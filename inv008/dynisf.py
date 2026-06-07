@@ -150,3 +150,78 @@ def v2updated_over_v1_ratio(bg, tdd, normal_target: float = config.NORMAL_TARGET
     Now BG-dependent (the glucose terms no longer cancel)."""
     return isf_v2_updated(bg, tdd, normal_target, divisor, cap) / isf_v1(
         bg, tdd, normal_target, divisor, cap=cap)
+
+
+# ===========================================================================
+# v-next:  ISF(BG) = (K_user / √TDD) · g(BG)
+#
+#   level:    K_user / √TDD      — universal −½ exponent, per-user constant K_user
+#   glucose:  g(BG)              — normalised to 1.0 at normal target, so it
+#                                  composes with the level without disturbing the
+#                                  per-user anchor
+#
+# Two glucose curves are provided:
+#   • g_quartic  — the Diabeloop clinical-population ISF shape (the default; its
+#                  exponent comes from controlled clinical data, not device logs)
+#   • g_powerlaw — (target/BG)^k, a one-parameter alternative of the same family
+#
+# Both equal 1.0 at the normal target. BG is high-capped at config.BG_CAP
+# (excess/3, as v1/v2) and low-floored at BG_FLOOR_VNEXT to stay inside the range
+# the clinical curve was fit over (no extrapolation past the physiological band).
+# ===========================================================================
+
+BG_FLOOR_VNEXT = 54.0      # ~3.0 mmol/L; low end of the clinical fit range
+
+# Diabeloop population ISF–glucose quartic (mg/dL per U vs glucose mg/dL).
+_QUARTIC = (272.0, -3.121, 0.01511, -3.305e-5, 2.69e-8)
+
+
+def quartic_isf(bg):
+    """Raw Diabeloop population quartic (un-normalised), vectorised."""
+    bg = np.asarray(bg, dtype=float)
+    c0, c1, c2, c3, c4 = _QUARTIC
+    return c0 + c1 * bg + c2 * bg**2 + c3 * bg**3 + c4 * bg**4
+
+
+def _bg_clamped_vnext(bg, cap: float = config.BG_CAP, floor: float = BG_FLOOR_VNEXT):
+    """High-cap (excess/3 above cap) then low-floor — keeps BG in the clinical range."""
+    return np.maximum(cap_bg(bg, cap), floor)
+
+
+def g_quartic(bg, normal_target: float = config.NORMAL_TARGET,
+              cap: float = config.BG_CAP, floor: float = BG_FLOOR_VNEXT):
+    """Diabeloop quartic glucose curve, normalised to 1.0 at the normal target."""
+    bg_c = _bg_clamped_vnext(bg, cap, floor)
+    return quartic_isf(bg_c) / quartic_isf(normal_target)
+
+
+def g_powerlaw(bg, k: float = 1.3, normal_target: float = config.NORMAL_TARGET,
+               cap: float = config.BG_CAP, floor: float = BG_FLOOR_VNEXT):
+    """Power-law glucose curve (target/BG)^k, normalised to 1.0 at the normal target.
+    Default k≈1.3 matches the Diabeloop quartic's slope over BG 70–250."""
+    bg_c = _bg_clamped_vnext(bg, cap, floor)
+    return (normal_target / bg_c) ** k
+
+
+def isf_vnext(bg, tdd, k_user, curve: str = "quartic", k: float = 1.3,
+              normal_target: float = config.NORMAL_TARGET,
+              cap: float = config.BG_CAP, floor: float = BG_FLOOR_VNEXT):
+    """v-next ISF: (K_user/√TDD) · g(BG).
+
+    k_user : per-user constant K_user (scalar or array). Tier-1 anchor is
+             profile_ISF · √(median TDD); Tier-2 swaps measured_ISF for profile_ISF.
+    curve  : 'quartic' (Diabeloop default) or 'powerlaw'.
+    """
+    tdd = np.asarray(tdd, dtype=float)
+    g = g_quartic(bg, normal_target, cap, floor) if curve == "quartic" \
+        else g_powerlaw(bg, k, normal_target, cap, floor)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        level = np.asarray(k_user, dtype=float) / np.sqrt(tdd)
+    isf = level * g
+    return np.where(tdd > 0, isf, np.nan)
+
+
+def k_user_tier1(profile_isf, median_tdd):
+    """Tier-1 (profile-anchored) per-user constant: K = profile_ISF · √(median TDD).
+    Makes isf_vnext return profile_ISF at the user's median TDD and normal target."""
+    return np.asarray(profile_isf, dtype=float) * np.sqrt(np.asarray(median_tdd, dtype=float))
