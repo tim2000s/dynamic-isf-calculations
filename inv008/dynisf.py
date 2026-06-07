@@ -107,3 +107,46 @@ def v2_over_v1_ratio(tdd):
     (exact at velocity=1.0, any BG)."""
     tdd = np.asarray(tdd, dtype=float)
     return 2300.0 / (0.02 * 1800.0 * tdd)
+
+
+# ---------------------------------------------------------------------------
+# v2 (updated) — anchor and glucose term drop the "+1"; BG floored at divisor+1
+#   sensNormalTarget = 2300 / (ln(target/divisor) · TDD² · 0.02)
+#   scaler           = ln(target/divisor) / ln(BG_floored/divisor)
+#   ISF(BG)          = 115000 / (TDD² · ln(BG_floored/divisor))
+# BG_floored = clamp(BG): high cap at 210 (excess/3), then floor at divisor+1
+# (so ln(BG/divisor) stays positive and finite).
+# ---------------------------------------------------------------------------
+
+def _bg_floored_v2u(bg, divisor: float = config.INSULIN_DIVISOR, cap: float = config.BG_CAP):
+    bg_adj = cap_bg(bg, cap)                       # existing high cap
+    return np.maximum(bg_adj, divisor + 1.0)       # NEW low floor at divisor+1
+
+
+def sens_normal_target_v2_updated(tdd, normal_target: float = config.NORMAL_TARGET,
+                                  divisor: float = config.INSULIN_DIVISOR):
+    """v2 updated anchor: 2300 / (ln(target/divisor) · TDD² · 0.02) — no +1."""
+    tdd = np.asarray(tdd, dtype=float)
+    log_term = np.log(normal_target / divisor)     # no +1
+    with np.errstate(divide="ignore", invalid="ignore"):
+        s = 2300.0 / (log_term * tdd * tdd * 0.02)
+    return np.where((tdd > 0) & (log_term > 0), s, np.nan)
+
+
+def isf_v2_updated(bg, tdd, normal_target: float = config.NORMAL_TARGET,
+                   divisor: float = config.INSULIN_DIVISOR, cap: float = config.BG_CAP):
+    """Updated v2 ISF: collapses to 115000 / (TDD² · ln(BG_floored/divisor))."""
+    tdd = np.asarray(tdd, dtype=float)
+    bg_f = _bg_floored_v2u(bg, divisor, cap)
+    log_bg = np.log(bg_f / divisor)                # no +1; BG floored so > 0
+    with np.errstate(divide="ignore", invalid="ignore"):
+        isf = 2300.0 / (0.02 * tdd * tdd * log_bg)
+    return np.where((tdd > 0) & (log_bg > 0), isf, np.nan)
+
+
+def v2updated_over_v1_ratio(bg, tdd, normal_target: float = config.NORMAL_TARGET,
+                            divisor: float = config.INSULIN_DIVISOR, cap: float = config.BG_CAP):
+    """ISF_v2updated / ISF_v1 = (63.888…/TDD) · ln(BG/divisor+1)/ln(BG_floored/divisor).
+    Now BG-dependent (the glucose terms no longer cancel)."""
+    return isf_v2_updated(bg, tdd, normal_target, divisor, cap) / isf_v1(
+        bg, tdd, normal_target, divisor, cap=cap)
