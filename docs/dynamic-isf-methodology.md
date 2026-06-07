@@ -260,6 +260,7 @@ output.
 | Orchestration | `inv008/runner.py` | run logs + manifests |
 | Figures | `inv008/stage3_plots.py` | cohort + per-person figures |
 | Equation search | `fit_best_isf.py` | candidate-comparison tables |
+| Personalisation (blended-TDD refit, variance decomposition) | `inv008/fit_personalisation.py` | universal-exponent / per-user-K finding |
 | Device validation | `inv008/validate_device_isf.py` | validation tables |
 | Delivery/basal inputs | `extract_treatments_tdd.py`, `extract_hourly_basal.py` | input data |
 | Reference cohort + calculated sensitivity | `canonical_cohort.py`, `empirical_isf_v5.py` | targets for the search |

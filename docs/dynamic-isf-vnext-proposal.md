@@ -15,44 +15,52 @@ Testing both against sensitivity calculated directly from 171 people's own gluco
 insulin data shows the steeper exponent moved the wrong way: the observed TDD dependence is
 *shallower* than even v1. v2 is the worst-fitting of every equation tested against
 calculated sensitivity, and in practice it weakens corrections for the 77% of people below
-~64 U/day while over-estimating their sensitivity more severely than v1. This document
-proposes the next version of the equation.
+~64 U/day while over-estimating their sensitivity more severely than v1.
+
+This document proposes the next version. It also answers the question that follows directly
+from the data: a single fixed equation is not enough on its own. The **exponent** of the
+TDD law should be universal, but the **level** of the curve must be calibrated per person —
+the same TDD predicts ISFs that differ ~9-fold between people, and most of that is a stable
+per-person offset. The proposal is therefore a **universal shape with a per-user constant,
+recalibrated weekly** from the person's own recent data when dynamic ISF is enabled.
 
 ---
 
 ## 1. Proposal
 
-Set the sensitivity at normal target in inverse proportion to the **square root of TDD**:
+Set sensitivity at normal target in inverse proportion to the **square root of TDD**, with a
+**per-user constant K**:
 
 ```
-ISF at normal target = 355 / √TDD          ("the 355 rule")
+ISF at normal target = K_user / √TDD
 ```
 
-This is the anchor. The existing glucose scaler then sets ISF at every other glucose
-level, unchanged — so the full equation, with the TDD blend and glucose cap also unchanged,
-is:
+The exponent (−½) is universal; `K_user` is calibrated per person (§4–5). The existing
+glucose scaler then sets ISF at every other glucose level, unchanged — so the full equation,
+with the TDD blend and glucose cap also unchanged, is:
 
 ```
-ISF(BG) = (355 / √TDD) · ln(target/divisor + 1) / ln(bg_capped/divisor + 1)
+ISF(BG) = (K_user / √TDD) · ln(target/divisor + 1) / ln(bg_capped/divisor + 1)
 ```
 
-**The 355 constant carries no insulin divisor.** It was fit directly to ISF (mg/dL per U)
-against √TDD, so it states the sensitivity at normal target for the cohort as a whole,
-independent of insulin type. The divisor — which varies with insulin peak time (≈75 for
-Lyumjev, 65 for Fiasp, 55 for a standard rapid analogue) — enters *only* through the
-glucose scaler, exactly as it does in v1 and v2; at normal target the scaler is 1 for every
-insulin type, so 355/√TDD is the ISF-at-target regardless of insulin. (Avoid folding the
-constant and the divisor's normal-target log term into a single number such as a "300
-rule": that product is only valid for one divisor and silently changes the implied ISF for
-other insulins.)
+**K carries no insulin divisor.** The √TDD term was fit directly to ISF (mg/dL per U), so K
+states sensitivity at normal target independent of insulin type. The divisor — which varies
+with insulin peak time (≈75 Lyumjev, 65 Fiasp, 55 standard rapid analogue) — enters *only*
+through the glucose scaler, exactly as in v1 and v2; at normal target the scaler is 1 for
+every insulin type, so K/√TDD is the ISF-at-target regardless of insulin. (Do not fold the
+constant and the divisor's normal-target log term into one number such as a "300 rule" — that
+product is valid for only one divisor.)
 
-- **Anchor constant K = 355**, matched to the sensitivity experienced users tune to.
-- **Evaluate in shadow first** (§6); enable for live dosing only after real-world
-  divergence data and a low-TDD safety clamp are in place.
+- **Exponent: universal −½**, robust across the TDD construct used (§2).
+- **K_user: per-user, recalibrated weekly** from the person's own recent data (§5). The safe
+  default anchors K to the user's existing profile ISF, leaving their average dosing
+  unchanged and adding only the TDD-responsive shape; an optional stronger setting anchors K
+  to measured sensitivity (needs validation).
+- **Evaluate in shadow first** (§7) with a low-TDD safety clamp before any live dosing.
 
-A more physiologically-faithful constant (K = 145, matched to *measured* sensitivity) is
-**not proposed for deployment yet**: it doses about 2.4× more strongly across the board and
-rests on a provisional estimate (§5).
+The earlier question of a single global constant (the cohort values were ≈355 against tuned
+profiles and ≈145 against measured sensitivity) is **superseded**: no global K is adequate
+(§4), so the level is set per user rather than chosen once for everyone.
 
 ---
 
@@ -89,19 +97,23 @@ against two independent targets: sensitivity calculated from each person's own d
 
 Four points decide it:
 
-1. **The exponent the data wants is ≈ −0.5.** Free-fitted exponents land at −0.43
-   (profiles) and −0.38 (calculated sensitivity); the log-log fit of calculated
-   sensitivity against TDD gives −0.4 to −0.56, with confidence intervals excluding −1.
-   Fixing the exponent at exactly −0.5 costs nothing measurable and gives a clean,
-   memorable form.
+1. **The exponent the data wants is ≈ −0.5.** Free-fitted exponents bracket it: on the
+   cross-sectional treatments-per-day TDD they are −0.43 (profiles) and −0.38 (calculated
+   sensitivity); re-fit on each person's median *blended per-tick* TDD — the windowed
+   quantity the equation actually consumes, and an independent construct — they steepen to
+   −0.62 (profiles) and −0.55 (calculated sensitivity). Either way the confidence intervals
+   exclude −1, and −0.5 sits in the middle. Fixing the exponent at −½ costs nothing
+   measurable; if anything the blended construct argues for a touch steeper, which a future
+   revision could revisit.
 2. **Extra inputs do not help.** Carb ratio and target add noise; basal fraction is
    marginal and not robust. The blend weight on the tuned profile value fitted to **zero**
    when predicting calculated sensitivity — a person's tuned ISF carries no information
    about their actual sensitivity beyond what TDD already provides.
 3. **It beats both v1 and v2 decisively** — and v2 is last on both targets.
-4. **It is corroborated** by an independent TDD-band analysis of the same cohort, whose
-   band/log-linear family sits in the same performance cluster; √TDD is its continuous
-   form.
+4. **It reproduces on an independent TDD construct.** The same √TDD law, re-fit on median
+   blended per-tick TDD instead of the cross-sectional scalar, again scores best
+   (median log-error 0.24 profiles / 0.29 sensitivity) — so the result is not an artefact
+   of one TDD definition.
 
 ---
 
@@ -142,89 +154,144 @@ and stronger for light ones — the opposite tilt to v2, and the direction the d
 
 ---
 
-## 4. Shape versus level: the constant is a safety decision
+## 4. Why a single constant is not enough — the level must be per-user
 
-The √TDD *shape* fits both targets. The two natural constants differ by 355/145 ≈ 2.45 —
-exactly the ratio between tuned-profile ISF and calculated sensitivity measured separately.
-So the equation splits into:
+The √TDD *shape* fits everyone; the *level* does not. Decomposing ISF variance across the
+cohort settles which parts of the equation can be ubiquitous and which cannot:
 
-- a **statistical question** — what exponent? — answered by the data: −0.5; and
-- a **safety question** — what constant? — which the data alone cannot settle:
-  - **K = 355** reproduces the sensitivity experienced users have tuned themselves to. Safe
-    to trial because it is anchored to dosing strengths people already run.
-  - **K = 145** reproduces measured insulin effect — stronger, "truer" dosing, but in
-    territory no one in the cohort actually operates at.
+- **Exponent → universal.** Within one person, TDD barely moves — median p90/p10 ≈ 1.8×
+  over their whole record (far less inside any 14-day window) — against ~15× between people.
+  There is no lever arm to estimate a per-user exponent from one person's data, and the
+  population evidence supports a single value. The exponent must be global.
+- **Constant K → per-user, and necessarily so.** With the best global K, the typical person
+  is still off by ~57% (between-user residual SD 0.45 in log; per-user constants span 35–325,
+  a 9× range). Crucially, **~84–98% of that error is a stable per-person offset**, not noise:
+  the scatter in *measuring* a person's own sensitivity is only ~6% (full history), rising to
+  perhaps ~15–18% for a 14-day window — far smaller than the 57% a global constant leaves. So
+  a short window of the person's own data removes most of the error a one-size equation makes.
 
-We propose **K = 355** for any first deployment.
+This is why the earlier "which global K — 355 or 145?" framing was the wrong question. 355
+(tuned-profile) and 145 (measured-sensitivity) are just the cohort medians of a quantity that
+varies 9× between individuals. The level is not one number to choose; it is a per-user
+constant to measure.
 
 ---
 
-## 5. Evidence status
+## 5. Personalisation: how K_user is set
+
+`K_user` is recalibrated **weekly** from the person's own recent data; the universal √TDD
+term then provides the within-week response as TDD moves. Two tiers, in increasing
+aggressiveness:
+
+**Tier 1 — profile-anchored (safe default).**
+```
+K_user = profile_ISF × √(median TDD over the last 14 days)
+```
+This re-expresses the user's *existing* static ISF as a TDD-responsive curve. At their typical
+TDD the ISF is unchanged, so average dosing does not move; the only new behaviour is the
+√TDD adjustment as TDD drifts up or down. It needs nothing more than 14 days of TDD history.
+
+**Tier 2 — sensitivity-anchored (stronger; needs validation).**
+```
+K_user = measured_ISF × √(median TDD over the last 14 days)
+```
+where `measured_ISF` is the person's empirically observed sensitivity (a ΔIOB regression of
+glucose change on insulin absorbed over fasting windows). This doses to measured insulin
+effect, which across the cohort is ~2.4× stronger than tuned profiles and carries the same
+"is the measured level biased low / is it safe?" caveat as any move toward true sensitivity.
+It is gated behind shadow evaluation and forward validation.
+
+**Robustness requirements (both tiers):**
+- **Fit-quality gate.** Per-user sensitivity fits are often weak over short windows (cohort
+  median R² ≈ 0.22). When a 14-day estimate is too noisy (low R² / wide CI), fall back to
+  Tier 1 rather than act on a noisy number.
+- **Change clamp.** Bound the week-to-week move in K_user (and the deviation from profile ISF)
+  so a single noisy window cannot lurch the curve.
+- **Cadence.** Weekly is appropriate: K tracks slow sensitivity drift (season, activity,
+  illness, life stage); the √TDD term already handles faster TDD swings within the week.
+
+**Data the device needs.** Tier 1 needs only 14 days of TDD (delivery history AAPS already
+holds). Tier 2 additionally needs IOB, glucose and treatment records retained over the window
+to run the sensitivity regression — pulled from Nightscout, or persisted by AAPS if not
+already stored.
+
+---
+
+## 6. Evidence status
 
 **Settled:**
 - The equation implementations are exact (18 unit tests) and reproduce device-logged ISF
   for all dynamic-ISF users, to within unmodelled per-person settings.
 - The TDD exponent (≈ −0.5) is tested against sensitivity *calculated from people's own
-  glucose and insulin data*, not against profile settings or the equations themselves, and
-  is robust across cohorts and to outlier and duration sensitivity checks.
+  glucose and insulin data*, not against profile settings or the equations themselves; it is
+  robust across the TDD construct (cross-sectional and blended per-tick) and to outlier and
+  duration checks.
+- The level varies ~9× between people and is dominated by a stable per-person offset, so
+  per-user calibration is well-founded, not a tuning convenience.
 
 **Provisional:**
-- The **calculated-sensitivity constant (K = 145)** comes from a regression estimator that
-  may be biased low by unrecorded carbohydrate or endogenous-glucose effects. It has
-  confidence intervals but no external ground truth. The *shape* it implies is trustworthy;
-  the *level* is not yet.
+- The **Tier-2 sensitivity anchor** rests on a regression estimator that may be biased low by
+  unrecorded carbohydrate or endogenous-glucose effects, and is weak per-user over short
+  windows (median R² ≈ 0.22). Its *shape* is trustworthy; its absolute *level* is not yet.
+- The cohort is largely composed of users who never ran dynamic ISF (≈87%); the small
+  dynamic-ISF subgroup hints at a steeper slope, with confidence intervals too wide to resolve.
 - All evidence is retrospective and decision-level (counterfactual replay), single-cohort
   (open-source AID, mostly 2016–2023), with no closed-loop outcomes.
 
-**Implication:** K = 355 can go to shadow evaluation now; K = 145 needs forward validation
-before it is even a candidate for dosing.
+**Implication:** the universal √TDD shape and the Tier-1 (profile-anchored) personalisation
+can go to shadow evaluation now; the Tier-2 (sensitivity-anchored) level needs forward
+validation before it doses.
 
 ---
 
-## 6. Path to deployment
+## 7. Path to deployment
 
-1. **Shadow evaluation (now).** Compute the v-next ISF alongside the live equation and log
-   it, without acting on it, for several weeks. Measure how often, and by how much, the
-   proposed ISF would have changed dosing, stratified by TDD band. No dosing impact.
-2. **Low-TDD safety clamp.** Below ~36 U/day the proposed curve doses more strongly than v1
-   (≈1.6× at 15 U/day) — relevant for children and very insulin-sensitive adults. Before any
-   live dosing, clamp the result so it is never more than ~1.5× stronger than the v1 value,
-   or gate the new law above a TDD threshold. The data says v1 *over-estimates* ISF for
-   these people, so the clamp is a conservatism, not a correction.
-3. **Live trial (after shadow review).** Enable for opt-in testers with the clamp active
-   and the shadow comparison still logging, at K = 355.
-4. **Revisit the constant (later).** Only with forward-validated outcome data should a
-   constant between 355 and 145 be considered.
+1. **Shadow evaluation (now).** Compute the v-next ISF (Tier-1 K_user) alongside the live
+   equation and log it without acting on it. Measure how often and by how much it would have
+   changed dosing, by TDD band, and confirm the weekly K_user recalibration is stable.
+2. **Low-TDD safety clamp.** Below ~36 U/day the curve doses more strongly than v1 (≈1.6× at
+   15 U/day) — relevant for children and very insulin-sensitive adults. Before any live
+   dosing, clamp so the result is never more than ~1.5× stronger than the user's profile-ISF
+   value, or gate above a TDD threshold.
+3. **Live trial (after shadow review).** Enable for opt-in testers at **Tier 1**, clamp
+   active, shadow comparison still logging.
+4. **Tier 2 (later).** Only with forward-validated outcomes should the sensitivity-anchored
+   K be offered, and then with the fit-quality gate and change clamp in force.
 
 ---
 
-## 7. Risks and mitigations
+## 8. Risks and mitigations
 
 | Risk | Mitigation |
 |---|---|
-| Light insulin users dosed too strongly | Low-TDD clamp / threshold gate (§6.2); shadow review before live |
-| Calculated-sensitivity constant over-aggressive | Not deployed; K = 355 only until forward validation |
+| Light insulin users dosed too strongly | Low-TDD clamp / threshold gate (§7.2); shadow review before live |
+| Per-user K calibrated on a noisy 14-day window | Fit-quality gate → fall back to Tier 1; week-to-week change clamp |
+| Sensitivity (Tier-2) anchor over-aggressive | Not deployed by default; Tier 1 leaves average dosing unchanged; Tier 2 gated behind validation |
 | TDD reconstruction error feeds the equation | √TDD is *less* TDD-sensitive than v1 and far less than v2, so the same TDD error moves ISF less — a robustness gain |
-| Single-cohort generalisation | Trial as opt-in; monitor across TDD bands; revisit with broader data |
-| Insulin-type / divisor variation | The 355 anchor is divisor-free and applies at normal target for any insulin; the divisor enters only through the unchanged glucose scaler. Whether the anchor *should* also vary with insulin peak (as v1/v2 implicitly make it) is not resolvable from this cohort and is a question for the shadow evaluation |
+| Single-cohort generalisation; few true DynISF users | Trial as opt-in; monitor across TDD bands; revisit exponent if the DynISF population shows steeper |
+| Insulin-type / divisor variation | K is divisor-free and applies at normal target for any insulin; the divisor enters only through the unchanged glucose scaler |
 
 ---
 
-## 8. The change, concretely
+## 9. The change, concretely
 
-The only change is the sensitivity-anchor computation; the TDD blend, glucose cap, glucose
-scaler, autosensitivity, and temp-target handling are untouched:
+The TDD blend, glucose cap, glucose scaler, autosensitivity and temp-target handling are
+untouched. Two pieces change: a weekly per-user K, and the anchor formula.
 
 ```
-anchor = 355 / sqrt(TDD)        // ISF at normal target; no divisor term
-                                // was: 1800 / (TDD · ln(target/divisor + 1))   for v1
-                                //  or: 2300 / (ln(target/divisor + 1) · TDD² · 0.02)  for v2
-ISF(BG) = anchor · scaler       // scaler is unchanged and equals 1 at normal target
+# weekly, per user (Tier 1 shown; Tier 2 swaps profile_ISF for measured_ISF):
+K_user = profile_ISF * sqrt(median_TDD_14d)        // clamp vs previous K_user
+
+# every cycle:
+anchor  = K_user / sqrt(TDD)        // ISF at normal target; no divisor term
+                                    // was: 1800 / (TDD · ln(target/divisor + 1))  for v1
+                                    //  or: 2300 / (ln(target/divisor + 1) · TDD² · 0.02)  for v2
+ISF(BG) = anchor * scaler           // scaler unchanged; equals 1 at normal target
 ```
 
-The anchor is a plain `355 / sqrt(TDD)` — unlike v1 and v2, it does not multiply the
-normal-target log term into the constant, so the insulin divisor never touches the anchor.
-The divisor continues to act only inside the unchanged glucose `scaler`.
+Because `K_user = profile_ISF · √(median TDD)`, at the user's typical TDD the anchor returns
+their profile ISF exactly — Tier 1 is a behaviour-preserving generalisation of their current
+setting, with the √TDD response added.
 
 ---
 
@@ -233,6 +300,7 @@ The divisor continues to act only inside the unchanged glucose `scaler`.
 - Methodology: companion methodology paper
 - v1 vs v2 analysis: companion analysis document
 - Equation search: `fit_best_isf.py`, `results/best_isf_fit_results.{json,md}`
+- Personalisation analysis (blended-TDD refit, variance decomposition): `inv008/fit_personalisation.py`
 - Comparison figure: `charts/inv008/fig_best_fit.png`
 - Device validation: `inv008/validate_device_isf.py`, `results/device_isf_validation.{json,md}`
 - Repository: `github.com/tim2000s/dynamic-isf-calculations`
