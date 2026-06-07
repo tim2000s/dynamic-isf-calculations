@@ -1,0 +1,15 @@
+{
+ "n": 110,
+ "median_overnight_isf": 18.4,
+ "median_entered_isf": 51.0,
+ "median_allday_empirical": 21.6,
+ "median_R_entered_over_overnight": 2.59,
+ "median_overnight_over_entered": 0.39,
+ "overnight_block_cv_median": 0.501,
+ "allday_block_cv_ref": 0.34,
+ "spearman": {
+  "overnight logR_vs_TAR (expect +)": 0.006,
+  "overnight logR_vs_TBR (expect -)": 0.389,
+  "overnight logR_vs_TIR": -0.128
+ }
+}
