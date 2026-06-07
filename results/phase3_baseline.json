@@ -1,0 +1,48 @@
+{
+ "n_users": 132,
+ "K_pop": 129.2,
+ "tau_log": 0.522,
+ "prior_only_pct": 42.0,
+ "by_window": [
+  {
+   "W": 7,
+   "n_users": 132,
+   "w_median": 0.61,
+   "prior_only_pct": 42.0,
+   "own_only_pct": 37.0,
+   "shrinkage_pct": 26.0
+  },
+  {
+   "W": 14,
+   "n_users": 131,
+   "w_median": 0.69,
+   "prior_only_pct": 42.0,
+   "own_only_pct": 30.0,
+   "shrinkage_pct": 22.0
+  },
+  {
+   "W": 30,
+   "n_users": 124,
+   "w_median": 0.79,
+   "prior_only_pct": 42.0,
+   "own_only_pct": 23.0,
+   "shrinkage_pct": 19.0
+  },
+  {
+   "W": 60,
+   "n_users": 114,
+   "w_median": 0.84,
+   "prior_only_pct": 42.0,
+   "own_only_pct": 19.0,
+   "shrinkage_pct": 16.0
+  },
+  {
+   "W": 90,
+   "n_users": 95,
+   "w_median": 0.88,
+   "prior_only_pct": 42.0,
+   "own_only_pct": 16.0,
+   "shrinkage_pct": 13.0
+  }
+ ]
+}
