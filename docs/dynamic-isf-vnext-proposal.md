@@ -77,7 +77,7 @@ against two independent targets: sensitivity calculated from each person's own d
 | Multivariate (TDD, CR, basal, target) | 14.7 | 0.306 | 46% |
 | **v1 (TDD⁻¹)** | 17.0 | 0.324 | 38% |
 | 1700-rule | 17.9 | 0.454 | 34% |
-| **v2 (updated, TDD⁻²)** | 124.0 | 1.304 | 7% |
+| **v2 (TDD⁻²)** | 124.0 | 1.304 | 7% |
 
 **Target: calculated sensitivity (n = 114)**
 
@@ -88,10 +88,10 @@ against two independent targets: sensitivity calculated from each person's own d
 | Power law A·TDD^b | 6.1 | 0.304 | 45% |
 | 1700-rule | 16.2 | 0.605 | 15% |
 | **v1 (TDD⁻¹)** | 26.0 | 0.813 | 7% |
-| **v2 (updated, TDD⁻²)** | 171.1 | 2.323 | 2% |
+| **v2 (TDD⁻²)** | 171.1 | 2.323 | 2% |
 
-(The updated v2 anchor drops the `+1`, lifting the curve ~3×, so as a between-person level
-predictor it is now far the worst — its strength is low-glucose protection, not the level.)
+(v2's anchor sits ~3× above v1 at target, so as a between-person level predictor it is far
+the worst — its strength is low-glucose protection, not the level.)
 
 Four points decide it:
 
@@ -117,7 +117,7 @@ Four points decide it:
 
 ## 3. What it does, relative to v1 and v2
 
-All three differ in the TDD term; updated v2 also changes the glucose term (drops the `+1`):
+All three differ in the TDD term; v2 and v-next also differ from v1 in the glucose term:
 
 ```
 v1:      ∝ 1 / TDD          glucose: ln(BG/div + 1)
@@ -127,7 +127,7 @@ v-next:  = K / √TDD         glucose: power-law / Diabeloop curve
 
 ISF at normal target, mg/dL per U, divisor 75 (v-next at cohort K = 355):
 
-| TDD (U/day) | v1 | v2 (updated) | **v-next (355/√TDD)** | v-next vs v1 |
+| TDD (U/day) | v1 | v2 | **v-next (355/√TDD)** | v-next vs v1 |
 |---|---|---|---|---|
 | 15 | 143 | 1840 | 92 | ~1.6× stronger corrections |
 | 25 | 86 | 663 | 71 | ~1.2× stronger |
@@ -136,10 +136,9 @@ ISF at normal target, mg/dL per U, divisor 75 (v-next at cohort K = 355):
 | 80 | 27 | 65 | 40 | ~1.5× weaker |
 | 120 | 18 | 29 | 32 | ~1.8× weaker |
 
-(Updated v2's at-target ISF is ~3× the earlier v2 — the dropped `+1` — and rises steeply
-*below* target, where `ln(BG/div)→0` gives near-zero corrections. So updated v2 is far
-gentler than v1 everywhere and strongly hypo-protective when low; the v1/v2 ratio is now
-glucose-dependent, not the earlier flat 63.9/TDD. See the v1-vs-v2 analysis doc.)
+(v2's at-target ISF is high and rises steeply *below* target, where `ln(BG/div)→0` gives
+near-zero corrections. So v2 is far gentler than v1 everywhere and strongly hypo-protective
+when low; the v1/v2 ratio is glucose-dependent. See the v1-vs-v2 analysis doc.)
 
 (ISF in mg/dL per U, at normal target.) v-next is gentler than v1 for heavy insulin users
 and stronger for light ones — the opposite tilt to v2, and the direction the data supports.
