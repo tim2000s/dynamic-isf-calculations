@@ -35,6 +35,7 @@ import pandas as pd
 
 ROOT = Path(os.environ.get("DYNISF_ROOT", Path.cwd()))
 LOG_TERM = math.log(99.0 / 75 + 1.0)  # normal target 99, divisor 75 (Lyumjev)
+LOG_TERM_V2U = math.log(99.0 / 75)     # updated v2: no +1
 
 # ---------------------------------------------------------------- data
 
@@ -55,7 +56,8 @@ def cand_v1(train, ycol):
     return lambda t: 1800.0 / (t["tdd"].to_numpy() * LOG_TERM)
 
 def cand_v2(train, ycol):
-    return lambda t: 2300.0 / (LOG_TERM * t["tdd"].to_numpy() ** 2 * 0.02)
+    # updated v2 anchor: 2300/(ln(target/divisor)·TDD²·0.02), +1 dropped
+    return lambda t: 2300.0 / (LOG_TERM_V2U * t["tdd"].to_numpy() ** 2 * 0.02)
 
 def cand_walsh(train, ycol):
     return lambda t: 1700.0 / t["tdd"].to_numpy()

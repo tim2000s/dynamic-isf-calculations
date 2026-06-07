@@ -8,187 +8,184 @@
 
 Dynamic ISF sets correction sensitivity from total daily dose (TDD) and current glucose.
 The original equation (**v1**, Chris Wilson) makes the sensitivity anchor inversely
-proportional to TDD; a later revision of the maths (**v2**) makes it inversely
-proportional to TDD squared. We generated each person's dynamic ISF under both equations
-from their real glucose and insulin-delivery history — roughly 9 million glucose readings
-across 171 people — and compared them.
+proportional to TDD; a revised form (**v2**) makes it inversely proportional to TDD
+squared. The current v2 also changes the glucose term — its logarithm drops the `+1` and
+glucose is floored at `divisor+1`. We generated each person's dynamic ISF under both
+equations from their real glucose and insulin history — ~9 million glucose readings across
+171 people — and compared them.
 
 Three findings:
 
-1. **v1 and v2 differ only through their TDD terms.** Compared at the same glucose and
-   TDD, every other term cancels in the ratio between them, leaving
-   ISF(v2)/ISF(v1) = **63.9/TDD** — independent of glucose. Below ~64 U/day v2 yields a
-   higher ISF (weaker corrections); above it, a lower ISF (stronger corrections).
-2. **77% of this cohort sits below the crossover**, so v2 weakens correction dosing for
-   most people — by roughly 3× for someone using 20 U/day — and strengthens it only for
-   the heaviest insulin users.
-3. **Neither TDD power law matches observation, and v2 is the worse fit.** Sensitivity
-   calculated independently from each person's own data follows ISF ∝ TDD^−0.5 or
-   shallower. v1 assumes TDD^−1; v2 assumes TDD^−2. Against calculated sensitivity, v2 is
-   the worst-fitting equation tested — worse than v1 and worse than the historical
-   1700-rule.
+1. **v2 now differs from v1 on *both* axes — TDD and glucose.** With the `+1` removed, the
+   glucose terms no longer cancel, so the v2/v1 ratio is **glucose-dependent** (the earlier
+   v2 gave a flat, glucose-independent 63.9/TDD). Updated v2 produces a far higher ISF at
+   low glucose, tapering at high glucose.
+2. **Updated v2 is much gentler than v1, and strongly hypo-protective.** It gives a higher
+   ISF (weaker corrections) than v1 on **92% of readings** — a median **3.0×** v1, rising
+   to **~53× below 80 mg/dL** (near-zero correction when low) and falling to **~1.5× above
+   200**. It is also ~2× the *old* v2 everywhere (the dropped `+1` roughly triples the
+   anchor).
+3. **The TDD exponent is still too steep.** Sensitivity calculated independently from each
+   person's own data follows ISF ∝ TDD^−0.5 or shallower; v2 is still TDD^−2. As a
+   between-person ISF predictor, updated v2 is by far the worst of every form tested
+   (median |error| ≈ 171 mg/dL/U vs measured sensitivity), because the dropped `+1` lifts
+   the whole curve ~3× above where it should sit.
 
-The revision from v1 to v2 increased the steepness of the TDD dependence. The data shows
-the true dependence is in fact **shallower than v1**, not steeper — so v2 moved in the
-wrong direction.
+So the update moves v2's *glucose* behaviour in a sensible (more hypo-protective)
+direction, but leaves the *TDD* exponent too steep and lifts the overall level well above
+both v1 and observed sensitivity.
 
 ---
 
 ## 1. The two equations
 
-Both equations derive a blended TDD, then a sensitivity anchor at normal target, then
-scale it by current glucose. The blend and the glucose scaler are identical between them.
-They differ only in the anchor:
+Both derive a blended TDD, a sensitivity anchor at normal target, then scale by glucose.
 
-| | sensitivity anchor at normal target | implied law |
+| | sensitivity anchor at normal target | implied TDD law |
 |---|---|---|
 | **v1** | `1800 / (TDD · ln(target/divisor + 1))` | ISF ∝ 1/TDD |
-| **v2** | `2300 / (ln(target/divisor + 1) · TDD² · 0.02)` | ISF ∝ 1/TDD² |
+| **v2 (updated)** | `2300 / (ln(target/divisor) · TDD² · 0.02)` | ISF ∝ 1/TDD² |
 
-In full long form (defaults: target 99 mg/dL, divisor 75, glucose capped at 210):
-
-```
-v1:   ISF(BG) = 1800    / ( TDD   · ln(bg_capped/75 + 1) )
-v2:   ISF(BG) = 115 000 / ( TDD²  · ln(bg_capped/75 + 1) )
-```
-
-Because the glucose term and the divisor are identical in both, they cancel **in the ratio
-between the two equations** (within each equation they apply fully and the ISF falls as
-glucose rises):
+Updated v2 drops the `+1` from the log (in both the anchor and the glucose scaler) and
+**floors glucose at `divisor+1`** so `ln(BG/divisor)` stays positive. In full long form
+(target 99 mg/dL, divisor 75, high cap 210):
 
 ```
-ISF_v2 / ISF_v1 = 2300 / (0.02 · 1800 · TDD) = 63.9 / TDD
+v1:           ISF(BG) = 1800    / ( TDD  · ln(BG_capped/75 + 1) )
+v2 (updated): ISF(BG) = 115 000 / ( TDD² · ln(BG_floored/75) )      BG_floored = max(BG, 76)
 ```
 
-The crossover where the equations agree is TDD = 63.9 U/day:
+**The glucose terms no longer cancel** (v1 keeps the `+1`, v2 no longer does), so the
+between-equation ratio is now glucose-dependent:
 
-- 20 U/day → v2 ISF 3.2× higher → corrections ~3× smaller
-- 40 U/day → 1.6× higher → corrections ~40% smaller
-- 64 U/day → identical
-- 100 U/day → 0.64× → corrections ~1.6× larger
-- 150 U/day → 0.43× → corrections ~2.3× larger
+```
+ISF_v2 / ISF_v1 = (63.9 / TDD) · ln(BG/75 + 1) / ln(BG_floored/75)
+```
+
+The bracket is large at low glucose (the v2 log → 0 as BG approaches the floor) and ~1.3 at
+high glucose — so updated v2 is dramatically more protective when low and modestly gentler
+when high.
 
 ---
 
 ## 2. Method in brief
 
 For each person, every glucose reading was passed through both equations using the TDD
-their device would have computed at that moment: device-logged TDD for Trio; for AAPS and
-OpenAPS users, TDD reconstructed from raw delivery records (boluses plus temp-basal
-segments over the profile basal schedule, on a 5-minute grid) and run through the same
-five-window blend the equations use. Relative timestamps were re-anchored to absolute time
-and validated against the recorded hour-of-day (median join coverage 99.4%; 5 of 148
-reconstructed users flagged uncertain). The equation implementations carry 18 unit tests
-against hand-computed fixtures. Full methodology is in the companion methodology paper.
+their device would have computed: device-logged TDD for Trio; for AAPS and OpenAPS users,
+TDD reconstructed from raw delivery records (boluses + temp-basal segments over the profile
+basal, on a 5-minute grid) through the same five-window blend. Relative timestamps were
+re-anchored to absolute time and validated against recorded hour-of-day (median join
+coverage 99.4%). The equation implementations carry 20 unit tests against hand-computed
+fixtures (including the updated v2 collapse, the glucose floor, and the BG-dependent ratio).
+Full methodology in the companion methodology paper.
 
 For 114 people we also have sensitivity calculated independently from their own data (a
-regression of glucose change on insulin absorbed over fasting windows), used here as the
-ground truth for which TDD law reality follows.
+regression of glucose change on insulin absorbed over fasting windows), used as the ground
+truth for the TDD law.
 
 ---
 
 ## 3. Results
 
-### 3.1 The crossover, observed
+### 3.1 The v2/v1 ratio is now glucose-dependent
 
-![Observed per-person median ISF ratio vs TDD, with the theoretical 63.9/TDD curve](charts/inv008/fig_crossover.png)
+![Updated v2 vs v1: ratio vs glucose (left) and per-user ratio vs TDD (right)](charts/inv008/fig_v2updated.png)
 
-Per-person median ratios lie on the theoretical curve across the full TDD range
-(13.6–272.9 U/day, median 47.5). **131 of 170 people (77%) fall below the 64 U/day
-crossover** — for them, v2 computes weaker corrections than v1; for the 23% above it,
-stronger.
+Median ISF_v2/ISF_v1 by glucose band (170 users, 9.5M readings):
+
+| glucose band | median ISF_v2 / ISF_v1 |
+|---|---|
+| 40–80 | **53×** |
+| 80–100 | 6.2× |
+| 100–120 | 3.5× |
+| 120–150 | 2.5× |
+| 150–200 | 1.9× |
+| 200–360 | 1.5× |
+
+Updated v2 is weaker than v1 (higher ISF) on **92%** of readings, median **3.0×**. The
+strong low-glucose ISF (near-zero correction below ~100 mg/dL) is the deliberate effect of
+dropping the `+1` and flooring glucose — strong hypo protection. (The earlier v2 gave a
+flat 63.9/TDD with a clean ~64 U/day crossover; that no longer applies.)
 
 ### 3.2 Which TDD law does observed sensitivity follow?
 
 ![Log-log ISF vs TDD: observed points, v1 slope −1, v2 slope −2, fitted slope −0.56](charts/inv008/fig_tdd_loglog.png)
 
-On a log-log plot, v1 is a line of slope −1 and v2 a line of slope −2. The calculated
-sensitivities follow a fitted slope of about **−0.56** — *shallower* than v1, and far from
-v2. Both equations over-steepen the TDD dependence: they over-estimate ISF for people
-using smaller daily doses and under-estimate it for people using larger ones. v2, with
-twice the log-space slope, does so roughly twice as hard.
+On a log-log plot, v1 is slope −1 and v2 slope −2; the calculated sensitivities follow a
+fitted slope of about **−0.56** — shallower than v1, far from v2. Both equations
+over-steepen the TDD dependence; v2, with twice the log-space slope, does so twice as hard.
+The glucose-term change does not affect this — the TDD exponent is still −2.
 
-### 3.3 Agreement with calculated sensitivity
+### 3.3 Agreement with calculated sensitivity (and tuned profiles)
 
-![Equation ISF vs calculated sensitivity, v1 and v2 panels](charts/inv008/fig_empirical.png)
+Scoring each form as a between-person ISF predictor (leave-one-user-out), against measured
+sensitivity (n=114) and tuned-profile ISF (n=138):
 
-| | v1 (TDD⁻¹) | v2 (TDD⁻²) |
-|---|---|---|
-| Median absolute error (mg/dL per U) | **21.8** | 36.7 |
-| Closer of the two | **112/138 (81%)** | 26/138 (19%) |
-| Error, TDD < 64 U/day (n=110) | **24.4** | 53.1 |
-| Error, TDD ≥ 64 U/day (n=28) | 10.9 | **9.5** |
+| candidate | median \|err\| vs measured | log-err | within ±30% |
+|---|---|---|---|
+| K/√TDD (v-next) | **6.2** | **0.30** | **45%** |
+| 1700-rule | 16.2 | 0.61 | 15% |
+| v1 (TDD⁻¹) | 26.0 | 0.81 | 7% |
+| **v2 (updated, TDD⁻²)** | **171** | 2.32 | 2% |
 
-v2's marginal advantage in the high-TDD band is a curve-crossing artefact, not evidence of
-a better model: a slope-−2 line through this data must cross the observed cloud somewhere,
-and it happens to do so around 60–100 U/day.
+Updated v2 is now overwhelmingly the worst between-person predictor — the dropped `+1`
+raises the whole curve ~3×, so on top of the too-steep TDD exponent the level is far above
+observed sensitivity. (Against tuned profiles the ranking is the same: v2 median |err| ≈
+124 vs √TDD 12.8.)
 
 ### 3.4 Implementation validation against device-calculated ISF
 
-Independently of the comparison, we checked that the v1 implementation reproduces what
-devices actually computed. Trio logs its own per-cycle ISF, giving ground truth for its
-dynamic-ISF users. We expect, per person, a positive log-log correlation (curve shape
-tracks the device) and a tight, roughly constant multiplicative offset — the device
-additionally applies an adjustment factor, an insulin divisor, and an autosensitivity
-ratio, which the replay does not model — rather than a ratio of exactly one.
-
-All nine users on the logarithmic dynamic-ISF form track their devices with stable offsets
-(median per-reading log-correlation 0.60; median ratio 0.52–0.90; median ratio
-interquartile range 0.29). This corroborates that the replayed ISF is the equation's true
-output, to within unmodelled per-person settings. (A data-quality note: four users had
-switched the *units* of their logged ISF mid-history; a per-reading correction resolves
-all four and affects only this validation read.)
+Independently, the v1 implementation reproduces what devices actually computed: for the nine
+Trio users on the logarithmic form, replayed v1 tracks the device's logged ISF with stable
+per-person offsets (median per-reading log-correlation 0.60; ratio IQR 0.29) — the offsets
+being unmodelled adjustment factor / divisor / autosens. (Four users had switched the
+*units* of logged ISF mid-history; a per-reading correction resolves all four.)
 
 ### 3.5 Per-person view
 
-![Example per-person page: ISF–glucose curves, two-week time series, ratio distribution](charts/inv008/users/U073.png)
+![Example per-person page](charts/inv008/users/U073.png)
 
-A page like this exists for each of the 170 people: the ISF–glucose curves under each
-equation at their TDD, a two-week sample of both dynamic-ISF traces over their real
-glucose, and their per-reading ratio distribution.
+A page like this exists for each of the 170 people: ISF–glucose curves at their TDD, a
+two-week sample of dynamic-ISF traces over real glucose, and the per-reading ratio.
 
 ---
 
 ## 4. Reading the result
 
-The revision from v1 to v2 was a change of one quantity: the TDD exponent, from −1 to −2 —
-a steeper dependence of sensitivity on total daily dose. The data points the other way.
-Sensitivity *calculated from people's own glucose and insulin records* increases with TDD
-far more gently than even v1 assumes — a slope near −0.5. Against that benchmark:
+The v1→v2 revision changed two things: it kept TDD^−2 (too steep — observed is ~−0.5), and
+it reshaped the glucose term. The glucose change is in a defensible direction — much more
+ISF (less insulin) at low glucose is exactly the hypo protection a correction curve should
+provide, and it echoes the glucose-dependent ISF established elsewhere (Diabeloop /
+power-law work). But two problems remain:
 
-- **v1 is too steep**, but only moderately, and it remains the closer of the two for 81%
-  of people;
-- **v2 is much too steep**, and is the worst-fitting equation of every option tested
-  against calculated sensitivity (see the companion proposal document for the full
-  candidate comparison);
-- in practice, adopting v2 *weakens* corrections for the 77% of people below ~64 U/day,
-  and — set against measured sensitivity — over-estimates their ISF more severely than v1
-  already does, exactly where the cohort is most concentrated.
+- **The TDD exponent is still wrong** (−2 vs observed −0.5), and updated v2 is the
+  worst-fitting between-person predictor of any form tested.
+- **The overall level is now ~3× too high** (the dropped `+1`), so corrections are very
+  weak across the board — not just for the lighter-dosing majority but at high glucose too
+  (still ~1.5× gentler than v1 above 200), where more aggression is usually wanted.
 
-The natural conclusion is that the correct TDD dependence is shallower than v1, not
-steeper than it. That is the basis for the v-next proposal.
+So updated v2 over-corrects the hypo-protection while leaving the TDD scaling and the level
+off. The v-next proposal keeps the good idea (strong, glucose-dependent low-BG protection)
+but via a √TDD level and a validated power-law glucose curve, anchored per-patient.
 
 ---
 
 ## 5. Caveats
 
-1. **Counterfactual replay.** These people ran their own AID configurations; we compare
-   the ISF each equation *would have computed*, not closed-loop outcomes.
-2. **Basal approximation for one platform.** AAPS exports carry no temp-basal records, so
-   basal TDD for those 39 users uses the profile schedule.
-3. **Calculated-sensitivity benchmark.** The regression estimate is per-person and may be
-   biased low by unrecorded carbohydrate or endogenous-glucose effects; it tests the
-   between-person TDD law, not within-person glucose scaling (which is identical across
-   equations).
-4. **Single cohort.** Open-source AID users, mostly 2016–2023; n = 114/138 for the
+1. **Counterfactual replay** — we compare the ISF each equation *would have computed*, not
+   closed-loop outcomes.
+2. **Basal approximation** — AAPS exports lack temp-basal records, so basal TDD for those 39
+   users uses the profile schedule.
+3. **Calculated-sensitivity benchmark** is per-person and may be biased low by unrecorded
+   carbohydrate / endogenous-glucose effects; it tests the between-person TDD law.
+4. **Single cohort** — open-source AID users, mostly 2016–2023; n = 114/138 for the
    calculated-sensitivity analyses.
 
 ---
 
 ## Reproducibility
 
-- Implementation + tests: `inv008/dynisf.py`, `inv008/tests/`
-- Pipeline: `inv008/` (TDD reconstruction → ISF replay → figures)
-- Per-person tables and figures: `charts/inv008/`; summary `charts/inv008/cohort_summary.json`
-- Device validation: `inv008/validate_device_isf.py`
+- Implementation + tests: `inv008/dynisf.py` (incl. `isf_v2_updated`), `inv008/tests/`
+- v1-vs-updated-v2 comparison: `inv008/compare_v1_v2updated.py` → `results/v1_v2updated_comparison.*`, `charts/inv008/fig_v2updated.png`
+- Pipeline / candidate search: `inv008/`, `fit_best_isf.py`
 - Repository: `github.com/tim2000s/dynamic-isf-calculations`
