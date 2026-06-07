@@ -43,19 +43,19 @@ v1 and v2 instead use the log scaler):
 ISF(BG) = (K_user / √TDD) × [existing glucose scaler]
 ```
 
-The exponent (−½) is universal; `K_user` is calibrated per person (§4–5). The TDD blend, the
+The exponent (−½) is universal; `K_user` is calibrated per person (§5–6). The TDD blend, the
 glucose scaler and everything else are untouched.
 
 - **Exponent: universal −½**, robust across the TDD construct used (§2).
-- **K_user: per-user, recalibrated weekly** from the person's own recent data (§5). The safe
+- **K_user: per-user, recalibrated weekly** from the person's own recent data (§6). The safe
   default anchors K to the user's existing profile ISF, leaving their average dosing
   unchanged and adding only the TDD-responsive shape; an optional stronger setting anchors K
   to measured sensitivity (needs validation).
-- **Evaluate in shadow first** (§7) with a low-TDD safety clamp before any live dosing.
+- **Evaluate in shadow first** (§8) with a low-TDD safety clamp before any live dosing.
 
 The earlier question of a single global constant (the cohort values were ≈355 against tuned
 profiles and ≈145 against measured sensitivity) is **superseded**: no global K is adequate
-(§4), so the level is set per user rather than chosen once for everyone.
+(§5), so the level is set per user rather than chosen once for everyone.
 
 ---
 
@@ -145,7 +145,36 @@ and stronger for light ones — the opposite tilt to v2, and the direction the d
 
 ---
 
-## 4. Why a single constant is not enough — the level must be per-user
+## 4. The glucose curve g(BG)
+
+v-next replaces the logarithmic glucose scaler with a **power-law / Diabeloop curve** — ISF
+falling with glucose (more insulin per mg/dL when high; strongly protective when low). The
+evidence:
+
+- **Direction and shape are established** by the Diabeloop clinical population model and by a
+  prediction-error backtest on 10 months of closed-loop data, where a power-law
+  `(target/BG)^k` cut 2-hour prediction error 12–18% below the log scaler.
+- **Robust across sites:** at 12 sites (TDD 6–84 U/day), at the end-of-insulin-action
+  horizon, the power-law matches or beats the log scaler at **all 12**.
+- **But the exponent is only weakly identified.** Best-fit k per site spans 0.5–4.0 (median
+  ≈ 0.75, n-weighted ≈ 1.9; single-patient ≈ 2.25 at +2h); the prediction-error surface is
+  nearly flat in k at the full-action horizon, so the exact exponent is not pinned by the
+  data. Practical reading: adopt a moderate power-law / the Diabeloop quartic; the precise
+  exponent is not critical and should be a validated default, not over-fitted.
+- **Evaluate at full insulin action, not +2h.** At +2h all formulas show a large positive
+  bias (BG ends higher than predicted) — but that is mostly a *horizon artefact* (insulin
+  unfinished): at ~3h the loop's own predictions are essentially unbiased (−0.8 mg/dL). So
+  the curve must be judged on the full-action drop, where the bias largely disappears.
+- **Between-site TDD exponent** fit alongside the power-law is ≈ 1/TDD^0.74 — again shallow,
+  corroborating the √TDD level (not 1/TDD).
+
+So the glucose dimension is settled in *direction and form* (power-law, hypo-protective) but
+loose in *exponent*; the v-next curve uses a moderate power-law/Diabeloop shape pending a
+multi-patient prediction backtest to set a default k.
+
+---
+
+## 5. Why a single constant is not enough — the level must be per-user
 
 The √TDD *shape* fits everyone; the *level* does not. Decomposing ISF variance across the
 cohort settles which parts of the equation can be ubiquitous and which cannot:
@@ -168,7 +197,7 @@ constant to measure.
 
 ---
 
-## 5. Personalisation: how K_user is set
+## 6. Personalisation: how K_user is set
 
 `K_user` is recalibrated **weekly** from the person's own recent data; the universal √TDD
 term then provides the within-week response as TDD moves. Two tiers, in increasing
@@ -208,7 +237,7 @@ already stored.
 
 ---
 
-## 6. Evidence status
+## 7. Evidence status
 
 **Settled:**
 - The equation implementations are exact (18 unit tests) and reproduce device-logged ISF
@@ -235,7 +264,7 @@ validation before it doses.
 
 ---
 
-## 7. Path to deployment
+## 8. Path to deployment
 
 1. **Shadow evaluation (now).** Compute the v-next ISF (Tier-1 K_user) alongside the live
    equation and log it without acting on it. Measure how often and by how much it would have
@@ -251,11 +280,11 @@ validation before it doses.
 
 ---
 
-## 8. Risks and mitigations
+## 9. Risks and mitigations
 
 | Risk | Mitigation |
 |---|---|
-| Light insulin users dosed too strongly | Low-TDD clamp / threshold gate (§7.2); shadow review before live |
+| Light insulin users dosed too strongly | Low-TDD clamp / threshold gate (§8.2); shadow review before live |
 | Per-user K calibrated on a noisy 14-day window | Fit-quality gate → fall back to Tier 1; week-to-week change clamp |
 | Sensitivity (Tier-2) anchor over-aggressive | Not deployed by default; Tier 1 leaves average dosing unchanged; Tier 2 gated behind validation |
 | TDD reconstruction error feeds the equation | √TDD is *less* TDD-sensitive than v1 and far less than v2, so the same TDD error moves ISF less — a robustness gain |
@@ -263,7 +292,7 @@ validation before it doses.
 
 ---
 
-## 9. The change, concretely
+## 10. The change, concretely
 
 The TDD blend, glucose cap, glucose scaler, autosensitivity and temp-target handling are
 untouched. Two pieces change: a weekly per-user K, and the anchor formula.
