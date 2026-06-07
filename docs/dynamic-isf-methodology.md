@@ -62,11 +62,11 @@ else:
 
 **Glucose scaling.** With glucose capped at 210 mg/dL (excess at one-third weight),
 divisor 75 (rapid analogue such as Lyumjev), normal target 99 mg/dL. v1 keeps the `+1` in
-the log; the current v2 drops it and floors glucose at `divisor+1`:
+the log; v2 uses `ln(BG/divisor)` (no +1) and floors glucose at `divisor+1`:
 
 ```
 v1 scaler:           ln(target/divisor + 1) / ln(bg_capped/divisor + 1)
-v2 (updated) scaler: ln(target/divisor)     / ln(bg_floored/divisor)     bg_floored = max(bg_capped, 76)
+v2 scaler:         ln(target/divisor)     / ln(bg_floored/divisor)     bg_floored = max(bg_capped, 76)
 ```
 
 **Sensitivity anchor:**
@@ -74,26 +74,24 @@ v2 (updated) scaler: ln(target/divisor)     / ln(bg_floored/divisor)     bg_floo
 | | anchor at normal target | implied TDD law |
 |---|---|---|
 | **v1** | `1800 / (TDD · ln(target/divisor + 1))` | ISF ∝ 1/TDD |
-| **v2 (updated)** | `2300 / (ln(target/divisor) · TDD² · 0.02)` | ISF ∝ 1/TDD² |
+| **v2** | `2300 / (ln(target/divisor) · TDD² · 0.02)` | ISF ∝ 1/TDD² |
 
 The ISF used at any glucose is `anchor · scaler`. In long form:
 
 ```
 v1:           ISF(BG) = 1800    / ( TDD  · ln(bg_capped/75 + 1) )
-v2 (updated): ISF(BG) = 115 000 / ( TDD² · ln(bg_floored/75) )
+v2:           ISF(BG) = 115 000 / ( TDD² · ln(bg_floored/75) )
 ```
 
-Because v1 retains the `+1` and the current v2 does not, **the glucose terms no longer
-cancel** — so the between-equation ratio is glucose-dependent:
+Because v1 uses `ln(BG/divisor+1)` and v2 uses `ln(BG/divisor)`, **the glucose terms differ**
+— so the between-equation ratio is glucose-dependent:
 
 ```
 ISF_v2 / ISF_v1 = (2300 / (0.02 · 1800 · TDD)) · ln(BG/75 + 1)/ln(BG_floored/75)
                 = (63.9 / TDD) · ln(BG/75 + 1)/ln(BG_floored/75)
 ```
 
-(An earlier v2, which kept the `+1`, gave the glucose terms cancelling to a flat
-63.9/TDD with a ~64 U/day crossover; that no longer holds.) The method therefore replays
-both axes — reconstructed TDD *and* glucose — per reading.
+The method therefore replays both axes — reconstructed TDD *and* glucose — per reading.
 
 ---
 
