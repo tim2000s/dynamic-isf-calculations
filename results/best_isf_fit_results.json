@@ -1,5 +1,5 @@
 {
- "generated": "2026-06-07 11:56",
+ "generated": "2026-06-07 19:13",
  "n_cohort": 138,
  "n_empirical": 114,
  "power_law_empirical": {
@@ -105,10 +105,10 @@
   {
    "candidate": "v2 (TDD^-2)",
    "fitted_cv": false,
-   "median_abs_err": 44.6,
-   "p75_abs_err": 138.2,
-   "median_log_err": 1.229,
-   "frac_within_30pct": 0.07
+   "median_abs_err": 171.1,
+   "p75_abs_err": 464.1,
+   "median_log_err": 2.323,
+   "frac_within_30pct": 0.018
   }
  ],
  "target_entered_isf": [
@@ -187,10 +187,10 @@
   {
    "candidate": "v2 (TDD^-2)",
    "fitted_cv": false,
-   "median_abs_err": 33.1,
-   "p75_abs_err": 95.0,
-   "median_log_err": 0.566,
-   "frac_within_30pct": 0.275
+   "median_abs_err": 124.0,
+   "p75_abs_err": 375.7,
+   "median_log_err": 1.304,
+   "frac_within_30pct": 0.065
   }
  ]
 }

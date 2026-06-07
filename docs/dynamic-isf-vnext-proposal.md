@@ -35,9 +35,9 @@ Set sensitivity at normal target in inverse proportion to the **square root of T
 ISF at normal target = K_user / √TDD
 ```
 
-`K_user / √TDD` is the **TDD term** — the only part that changes. It replaces v1's `1800/TDD`
-and v2's `115000/TDD²`; like them it is just a function of TDD. ISF at other glucose levels
-comes from the existing dynamic-ISF glucose scaler, applied unchanged:
+`K_user / √TDD` is the **TDD term** — it replaces v1's `1800/TDD` and v2's `115000/TDD²`.
+ISF at other glucose levels comes from the glucose curve (the power-law / Diabeloop curve;
+v1 and v2 instead use the log scaler):
 
 ```
 ISF(BG) = (K_user / √TDD) × [existing glucose scaler]
@@ -77,7 +77,7 @@ against two independent targets: sensitivity calculated from each person's own d
 | Multivariate (TDD, CR, basal, target) | 14.7 | 0.306 | 46% |
 | **v1 (TDD⁻¹)** | 17.0 | 0.324 | 38% |
 | 1700-rule | 17.9 | 0.454 | 34% |
-| **v2 (TDD⁻²)** | 33.1 | 0.566 | 28% |
+| **v2 (updated, TDD⁻²)** | 124.0 | 1.304 | 7% |
 
 **Target: calculated sensitivity (n = 114)**
 
@@ -88,7 +88,10 @@ against two independent targets: sensitivity calculated from each person's own d
 | Power law A·TDD^b | 6.1 | 0.304 | 45% |
 | 1700-rule | 16.2 | 0.605 | 15% |
 | **v1 (TDD⁻¹)** | 26.0 | 0.813 | 7% |
-| **v2 (TDD⁻²)** | 44.6 | 1.229 | 7% |
+| **v2 (updated, TDD⁻²)** | 171.1 | 2.323 | 2% |
+
+(The updated v2 anchor drops the `+1`, lifting the curve ~3×, so as a between-person level
+predictor it is now far the worst — its strength is low-glucose protection, not the level.)
 
 Four points decide it:
 
@@ -114,30 +117,29 @@ Four points decide it:
 
 ## 3. What it does, relative to v1 and v2
 
-All three equations apply the same glucose scaler; they differ only in the TDD term that
-sets sensitivity at normal target:
+All three differ in the TDD term; updated v2 also changes the glucose term (drops the `+1`):
 
 ```
-v1:      ∝ 1 / TDD
-v2:      ∝ 1 / TDD²
-v-next:  = K / √TDD
+v1:      ∝ 1 / TDD          glucose: ln(BG/div + 1)
+v2:      ∝ 1 / TDD²         glucose: ln(BG/div)  (no +1; BG floored at div+1)
+v-next:  = K / √TDD         glucose: power-law / Diabeloop curve
 ```
 
-The proposed curve rotates v1 about TDD ≈ 36 U/day (ISF at normal target, mg/dL per U;
-v-next shown at the cohort K = 355):
+ISF at normal target, mg/dL per U, divisor 75 (v-next at cohort K = 355):
 
-| TDD (U/day) | v1 | v2 | **v-next (355/√TDD)** | v-next vs v1 |
+| TDD (U/day) | v1 | v2 (updated) | **v-next (355/√TDD)** | v-next vs v1 |
 |---|---|---|---|---|
-| 15 | 143 | 607 | 92 | ~1.6× stronger corrections |
-| 25 | 86 | 219 | 71 | ~1.2× stronger |
-| 36 | 59 | 105 | 59 | equal |
-| 50 | 43 | 55 | 50 | ~15% weaker |
-| 80 | 27 | 21 | 40 | ~1.5× weaker |
-| 120 | 18 | 9.5 | 32 | ~1.8× weaker |
+| 15 | 143 | 1840 | 92 | ~1.6× stronger corrections |
+| 25 | 86 | 663 | 71 | ~1.2× stronger |
+| 36 | 59 | 320 | 59 | equal |
+| 50 | 43 | 166 | 50 | ~15% weaker |
+| 80 | 27 | 65 | 40 | ~1.5× weaker |
+| 120 | 18 | 29 | 32 | ~1.8× weaker |
 
-(The v2 column tracks v1 by exactly the 63.9/TDD ratio — far higher than v1 below the
-64 U/day crossover, far lower above it. At 15 U/day v2 implies an ISF of ~600 mg/dL per
-unit, i.e. almost no correction, which is the extreme over-estimation the data rejects.)
+(Updated v2's at-target ISF is ~3× the earlier v2 — the dropped `+1` — and rises steeply
+*below* target, where `ln(BG/div)→0` gives near-zero corrections. So updated v2 is far
+gentler than v1 everywhere and strongly hypo-protective when low; the v1/v2 ratio is now
+glucose-dependent, not the earlier flat 63.9/TDD. See the v1-vs-v2 analysis doc.)
 
 (ISF in mg/dL per U, at normal target.) v-next is gentler than v1 for heavy insulin users
 and stronger for light ones — the opposite tilt to v2, and the direction the data supports.

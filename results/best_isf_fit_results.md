@@ -1,6 +1,6 @@
 # Best-fit ISF equation search — LOUO-CV comparison
 
-2026-06-07 11:56 · empirical target n=114 · entered target n=138
+2026-06-07 19:13 · empirical target n=114 · entered target n=138
 
 Fitted power law (empirical): ISF = 86.0·TDD^-0.376
 Fitted power law (entered):  ISF = 285.1·TDD^-0.433
@@ -21,7 +21,7 @@ Blend weight on entered ISF: 0.0
 | 1700-rule | False | 16.2 | 31.2 | 0.605 | 0.149 |
 | v1 (TDD^-1) | False | 26.0 | 48.0 | 0.813 | 0.07 |
 | Entered profile ISF | False | 32.0 | 50.3 | 0.896 | 0.044 |
-| v2 (TDD^-2) | False | 44.6 | 138.2 | 1.229 | 0.07 |
+| v2 (TDD^-2) | False | 171.1 | 464.1 | 2.323 | 0.018 |
 
 ## Target: entered ISF (user-tuned profile)
 
@@ -36,4 +36,4 @@ Blend weight on entered ISF: 0.0
 | v1 (TDD^-1) | False | 17.0 | 37.8 | 0.324 | 0.377 |
 | Fitted C/TDD | True | 19.3 | 37.0 | 0.336 | 0.435 |
 | 1700-rule | False | 17.9 | 36.7 | 0.454 | 0.341 |
-| v2 (TDD^-2) | False | 33.1 | 95.0 | 0.566 | 0.275 |
+| v2 (TDD^-2) | False | 124.0 | 375.7 | 1.304 | 0.065 |
