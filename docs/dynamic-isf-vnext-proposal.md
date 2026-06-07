@@ -35,23 +35,48 @@ Set sensitivity at normal target in inverse proportion to the **square root of T
 ISF at normal target = K_user / √TDD
 ```
 
-`K_user / √TDD` is the **TDD term** — it replaces v1's `1800/TDD` and v2's `115000/TDD²`.
-ISF at other glucose levels comes from the glucose curve (the power-law / Diabeloop curve;
-v1 and v2 instead use the log scaler):
+`K_user / √TDD` is the **TDD term** — it replaces v1's `1800/TDD` and v2's `115000/TDD²`. ISF
+at other glucose levels comes from a glucose curve `g(BG)` that **replaces v1/v2's logarithmic
+scaler** with the Diabeloop clinical curve (§4). The full equation is:
 
 ```
-ISF(BG) = (K_user / √TDD) × [existing glucose scaler]
+ISF(BG) = (K_user / √TDD) · g(BG)
 ```
 
-The exponent (−½) is universal; `K_user` is calibrated per person (§5–6). The TDD blend, the
-glucose scaler and everything else are untouched.
+The exponent (−½) is universal; `K_user` is calibrated per person (§5–6); `g(BG)` is the same
+for everyone. The TDD *blend* and the high-glucose cap are kept from v1/v2; the *glucose
+scaler* changes from log to `g(BG)`.
+
+### The starting equation
+
+Spelled out concretely, with the safe default (Tier-1) constant and the Diabeloop quartic
+glucose curve, this is the equation to ship for shadow evaluation:
+
+```
+# once per week, per user:
+K_user = profile_ISF · √(median TDD over last 14 days)
+
+# every cycle, at the blended TDD and current BG:
+level   = max( K_user / √TDD ,  profile_ISF / 1.5 )      # √TDD term, level floor (§8.2)
+ISF(BG) = level · g(BG)
+
+# glucose curve (Diabeloop population quartic, normalised to 1.0 at target):
+q(BG)   = 272 − 3.121·BG + 0.01511·BG² − 3.305e-5·BG³ + 2.69e-8·BG⁴
+g(BG)   = q(BG) / q(target)        # BG high-capped at 210 (excess/3), low-floored at 54
+```
+
+Equivalently, substituting the Tier-1 anchor, ISF at the user's median TDD and target glucose
+returns their **existing profile ISF exactly** — the curve is a behaviour-preserving
+generalisation of their current setting, adding a √TDD level response and the glucose curve.
 
 - **Exponent: universal −½**, robust across the TDD construct used (§2).
 - **K_user: per-user, recalibrated weekly** from the person's own recent data (§6). The safe
-  default anchors K to the user's existing profile ISF, leaving their average dosing
-  unchanged and adding only the TDD-responsive shape; an optional stronger setting anchors K
-  to measured sensitivity (needs validation).
-- **Evaluate in shadow first** (§8) with a low-TDD safety clamp before any live dosing.
+  default (Tier 1) anchors K to the user's existing profile ISF, preserving their dosing
+  *level*; an optional stronger setting (Tier 2) anchors K to measured sensitivity (needs
+  validation).
+- **g(BG): the Diabeloop clinical curve** (§4), shared by all users — falls with glucose
+  (firmer corrections when high, protective when low).
+- **Evaluate in shadow first** (§8) with the level clamp before any live dosing.
 
 The earlier question of a single global constant (the cohort values were ≈355 against tuned
 profiles and ≈145 against measured sensitivity) is **superseded**: no global K is adequate
@@ -122,10 +147,12 @@ All three differ in the TDD term; v2 and v-next also differ from v1 in the gluco
 ```
 v1:      ∝ 1 / TDD          glucose: ln(BG/div + 1)
 v2:      ∝ 1 / TDD²         glucose: ln(BG/div)  (no +1; BG floored at div+1)
-v-next:  = K / √TDD         glucose: power-law / Diabeloop curve
+v-next:  = K_user / √TDD    glucose: Diabeloop quartic g(BG)  (§4)
 ```
 
-ISF at normal target, mg/dL per U, divisor 75 (v-next at cohort K = 355):
+ISF at normal target (where `g(BG) = 1`), mg/dL per U, divisor 75. The v-next column uses the
+cohort-representative K = 355 purely to show the **level shape** — the shipped equation uses a
+per-user K_user (§1, §6), not this single value:
 
 | TDD (U/day) | v1 | v2 | **v-next (355/√TDD)** | v-next vs v1 |
 |---|---|---|---|---|
