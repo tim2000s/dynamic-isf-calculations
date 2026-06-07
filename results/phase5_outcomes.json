@@ -1,0 +1,37 @@
+{
+ "n": 112,
+ "median_R_entered_over_empirical": 2.38,
+ "spearman": {
+  "logR_vs_TAR (expect +)": 0.003,
+  "logR_vs_TBR (expect -)": 0.383,
+  "logR_vs_TIR": -0.117,
+  "mismatch_vs_TIR (expect -)": -0.117,
+  "mismatch_vs_TBR": 0.383
+ },
+ "tertiles": [
+  {
+   "Rband": "low (\u2248 doses to sensitivity)",
+   "n": 38,
+   "median_R": 1.608636995419503,
+   "TIR": 0.8453256104141053,
+   "TAR": 0.1390282402099121,
+   "TBR": 0.016021782061329193
+  },
+  {
+   "Rband": "mid",
+   "n": 37,
+   "median_R": 2.3919751919003454,
+   "TIR": 0.8065803494940068,
+   "TAR": 0.15936158927624283,
+   "TBR": 0.03025816600351624
+  },
+  {
+   "Rband": "high (doses weak)",
+   "n": 37,
+   "median_R": 4.541988189171498,
+   "TIR": 0.8261013215859031,
+   "TAR": 0.12226171778126808,
+   "TBR": 0.042808001019238116
+  }
+ ]
+}
