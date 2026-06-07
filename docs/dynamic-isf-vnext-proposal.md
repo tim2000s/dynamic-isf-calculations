@@ -37,37 +37,42 @@ ISF at normal target = K_user / √TDD
 
 `K_user / √TDD` is the **TDD term** — it replaces v1's `1800/TDD` and v2's `115000/TDD²`. ISF
 at other glucose levels comes from a glucose curve `g(BG)` that **replaces v1/v2's logarithmic
-scaler** with the Diabeloop clinical curve (§4). The full equation is:
+scaler** with the Diabeloop clinical curve (§4). In the same form as v1 and v2:
 
 ```
-ISF(BG) = (K_user / √TDD) · g(BG)
+v1:      ISF(BG) = 1800    / ( TDD  · ln(BG_capped/75 + 1) )
+v2:      ISF(BG) = 115000  / ( TDD² · ln(BG_floored/75)    )
+v-next:  ISF(BG) = ( K_user / √TDD ) · g(BG)
 ```
 
 The exponent (−½) is universal; `K_user` is calibrated per person (§5–6); `g(BG)` is the same
 for everyone. The TDD *blend* and the high-glucose cap are kept from v1/v2; the *glucose
 scaler* changes from log to `g(BG)`.
 
-### The starting equation
+### The implementation equation
 
-Spelled out concretely, with the safe default (Tier-1) constant and the Diabeloop quartic
-glucose curve, this is the equation to ship for shadow evaluation:
+Substituting the safe-default (Tier-1) constant `K_user = profile_ISF · √(median 14-day TDD)`
+and the Diabeloop quartic, the single closed-form ISF a device computes each cycle is:
 
 ```
-# once per week, per user:
-K_user = profile_ISF · √(median TDD over last 14 days)
-
-# every cycle, at the blended TDD and current BG:
-level   = max( K_user / √TDD ,  profile_ISF / 1.5 )      # √TDD term, level floor (§8.2)
-ISF(BG) = level · g(BG)
-
-# glucose curve (Diabeloop population quartic, normalised to 1.0 at target):
-q(BG)   = 272 − 3.121·BG + 0.01511·BG² − 3.305e-5·BG³ + 2.69e-8·BG⁴
-g(BG)   = q(BG) / q(target)        # BG high-capped at 210 (excess/3), low-floored at 54
+                                        272 − 3.121·BG + 0.01511·BG² − 3.305e-5·BG³ + 2.69e-8·BG⁴
+ISF(BG) = profile_ISF · √(TDD₁₄ / TDD) · ──────────────────────────────────────────────────────
+                                                                81.63
 ```
 
-Equivalently, substituting the Tier-1 anchor, ISF at the user's median TDD and target glucose
-returns their **existing profile ISF exactly** — the curve is a behaviour-preserving
-generalisation of their current setting, adding a √TDD level response and the glucose curve.
+where
+- `profile_ISF` — the person's existing static profile ISF (mg/dL per U)
+- `TDD₁₄` — median blended TDD over the last 14 days (updated weekly)
+- `TDD` — the current blended TDD (the existing v1/v2 5-window blend, unchanged)
+- `BG` — current glucose, clamped to `[54, cap(210, excess/3)]`
+- `81.63 = q(99)` — the quartic at the normal target, so the glucose factor is 1.0 at target
+- **level floor (§8.2):** clamp `profile_ISF · √(TDD₁₄/TDD) ≥ profile_ISF / 1.5` before applying
+  the glucose factor (bounds how far the *level* can strengthen; does not touch `g(BG)`)
+
+At the user's median TDD and target glucose this returns their **existing profile ISF
+exactly** (`√(TDD₁₄/TDD)=1`, glucose factor `=1`) — a behaviour-preserving generalisation of
+their current setting, adding a √TDD level response and the glucose curve. The Tier-2 variant
+swaps `profile_ISF` for the person's measured sensitivity (§6).
 
 - **Exponent: universal −½**, robust across the TDD construct used (§2).
 - **K_user: per-user, recalibrated weekly** from the person's own recent data (§6). The safe
