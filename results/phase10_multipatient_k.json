@@ -1,0 +1,38 @@
+{
+ "n_patients": 13,
+ "total_windows": 16432,
+ "k_default_equal_weight": 0.5,
+ "k_default_pooled": 1.6,
+ "lopo_k_median": 0.5,
+ "lopo_k_range": [
+  0.5,
+  0.6
+ ],
+ "lopo_mae_median": 16.89,
+ "mean_mae_at_best_k": 17.33,
+ "mean_mae_log": 17.35,
+ "mean_mae_loop": 21.7,
+ "flatness_mean_mae_by_k": {
+  "1.0": 17.46,
+  "1.5": 17.72,
+  "2.0": 18.02,
+  "2.5": 18.36,
+  "3.0": 18.68,
+  "4.0": 19.28
+ },
+ "per_patient_best_k": {
+  "henny425": 0.5,
+  "aadiabetes": 1.0,
+  "diajesse": 0.5,
+  "svns": 1.7,
+  "andycgm": 2.2,
+  "noahr": 0.5,
+  "fuxchr": 4.0,
+  "nightscout1": 0.5,
+  "eli": 0.5,
+  "mikens": 0.5,
+  "ns_rot6": 3.0,
+  "kelseyhuss": 2.3,
+  "boost(N=1)": 2.5
+ }
+}
