@@ -1,0 +1,22 @@
+{
+ "n": 112,
+ "K_pop_working": 355.1,
+ "median_nudge": 1.0,
+ "candidates": [
+  {
+   "candidate": "sensitivity route (empirical)",
+   "err_vs_working_pct": 138.0,
+   "logR_vs_TBR": 0.38
+  },
+  {
+   "candidate": "cold start (\u221aTDD, no per-user)",
+   "err_vs_working_pct": 28.0,
+   "logR_vs_TBR": 0.21
+  },
+  {
+   "candidate": "outcome route (cold + nudge)",
+   "err_vs_working_pct": 41.0,
+   "logR_vs_TBR": -0.04
+  }
+ ]
+}
