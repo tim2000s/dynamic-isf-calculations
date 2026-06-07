@@ -153,11 +153,14 @@ def main():
     for r in sorted(res, key=lambda x: x["tdd"]):
         md.append(f"| {r['name'][:18]} | {r['tdd']:.0f} | {r['n']} | {r['best_k']:.1f} |")
     rng = max(flat.values()) - min(flat.values())
-    md.append(f"\n**Reading:** the population objective is minimised at k≈{k_eq} (LOPO median "
-              f"{summary['lopo_k_median']}); but MAE varies only ~{rng:.1f} mg/dL across k 1–4, "
-              "so the exponent is a weak lever — any moderate k in ~1.5–3 is near-optimal. "
-              "Power-law beats both log and the loop on the mean. Use the LOPO k as the default; "
-              "treat the curve shape as more important than the precise exponent.")
+    md.append(f"\n**Reading:** this prediction backtest does NOT set the absolute glucose "
+              f"exponent. It scores a candidate curve only *relative to the loop's existing "
+              f"DynISF*, so the fitted k reflects curvature beyond the loop's own curve, not the "
+              f"true ISF–glucose relationship; it is horizon-dependent and underpowered — MAE "
+              f"varies only ~{rng:.1f} mg/dL across k 1–4, and power-law ≈ log. The apparent "
+              f"k≈{k_eq} therefore means 'no extra curvature beyond the loop's at this horizon', "
+              f"not 'ISF is flat in glucose'. The glucose exponent must come from the Diabeloop "
+              f"clinical model and be validated prospectively, not fitted here.")
     (OUT / "phase10_multipatient_k.md").write_text("\n".join(md))
     print("\n".join(md))
 

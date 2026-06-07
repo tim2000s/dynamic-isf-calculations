@@ -147,30 +147,32 @@ and stronger for light ones — the opposite tilt to v2, and the direction the d
 
 ## 4. The glucose curve g(BG)
 
-v-next replaces the logarithmic glucose scaler with a **power-law / Diabeloop curve** — ISF
-falling with glucose (more insulin per mg/dL when high; strongly protective when low). The
-evidence:
+v-next's glucose term is a **power-law / Diabeloop curve** — ISF falling with glucose (more
+insulin per mg/dL when high; strongly protective at low). Its provenance is deliberately
+different from the TDD level:
 
-- **Direction and shape are established** by the Diabeloop clinical population model and by a
-  prediction-error backtest on 10 months of closed-loop data, where a power-law
-  `(target/BG)^k` cut 2-hour prediction error 12–18% below the log scaler.
-- **Robust across sites:** at 12 sites (TDD 6–84 U/day), at the end-of-insulin-action
-  horizon, the power-law matches or beats the log scaler at **all 12**.
-- **But the exponent is only weakly identified.** Best-fit k per site spans 0.5–4.0 (median
-  ≈ 0.75, n-weighted ≈ 1.9; single-patient ≈ 2.25 at +2h); the prediction-error surface is
-  nearly flat in k at the full-action horizon, so the exact exponent is not pinned by the
-  data. Practical reading: adopt a moderate power-law / the Diabeloop quartic; the precise
-  exponent is not critical and should be a validated default, not over-fitted.
-- **Evaluate at full insulin action, not +2h.** At +2h all formulas show a large positive
-  bias (BG ends higher than predicted) — but that is mostly a *horizon artefact* (insulin
-  unfinished): at ~3h the loop's own predictions are essentially unbiased (−0.8 mg/dL). So
-  the curve must be judged on the full-action drop, where the bias largely disappears.
-- **Between-site TDD exponent** fit alongside the power-law is ≈ 1/TDD^0.74 — again shallow,
-  corroborating the √TDD level (not 1/TDD).
+- **The shape and exponent come from the Diabeloop clinical population model** (ISF vs
+  glucose from controlled clinical data, piecewise polynomial / quartic). That is the basis
+  for the glucose curve; v-next adopts it rather than fitting an exponent from device data.
+- **The absolute exponent cannot be determined from observational AID data.** Prediction-
+  error backtests on closed-loop data estimate a candidate curve's curvature only *relative
+  to the loop's existing DynISF* (the device already applies a glucose-dependent ISF), are
+  horizon-dependent, and are underpowered — the glucose exponent moves prediction MAE by
+  ≤2 mg/dL and a power-law sits within noise of the log scaler. So those backtests can
+  confirm a power-law is *no worse* than log, but they cannot set or validate the exponent.
+  (This is the glucose-axis counterpart of the level result: observational data, confounded
+  by the loop's own behaviour and by glucose mean-reversion, cannot recover g(BG).)
+- **Validation is prospective, not retrospective.** Establishing the exponent for this
+  population requires a prospective / closed-loop trial; retrospective fitting on AID logs
+  does not answer it.
+- One robust observational note: at the full-action horizon the loop's own ISF predictions
+  are essentially unbiased (≈ −0.8 mg/dL), so the much larger positive bias seen at a 2-hour
+  horizon is a horizon artefact (insulin unfinished), not real over-aggression.
 
-So the glucose dimension is settled in *direction and form* (power-law, hypo-protective) but
-loose in *exponent*; the v-next curve uses a moderate power-law/Diabeloop shape pending a
-multi-patient prediction backtest to set a default k.
+So the glucose dimension is settled in **direction and form** (power-law, hypo-protective,
+from the Diabeloop clinical model) and **open in exponent**, which is taken from that clinical
+model and flagged for prospective validation — unlike the √TDD level and per-user K, which
+the cohort data establishes directly.
 
 ---
 

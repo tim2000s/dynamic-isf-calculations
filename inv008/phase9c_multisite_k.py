@@ -107,11 +107,12 @@ def main():
     for r in sorted(rows, key=lambda x: x["tdd"]):
         md.append(f"| {r['name'][:18]} | {r['model']} | {r['n']} | {r['tdd']:.0f} | "
                   f"**{r['best_k']:.2f}** | {r['mae_pl']} | {r['mae_log']} | {r['mae_loop']} |")
-    md.append(f"\n- Single-patient (boost cache) gave k≈2.25 at ~3.17h; the multisite median "
-              f"({summary['best_k_median']}) {'agrees' if abs(summary['best_k_median']-2.25)<1 else 'differs'}.")
-    md.append("\n*N small per site (40–2819 windows); k is noisy per site but the central "
-              "tendency firms up the exponent. Prediction-error design; mixed sigmoid/log loop "
-              "formulas (the scaling is formula-agnostic).*")
+    md.append("\n- The per-site k scatters 0.5–4.0 with no consistent pattern: this "
+              "prediction backtest scores a candidate curve only RELATIVE to each loop's "
+              "existing DynISF, so k tracks the device's own curve and horizon, not the absolute "
+              "ISF–glucose relationship. It cannot set the glucose exponent — that comes from the "
+              "Diabeloop clinical model. What is robust is only that a power-law is no worse than "
+              "the log scaler.")
     (OUT / "phase9c_multisite_k.md").write_text("\n".join(md))
     print("\n".join(md))
 

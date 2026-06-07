@@ -32,4 +32,4 @@
 | eli | 77 | 40 | 0.5 |
 | nightscout1 | 84 | 972 | 0.5 |
 
-**Reading:** the population objective is minimised at k≈0.5 (LOPO median 0.5); but MAE varies only ~1.8 mg/dL across k 1–4, so the exponent is a weak lever — any moderate k in ~1.5–3 is near-optimal. Power-law beats both log and the loop on the mean. Use the LOPO k as the default; treat the curve shape as more important than the precise exponent.
+**Reading:** this prediction backtest does NOT set the absolute glucose exponent. It scores a candidate curve only *relative to the loop's existing DynISF*, so the fitted k reflects curvature beyond the loop's own curve, not the true ISF–glucose relationship; it is horizon-dependent and underpowered — MAE varies only ~1.8 mg/dL across k 1–4, and power-law ≈ log. The apparent k≈0.5 therefore means 'no extra curvature beyond the loop's at this horizon', not 'ISF is flat in glucose'. The glucose exponent must come from the Diabeloop clinical model and be validated prospectively, not fitted here.

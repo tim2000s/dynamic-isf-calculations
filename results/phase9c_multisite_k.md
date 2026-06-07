@@ -21,6 +21,4 @@ Per-site prediction-error fit of ISF = α·(target/BG)^k at the end-of-insulin-a
 | eli | log | 40 | 77 | **0.50** | 13.14 | 13.14 | 18.52 |
 | nightscout1 | log | 972 | 84 | **0.50** | 14.62 | 14.67 | 28.1 |
 
-- Single-patient (boost cache) gave k≈2.25 at ~3.17h; the multisite median (0.75) differs.
-
-*N small per site (40–2819 windows); k is noisy per site but the central tendency firms up the exponent. Prediction-error design; mixed sigmoid/log loop formulas (the scaling is formula-agnostic).*
+- The per-site k scatters 0.5–4.0 with no consistent pattern: this prediction backtest scores a candidate curve only RELATIVE to each loop's existing DynISF, so k tracks the device's own curve and horizon, not the absolute ISF–glucose relationship. It cannot set the glucose exponent — that comes from the Diabeloop clinical model. What is robust is only that a power-law is no worse than the log scaler.
