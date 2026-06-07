@@ -108,3 +108,57 @@ def test_v2_updated_ratio_is_bg_dependent():
     r_low = float(v2updated_over_v1_ratio(90.0, 50.0))
     r_high = float(v2updated_over_v1_ratio(250.0, 50.0))
     assert r_low > r_high > 1.0
+
+
+# --- v-next: (K_user/√TDD) · g(BG) -----------------------------------------
+
+def test_g_curves_unity_at_target():
+    from inv008.dynisf import g_quartic, g_powerlaw
+    # both glucose curves are normalised to 1.0 at the normal target
+    assert float(g_quartic(NT)) == pytest.approx(1.0)
+    assert float(g_powerlaw(NT)) == pytest.approx(1.0)
+
+
+def test_g_curves_fall_with_glucose():
+    from inv008.dynisf import g_quartic, g_powerlaw
+    bg = np.linspace(60, 300, 49)
+    for g in (np.asarray(g_quartic(bg)), np.asarray(g_powerlaw(bg))):
+        assert np.all(np.diff(g) < 0)          # ISF falls as BG rises
+    # hypo-protective below target, more aggressive above
+    assert float(g_quartic(70.0)) > 1.0 > float(g_quartic(160.0))
+
+
+def test_g_quartic_matches_diabeloop_coeffs():
+    from inv008.dynisf import g_quartic, quartic_isf
+    def q(g): return 272 - 3.121*g + 0.01511*g**2 - 3.305e-5*g**3 + 2.69e-8*g**4
+    assert float(quartic_isf(140.0)) == pytest.approx(q(140.0))
+    assert float(g_quartic(140.0)) == pytest.approx(q(140.0) / q(NT))
+
+
+def test_g_bg_clamps():
+    from inv008.dynisf import g_quartic, BG_FLOOR_VNEXT
+    # low floor: BG below the clinical floor clamps to the floor value
+    assert float(g_quartic(40.0)) == pytest.approx(float(g_quartic(BG_FLOOR_VNEXT)))
+    # high cap (excess/3 above 210): 270 → 230, evaluated as the raw quartic at 230
+    from inv008.dynisf import quartic_isf
+    assert float(g_quartic(270.0)) == pytest.approx(quartic_isf(230.0) / quartic_isf(NT))
+
+
+def test_isf_vnext_anchor_and_tdd_law():
+    from inv008.dynisf import isf_vnext, k_user_tier1
+    profile_isf, med_tdd = 40.0, 36.0
+    K = k_user_tier1(profile_isf, med_tdd)
+    # at the user's median TDD and normal target, Tier-1 returns profile ISF exactly
+    assert float(isf_vnext(NT, med_tdd, K)) == pytest.approx(profile_isf)
+    # √TDD law: doubling TDD multiplies the at-target ISF by 1/√2
+    assert float(isf_vnext(NT, 2 * med_tdd, K)) == pytest.approx(profile_isf / math.sqrt(2))
+    # glucose curve composes multiplicatively
+    from inv008.dynisf import g_quartic
+    assert float(isf_vnext(160.0, med_tdd, K)) == pytest.approx(profile_isf * float(g_quartic(160.0)))
+
+
+def test_isf_vnext_powerlaw_curve_option():
+    from inv008.dynisf import isf_vnext, g_powerlaw, k_user_tier1
+    K = k_user_tier1(40.0, 36.0)
+    assert float(isf_vnext(160.0, 36.0, K, curve="powerlaw", k=1.3)) == pytest.approx(
+        40.0 * float(g_powerlaw(160.0, k=1.3)))

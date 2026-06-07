@@ -169,6 +169,20 @@ different from the TDD level:
   are essentially unbiased (≈ −0.8 mg/dL), so the much larger positive bias seen at a 2-hour
   horizon is a horizon artefact (insulin unfinished), not real over-aggression.
 
+**Concrete instantiation.** The curve adopted is the Diabeloop population quartic, normalised
+to 1.0 at the normal target so it composes with the level without moving the per-user anchor:
+
+```
+q(BG) = 272 − 3.121·BG + 0.01511·BG² − 3.305e-5·BG³ + 2.69e-8·BG⁴
+g(BG) = q(BG) / q(target)        # BG high-capped at 210 (excess/3), low-floored at 54
+```
+
+It falls monotonically across the physiological range — more insulin per mg/dL when high,
+strongly protective when low — and corresponds to a mild power law of exponent ≈ 1.3 over
+BG 70–250, far gentler than the exponents retrospective device fits suggested (consistent
+with those being artefacts). A one-parameter `(target/BG)^k` form is available as an
+alternative of the same family.
+
 So the glucose dimension is settled in **direction and form** (power-law, hypo-protective,
 from the Diabeloop clinical model) and **open in exponent**, which is taken from that clinical
 model and flagged for prospective validation — unlike the √TDD level and per-user K, which
@@ -210,8 +224,11 @@ aggressiveness:
 K_user = profile_ISF × √(median TDD over the last 14 days)
 ```
 This re-expresses the user's *existing* static ISF as a TDD-responsive curve. At their typical
-TDD the ISF is unchanged, so average dosing does not move; the only new behaviour is the
-√TDD adjustment as TDD drifts up or down. It needs nothing more than 14 days of TDD history.
+TDD **and target glucose** the ISF level is unchanged, so the dosing *level* is preserved; the
+new behaviour is the glucose curve (§4), which firms corrections when high and eases them when
+low, plus the √TDD adjustment as TDD drifts. The cohort shadow run (§7) confirms the level is
+held — the §8.2 level clamp binds for ~0% of readings — while g(BG) reshapes dosing across the
+glucose range. It needs nothing more than 14 days of TDD history.
 
 **Tier 2 — sensitivity-anchored (stronger; needs validation).**
 ```
@@ -250,6 +267,12 @@ already stored.
   duration checks.
 - The level varies ~9× between people and is dominated by a stable per-person offset, so
   per-user calibration is well-founded, not a tuning convenience.
+- A cohort shadow evaluation (138 people, 9.1M readings; counterfactual replay of the ISF
+  each device would have used) confirms Tier-1 preserves the dosing *level* — the §8.2 level
+  clamp would bind for a median of 0% of readings (worst person ~19%) — and that the dosing
+  change it introduces (median 38% per correction) is the glucose curve, not a level shift.
+  Across the glucose range it tracks today's DynISF (v1) within ±30% (median ratio 1.01),
+  a little firmer at high glucose where the Diabeloop curve is steeper than v1's log scaler.
 
 **Provisional:**
 - The **Tier-2 sensitivity anchor** rests on a regression estimator that may be biased low by
@@ -268,13 +291,17 @@ validation before it doses.
 
 ## 8. Path to deployment
 
-1. **Shadow evaluation (now).** Compute the v-next ISF (Tier-1 K_user) alongside the live
-   equation and log it without acting on it. Measure how often and by how much it would have
-   changed dosing, by TDD band, and confirm the weekly K_user recalibration is stable.
-2. **Low-TDD safety clamp.** Below ~36 U/day the curve doses more strongly than v1 (≈1.6× at
-   15 U/day) — relevant for children and very insulin-sensitive adults. Before any live
-   dosing, clamp so the result is never more than ~1.5× stronger than the user's profile-ISF
-   value, or gate above a TDD threshold.
+1. **Shadow evaluation (done retrospectively; repeat live).** A counterfactual cohort sweep
+   (§7) has computed the Tier-1 v-next ISF against each person's real per-tick history: the
+   level is preserved and the change is the glucose curve, tracking v1 within ±30%. The live
+   step is to compute it on-device alongside the running equation, log without acting, and
+   confirm the weekly K_user recalibration is stable in production.
+2. **Low-TDD safety clamp — on the level term.** Clamp the **level** `K_user/√TDD` so it is
+   never more than ~1.5× stronger than the user's profile-ISF value (a floor on the level),
+   applied to the level *only*, not the full ISF — otherwise the intended high-glucose
+   aggression of g(BG) would be clipped ~40% of the time. The shadow run shows this level
+   clamp rarely binds under Tier-1 (≈0% of readings); it is a guard against TDD spikes and
+   the Tier-2 sensitivity anchor rather than a routine limiter.
 3. **Live trial (after shadow review).** Enable for opt-in testers at **Tier 1**, clamp
    active, shadow comparison still logging.
 4. **Tier 2 (later).** Only with forward-validated outcomes should the sensitivity-anchored
@@ -296,16 +323,18 @@ validation before it doses.
 
 ## 10. The change, concretely
 
-The TDD blend, glucose cap, glucose scaler, autosensitivity and temp-target handling are
-untouched. Two pieces change: a weekly per-user K, and the anchor formula.
+The TDD blend, glucose cap, autosensitivity and temp-target handling are untouched. Three
+pieces change: a weekly per-user K, the anchor formula, and the glucose scaler (log → the
+Diabeloop quartic g(BG)).
 
 ```
 # weekly, per user (Tier 1 shown; Tier 2 swaps profile_ISF for measured_ISF):
 K_user = profile_ISF * sqrt(median_TDD_14d)        // clamp vs previous K_user
 
 # every cycle:
-sensNormalTarget = K_user / sqrt(TDD)   // the TDD term; was 1800/TDD (v1) or 115000/TDD² (v2)
-ISF(BG) = sensNormalTarget * scaler     // existing glucose scaler, unchanged
+level   = K_user / sqrt(TDD)             // the TDD term; was 1800/TDD (v1) or 115000/TDD² (v2)
+level   = max(level, profile_ISF / 1.5)  // §8.2 clamp on the LEVEL only (not the full ISF)
+ISF(BG) = level * g(BG)                   // g(BG) = Diabeloop quartic, normalised to 1 at target
 ```
 
 Because `K_user = profile_ISF · √(median TDD)`, at the user's typical TDD this returns their
@@ -320,6 +349,8 @@ setting, with the √TDD response added.
 - v1 vs v2 analysis: companion analysis document
 - Equation search: `fit_best_isf.py`, `results/best_isf_fit_results.{json,md}`
 - Personalisation analysis (blended-TDD refit, variance decomposition): `inv008/fit_personalisation.py`
+- Glucose curve + v-next equation: `inv008/dynisf.py` (`g_quartic`, `isf_vnext`, `k_user_tier1`), tests in `inv008/tests/`
+- Cohort shadow evaluation: `inv008/phase11_shadow_eval.py` → `results/phase11_shadow_eval.{json,md}`, `charts/inv008/fig_shadow_eval.png`
 - Comparison figure: `charts/inv008/fig_best_fit.png`
 - Device validation: `inv008/validate_device_isf.py`, `results/device_isf_validation.{json,md}`
 - Repository: `github.com/tim2000s/dynamic-isf-calculations`
