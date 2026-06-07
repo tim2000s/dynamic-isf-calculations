@@ -15,7 +15,7 @@ term. Here we fit BOTH axes on the same multi-user data:
       per-user level scale as 1/TDD^p with p≈0.5 (√TDD) or p≈1?
 
 Overnight (00:00–06:00) clean fasting windows only, to limit the unannounced-carb confound
-that biases the glucose exponent (apparent low sensitivity at high BG from residual carbs).
+that limit confounds. NOTE: an observed-ISF-vs-BG regression CANNOT recover g(BG) — its slope is dominated by regression-to-mean/counter-regulation and comes out wrong-signed (local-ISF rises with BG; true ISF falls with BG). Use a prediction-error backtest for g(BG).
 CAVEAT: that confound is reduced, not eliminated, so the *magnitude* of k from observational
 data is less trustworthy than the prior clean backtest; the power-law-vs-log *comparison* and
 the TDD exponent are the robust outputs.
