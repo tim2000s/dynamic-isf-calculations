@@ -11,6 +11,11 @@ generates each person's dynamic ISF under both equations from their own glucose 
 insulin history, tests both against sensitivity calculated directly from the data, and
 proposes a next version.
 
+ISF factorises as **f(TDD) × g(BG)**. The root of this repo covers **f(TDD)** (the √TDD law);
+**[`glucose-isf/`](glucose-isf/)** covers **g(BG)** — the prior Diabeloop / power-law work
+establishing glucose-dependent ISF and that a power-law glucose term beats the log scaler.
+`results/phase8_glucose_tdd.md` reconciles the two axes on the cohort.
+
 ## The equations
 
 Both share the same TDD-blending step (five windows → a weighted TDD) and the same
