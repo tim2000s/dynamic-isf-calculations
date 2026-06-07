@@ -1,0 +1,4964 @@
+[
+ {
+  "user_id": "U001",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 728,
+   "total_var": 0.5951861923526218,
+   "eta2_circadian": 0.0087,
+   "eta2_weekly": 0.004,
+   "eta2_slow": 0.006,
+   "n_days": 58,
+   "daily_acf1": -0.07373922218860621,
+   "daily_acf7": -0.06667281867668215,
+   "circadian_profile": {
+    "afternoon": 0.1,
+    "dawn": -0.052,
+    "evening": -0.062,
+    "late": -0.06,
+    "midday": 0.228,
+    "night": 0.028
+   }
+  },
+  "strict": {
+   "n_windows": 165,
+   "total_var": 0.6163204223849489,
+   "eta2_circadian": 0.0824,
+   "eta2_weekly": 0.1157,
+   "eta2_slow": 0.0449,
+   "n_days": 13,
+   "daily_acf1": 0.12454270371381801,
+   "daily_acf7": 0.012824059627816301,
+   "circadian_profile": {
+    "afternoon": 0.126,
+    "dawn": 0.118,
+    "evening": -0.178,
+    "late": -0.934,
+    "night": 0.076
+   }
+  }
+ },
+ {
+  "user_id": "U002",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 10049,
+   "total_var": 0.45415835864875004,
+   "eta2_circadian": 0.0106,
+   "eta2_weekly": 0.0019,
+   "eta2_slow": 0.0451,
+   "n_days": 364,
+   "daily_acf1": 0.20229909457708725,
+   "daily_acf7": 0.08324670239581491,
+   "circadian_profile": {
+    "afternoon": -0.087,
+    "dawn": -0.055,
+    "evening": 0.012,
+    "late": 0.158,
+    "midday": 0.018,
+    "night": -0.002
+   }
+  },
+  "strict": {
+   "n_windows": 3531,
+   "total_var": 0.42459335145471855,
+   "eta2_circadian": 0.0108,
+   "eta2_weekly": 0.0044,
+   "eta2_slow": 0.0364,
+   "n_days": 198,
+   "daily_acf1": 0.038593351908493494,
+   "daily_acf7": 0.08192073753740349,
+   "circadian_profile": {
+    "afternoon": -0.13,
+    "dawn": 0.018,
+    "evening": 0.041,
+    "late": 0.08,
+    "midday": 0.048,
+    "night": -0.017
+   }
+  }
+ },
+ {
+  "user_id": "U003",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 1911,
+   "total_var": 0.46543663759426174,
+   "eta2_circadian": 0.0191,
+   "eta2_weekly": 0.0114,
+   "eta2_slow": 0.0096,
+   "n_days": 87,
+   "daily_acf1": 0.01924200654368359,
+   "daily_acf7": -0.04947466798317386,
+   "circadian_profile": {
+    "afternoon": -0.094,
+    "dawn": 0.107,
+    "evening": -0.085,
+    "late": -0.237,
+    "midday": 0.055,
+    "night": -0.073
+   }
+  },
+  "strict": {
+   "n_windows": 1111,
+   "total_var": 0.39863504925501836,
+   "eta2_circadian": 0.0134,
+   "eta2_weekly": 0.0121,
+   "eta2_slow": 0.0064,
+   "n_days": 72,
+   "daily_acf1": 0.0291739530684374,
+   "daily_acf7": -0.12829412710882893,
+   "circadian_profile": {
+    "afternoon": -0.066,
+    "dawn": 0.092,
+    "evening": -0.014,
+    "late": -0.103,
+    "midday": 0.006,
+    "night": -0.074
+   }
+  }
+ },
+ {
+  "user_id": "U004",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 268,
+   "total_var": 0.35838815426630577,
+   "eta2_circadian": 0.1136,
+   "eta2_weekly": 0.0614,
+   "eta2_slow": 0.0895,
+   "n_days": 20,
+   "daily_acf1": -0.10246344375053669,
+   "daily_acf7": 0.27908211442057795,
+   "circadian_profile": {
+    "afternoon": 0.4,
+    "dawn": 0.065,
+    "evening": 0.152,
+    "late": 1.075,
+    "midday": -0.023,
+    "night": -0.228
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U005",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 1618,
+   "total_var": 0.46987392146446105,
+   "eta2_circadian": 0.0552,
+   "eta2_weekly": 0.0121,
+   "eta2_slow": 0.0378,
+   "n_days": 139,
+   "daily_acf1": -0.013580741016423233,
+   "daily_acf7": -0.09823930696678583,
+   "circadian_profile": {
+    "afternoon": -0.144,
+    "dawn": 0.052,
+    "evening": -0.022,
+    "late": 0.191,
+    "midday": 0.43,
+    "night": -0.091
+   }
+  },
+  "strict": {
+   "n_windows": 512,
+   "total_var": 0.3938085294907323,
+   "eta2_circadian": 0.0551,
+   "eta2_weekly": 0.0293,
+   "eta2_slow": 0.1065,
+   "n_days": 36,
+   "daily_acf1": -0.1897312541172602,
+   "daily_acf7": 0.00803491627557899,
+   "circadian_profile": {
+    "afternoon": -0.232,
+    "dawn": 0.062,
+    "evening": -0.028,
+    "late": 0.12,
+    "midday": 0.357,
+    "night": -0.092
+   }
+  }
+ },
+ {
+  "user_id": "U006",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 541,
+   "total_var": 0.4813533017372371,
+   "eta2_circadian": 0.0104,
+   "eta2_weekly": 0.0694,
+   "eta2_slow": 0.0118,
+   "n_days": 31,
+   "daily_acf1": -0.012115279982695074,
+   "daily_acf7": -0.2675196557517858,
+   "circadian_profile": {
+    "afternoon": 0.108,
+    "dawn": -0.022,
+    "evening": 0.131,
+    "late": 0.065,
+    "midday": -0.051,
+    "night": -0.068
+   }
+  },
+  "strict": {
+   "n_windows": 233,
+   "total_var": 0.42240014053754615,
+   "eta2_circadian": 0.0531,
+   "eta2_weekly": 0.1359,
+   "eta2_slow": 0.0112,
+   "n_days": 21,
+   "daily_acf1": 0.07933203820948974,
+   "daily_acf7": -0.38010102838012605,
+   "circadian_profile": {
+    "afternoon": 0.424,
+    "dawn": 0.03,
+    "evening": -0.008,
+    "late": -0.065,
+    "midday": -0.132,
+    "night": -0.134
+   }
+  }
+ },
+ {
+  "user_id": "U007",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 1201,
+   "total_var": 0.41712334608737545,
+   "eta2_circadian": 0.0561,
+   "eta2_weekly": 0.0306,
+   "eta2_slow": 0.0036,
+   "n_days": 66,
+   "daily_acf1": -0.003144905405508609,
+   "daily_acf7": -0.03689210920134299,
+   "circadian_profile": {
+    "afternoon": 0.136,
+    "dawn": -0.007,
+    "evening": -0.0,
+    "late": -0.227,
+    "midday": 0.255,
+    "night": 0.006
+   }
+  },
+  "strict": {
+   "n_windows": 361,
+   "total_var": 0.45845179222024235,
+   "eta2_circadian": 0.0851,
+   "eta2_weekly": 0.1125,
+   "eta2_slow": 0.0166,
+   "n_days": 28,
+   "daily_acf1": -0.06274336890078334,
+   "daily_acf7": 0.13766675284168853,
+   "circadian_profile": {
+    "afternoon": 0.497,
+    "dawn": 0.405,
+    "evening": 0.027,
+    "late": -0.159,
+    "midday": 0.367,
+    "night": 0.03
+   }
+  }
+ },
+ {
+  "user_id": "U009",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 2454,
+   "total_var": 0.5552334351957303,
+   "eta2_circadian": 0.0018,
+   "eta2_weekly": 0.0089,
+   "eta2_slow": 0.0104,
+   "n_days": 207,
+   "daily_acf1": 0.16131550152521368,
+   "daily_acf7": 0.08238664187888907,
+   "circadian_profile": {
+    "afternoon": 0.014,
+    "dawn": 0.053,
+    "evening": 0.013,
+    "late": -0.022,
+    "midday": -0.02,
+    "night": -0.026
+   }
+  },
+  "strict": {
+   "n_windows": 1887,
+   "total_var": 0.4733386193065229,
+   "eta2_circadian": 0.0011,
+   "eta2_weekly": 0.0095,
+   "eta2_slow": 0.0103,
+   "n_days": 162,
+   "daily_acf1": 0.03984607331520569,
+   "daily_acf7": 0.09178382083418685,
+   "circadian_profile": {
+    "afternoon": 0.029,
+    "dawn": 0.03,
+    "evening": -0.031,
+    "late": -0.002,
+    "midday": -0.026,
+    "night": 0.003
+   }
+  }
+ },
+ {
+  "user_id": "U010",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 11083,
+   "total_var": 0.517573971338483,
+   "eta2_circadian": 0.0053,
+   "eta2_weekly": 0.0045,
+   "eta2_slow": 0.0337,
+   "n_days": 603,
+   "daily_acf1": 0.26013167500514217,
+   "daily_acf7": 0.1299140120447785,
+   "circadian_profile": {
+    "afternoon": 0.011,
+    "dawn": -0.06,
+    "evening": 0.081,
+    "late": 0.034,
+    "midday": 0.025,
+    "night": -0.061
+   }
+  },
+  "strict": {
+   "n_windows": 4320,
+   "total_var": 0.4522425734033787,
+   "eta2_circadian": 0.0078,
+   "eta2_weekly": 0.0028,
+   "eta2_slow": 0.0362,
+   "n_days": 339,
+   "daily_acf1": 0.15310528040431928,
+   "daily_acf7": 0.11714270908368149,
+   "circadian_profile": {
+    "afternoon": 0.027,
+    "dawn": -0.1,
+    "evening": 0.073,
+    "late": 0.017,
+    "midday": 0.056,
+    "night": -0.041
+   }
+  }
+ },
+ {
+  "user_id": "U011",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 3443,
+   "total_var": 0.3969224041411695,
+   "eta2_circadian": 0.0073,
+   "eta2_weekly": 0.0043,
+   "eta2_slow": 0.0283,
+   "n_days": 264,
+   "daily_acf1": 0.14919096153362674,
+   "daily_acf7": 0.0942173909846213,
+   "circadian_profile": {
+    "afternoon": 0.029,
+    "dawn": -0.015,
+    "evening": 0.048,
+    "late": 0.055,
+    "midday": 0.104,
+    "night": -0.048
+   }
+  },
+  "strict": {
+   "n_windows": 964,
+   "total_var": 0.3539163150220578,
+   "eta2_circadian": 0.0309,
+   "eta2_weekly": 0.031,
+   "eta2_slow": 0.0279,
+   "n_days": 83,
+   "daily_acf1": -0.08471500474449405,
+   "daily_acf7": -0.05107114024481208,
+   "circadian_profile": {
+    "afternoon": 0.148,
+    "dawn": -0.021,
+    "evening": 0.127,
+    "late": 0.036,
+    "midday": 0.056,
+    "night": -0.119
+   }
+  }
+ },
+ {
+  "user_id": "U012",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 2654,
+   "total_var": 0.5879277683354597,
+   "eta2_circadian": 0.0259,
+   "eta2_weekly": 0.0131,
+   "eta2_slow": 0.1093,
+   "n_days": 151,
+   "daily_acf1": 0.22161455945520636,
+   "daily_acf7": 0.13615661472244817,
+   "circadian_profile": {
+    "afternoon": -0.172,
+    "dawn": 0.064,
+    "evening": 0.057,
+    "late": -0.128,
+    "midday": 0.042,
+    "night": 0.129
+   }
+  },
+  "strict": {
+   "n_windows": 633,
+   "total_var": 0.5565316102819595,
+   "eta2_circadian": 0.0097,
+   "eta2_weekly": 0.0141,
+   "eta2_slow": 0.1022,
+   "n_days": 46,
+   "daily_acf1": 0.07250853081537977,
+   "daily_acf7": -0.00968283863845646,
+   "circadian_profile": {
+    "afternoon": -0.047,
+    "dawn": 0.12,
+    "evening": -0.137,
+    "late": 0.073,
+    "midday": 0.044,
+    "night": 0.046
+   }
+  }
+ },
+ {
+  "user_id": "U013",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 1511,
+   "total_var": 0.4707842864924334,
+   "eta2_circadian": 0.0146,
+   "eta2_weekly": 0.0112,
+   "eta2_slow": 0.0005,
+   "n_days": 78,
+   "daily_acf1": -0.024569583715167754,
+   "daily_acf7": -0.10900206295498097,
+   "circadian_profile": {
+    "afternoon": -0.25,
+    "dawn": 0.093,
+    "evening": -0.027,
+    "late": -0.087,
+    "midday": 0.043,
+    "night": 0.017
+   }
+  },
+  "strict": {
+   "n_windows": 819,
+   "total_var": 0.48786913792386316,
+   "eta2_circadian": 0.0187,
+   "eta2_weekly": 0.0359,
+   "eta2_slow": 0.0056,
+   "n_days": 50,
+   "daily_acf1": 0.06746228886652117,
+   "daily_acf7": 0.024716767362335194,
+   "circadian_profile": {
+    "afternoon": -0.137,
+    "dawn": 0.16,
+    "evening": -0.019,
+    "late": -0.08,
+    "midday": 0.213,
+    "night": -0.015
+   }
+  }
+ },
+ {
+  "user_id": "U014",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 2109,
+   "total_var": 0.41230253882045326,
+   "eta2_circadian": 0.0169,
+   "eta2_weekly": 0.0251,
+   "eta2_slow": 0.0494,
+   "n_days": 191,
+   "daily_acf1": 0.04831931351630093,
+   "daily_acf7": -0.04602158000667907,
+   "circadian_profile": {
+    "afternoon": 0.038,
+    "dawn": -0.112,
+    "evening": -0.102,
+    "late": 0.282,
+    "midday": 0.005,
+    "night": 0.031
+   }
+  },
+  "strict": {
+   "n_windows": 352,
+   "total_var": 0.33661070149726846,
+   "eta2_circadian": 0.0276,
+   "eta2_weekly": 0.14,
+   "eta2_slow": 0.0836,
+   "n_days": 28,
+   "daily_acf1": 0.04476076123506147,
+   "daily_acf7": -0.0656611563040288,
+   "circadian_profile": {
+    "afternoon": 0.014,
+    "dawn": -0.425,
+    "evening": -0.11,
+    "late": -0.103,
+    "midday": 0.049,
+    "night": 0.09
+   }
+  }
+ },
+ {
+  "user_id": "U015",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 1320,
+   "total_var": 0.4270863996257702,
+   "eta2_circadian": 0.008,
+   "eta2_weekly": 0.0048,
+   "eta2_slow": 0.0061,
+   "n_days": 79,
+   "daily_acf1": -0.05008674733771756,
+   "daily_acf7": -0.04418096931826844,
+   "circadian_profile": {
+    "afternoon": 0.005,
+    "dawn": 0.083,
+    "evening": -0.07,
+    "late": -0.101,
+    "midday": 0.048,
+    "night": 0.002
+   }
+  },
+  "strict": {
+   "n_windows": 987,
+   "total_var": 0.37894571594831744,
+   "eta2_circadian": 0.0159,
+   "eta2_weekly": 0.0024,
+   "eta2_slow": 0.0064,
+   "n_days": 70,
+   "daily_acf1": -0.05254570287688128,
+   "daily_acf7": -0.11236603101136129,
+   "circadian_profile": {
+    "afternoon": -0.037,
+    "dawn": 0.138,
+    "evening": -0.047,
+    "late": -0.143,
+    "midday": 0.058,
+    "night": 0.001
+   }
+  }
+ },
+ {
+  "user_id": "U016",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 2068,
+   "total_var": 0.5127462607127539,
+   "eta2_circadian": 0.0075,
+   "eta2_weekly": 0.0016,
+   "eta2_slow": 0.0302,
+   "n_days": 169,
+   "daily_acf1": 0.01783605375347713,
+   "daily_acf7": -0.047340545210388454,
+   "circadian_profile": {
+    "afternoon": 0.059,
+    "dawn": 0.021,
+    "evening": -0.043,
+    "late": -0.299,
+    "midday": -0.007,
+    "night": 0.012
+   }
+  },
+  "strict": {
+   "n_windows": 923,
+   "total_var": 0.42311671033288256,
+   "eta2_circadian": 0.0142,
+   "eta2_weekly": 0.0142,
+   "eta2_slow": 0.0409,
+   "n_days": 72,
+   "daily_acf1": 0.26307244219790477,
+   "daily_acf7": 0.012700551131368492,
+   "circadian_profile": {
+    "afternoon": 0.14,
+    "dawn": 0.004,
+    "evening": 0.078,
+    "late": -0.229,
+    "midday": -0.032,
+    "night": 0.003
+   }
+  }
+ },
+ {
+  "user_id": "U017",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 509,
+   "total_var": 0.5402110197850454,
+   "eta2_circadian": 0.0442,
+   "eta2_weekly": 0.0077,
+   "eta2_slow": 0.0083,
+   "n_days": 35,
+   "daily_acf1": 0.10748311141136058,
+   "daily_acf7": -0.0002447931590955814,
+   "circadian_profile": {
+    "afternoon": 0.011,
+    "dawn": -0.032,
+    "evening": 0.013,
+    "late": -0.295,
+    "midday": 0.349,
+    "night": -0.071
+   }
+  },
+  "strict": {
+   "n_windows": 267,
+   "total_var": 0.40218259162888365,
+   "eta2_circadian": 0.04,
+   "eta2_weekly": 0.0317,
+   "eta2_slow": 0.06,
+   "n_days": 23,
+   "daily_acf1": 0.1532515762390334,
+   "daily_acf7": -0.22590521834017738,
+   "circadian_profile": {
+    "afternoon": -0.206,
+    "dawn": -0.04,
+    "evening": 0.037,
+    "late": -0.059,
+    "midday": 0.277,
+    "night": -0.006
+   }
+  }
+ },
+ {
+  "user_id": "U018",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 3409,
+   "total_var": 0.49206791430267954,
+   "eta2_circadian": 0.0095,
+   "eta2_weekly": 0.0012,
+   "eta2_slow": 0.0319,
+   "n_days": 160,
+   "daily_acf1": 0.006289307658600363,
+   "daily_acf7": 0.06670994309083042,
+   "circadian_profile": {
+    "afternoon": -0.089,
+    "dawn": -0.018,
+    "evening": 0.219,
+    "late": 0.143,
+    "midday": -0.072,
+    "night": 0.065
+   }
+  },
+  "strict": {
+   "n_windows": 1860,
+   "total_var": 0.4475069253739187,
+   "eta2_circadian": 0.0085,
+   "eta2_weekly": 0.0041,
+   "eta2_slow": 0.0677,
+   "n_days": 110,
+   "daily_acf1": 0.1948902481515401,
+   "daily_acf7": 0.20662587858979808,
+   "circadian_profile": {
+    "afternoon": -0.089,
+    "dawn": -0.041,
+    "evening": 0.183,
+    "late": 0.202,
+    "midday": -0.034,
+    "night": 0.037
+   }
+  }
+ },
+ {
+  "user_id": "U019",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 1902,
+   "total_var": 0.576074473399211,
+   "eta2_circadian": 0.0624,
+   "eta2_weekly": 0.0084,
+   "eta2_slow": 0.0642,
+   "n_days": 162,
+   "daily_acf1": 0.13910778325244774,
+   "daily_acf7": 0.1823318171447783,
+   "circadian_profile": {
+    "afternoon": 0.267,
+    "dawn": -0.077,
+    "evening": -0.046,
+    "late": -0.092,
+    "midday": 0.348,
+    "night": -0.148
+   }
+  },
+  "strict": {
+   "n_windows": 197,
+   "total_var": 0.49879399811769887,
+   "eta2_circadian": 0.1378,
+   "eta2_weekly": 0.0361,
+   "eta2_slow": 0.2362,
+   "n_days": 16,
+   "daily_acf1": 0.03356389491943328,
+   "daily_acf7": 0.32529530875636686,
+   "circadian_profile": {
+    "afternoon": 0.414,
+    "dawn": -0.236,
+    "evening": 0.044,
+    "late": 0.041,
+    "midday": -0.16,
+    "night": -0.255
+   }
+  }
+ },
+ {
+  "user_id": "U020",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 1563,
+   "total_var": 0.5158315967268503,
+   "eta2_circadian": 0.0337,
+   "eta2_weekly": 0.026,
+   "eta2_slow": 0.043,
+   "n_days": 91,
+   "daily_acf1": -0.1790617398638007,
+   "daily_acf7": 0.17540346765344134,
+   "circadian_profile": {
+    "afternoon": 0.081,
+    "dawn": -0.123,
+    "evening": 0.551,
+    "late": 0.564,
+    "midday": 0.046,
+    "night": 0.014
+   }
+  },
+  "strict": {
+   "n_windows": 647,
+   "total_var": 0.4898314721490102,
+   "eta2_circadian": 0.0647,
+   "eta2_weekly": 0.0373,
+   "eta2_slow": 0.1015,
+   "n_days": 40,
+   "daily_acf1": 0.07987110285385834,
+   "daily_acf7": -0.11236271923049679,
+   "circadian_profile": {
+    "afternoon": 0.205,
+    "dawn": -0.161,
+    "evening": 0.546,
+    "late": 0.637,
+    "midday": 0.068,
+    "night": 0.025
+   }
+  }
+ },
+ {
+  "user_id": "U022",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 10327,
+   "total_var": 0.5006940183624049,
+   "eta2_circadian": 0.0057,
+   "eta2_weekly": 0.0024,
+   "eta2_slow": 0.0595,
+   "n_days": 295,
+   "daily_acf1": 0.18245585545958873,
+   "daily_acf7": 0.10908593790845408,
+   "circadian_profile": {
+    "afternoon": -0.055,
+    "dawn": -0.016,
+    "evening": 0.1,
+    "late": -0.104,
+    "midday": -0.006,
+    "night": 0.012
+   }
+  },
+  "strict": {
+   "n_windows": 7370,
+   "total_var": 0.4492941034967843,
+   "eta2_circadian": 0.0088,
+   "eta2_weekly": 0.0055,
+   "eta2_slow": 0.0403,
+   "n_days": 264,
+   "daily_acf1": 0.1551068355562143,
+   "daily_acf7": 0.03284951398912517,
+   "circadian_profile": {
+    "afternoon": -0.015,
+    "dawn": -0.071,
+    "evening": 0.126,
+    "late": -0.02,
+    "midday": 0.002,
+    "night": -0.012
+   }
+  }
+ },
+ {
+  "user_id": "U023",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 613,
+   "total_var": 0.46134867841469784,
+   "eta2_circadian": 0.1208,
+   "eta2_weekly": 0.1214,
+   "eta2_slow": 0.0145,
+   "n_days": 32,
+   "daily_acf1": 0.018069888571877735,
+   "daily_acf7": -0.1850485487154539,
+   "circadian_profile": {
+    "afternoon": -0.014,
+    "dawn": 0.176,
+    "evening": -0.379,
+    "late": -0.218,
+    "midday": 0.62,
+    "night": 0.16
+   }
+  },
+  "strict": {
+   "n_windows": 189,
+   "total_var": 0.39645663776703854,
+   "eta2_circadian": 0.0261,
+   "eta2_weekly": 0.1696,
+   "eta2_slow": 0.0,
+   "n_days": 13,
+   "daily_acf1": 0.020939366809364843,
+   "daily_acf7": 0.0993599299637551,
+   "circadian_profile": {
+    "afternoon": 0.079,
+    "evening": -0.046,
+    "late": -0.108,
+    "night": 0.123
+   }
+  }
+ },
+ {
+  "user_id": "U024",
+  "table": "oref_v5",
+  "base": {
+   "n_windows": 467,
+   "total_var": 0.4724797507100165,
+   "eta2_circadian": 0.0258,
+   "eta2_weekly": 0.0248,
+   "eta2_slow": 0.0165,
+   "n_days": 42,
+   "daily_acf1": -0.16267885055861223,
+   "daily_acf7": 0.07302502064632403,
+   "circadian_profile": {
+    "afternoon": -0.05,
+    "dawn": -0.226,
+    "evening": 0.165,
+    "late": -0.017,
+    "midday": -0.018,
+    "night": 0.116
+   }
+  },
+  "strict": {
+   "n_windows": 266,
+   "total_var": 0.4052323632328244,
+   "eta2_circadian": 0.0191,
+   "eta2_weekly": 0.0965,
+   "eta2_slow": 0.0065,
+   "n_days": 27,
+   "daily_acf1": -0.08038336255653135,
+   "daily_acf7": -0.2622397661281722,
+   "circadian_profile": {
+    "afternoon": 0.038,
+    "dawn": -0.32,
+    "evening": 0.052,
+    "late": -0.012,
+    "midday": 0.028,
+    "night": 0.031
+   }
+  }
+ },
+ {
+  "user_id": "U031",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 1041,
+   "total_var": 0.5628739584496242,
+   "eta2_circadian": 0.039,
+   "eta2_weekly": 0.0372,
+   "eta2_slow": 0.033,
+   "n_days": 83,
+   "daily_acf1": 0.24715563961826037,
+   "daily_acf7": -0.14427927302654295,
+   "circadian_profile": {
+    "afternoon": -0.083,
+    "dawn": 0.104,
+    "evening": -0.182,
+    "late": -0.334,
+    "midday": -0.035,
+    "night": 0.106
+   }
+  },
+  "strict": {
+   "n_windows": 242,
+   "total_var": 0.42478835294106254,
+   "eta2_circadian": 0.0897,
+   "eta2_weekly": 0.1145,
+   "eta2_slow": 0.0652,
+   "n_days": 21,
+   "daily_acf1": 0.14322755040318982,
+   "daily_acf7": 0.025646646917726584,
+   "circadian_profile": {
+    "afternoon": -0.056,
+    "dawn": 0.844,
+    "evening": 0.014,
+    "late": -0.131,
+    "midday": 0.065,
+    "night": -0.074
+   }
+  }
+ },
+ {
+  "user_id": "U032",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 2407,
+   "total_var": 0.35280209565487897,
+   "eta2_circadian": 0.0636,
+   "eta2_weekly": 0.0023,
+   "eta2_slow": 0.0192,
+   "n_days": 90,
+   "daily_acf1": 0.11689221923747126,
+   "daily_acf7": 0.04741430451077429,
+   "circadian_profile": {
+    "afternoon": 0.142,
+    "dawn": -0.165,
+    "evening": 0.188,
+    "late": 0.424,
+    "midday": 0.084,
+    "night": -0.103
+   }
+  },
+  "strict": {
+   "n_windows": 784,
+   "total_var": 0.32844357261951274,
+   "eta2_circadian": 0.1172,
+   "eta2_weekly": 0.0156,
+   "eta2_slow": 0.0423,
+   "n_days": 54,
+   "daily_acf1": -0.008176942604464029,
+   "daily_acf7": -0.07998823544373214,
+   "circadian_profile": {
+    "afternoon": 0.119,
+    "dawn": -0.405,
+    "evening": 0.206,
+    "late": 0.085,
+    "midday": -0.066,
+    "night": -0.007
+   }
+  }
+ },
+ {
+  "user_id": "U033",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 4289,
+   "total_var": 0.39445352654430255,
+   "eta2_circadian": 0.0051,
+   "eta2_weekly": 0.0014,
+   "eta2_slow": 0.0405,
+   "n_days": 182,
+   "daily_acf1": 0.17933254643785235,
+   "daily_acf7": 0.23633093269730307,
+   "circadian_profile": {
+    "afternoon": 0.022,
+    "dawn": -0.027,
+    "evening": 0.075,
+    "late": -0.102,
+    "midday": 0.051,
+    "night": -0.031
+   }
+  },
+  "strict": {
+   "n_windows": 2733,
+   "total_var": 0.3106794978229979,
+   "eta2_circadian": 0.0093,
+   "eta2_weekly": 0.0026,
+   "eta2_slow": 0.0426,
+   "n_days": 148,
+   "daily_acf1": 0.22145349191509636,
+   "daily_acf7": 0.21555736636865022,
+   "circadian_profile": {
+    "afternoon": 0.046,
+    "dawn": 0.014,
+    "evening": 0.077,
+    "late": -0.09,
+    "midday": 0.017,
+    "night": -0.067
+   }
+  }
+ },
+ {
+  "user_id": "U034",
+  "table": "oref_v6",
+  "base": null,
+  "strict": null
+ },
+ {
+  "user_id": "U035",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 335,
+   "total_var": 0.4338794075591443,
+   "eta2_circadian": 0.0365,
+   "eta2_weekly": 0.1204,
+   "eta2_slow": 0.0,
+   "n_days": 17,
+   "daily_acf1": 0.23449663090717265,
+   "daily_acf7": -0.016992485034612467,
+   "circadian_profile": {
+    "afternoon": 0.34,
+    "dawn": -0.038,
+    "evening": 0.093,
+    "late": 0.089,
+    "midday": -0.001,
+    "night": -0.144
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U042",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 204,
+   "total_var": 0.5163497186221717,
+   "eta2_circadian": 0.1003,
+   "eta2_weekly": 0.1032,
+   "eta2_slow": 0.104,
+   "n_days": 14,
+   "daily_acf1": -0.14816365005714716,
+   "daily_acf7": 0.11208823243799708,
+   "circadian_profile": {
+    "afternoon": -0.211,
+    "dawn": -0.367,
+    "evening": 0.059,
+    "late": 0.212,
+    "midday": -0.663,
+    "night": 0.207
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U045",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 270,
+   "total_var": 0.390788912113877,
+   "eta2_circadian": 0.0825,
+   "eta2_weekly": 0.026,
+   "eta2_slow": 0.0,
+   "n_days": 17,
+   "daily_acf1": 0.18469850676418925,
+   "daily_acf7": -0.2808720168547995,
+   "circadian_profile": {
+    "afternoon": -0.082,
+    "dawn": -0.273,
+    "evening": 0.123,
+    "late": 0.183,
+    "midday": -0.369,
+    "night": 0.084
+   }
+  },
+  "strict": {
+   "n_windows": 170,
+   "total_var": 0.249635119205832,
+   "eta2_circadian": 0.2623,
+   "eta2_weekly": 0.091,
+   "eta2_slow": 0.0,
+   "n_days": 13,
+   "daily_acf1": 0.21849903000751542,
+   "daily_acf7": -0.10418865286795088,
+   "circadian_profile": {
+    "afternoon": -0.19,
+    "dawn": -0.274,
+    "evening": 0.189,
+    "late": 0.361,
+    "midday": -0.429,
+    "night": 0.104
+   }
+  }
+ },
+ {
+  "user_id": "U047",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 4007,
+   "total_var": 0.4648806163874256,
+   "eta2_circadian": 0.0081,
+   "eta2_weekly": 0.0071,
+   "eta2_slow": 0.0217,
+   "n_days": 257,
+   "daily_acf1": 0.1417148137410212,
+   "daily_acf7": 0.07976917504775011,
+   "circadian_profile": {
+    "afternoon": 0.003,
+    "dawn": 0.022,
+    "evening": -0.133,
+    "late": 0.033,
+    "midday": 0.08,
+    "night": -0.011
+   }
+  },
+  "strict": {
+   "n_windows": 2328,
+   "total_var": 0.37043368652438763,
+   "eta2_circadian": 0.0101,
+   "eta2_weekly": 0.0027,
+   "eta2_slow": 0.0234,
+   "n_days": 174,
+   "daily_acf1": -0.05034516241668556,
+   "daily_acf7": 0.010765143585303078,
+   "circadian_profile": {
+    "afternoon": -0.006,
+    "dawn": 0.064,
+    "evening": -0.057,
+    "late": 0.038,
+    "midday": 0.091,
+    "night": -0.071
+   }
+  }
+ },
+ {
+  "user_id": "U049",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 189,
+   "total_var": 0.5376880038590364,
+   "eta2_circadian": 0.1089,
+   "eta2_weekly": 0.0541,
+   "eta2_slow": 0.0,
+   "n_days": 12,
+   "daily_acf1": -0.04107161197895586,
+   "daily_acf7": -0.041180067386402196,
+   "circadian_profile": {
+    "afternoon": -0.153,
+    "dawn": 0.141,
+    "evening": 0.268,
+    "late": 0.164,
+    "midday": -0.297,
+    "night": -0.423
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U050",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 548,
+   "total_var": 0.4845057942608486,
+   "eta2_circadian": 0.0884,
+   "eta2_weekly": 0.0444,
+   "eta2_slow": 0.0849,
+   "n_days": 47,
+   "daily_acf1": 0.08575719132249811,
+   "daily_acf7": 0.020630285269110305,
+   "circadian_profile": {
+    "afternoon": 0.736,
+    "dawn": -1.232,
+    "evening": -0.765,
+    "late": 0.081,
+    "midday": -2.297,
+    "night": -0.003
+   }
+  },
+  "strict": {
+   "n_windows": 160,
+   "total_var": 0.2929305795910079,
+   "eta2_circadian": 0.0263,
+   "eta2_weekly": 0.0522,
+   "eta2_slow": 0.0253,
+   "n_days": 13,
+   "daily_acf1": -0.15328730478639385,
+   "daily_acf7": 0.14824177178663364,
+   "circadian_profile": {
+    "evening": -0.706,
+    "late": 0.066,
+    "night": -0.015
+   }
+  }
+ },
+ {
+  "user_id": "U053",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 4485,
+   "total_var": 0.5337411020339211,
+   "eta2_circadian": 0.0046,
+   "eta2_weekly": 0.0027,
+   "eta2_slow": 0.0357,
+   "n_days": 169,
+   "daily_acf1": 0.2419109060062292,
+   "daily_acf7": 0.07421587995726005,
+   "circadian_profile": {
+    "afternoon": -0.012,
+    "dawn": -0.038,
+    "evening": -0.005,
+    "late": 0.157,
+    "midday": -0.023,
+    "night": 0.02
+   }
+  },
+  "strict": {
+   "n_windows": 2847,
+   "total_var": 0.46230755708241367,
+   "eta2_circadian": 0.0085,
+   "eta2_weekly": 0.0175,
+   "eta2_slow": 0.0378,
+   "n_days": 147,
+   "daily_acf1": 0.06269202544889002,
+   "daily_acf7": 0.10310489874452584,
+   "circadian_profile": {
+    "afternoon": -0.063,
+    "dawn": -0.067,
+    "evening": -0.013,
+    "late": 0.134,
+    "midday": -0.027,
+    "night": 0.054
+   }
+  }
+ },
+ {
+  "user_id": "U054",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 3342,
+   "total_var": 0.6576830462979121,
+   "eta2_circadian": 0.0192,
+   "eta2_weekly": 0.0102,
+   "eta2_slow": 0.009,
+   "n_days": 221,
+   "daily_acf1": -0.053375022705426316,
+   "daily_acf7": 0.019044249015367522,
+   "circadian_profile": {
+    "afternoon": 0.123,
+    "dawn": -0.1,
+    "evening": 0.182,
+    "late": -0.397,
+    "midday": 0.05,
+    "night": -0.032
+   }
+  },
+  "strict": {
+   "n_windows": 1273,
+   "total_var": 0.6064633086388624,
+   "eta2_circadian": 0.0252,
+   "eta2_weekly": 0.0201,
+   "eta2_slow": 0.0081,
+   "n_days": 113,
+   "daily_acf1": -0.004246659360739208,
+   "daily_acf7": 0.04707691829425096,
+   "circadian_profile": {
+    "afternoon": 0.1,
+    "dawn": -0.124,
+    "evening": 0.195,
+    "late": -0.305,
+    "midday": 0.092,
+    "night": -0.06
+   }
+  }
+ },
+ {
+  "user_id": "U055",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 2088,
+   "total_var": 0.4622055705340481,
+   "eta2_circadian": 0.0253,
+   "eta2_weekly": 0.0203,
+   "eta2_slow": 0.0181,
+   "n_days": 148,
+   "daily_acf1": 0.06465473512372287,
+   "daily_acf7": -0.10590368754344263,
+   "circadian_profile": {
+    "afternoon": 0.083,
+    "dawn": -0.19,
+    "evening": 0.037,
+    "late": -0.054,
+    "midday": -0.036,
+    "night": 0.093
+   }
+  },
+  "strict": {
+   "n_windows": 1391,
+   "total_var": 0.41060063169531336,
+   "eta2_circadian": 0.0234,
+   "eta2_weekly": 0.0116,
+   "eta2_slow": 0.0132,
+   "n_days": 112,
+   "daily_acf1": 0.13949859883932866,
+   "daily_acf7": 0.01073985760722577,
+   "circadian_profile": {
+    "afternoon": 0.08,
+    "dawn": -0.166,
+    "evening": 0.126,
+    "late": 0.018,
+    "midday": 0.019,
+    "night": 0.042
+   }
+  }
+ },
+ {
+  "user_id": "U059",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 26512,
+   "total_var": 0.3786799255466753,
+   "eta2_circadian": 0.0419,
+   "eta2_weekly": 0.0008,
+   "eta2_slow": 0.0708,
+   "n_days": 651,
+   "daily_acf1": 0.40433473738580095,
+   "daily_acf7": 0.3053835483269578,
+   "circadian_profile": {
+    "afternoon": -0.108,
+    "dawn": -0.197,
+    "evening": 0.106,
+    "late": 0.2,
+    "midday": -0.182,
+    "night": 0.069
+   }
+  },
+  "strict": {
+   "n_windows": 16993,
+   "total_var": 0.3118171479488211,
+   "eta2_circadian": 0.053,
+   "eta2_weekly": 0.0009,
+   "eta2_slow": 0.0551,
+   "n_days": 627,
+   "daily_acf1": 0.27467814163922855,
+   "daily_acf7": 0.1595657030444239,
+   "circadian_profile": {
+    "afternoon": -0.112,
+    "dawn": -0.181,
+    "evening": 0.106,
+    "late": 0.147,
+    "midday": -0.198,
+    "night": 0.085
+   }
+  }
+ },
+ {
+  "user_id": "U062",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 4049,
+   "total_var": 0.42487631024876543,
+   "eta2_circadian": 0.0123,
+   "eta2_weekly": 0.0095,
+   "eta2_slow": 0.0531,
+   "n_days": 269,
+   "daily_acf1": 0.20083985448751918,
+   "daily_acf7": 0.0954455671488577,
+   "circadian_profile": {
+    "afternoon": 0.107,
+    "dawn": -0.189,
+    "evening": 0.047,
+    "late": -0.017,
+    "midday": 0.165,
+    "night": 0.002
+   }
+  },
+  "strict": {
+   "n_windows": 1368,
+   "total_var": 0.3626415473063836,
+   "eta2_circadian": 0.0432,
+   "eta2_weekly": 0.0212,
+   "eta2_slow": 0.0769,
+   "n_days": 114,
+   "daily_acf1": 0.010935458006560397,
+   "daily_acf7": 0.07531776185894727,
+   "circadian_profile": {
+    "afternoon": 0.212,
+    "dawn": -0.059,
+    "evening": -0.227,
+    "late": -0.119,
+    "midday": 0.229,
+    "night": -0.002
+   }
+  }
+ },
+ {
+  "user_id": "U065",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 2547,
+   "total_var": 0.614667029551628,
+   "eta2_circadian": 0.0817,
+   "eta2_weekly": 0.0062,
+   "eta2_slow": 0.0486,
+   "n_days": 217,
+   "daily_acf1": 0.27745369223900884,
+   "daily_acf7": 0.20238764093649306,
+   "circadian_profile": {
+    "afternoon": 0.315,
+    "dawn": -0.073,
+    "evening": 0.252,
+    "late": -0.023,
+    "midday": 0.364,
+    "night": -0.196
+   }
+  },
+  "strict": {
+   "n_windows": 1565,
+   "total_var": 0.4670190969838803,
+   "eta2_circadian": 0.0618,
+   "eta2_weekly": 0.0044,
+   "eta2_slow": 0.0364,
+   "n_days": 141,
+   "daily_acf1": 0.23157238949281678,
+   "daily_acf7": 0.09569434887022385,
+   "circadian_profile": {
+    "afternoon": 0.303,
+    "dawn": -0.099,
+    "evening": 0.225,
+    "late": -0.002,
+    "midday": 0.264,
+    "night": -0.121
+   }
+  }
+ },
+ {
+  "user_id": "U066",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 653,
+   "total_var": 0.5375427415369743,
+   "eta2_circadian": 0.0138,
+   "eta2_weekly": 0.0269,
+   "eta2_slow": 0.0001,
+   "n_days": 35,
+   "daily_acf1": 0.02264059812206751,
+   "daily_acf7": 0.053746157494551916,
+   "circadian_profile": {
+    "afternoon": 0.121,
+    "dawn": -0.089,
+    "evening": 0.026,
+    "late": -0.076,
+    "midday": -0.124,
+    "night": -0.003
+   }
+  },
+  "strict": {
+   "n_windows": 347,
+   "total_var": 0.45251959931288127,
+   "eta2_circadian": 0.0395,
+   "eta2_weekly": 0.0581,
+   "eta2_slow": 0.0011,
+   "n_days": 25,
+   "daily_acf1": -0.02655143389948761,
+   "daily_acf7": -0.13240581645932298,
+   "circadian_profile": {
+    "afternoon": 0.087,
+    "dawn": -0.466,
+    "evening": 0.033,
+    "late": 0.161,
+    "midday": -0.063,
+    "night": -0.046
+   }
+  }
+ },
+ {
+  "user_id": "U068",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 3287,
+   "total_var": 0.3432453486481264,
+   "eta2_circadian": 0.0074,
+   "eta2_weekly": 0.0078,
+   "eta2_slow": 0.0067,
+   "n_days": 118,
+   "daily_acf1": 0.07531218805413517,
+   "daily_acf7": 0.1461544539106646,
+   "circadian_profile": {
+    "afternoon": -0.095,
+    "dawn": 0.034,
+    "evening": 0.003,
+    "late": 0.001,
+    "midday": -0.024,
+    "night": 0.051
+   }
+  },
+  "strict": {
+   "n_windows": 2142,
+   "total_var": 0.2930150296804143,
+   "eta2_circadian": 0.0138,
+   "eta2_weekly": 0.0191,
+   "eta2_slow": 0.0077,
+   "n_days": 110,
+   "daily_acf1": 0.19215351715654624,
+   "daily_acf7": 0.11415931615825356,
+   "circadian_profile": {
+    "afternoon": -0.101,
+    "dawn": 0.023,
+    "evening": 0.046,
+    "late": -0.021,
+    "midday": -0.077,
+    "night": 0.057
+   }
+  }
+ },
+ {
+  "user_id": "U071",
+  "table": "oref_v6",
+  "base": {
+   "n_windows": 1713,
+   "total_var": 0.552601465589824,
+   "eta2_circadian": 0.0497,
+   "eta2_weekly": 0.0078,
+   "eta2_slow": 0.0606,
+   "n_days": 154,
+   "daily_acf1": 0.22202333394319343,
+   "daily_acf7": 0.17314269692131173,
+   "circadian_profile": {
+    "afternoon": 0.305,
+    "dawn": -0.255,
+    "evening": 0.195,
+    "late": 0.002,
+    "midday": 0.201,
+    "night": -0.053
+   }
+  },
+  "strict": {
+   "n_windows": 265,
+   "total_var": 0.5036004564453621,
+   "eta2_circadian": 0.085,
+   "eta2_weekly": 0.1094,
+   "eta2_slow": 0.0698,
+   "n_days": 19,
+   "daily_acf1": -0.06308534367205781,
+   "daily_acf7": -0.06834975971244177,
+   "circadian_profile": {
+    "afternoon": 0.163,
+    "dawn": -0.287,
+    "evening": 0.048,
+    "late": -0.414,
+    "midday": 0.297,
+    "night": -0.036
+   }
+  }
+ },
+ {
+  "user_id": "U073",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2193,
+   "total_var": 0.48925399721384777,
+   "eta2_circadian": 0.0142,
+   "eta2_weekly": 0.0096,
+   "eta2_slow": 0.0487,
+   "n_days": 98,
+   "daily_acf1": 0.1801468173268963,
+   "daily_acf7": 0.28953831659896584,
+   "circadian_profile": {
+    "afternoon": 0.152,
+    "dawn": 0.065,
+    "evening": -0.005,
+    "late": -0.099,
+    "midday": -0.035,
+    "night": -0.057
+   }
+  },
+  "strict": {
+   "n_windows": 791,
+   "total_var": 0.3890267599564182,
+   "eta2_circadian": 0.0209,
+   "eta2_weekly": 0.0259,
+   "eta2_slow": 0.0132,
+   "n_days": 57,
+   "daily_acf1": -0.15612088828154636,
+   "daily_acf7": -0.09587325879759143,
+   "circadian_profile": {
+    "afternoon": 0.028,
+    "dawn": 0.165,
+    "evening": 0.014,
+    "late": -0.051,
+    "midday": -0.109,
+    "night": -0.054
+   }
+  }
+ },
+ {
+  "user_id": "U074",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 331,
+   "total_var": 0.45346680763790964,
+   "eta2_circadian": 0.1367,
+   "eta2_weekly": 0.0372,
+   "eta2_slow": 0.035,
+   "n_days": 27,
+   "daily_acf1": 0.09121327489577889,
+   "daily_acf7": -0.07176066312925188,
+   "circadian_profile": {
+    "afternoon": -0.567,
+    "dawn": 0.179,
+    "evening": 0.162,
+    "late": -0.583,
+    "midday": -0.059,
+    "night": 0.146
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U075",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2156,
+   "total_var": 0.5583543131693977,
+   "eta2_circadian": 0.0105,
+   "eta2_weekly": 0.0049,
+   "eta2_slow": 0.0592,
+   "n_days": 121,
+   "daily_acf1": 0.1895213291001109,
+   "daily_acf7": 0.19501399936767935,
+   "circadian_profile": {
+    "afternoon": -0.042,
+    "dawn": 0.032,
+    "evening": 0.01,
+    "late": 0.009,
+    "midday": 0.118,
+    "night": -0.088
+   }
+  },
+  "strict": {
+   "n_windows": 852,
+   "total_var": 0.49636521129953526,
+   "eta2_circadian": 0.0043,
+   "eta2_weekly": 0.0147,
+   "eta2_slow": 0.0694,
+   "n_days": 61,
+   "daily_acf1": 0.25693469062579616,
+   "daily_acf7": 0.20860110014127192,
+   "circadian_profile": {
+    "afternoon": 0.01,
+    "dawn": 0.011,
+    "evening": 0.068,
+    "late": 0.007,
+    "midday": 0.034,
+    "night": -0.073
+   }
+  }
+ },
+ {
+  "user_id": "U076",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 787,
+   "total_var": 0.42841213016054297,
+   "eta2_circadian": 0.0128,
+   "eta2_weekly": 0.0402,
+   "eta2_slow": 0.0236,
+   "n_days": 63,
+   "daily_acf1": -0.1239537129325167,
+   "daily_acf7": 0.06049214776616352,
+   "circadian_profile": {
+    "afternoon": 0.035,
+    "dawn": -0.034,
+    "evening": -0.022,
+    "late": 0.097,
+    "midday": -0.351,
+    "night": 0.09
+   }
+  },
+  "strict": {
+   "n_windows": 269,
+   "total_var": 0.2935849201191319,
+   "eta2_circadian": 0.0184,
+   "eta2_weekly": 0.1234,
+   "eta2_slow": 0.0537,
+   "n_days": 23,
+   "daily_acf1": 0.06572576461385798,
+   "daily_acf7": -0.06775229096967726,
+   "circadian_profile": {
+    "afternoon": 0.009,
+    "dawn": 0.023,
+    "evening": 0.033,
+    "late": -0.151,
+    "midday": -0.248,
+    "night": 0.037
+   }
+  }
+ },
+ {
+  "user_id": "U077",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 972,
+   "total_var": 0.6044400820305537,
+   "eta2_circadian": 0.0158,
+   "eta2_weekly": 0.0253,
+   "eta2_slow": 0.0156,
+   "n_days": 61,
+   "daily_acf1": -0.006248417166242,
+   "daily_acf7": 0.10665339332760118,
+   "circadian_profile": {
+    "afternoon": 0.164,
+    "dawn": -0.089,
+    "evening": 0.054,
+    "late": -0.149,
+    "midday": 0.082,
+    "night": -0.021
+   }
+  },
+  "strict": {
+   "n_windows": 449,
+   "total_var": 0.5119284648513914,
+   "eta2_circadian": 0.04,
+   "eta2_weekly": 0.015,
+   "eta2_slow": 0.0403,
+   "n_days": 37,
+   "daily_acf1": -0.06570191195484948,
+   "daily_acf7": -0.2596766471562092,
+   "circadian_profile": {
+    "afternoon": 0.275,
+    "dawn": -0.137,
+    "evening": -0.061,
+    "late": 0.036,
+    "midday": 0.081,
+    "night": -0.145
+   }
+  }
+ },
+ {
+  "user_id": "U078",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2835,
+   "total_var": 0.5313027585159946,
+   "eta2_circadian": 0.009,
+   "eta2_weekly": 0.0048,
+   "eta2_slow": 0.0076,
+   "n_days": 131,
+   "daily_acf1": -0.07003167627510437,
+   "daily_acf7": -0.003156082148670137,
+   "circadian_profile": {
+    "afternoon": -0.091,
+    "dawn": 0.022,
+    "evening": -0.02,
+    "late": 0.152,
+    "midday": 0.002,
+    "night": 0.098
+   }
+  },
+  "strict": {
+   "n_windows": 1227,
+   "total_var": 0.4455659714102107,
+   "eta2_circadian": 0.0092,
+   "eta2_weekly": 0.0163,
+   "eta2_slow": 0.0171,
+   "n_days": 92,
+   "daily_acf1": -0.009337769296353087,
+   "daily_acf7": -0.12397357387161488,
+   "circadian_profile": {
+    "afternoon": -0.044,
+    "dawn": 0.008,
+    "evening": 0.017,
+    "late": 0.092,
+    "midday": -0.06,
+    "night": 0.11
+   }
+  }
+ },
+ {
+  "user_id": "U079",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 8961,
+   "total_var": 0.39280371072428205,
+   "eta2_circadian": 0.043,
+   "eta2_weekly": 0.0021,
+   "eta2_slow": 0.03,
+   "n_days": 311,
+   "daily_acf1": 0.15746191079572566,
+   "daily_acf7": 0.05083879265312982,
+   "circadian_profile": {
+    "afternoon": 0.078,
+    "dawn": -0.06,
+    "evening": 0.171,
+    "late": 0.179,
+    "midday": 0.133,
+    "night": -0.157
+   }
+  },
+  "strict": {
+   "n_windows": 3447,
+   "total_var": 0.33319505483221423,
+   "eta2_circadian": 0.0376,
+   "eta2_weekly": 0.0082,
+   "eta2_slow": 0.0477,
+   "n_days": 210,
+   "daily_acf1": 0.03834475513940198,
+   "daily_acf7": 0.08188877005355658,
+   "circadian_profile": {
+    "afternoon": 0.074,
+    "dawn": -0.071,
+    "evening": 0.135,
+    "late": 0.116,
+    "midday": 0.114,
+    "night": -0.127
+   }
+  }
+ },
+ {
+  "user_id": "U080",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 534,
+   "total_var": 0.3379564078465057,
+   "eta2_circadian": 0.0813,
+   "eta2_weekly": 0.0508,
+   "eta2_slow": 0.0255,
+   "n_days": 41,
+   "daily_acf1": 0.16569665143688095,
+   "daily_acf7": 0.13345414970738123,
+   "circadian_profile": {
+    "afternoon": -0.055,
+    "dawn": 0.045,
+    "evening": 0.071,
+    "late": 0.096,
+    "midday": -0.56,
+    "night": 0.035
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U081",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 3035,
+   "total_var": 0.37771510869599284,
+   "eta2_circadian": 0.0076,
+   "eta2_weekly": 0.003,
+   "eta2_slow": 0.0068,
+   "n_days": 142,
+   "daily_acf1": -0.024169897125342954,
+   "daily_acf7": 0.008435426779606335,
+   "circadian_profile": {
+    "afternoon": -0.088,
+    "dawn": 0.015,
+    "evening": 0.038,
+    "late": 0.029,
+    "midday": 0.023,
+    "night": 0.064
+   }
+  },
+  "strict": {
+   "n_windows": 1200,
+   "total_var": 0.3227707451235002,
+   "eta2_circadian": 0.0081,
+   "eta2_weekly": 0.02,
+   "eta2_slow": 0.0054,
+   "n_days": 91,
+   "daily_acf1": 0.12156700589265876,
+   "daily_acf7": -0.1135331888314828,
+   "circadian_profile": {
+    "afternoon": -0.072,
+    "dawn": -0.046,
+    "evening": -0.01,
+    "late": 0.047,
+    "midday": 0.019,
+    "night": 0.077
+   }
+  }
+ },
+ {
+  "user_id": "U083",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 5179,
+   "total_var": 0.40871068323554505,
+   "eta2_circadian": 0.0203,
+   "eta2_weekly": 0.0057,
+   "eta2_slow": 0.0897,
+   "n_days": 344,
+   "daily_acf1": 0.2340590089596393,
+   "daily_acf7": 0.18616534614173863,
+   "circadian_profile": {
+    "afternoon": 0.131,
+    "dawn": -0.125,
+    "evening": 0.156,
+    "late": 0.021,
+    "midday": 0.028,
+    "night": -0.004
+   }
+  },
+  "strict": {
+   "n_windows": 904,
+   "total_var": 0.3098604303303028,
+   "eta2_circadian": 0.02,
+   "eta2_weekly": 0.0441,
+   "eta2_slow": 0.1253,
+   "n_days": 70,
+   "daily_acf1": -0.17963744941165022,
+   "daily_acf7": 0.07882002254344073,
+   "circadian_profile": {
+    "afternoon": 0.036,
+    "dawn": -0.015,
+    "evening": 0.25,
+    "late": -0.087,
+    "midday": 0.078,
+    "night": -0.096
+   }
+  }
+ },
+ {
+  "user_id": "U084",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 519,
+   "total_var": 0.37163605264401245,
+   "eta2_circadian": 0.0938,
+   "eta2_weekly": 0.0688,
+   "eta2_slow": 0.1101,
+   "n_days": 20,
+   "daily_acf1": 0.4408572879761957,
+   "daily_acf7": -0.21605128271105697,
+   "circadian_profile": {
+    "afternoon": 0.105,
+    "dawn": -0.191,
+    "evening": 0.113,
+    "late": -0.578,
+    "midday": -0.432,
+    "night": 0.164
+   }
+  },
+  "strict": {
+   "n_windows": 152,
+   "total_var": 0.3958316666604455,
+   "eta2_circadian": 0.1088,
+   "eta2_weekly": 0.1344,
+   "eta2_slow": 0.1136,
+   "n_days": 9,
+   "daily_acf1": 0.3633799484020006,
+   "daily_acf7": null,
+   "circadian_profile": {
+    "afternoon": 0.123,
+    "dawn": -0.337,
+    "evening": -0.036,
+    "night": 0.192
+   }
+  }
+ },
+ {
+  "user_id": "U085",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1332,
+   "total_var": 0.40478007304886887,
+   "eta2_circadian": 0.0121,
+   "eta2_weekly": 0.0168,
+   "eta2_slow": 0.0436,
+   "n_days": 98,
+   "daily_acf1": 0.08216658093248617,
+   "daily_acf7": 0.09067469567466706,
+   "circadian_profile": {
+    "afternoon": -0.042,
+    "dawn": -0.05,
+    "evening": -0.087,
+    "late": 0.048,
+    "midday": -0.016,
+    "night": 0.118
+   }
+  },
+  "strict": {
+   "n_windows": 639,
+   "total_var": 0.3415190686911969,
+   "eta2_circadian": 0.0369,
+   "eta2_weekly": 0.0203,
+   "eta2_slow": 0.0347,
+   "n_days": 54,
+   "daily_acf1": 0.1345161731094895,
+   "daily_acf7": -0.3118040754278099,
+   "circadian_profile": {
+    "afternoon": -0.25,
+    "dawn": 0.121,
+    "evening": -0.064,
+    "late": 0.019,
+    "midday": -0.021,
+    "night": 0.06
+   }
+  }
+ },
+ {
+  "user_id": "U086",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2020,
+   "total_var": 0.7287933726909632,
+   "eta2_circadian": 0.066,
+   "eta2_weekly": 0.0155,
+   "eta2_slow": 0.23,
+   "n_days": 133,
+   "daily_acf1": 0.37113565970717516,
+   "daily_acf7": 0.31548369762741785,
+   "circadian_profile": {
+    "afternoon": 0.03,
+    "dawn": -0.245,
+    "evening": 0.115,
+    "late": 0.33,
+    "midday": -0.249,
+    "night": 0.211
+   }
+  },
+  "strict": {
+   "n_windows": 447,
+   "total_var": 0.6103765555260354,
+   "eta2_circadian": 0.1266,
+   "eta2_weekly": 0.064,
+   "eta2_slow": 0.4027,
+   "n_days": 34,
+   "daily_acf1": 0.5676457164571611,
+   "daily_acf7": 0.18760759474256658,
+   "circadian_profile": {
+    "afternoon": 0.007,
+    "dawn": -0.268,
+    "evening": -0.088,
+    "late": 0.777,
+    "midday": -0.067,
+    "night": 0.224
+   }
+  }
+ },
+ {
+  "user_id": "U088",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 3194,
+   "total_var": 0.49896777398064096,
+   "eta2_circadian": 0.0128,
+   "eta2_weekly": 0.0052,
+   "eta2_slow": 0.1163,
+   "n_days": 246,
+   "daily_acf1": 0.27498382224157814,
+   "daily_acf7": 0.27297290484670234,
+   "circadian_profile": {
+    "afternoon": 0.162,
+    "dawn": -0.043,
+    "evening": 0.154,
+    "late": 0.122,
+    "midday": -0.04,
+    "night": -0.062
+   }
+  },
+  "strict": {
+   "n_windows": 694,
+   "total_var": 0.3923628565849213,
+   "eta2_circadian": 0.0323,
+   "eta2_weekly": 0.027,
+   "eta2_slow": 0.1346,
+   "n_days": 57,
+   "daily_acf1": 0.052900726182920056,
+   "daily_acf7": 0.05922900990144689,
+   "circadian_profile": {
+    "afternoon": 0.348,
+    "dawn": -0.045,
+    "evening": -0.227,
+    "late": 0.059,
+    "midday": 0.083,
+    "night": -0.02
+   }
+  }
+ },
+ {
+  "user_id": "U089",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 441,
+   "total_var": 0.49412127565808317,
+   "eta2_circadian": 0.0678,
+   "eta2_weekly": 0.005,
+   "eta2_slow": 0.0,
+   "n_days": 19,
+   "daily_acf1": -0.06370539284135664,
+   "daily_acf7": -0.21220247543549145,
+   "circadian_profile": {
+    "afternoon": -0.084,
+    "dawn": 0.147,
+    "evening": -0.011,
+    "late": -0.222,
+    "midday": 0.316,
+    "night": -0.11
+   }
+  },
+  "strict": {
+   "n_windows": 278,
+   "total_var": 0.4458282277134523,
+   "eta2_circadian": 0.1103,
+   "eta2_weekly": 0.0541,
+   "eta2_slow": 0.0,
+   "n_days": 18,
+   "daily_acf1": 0.10755376306594253,
+   "daily_acf7": -0.1761676954760522,
+   "circadian_profile": {
+    "afternoon": -0.022,
+    "dawn": -0.024,
+    "evening": 0.093,
+    "late": -0.222,
+    "midday": 0.365,
+    "night": -0.207
+   }
+  }
+ },
+ {
+  "user_id": "U090",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1118,
+   "total_var": 0.4900676259433775,
+   "eta2_circadian": 0.0412,
+   "eta2_weekly": 0.025,
+   "eta2_slow": 0.0561,
+   "n_days": 72,
+   "daily_acf1": 0.13163752538929732,
+   "daily_acf7": 0.05881502373243024,
+   "circadian_profile": {
+    "afternoon": 0.017,
+    "dawn": -0.125,
+    "evening": 0.007,
+    "late": 0.256,
+    "midday": 0.279,
+    "night": -0.127
+   }
+  },
+  "strict": {
+   "n_windows": 566,
+   "total_var": 0.4191724820796744,
+   "eta2_circadian": 0.0406,
+   "eta2_weekly": 0.0557,
+   "eta2_slow": 0.0632,
+   "n_days": 44,
+   "daily_acf1": 0.1127869907553981,
+   "daily_acf7": -0.3045734384963359,
+   "circadian_profile": {
+    "afternoon": 0.006,
+    "dawn": -0.091,
+    "evening": 0.004,
+    "late": 0.276,
+    "midday": 0.163,
+    "night": -0.212
+   }
+  }
+ },
+ {
+  "user_id": "U091",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 4307,
+   "total_var": 0.42733978516950843,
+   "eta2_circadian": 0.0174,
+   "eta2_weekly": 0.011,
+   "eta2_slow": 0.0449,
+   "n_days": 245,
+   "daily_acf1": -0.03647738636428536,
+   "daily_acf7": -0.0029345405168642686,
+   "circadian_profile": {
+    "afternoon": 0.156,
+    "dawn": -0.104,
+    "evening": 0.054,
+    "late": 0.091,
+    "midday": 0.022,
+    "night": -0.061
+   }
+  },
+  "strict": {
+   "n_windows": 2381,
+   "total_var": 0.3777797573972478,
+   "eta2_circadian": 0.0243,
+   "eta2_weekly": 0.0174,
+   "eta2_slow": 0.0645,
+   "n_days": 167,
+   "daily_acf1": 0.00033778600794517834,
+   "daily_acf7": -0.058698866134314576,
+   "circadian_profile": {
+    "afternoon": 0.133,
+    "dawn": -0.034,
+    "evening": 0.056,
+    "late": 0.046,
+    "midday": 0.045,
+    "night": -0.134
+   }
+  }
+ },
+ {
+  "user_id": "U092",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 512,
+   "total_var": 0.5198528585241864,
+   "eta2_circadian": 0.0264,
+   "eta2_weekly": 0.0194,
+   "eta2_slow": 0.0149,
+   "n_days": 40,
+   "daily_acf1": 0.05839035673397892,
+   "daily_acf7": -0.04656730719466624,
+   "circadian_profile": {
+    "afternoon": -0.151,
+    "dawn": 0.3,
+    "evening": 0.038,
+    "late": 0.154,
+    "midday": -0.427,
+    "night": -0.016
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U093",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 29100,
+   "total_var": 0.6011677409718766,
+   "eta2_circadian": 0.0058,
+   "eta2_weekly": 0.0011,
+   "eta2_slow": 0.0753,
+   "n_days": 1355,
+   "daily_acf1": 0.2683865166472981,
+   "daily_acf7": 0.2173895040181333,
+   "circadian_profile": {
+    "afternoon": 0.087,
+    "dawn": -0.075,
+    "evening": 0.059,
+    "late": 0.002,
+    "midday": -0.0,
+    "night": -0.053
+   }
+  },
+  "strict": {
+   "n_windows": 16490,
+   "total_var": 0.5184280371272614,
+   "eta2_circadian": 0.0114,
+   "eta2_weekly": 0.0015,
+   "eta2_slow": 0.0819,
+   "n_days": 1062,
+   "daily_acf1": 0.23193553092110636,
+   "daily_acf7": 0.16190762487541915,
+   "circadian_profile": {
+    "afternoon": 0.104,
+    "dawn": -0.055,
+    "evening": 0.058,
+    "late": -0.042,
+    "midday": 0.002,
+    "night": -0.112
+   }
+  }
+ },
+ {
+  "user_id": "U094",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 330,
+   "total_var": 0.5556468436086398,
+   "eta2_circadian": 0.0478,
+   "eta2_weekly": 0.0817,
+   "eta2_slow": 0.0162,
+   "n_days": 20,
+   "daily_acf1": 0.26188390585634674,
+   "daily_acf7": -0.3386650571634396,
+   "circadian_profile": {
+    "afternoon": -0.148,
+    "dawn": 0.198,
+    "evening": -0.133,
+    "late": 0.156,
+    "midday": 0.011,
+    "night": 0.401
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U095",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 4097,
+   "total_var": 0.5703513793460153,
+   "eta2_circadian": 0.0163,
+   "eta2_weekly": 0.0022,
+   "eta2_slow": 0.0175,
+   "n_days": 112,
+   "daily_acf1": 0.07585324493390536,
+   "daily_acf7": 0.0866676380208096,
+   "circadian_profile": {
+    "afternoon": 0.172,
+    "dawn": -0.069,
+    "evening": -0.016,
+    "late": 0.171,
+    "midday": 0.036,
+    "night": -0.13
+   }
+  },
+  "strict": {
+   "n_windows": 2138,
+   "total_var": 0.4989647594145601,
+   "eta2_circadian": 0.027,
+   "eta2_weekly": 0.0154,
+   "eta2_slow": 0.0315,
+   "n_days": 92,
+   "daily_acf1": 0.14002991253655134,
+   "daily_acf7": 0.10238568972945244,
+   "circadian_profile": {
+    "afternoon": 0.221,
+    "dawn": -0.016,
+    "evening": -0.135,
+    "late": 0.192,
+    "midday": 0.069,
+    "night": -0.124
+   }
+  }
+ },
+ {
+  "user_id": "U096",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 608,
+   "total_var": 0.6737059087435668,
+   "eta2_circadian": 0.0114,
+   "eta2_weekly": 0.0267,
+   "eta2_slow": 0.0084,
+   "n_days": 43,
+   "daily_acf1": -0.130470027537789,
+   "daily_acf7": -0.14246759082909174,
+   "circadian_profile": {
+    "afternoon": 0.1,
+    "dawn": -0.055,
+    "evening": -0.174,
+    "late": -0.089,
+    "midday": 0.082,
+    "night": -0.016
+   }
+  },
+  "strict": {
+   "n_windows": 363,
+   "total_var": 0.5050817619258768,
+   "eta2_circadian": 0.0481,
+   "eta2_weekly": 0.0534,
+   "eta2_slow": 0.0139,
+   "n_days": 27,
+   "daily_acf1": 0.23281244977221935,
+   "daily_acf7": -0.07477236700494856,
+   "circadian_profile": {
+    "afternoon": 0.327,
+    "dawn": -0.134,
+    "evening": 0.023,
+    "late": -0.268,
+    "midday": 0.039,
+    "night": -0.055
+   }
+  }
+ },
+ {
+  "user_id": "U097",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 305,
+   "total_var": 0.7280473017120315,
+   "eta2_circadian": 0.047,
+   "eta2_weekly": 0.0174,
+   "eta2_slow": 0.0231,
+   "n_days": 24,
+   "daily_acf1": 0.28121461551648713,
+   "daily_acf7": 0.09459506177517117,
+   "circadian_profile": {
+    "afternoon": 0.246,
+    "dawn": -0.154,
+    "evening": 0.263,
+    "late": 0.227,
+    "midday": 0.255,
+    "night": 0.103
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U098",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 597,
+   "total_var": 0.6000112436726457,
+   "eta2_circadian": 0.1085,
+   "eta2_weekly": 0.0273,
+   "eta2_slow": 0.0016,
+   "n_days": 42,
+   "daily_acf1": -0.10801228982721726,
+   "daily_acf7": 0.10025763954049591,
+   "circadian_profile": {
+    "afternoon": 0.462,
+    "dawn": -0.3,
+    "evening": 0.253,
+    "late": 0.041,
+    "midday": 0.014,
+    "night": -0.146
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U099",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2699,
+   "total_var": 0.44992552330412866,
+   "eta2_circadian": 0.0131,
+   "eta2_weekly": 0.0169,
+   "eta2_slow": 0.0257,
+   "n_days": 129,
+   "daily_acf1": 0.12286627336792,
+   "daily_acf7": 0.023700543672994314,
+   "circadian_profile": {
+    "afternoon": -0.052,
+    "dawn": -0.012,
+    "evening": 0.046,
+    "late": 0.245,
+    "midday": -0.052,
+    "night": 0.13
+   }
+  },
+  "strict": {
+   "n_windows": 1137,
+   "total_var": 0.39992533764138927,
+   "eta2_circadian": 0.0417,
+   "eta2_weekly": 0.0714,
+   "eta2_slow": 0.0673,
+   "n_days": 79,
+   "daily_acf1": 0.2998484521551613,
+   "daily_acf7": 0.0507613595602645,
+   "circadian_profile": {
+    "afternoon": -0.105,
+    "dawn": -0.008,
+    "evening": 0.086,
+    "late": 0.322,
+    "midday": -0.143,
+    "night": 0.17
+   }
+  }
+ },
+ {
+  "user_id": "U100",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 601,
+   "total_var": 0.6743712971589721,
+   "eta2_circadian": 0.0922,
+   "eta2_weekly": 0.09,
+   "eta2_slow": 0.0449,
+   "n_days": 45,
+   "daily_acf1": -0.11303566791030213,
+   "daily_acf7": 0.09687322448395992,
+   "circadian_profile": {
+    "afternoon": -0.343,
+    "dawn": -0.427,
+    "evening": 0.082,
+    "late": 0.335,
+    "midday": -0.001,
+    "night": 0.266
+   }
+  },
+  "strict": {
+   "n_windows": 250,
+   "total_var": 0.5540502133249589,
+   "eta2_circadian": 0.0914,
+   "eta2_weekly": 0.1509,
+   "eta2_slow": 0.0817,
+   "n_days": 18,
+   "daily_acf1": -0.0807713817503703,
+   "daily_acf7": -0.17621267801851967,
+   "circadian_profile": {
+    "afternoon": -0.168,
+    "dawn": -0.378,
+    "evening": 0.097,
+    "late": -0.942,
+    "midday": 0.21,
+    "night": 0.133
+   }
+  }
+ },
+ {
+  "user_id": "U101",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1164,
+   "total_var": 0.49179937125828066,
+   "eta2_circadian": 0.0949,
+   "eta2_weekly": 0.0246,
+   "eta2_slow": 0.0353,
+   "n_days": 74,
+   "daily_acf1": 0.12776888404394376,
+   "daily_acf7": -0.02658090468326588,
+   "circadian_profile": {
+    "afternoon": 0.064,
+    "dawn": -0.205,
+    "evening": 0.498,
+    "late": 0.032,
+    "midday": -0.329,
+    "night": -0.07
+   }
+  },
+  "strict": {
+   "n_windows": 338,
+   "total_var": 0.49102842552776865,
+   "eta2_circadian": 0.0913,
+   "eta2_weekly": 0.0401,
+   "eta2_slow": 0.1213,
+   "n_days": 26,
+   "daily_acf1": -0.25460945489248343,
+   "daily_acf7": 0.15679941776738537,
+   "circadian_profile": {
+    "afternoon": 0.193,
+    "dawn": -0.194,
+    "evening": 0.437,
+    "late": 0.051,
+    "midday": -0.192,
+    "night": -0.084
+   }
+  }
+ },
+ {
+  "user_id": "U102",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2945,
+   "total_var": 0.4746546490694914,
+   "eta2_circadian": 0.009,
+   "eta2_weekly": 0.0079,
+   "eta2_slow": 0.0112,
+   "n_days": 100,
+   "daily_acf1": 0.11896749943872686,
+   "daily_acf7": 0.09057080524079555,
+   "circadian_profile": {
+    "afternoon": -0.029,
+    "dawn": 0.003,
+    "evening": -0.054,
+    "late": 0.125,
+    "midday": 0.1,
+    "night": -0.05
+   }
+  },
+  "strict": {
+   "n_windows": 1374,
+   "total_var": 0.3685109778325028,
+   "eta2_circadian": 0.0062,
+   "eta2_weekly": 0.0119,
+   "eta2_slow": 0.0171,
+   "n_days": 80,
+   "daily_acf1": -0.020576340185617215,
+   "daily_acf7": 0.03360463936404665,
+   "circadian_profile": {
+    "afternoon": 0.07,
+    "dawn": 0.022,
+    "evening": -0.034,
+    "late": 0.064,
+    "midday": 0.048,
+    "night": -0.045
+   }
+  }
+ },
+ {
+  "user_id": "U103",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 198,
+   "total_var": 0.5648888189113499,
+   "eta2_circadian": 0.0218,
+   "eta2_weekly": 0.0603,
+   "eta2_slow": 0.0,
+   "n_days": 15,
+   "daily_acf1": -0.03782092290528738,
+   "daily_acf7": -0.03944713039814091,
+   "circadian_profile": {
+    "afternoon": 0.088,
+    "dawn": 0.052,
+    "evening": -0.084,
+    "late": -0.199,
+    "midday": 0.183,
+    "night": -0.034
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U104",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1024,
+   "total_var": 0.3412557009590932,
+   "eta2_circadian": 0.0844,
+   "eta2_weekly": 0.0121,
+   "eta2_slow": 0.0033,
+   "n_days": 71,
+   "daily_acf1": -0.184212919182169,
+   "daily_acf7": -0.10610955856061052,
+   "circadian_profile": {
+    "afternoon": -0.01,
+    "dawn": -0.788,
+    "evening": 0.026,
+    "late": 0.248,
+    "midday": 0.066,
+    "night": -0.356
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U105",
+  "table": "oref_v7",
+  "base": null,
+  "strict": null
+ },
+ {
+  "user_id": "U106",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 793,
+   "total_var": 0.3205857882249339,
+   "eta2_circadian": 0.0215,
+   "eta2_weekly": 0.0121,
+   "eta2_slow": 0.0147,
+   "n_days": 46,
+   "daily_acf1": -0.21026836663141232,
+   "daily_acf7": -0.15970675507530005,
+   "circadian_profile": {
+    "afternoon": -0.011,
+    "dawn": 0.078,
+    "evening": 0.096,
+    "late": 0.315,
+    "midday": -0.015,
+    "night": -0.227
+   }
+  },
+  "strict": {
+   "n_windows": 410,
+   "total_var": 0.26186982814052423,
+   "eta2_circadian": 0.0283,
+   "eta2_weekly": 0.0361,
+   "eta2_slow": 0.0259,
+   "n_days": 30,
+   "daily_acf1": 0.2483180876715078,
+   "daily_acf7": -0.1301165899457952,
+   "circadian_profile": {
+    "afternoon": -0.029,
+    "dawn": 0.081,
+    "evening": 0.1,
+    "late": 0.282,
+    "midday": -0.067,
+    "night": -0.159
+   }
+  }
+ },
+ {
+  "user_id": "U107",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1056,
+   "total_var": 0.5464302485716318,
+   "eta2_circadian": 0.08,
+   "eta2_weekly": 0.0106,
+   "eta2_slow": 0.0051,
+   "n_days": 61,
+   "daily_acf1": -0.06761198747188467,
+   "daily_acf7": -0.07535566036513122,
+   "circadian_profile": {
+    "afternoon": -0.077,
+    "dawn": -0.049,
+    "evening": -0.149,
+    "late": -0.288,
+    "midday": 0.245,
+    "night": -0.314
+   }
+  },
+  "strict": {
+   "n_windows": 304,
+   "total_var": 0.585411587948418,
+   "eta2_circadian": 0.2003,
+   "eta2_weekly": 0.1063,
+   "eta2_slow": 0.0275,
+   "n_days": 23,
+   "daily_acf1": -0.20797757564580321,
+   "daily_acf7": 0.14625043955195705,
+   "circadian_profile": {
+    "afternoon": -0.036,
+    "dawn": -0.537,
+    "evening": -0.016,
+    "late": -0.769,
+    "midday": 0.331,
+    "night": -0.168
+   }
+  }
+ },
+ {
+  "user_id": "U108",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1550,
+   "total_var": 0.4658467686261036,
+   "eta2_circadian": 0.0466,
+   "eta2_weekly": 0.0183,
+   "eta2_slow": 0.0174,
+   "n_days": 115,
+   "daily_acf1": -0.031509326429206584,
+   "daily_acf7": -0.00799484138036382,
+   "circadian_profile": {
+    "afternoon": 0.27,
+    "dawn": -0.092,
+    "evening": 0.098,
+    "late": 0.276,
+    "midday": -0.193,
+    "night": 0.088
+   }
+  },
+  "strict": {
+   "n_windows": 289,
+   "total_var": 0.44719688982838174,
+   "eta2_circadian": 0.1177,
+   "eta2_weekly": 0.1369,
+   "eta2_slow": 0.0184,
+   "n_days": 24,
+   "daily_acf1": -0.4374595446947064,
+   "daily_acf7": -0.14475177074670603,
+   "circadian_profile": {
+    "afternoon": 0.342,
+    "dawn": -0.182,
+    "evening": 0.122,
+    "late": 0.51,
+    "midday": -0.149,
+    "night": -0.025
+   }
+  }
+ },
+ {
+  "user_id": "U109",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 497,
+   "total_var": 0.5509005688865789,
+   "eta2_circadian": 0.0211,
+   "eta2_weekly": 0.065,
+   "eta2_slow": 0.0303,
+   "n_days": 36,
+   "daily_acf1": 0.28398765963603734,
+   "daily_acf7": -0.13851224318755342,
+   "circadian_profile": {
+    "afternoon": -0.14,
+    "dawn": -0.014,
+    "evening": -0.045,
+    "late": 0.44,
+    "midday": 0.014,
+    "night": 0.016
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U110",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 804,
+   "total_var": 0.5588096502309264,
+   "eta2_circadian": 0.0193,
+   "eta2_weekly": 0.0297,
+   "eta2_slow": 0.0262,
+   "n_days": 43,
+   "daily_acf1": 0.014931461798436308,
+   "daily_acf7": 0.05613643961154391,
+   "circadian_profile": {
+    "afternoon": -0.033,
+    "dawn": 0.148,
+    "evening": -0.082,
+    "late": -0.256,
+    "midday": 0.131,
+    "night": -0.016
+   }
+  },
+  "strict": {
+   "n_windows": 264,
+   "total_var": 0.46805251819556326,
+   "eta2_circadian": 0.0661,
+   "eta2_weekly": 0.039,
+   "eta2_slow": 0.0843,
+   "n_days": 21,
+   "daily_acf1": 0.03517655189756948,
+   "daily_acf7": -0.035481037713571605,
+   "circadian_profile": {
+    "afternoon": -0.027,
+    "dawn": 0.202,
+    "evening": -0.22,
+    "late": -0.86,
+    "midday": 0.195,
+    "night": 0.047
+   }
+  }
+ },
+ {
+  "user_id": "U111",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 781,
+   "total_var": 0.39742195397597047,
+   "eta2_circadian": 0.0376,
+   "eta2_weekly": 0.0333,
+   "eta2_slow": 0.0509,
+   "n_days": 41,
+   "daily_acf1": 0.06141046424310399,
+   "daily_acf7": 0.2574311738016664,
+   "circadian_profile": {
+    "afternoon": 0.271,
+    "dawn": 0.101,
+    "evening": -0.111,
+    "late": -0.256,
+    "midday": -0.071,
+    "night": -0.099
+   }
+  },
+  "strict": {
+   "n_windows": 352,
+   "total_var": 0.4051346661719336,
+   "eta2_circadian": 0.0909,
+   "eta2_weekly": 0.034,
+   "eta2_slow": 0.0261,
+   "n_days": 21,
+   "daily_acf1": 0.29038979742997406,
+   "daily_acf7": -0.012732608135124971,
+   "circadian_profile": {
+    "afternoon": 0.341,
+    "dawn": 0.192,
+    "evening": -0.042,
+    "late": -0.083,
+    "midday": -0.164,
+    "night": -0.176
+   }
+  }
+ },
+ {
+  "user_id": "U112",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 749,
+   "total_var": 0.3215768267150511,
+   "eta2_circadian": 0.035,
+   "eta2_weekly": 0.0108,
+   "eta2_slow": 0.0,
+   "n_days": 14,
+   "daily_acf1": -0.14634315268015088,
+   "daily_acf7": -0.11548399756476987,
+   "circadian_profile": {
+    "afternoon": -0.336,
+    "dawn": 0.028,
+    "evening": -0.032,
+    "late": -0.259,
+    "midday": -0.026,
+    "night": 0.137
+   }
+  },
+  "strict": {
+   "n_windows": 279,
+   "total_var": 0.2617846107113837,
+   "eta2_circadian": 0.1326,
+   "eta2_weekly": 0.073,
+   "eta2_slow": 0.0,
+   "n_days": 10,
+   "daily_acf1": -0.2984792907761698,
+   "daily_acf7": null,
+   "circadian_profile": {
+    "afternoon": -0.42,
+    "dawn": 0.105,
+    "evening": -0.206,
+    "late": -0.386,
+    "midday": 0.035,
+    "night": 0.135
+   }
+  }
+ },
+ {
+  "user_id": "U113",
+  "table": "oref_v7",
+  "base": null,
+  "strict": null
+ },
+ {
+  "user_id": "U114",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 161,
+   "total_var": 0.5001777263076471,
+   "eta2_circadian": 0.1264,
+   "eta2_weekly": 0.0257,
+   "eta2_slow": 0.0111,
+   "n_days": 14,
+   "daily_acf1": -0.5768241650312819,
+   "daily_acf7": -0.05963644133583806,
+   "circadian_profile": {
+    "afternoon": 0.048,
+    "dawn": 0.062,
+    "evening": 0.701,
+    "midday": -0.109,
+    "night": -0.858
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U115",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2259,
+   "total_var": 0.4089826673245296,
+   "eta2_circadian": 0.0083,
+   "eta2_weekly": 0.0064,
+   "eta2_slow": 0.1013,
+   "n_days": 155,
+   "daily_acf1": 0.4232925872750076,
+   "daily_acf7": 0.3262192332357071,
+   "circadian_profile": {
+    "afternoon": 0.066,
+    "dawn": 0.002,
+    "evening": 0.075,
+    "late": 0.014,
+    "midday": 0.079,
+    "night": -0.063
+   }
+  },
+  "strict": {
+   "n_windows": 1295,
+   "total_var": 0.31432491718501226,
+   "eta2_circadian": 0.032,
+   "eta2_weekly": 0.0145,
+   "eta2_slow": 0.0801,
+   "n_days": 100,
+   "daily_acf1": 0.2536002209672695,
+   "daily_acf7": 0.022509208200407024,
+   "circadian_profile": {
+    "afternoon": 0.134,
+    "dawn": 0.018,
+    "evening": 0.131,
+    "late": 0.012,
+    "midday": 0.007,
+    "night": -0.111
+   }
+  }
+ },
+ {
+  "user_id": "U116",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1457,
+   "total_var": 0.4613878103005774,
+   "eta2_circadian": 0.0087,
+   "eta2_weekly": 0.0089,
+   "eta2_slow": 0.0048,
+   "n_days": 59,
+   "daily_acf1": 0.04072267586458364,
+   "daily_acf7": -0.28397134484688286,
+   "circadian_profile": {
+    "afternoon": 0.024,
+    "dawn": 0.086,
+    "evening": 0.039,
+    "late": -0.261,
+    "midday": -0.026,
+    "night": -0.06
+   }
+  },
+  "strict": {
+   "n_windows": 649,
+   "total_var": 0.4459392060153753,
+   "eta2_circadian": 0.0056,
+   "eta2_weekly": 0.032,
+   "eta2_slow": 0.0181,
+   "n_days": 41,
+   "daily_acf1": -0.45425731272278624,
+   "daily_acf7": 0.03019531211741969,
+   "circadian_profile": {
+    "afternoon": 0.112,
+    "dawn": -0.008,
+    "evening": 0.081,
+    "late": -0.092,
+    "midday": -0.024,
+    "night": -0.018
+   }
+  }
+ },
+ {
+  "user_id": "U117",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 14893,
+   "total_var": 0.4567991663750407,
+   "eta2_circadian": 0.0151,
+   "eta2_weekly": 0.0097,
+   "eta2_slow": 0.0203,
+   "n_days": 325,
+   "daily_acf1": 0.04107316198077797,
+   "daily_acf7": 0.0177037719430806,
+   "circadian_profile": {
+    "afternoon": -0.123,
+    "dawn": -0.019,
+    "evening": -0.065,
+    "late": 0.07,
+    "midday": 0.117,
+    "night": -0.004
+   }
+  },
+  "strict": {
+   "n_windows": 6027,
+   "total_var": 0.39278996836027197,
+   "eta2_circadian": 0.0197,
+   "eta2_weekly": 0.0124,
+   "eta2_slow": 0.0338,
+   "n_days": 233,
+   "daily_acf1": 0.08269132453109236,
+   "daily_acf7": 0.10661171809757104,
+   "circadian_profile": {
+    "afternoon": -0.189,
+    "dawn": 0.001,
+    "evening": 0.02,
+    "late": 0.043,
+    "midday": 0.179,
+    "night": -0.028
+   }
+  }
+ },
+ {
+  "user_id": "U118",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 13105,
+   "total_var": 0.3832709025479543,
+   "eta2_circadian": 0.0271,
+   "eta2_weekly": 0.0026,
+   "eta2_slow": 0.0289,
+   "n_days": 129,
+   "daily_acf1": 0.13884837740896674,
+   "daily_acf7": 0.0720537973626208,
+   "circadian_profile": {
+    "afternoon": -0.057,
+    "dawn": -0.025,
+    "evening": 0.14,
+    "late": 0.223,
+    "midday": 0.039,
+    "night": -0.094
+   }
+  },
+  "strict": {
+   "n_windows": 5671,
+   "total_var": 0.3008478816085695,
+   "eta2_circadian": 0.0349,
+   "eta2_weekly": 0.0104,
+   "eta2_slow": 0.0251,
+   "n_days": 81,
+   "daily_acf1": 0.1544756411148304,
+   "daily_acf7": -0.009351771708984075,
+   "circadian_profile": {
+    "afternoon": -0.09,
+    "dawn": 0.031,
+    "evening": 0.134,
+    "late": 0.17,
+    "midday": 0.055,
+    "night": -0.101
+   }
+  }
+ },
+ {
+  "user_id": "U119",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 4223,
+   "total_var": 0.47071993754685804,
+   "eta2_circadian": 0.0072,
+   "eta2_weekly": 0.0113,
+   "eta2_slow": 0.0111,
+   "n_days": 153,
+   "daily_acf1": 0.19301521566869698,
+   "daily_acf7": -0.0032714745092263645,
+   "circadian_profile": {
+    "afternoon": -0.039,
+    "dawn": 0.018,
+    "evening": 0.014,
+    "late": -0.082,
+    "midday": -0.093,
+    "night": 0.077
+   }
+  },
+  "strict": {
+   "n_windows": 1478,
+   "total_var": 0.38688752416638,
+   "eta2_circadian": 0.0154,
+   "eta2_weekly": 0.0242,
+   "eta2_slow": 0.0112,
+   "n_days": 103,
+   "daily_acf1": -0.07236060813245894,
+   "daily_acf7": -0.09722038742156859,
+   "circadian_profile": {
+    "afternoon": 0.009,
+    "dawn": 0.053,
+    "evening": -0.079,
+    "late": -0.068,
+    "midday": -0.174,
+    "night": 0.062
+   }
+  }
+ },
+ {
+  "user_id": "U120",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 616,
+   "total_var": 0.3689472347201559,
+   "eta2_circadian": 0.1315,
+   "eta2_weekly": 0.0912,
+   "eta2_slow": 0.0091,
+   "n_days": 8,
+   "daily_acf1": 0.007176795781178599,
+   "daily_acf7": null,
+   "circadian_profile": {
+    "afternoon": 0.054,
+    "dawn": 0.096,
+    "evening": 0.23,
+    "late": 0.382,
+    "midday": -0.241,
+    "night": 0.229
+   }
+  },
+  "strict": {
+   "n_windows": 201,
+   "total_var": 0.12212015326967057,
+   "eta2_circadian": 0.2163,
+   "eta2_weekly": 0.3014,
+   "eta2_slow": 0.0,
+   "n_days": 4,
+   "daily_acf1": null,
+   "daily_acf7": null,
+   "circadian_profile": {
+    "afternoon": -0.134,
+    "dawn": -0.047,
+    "evening": -0.039,
+    "late": 0.166,
+    "midday": -0.306,
+    "night": 0.083
+   }
+  }
+ },
+ {
+  "user_id": "U121",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 209,
+   "total_var": 0.31138526971496944,
+   "eta2_circadian": 0.0522,
+   "eta2_weekly": 0.0849,
+   "eta2_slow": 0.0,
+   "n_days": 15,
+   "daily_acf1": -0.11949050100859483,
+   "daily_acf7": -0.04463472553430657,
+   "circadian_profile": {
+    "afternoon": 0.193,
+    "dawn": -0.133,
+    "late": 0.171,
+    "midday": 0.151,
+    "night": -0.073
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U122",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 363,
+   "total_var": 0.3978046774357064,
+   "eta2_circadian": 0.081,
+   "eta2_weekly": 0.0698,
+   "eta2_slow": 0.071,
+   "n_days": 29,
+   "daily_acf1": 0.29342657678772466,
+   "daily_acf7": -0.17194737208080652,
+   "circadian_profile": {
+    "afternoon": 0.14,
+    "dawn": 0.026,
+    "evening": 0.133,
+    "late": 0.117,
+    "midday": -0.789,
+    "night": -0.174
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U123",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 836,
+   "total_var": 0.5018556531316514,
+   "eta2_circadian": 0.0038,
+   "eta2_weekly": 0.0162,
+   "eta2_slow": 0.0181,
+   "n_days": 54,
+   "daily_acf1": 0.023561861913714958,
+   "daily_acf7": -0.08720916457145166,
+   "circadian_profile": {
+    "afternoon": 0.009,
+    "dawn": 0.017,
+    "evening": 0.068,
+    "late": -0.118,
+    "midday": -0.056,
+    "night": -0.006
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U124",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2776,
+   "total_var": 0.4921208564311733,
+   "eta2_circadian": 0.0161,
+   "eta2_weekly": 0.012,
+   "eta2_slow": 0.0044,
+   "n_days": 137,
+   "daily_acf1": 0.06542724786959239,
+   "daily_acf7": 0.03141133352066701,
+   "circadian_profile": {
+    "afternoon": 0.068,
+    "dawn": -0.201,
+    "evening": 0.117,
+    "late": 0.037,
+    "midday": -0.044,
+    "night": 0.013
+   }
+  },
+  "strict": {
+   "n_windows": 918,
+   "total_var": 0.4740909908323254,
+   "eta2_circadian": 0.0424,
+   "eta2_weekly": 0.0105,
+   "eta2_slow": 0.0124,
+   "n_days": 78,
+   "daily_acf1": 0.05273351632241243,
+   "daily_acf7": -0.11614623225934367,
+   "circadian_profile": {
+    "afternoon": 0.005,
+    "dawn": -0.364,
+    "evening": 0.142,
+    "late": 0.041,
+    "midday": 0.044,
+    "night": 0.045
+   }
+  }
+ },
+ {
+  "user_id": "U125",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 5175,
+   "total_var": 0.54065976467984,
+   "eta2_circadian": 0.0133,
+   "eta2_weekly": 0.0091,
+   "eta2_slow": 0.059,
+   "n_days": 236,
+   "daily_acf1": 0.2734988550040947,
+   "daily_acf7": 0.34427608389992925,
+   "circadian_profile": {
+    "afternoon": -0.092,
+    "dawn": -0.042,
+    "evening": -0.015,
+    "late": 0.214,
+    "midday": -0.05,
+    "night": 0.097
+   }
+  },
+  "strict": {
+   "n_windows": 3043,
+   "total_var": 0.4226717818670844,
+   "eta2_circadian": 0.016,
+   "eta2_weekly": 0.0142,
+   "eta2_slow": 0.0546,
+   "n_days": 188,
+   "daily_acf1": 0.11181931832604408,
+   "daily_acf7": 0.22648008050759866,
+   "circadian_profile": {
+    "afternoon": -0.061,
+    "dawn": -0.052,
+    "evening": -0.053,
+    "late": 0.19,
+    "midday": -0.043,
+    "night": 0.082
+   }
+  }
+ },
+ {
+  "user_id": "U126",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 618,
+   "total_var": 0.28210866609989194,
+   "eta2_circadian": 0.0476,
+   "eta2_weekly": 0.0306,
+   "eta2_slow": 0.0002,
+   "n_days": 36,
+   "daily_acf1": 0.22895017060977213,
+   "daily_acf7": -0.28857000891505924,
+   "circadian_profile": {
+    "afternoon": -0.12,
+    "dawn": -0.131,
+    "evening": 0.143,
+    "late": 0.173,
+    "midday": 0.124,
+    "night": -0.05
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U127",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 20297,
+   "total_var": 0.5819362035261024,
+   "eta2_circadian": 0.0697,
+   "eta2_weekly": 0.0043,
+   "eta2_slow": 0.03,
+   "n_days": 288,
+   "daily_acf1": 0.17833739701242707,
+   "daily_acf7": 0.12907327953656947,
+   "circadian_profile": {
+    "afternoon": -0.137,
+    "dawn": 0.251,
+    "evening": -0.191,
+    "late": -0.315,
+    "midday": 0.172,
+    "night": -0.17
+   }
+  },
+  "strict": {
+   "n_windows": 10570,
+   "total_var": 0.5934365152685281,
+   "eta2_circadian": 0.0614,
+   "eta2_weekly": 0.0038,
+   "eta2_slow": 0.0363,
+   "n_days": 253,
+   "daily_acf1": 0.14328946904269618,
+   "daily_acf7": 0.14282747996224254,
+   "circadian_profile": {
+    "afternoon": -0.079,
+    "dawn": 0.27,
+    "evening": -0.153,
+    "late": -0.226,
+    "midday": 0.321,
+    "night": -0.082
+   }
+  }
+ },
+ {
+  "user_id": "U128",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 12830,
+   "total_var": 0.25088081315320193,
+   "eta2_circadian": 0.0214,
+   "eta2_weekly": 0.0017,
+   "eta2_slow": 0.0478,
+   "n_days": 237,
+   "daily_acf1": 0.18550078539559772,
+   "daily_acf7": -0.026909980378641465,
+   "circadian_profile": {
+    "afternoon": -0.074,
+    "dawn": -0.035,
+    "evening": 0.012,
+    "late": 0.183,
+    "midday": -0.095,
+    "night": 0.083
+   }
+  },
+  "strict": {
+   "n_windows": 1984,
+   "total_var": 0.2783340484108444,
+   "eta2_circadian": 0.0565,
+   "eta2_weekly": 0.0445,
+   "eta2_slow": 0.1165,
+   "n_days": 72,
+   "daily_acf1": 0.017859750970003974,
+   "daily_acf7": 0.11057618659044557,
+   "circadian_profile": {
+    "afternoon": 0.046,
+    "dawn": -0.116,
+    "evening": -0.175,
+    "late": 0.314,
+    "midday": 0.104,
+    "night": 0.087
+   }
+  }
+ },
+ {
+  "user_id": "U129",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 351,
+   "total_var": 0.500926253085316,
+   "eta2_circadian": 0.0583,
+   "eta2_weekly": 0.0516,
+   "eta2_slow": 0.0072,
+   "n_days": 25,
+   "daily_acf1": 0.026080517845250388,
+   "daily_acf7": -0.028319724997582,
+   "circadian_profile": {
+    "dawn": 0.139,
+    "evening": -1.873,
+    "late": -0.564,
+    "midday": 0.808,
+    "night": 0.018
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U130",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 5331,
+   "total_var": 0.34814876434362074,
+   "eta2_circadian": 0.0077,
+   "eta2_weekly": 0.0017,
+   "eta2_slow": 0.0097,
+   "n_days": 218,
+   "daily_acf1": 0.12503012132981578,
+   "daily_acf7": -0.030297383379171,
+   "circadian_profile": {
+    "afternoon": 0.031,
+    "dawn": -0.047,
+    "evening": 0.037,
+    "late": 0.035,
+    "midday": 0.17,
+    "night": -0.029
+   }
+  },
+  "strict": {
+   "n_windows": 1403,
+   "total_var": 0.27021918891552044,
+   "eta2_circadian": 0.0082,
+   "eta2_weekly": 0.002,
+   "eta2_slow": 0.0346,
+   "n_days": 104,
+   "daily_acf1": 0.07996076425281949,
+   "daily_acf7": -0.03173224696611911,
+   "circadian_profile": {
+    "afternoon": 0.048,
+    "dawn": 0.061,
+    "evening": 0.039,
+    "late": 0.0,
+    "midday": 0.047,
+    "night": -0.057
+   }
+  }
+ },
+ {
+  "user_id": "U131",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 8356,
+   "total_var": 0.4034204169823392,
+   "eta2_circadian": 0.0015,
+   "eta2_weekly": 0.0136,
+   "eta2_slow": 0.0087,
+   "n_days": 111,
+   "daily_acf1": -0.11594516482685022,
+   "daily_acf7": -0.055655687253243796,
+   "circadian_profile": {
+    "afternoon": -0.188,
+    "dawn": -0.013,
+    "evening": -0.133,
+    "late": 0.003,
+    "midday": 0.009,
+    "night": 0.015
+   }
+  },
+  "strict": {
+   "n_windows": 2017,
+   "total_var": 0.3406274836616247,
+   "eta2_circadian": 0.0195,
+   "eta2_weekly": 0.0339,
+   "eta2_slow": 0.0169,
+   "n_days": 65,
+   "daily_acf1": 0.11233532049721057,
+   "daily_acf7": 0.23024821728839695,
+   "circadian_profile": {
+    "afternoon": -0.431,
+    "dawn": -0.007,
+    "evening": -0.194,
+    "late": 0.003,
+    "midday": -0.195,
+    "night": 0.053
+   }
+  }
+ },
+ {
+  "user_id": "U132",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2213,
+   "total_var": 0.5026477656067626,
+   "eta2_circadian": 0.0017,
+   "eta2_weekly": 0.021,
+   "eta2_slow": 0.0156,
+   "n_days": 147,
+   "daily_acf1": 0.1293423871421929,
+   "daily_acf7": 0.058195227422363854,
+   "circadian_profile": {
+    "afternoon": -0.019,
+    "dawn": 0.072,
+    "evening": -0.001,
+    "late": -0.024,
+    "midday": -0.019,
+    "night": 0.003
+   }
+  },
+  "strict": {
+   "n_windows": 518,
+   "total_var": 0.4253823703180298,
+   "eta2_circadian": 0.0177,
+   "eta2_weekly": 0.0578,
+   "eta2_slow": 0.047,
+   "n_days": 43,
+   "daily_acf1": 0.09017405939530386,
+   "daily_acf7": -0.05617584062149061,
+   "circadian_profile": {
+    "afternoon": -0.124,
+    "dawn": 0.084,
+    "evening": 0.146,
+    "late": 0.009,
+    "midday": 0.043,
+    "night": -0.061
+   }
+  }
+ },
+ {
+  "user_id": "U133",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 626,
+   "total_var": 0.5555732178946613,
+   "eta2_circadian": 0.0148,
+   "eta2_weekly": 0.0097,
+   "eta2_slow": 0.0223,
+   "n_days": 38,
+   "daily_acf1": 0.029140039310466898,
+   "daily_acf7": -0.10134784896284017,
+   "circadian_profile": {
+    "afternoon": -0.004,
+    "dawn": 0.035,
+    "evening": 0.037,
+    "late": 0.123,
+    "midday": -0.111,
+    "night": -0.116
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U134",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1056,
+   "total_var": 0.46774335081335194,
+   "eta2_circadian": 0.0417,
+   "eta2_weekly": 0.0162,
+   "eta2_slow": 0.0065,
+   "n_days": 48,
+   "daily_acf1": -0.24216227504123547,
+   "daily_acf7": -0.20263305049557095,
+   "circadian_profile": {
+    "afternoon": -0.093,
+    "dawn": -0.142,
+    "evening": -0.094,
+    "late": -0.073,
+    "midday": -0.114,
+    "night": 0.182
+   }
+  },
+  "strict": {
+   "n_windows": 327,
+   "total_var": 0.48563106129629297,
+   "eta2_circadian": 0.0621,
+   "eta2_weekly": 0.0244,
+   "eta2_slow": 0.018,
+   "n_days": 30,
+   "daily_acf1": 0.15151646772439237,
+   "daily_acf7": -0.07144240649201333,
+   "circadian_profile": {
+    "afternoon": -0.122,
+    "dawn": -0.192,
+    "evening": -0.061,
+    "late": -0.217,
+    "midday": -0.304,
+    "night": 0.201
+   }
+  }
+ },
+ {
+  "user_id": "U135",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2530,
+   "total_var": 0.30699068118207457,
+   "eta2_circadian": 0.0189,
+   "eta2_weekly": 0.0378,
+   "eta2_slow": 0.0061,
+   "n_days": 49,
+   "daily_acf1": -0.006939100292569599,
+   "daily_acf7": 0.07660320072764155,
+   "circadian_profile": {
+    "afternoon": -0.005,
+    "dawn": 0.071,
+    "evening": -0.139,
+    "late": 0.012,
+    "midday": 0.092,
+    "night": 0.066
+   }
+  },
+  "strict": {
+   "n_windows": 525,
+   "total_var": 0.3305298007224115,
+   "eta2_circadian": 0.1172,
+   "eta2_weekly": 0.1199,
+   "eta2_slow": 0.0146,
+   "n_days": 19,
+   "daily_acf1": 0.037634282231808106,
+   "daily_acf7": 0.009422316453301063,
+   "circadian_profile": {
+    "afternoon": -0.2,
+    "dawn": 0.078,
+    "evening": -0.394,
+    "late": -2.305,
+    "midday": -0.038,
+    "night": 0.208
+   }
+  }
+ },
+ {
+  "user_id": "U136",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 914,
+   "total_var": 0.3228870414761632,
+   "eta2_circadian": 0.0443,
+   "eta2_weekly": 0.026,
+   "eta2_slow": 0.0152,
+   "n_days": 29,
+   "daily_acf1": -0.14011542235747876,
+   "daily_acf7": -0.1426419608803096,
+   "circadian_profile": {
+    "afternoon": 0.06,
+    "dawn": 0.134,
+    "evening": -0.016,
+    "late": -0.214,
+    "midday": -0.196,
+    "night": 0.235
+   }
+  },
+  "strict": {
+   "n_windows": 251,
+   "total_var": 0.2643084724620529,
+   "eta2_circadian": 0.2637,
+   "eta2_weekly": 0.3537,
+   "eta2_slow": 0.0138,
+   "n_days": 13,
+   "daily_acf1": -0.1410063229699303,
+   "daily_acf7": 0.0014361206519801128,
+   "circadian_profile": {
+    "afternoon": 0.029,
+    "dawn": 0.429,
+    "evening": -0.442,
+    "late": -0.155,
+    "midday": -0.168,
+    "night": 0.294
+   }
+  }
+ },
+ {
+  "user_id": "U137",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2484,
+   "total_var": 0.44934464264548907,
+   "eta2_circadian": 0.0088,
+   "eta2_weekly": 0.0174,
+   "eta2_slow": 0.1026,
+   "n_days": 69,
+   "daily_acf1": -0.22198808407666776,
+   "daily_acf7": 0.05662854327554134,
+   "circadian_profile": {
+    "afternoon": 0.05,
+    "dawn": 0.026,
+    "evening": -0.169,
+    "late": 0.12,
+    "midday": -0.024,
+    "night": 0.002
+   }
+  },
+  "strict": {
+   "n_windows": 830,
+   "total_var": 0.4570659244893806,
+   "eta2_circadian": 0.0633,
+   "eta2_weekly": 0.1309,
+   "eta2_slow": 0.2039,
+   "n_days": 30,
+   "daily_acf1": 0.16326942204711611,
+   "daily_acf7": 0.04430215525387174,
+   "circadian_profile": {
+    "afternoon": 0.121,
+    "dawn": 0.246,
+    "evening": -0.239,
+    "late": -0.397,
+    "midday": -0.209,
+    "night": -0.082
+   }
+  }
+ },
+ {
+  "user_id": "U138",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 65777,
+   "total_var": 0.3993338386317225,
+   "eta2_circadian": 0.0065,
+   "eta2_weekly": 0.0004,
+   "eta2_slow": 0.0328,
+   "n_days": 1626,
+   "daily_acf1": 0.3154198603061122,
+   "daily_acf7": 0.20095640157534406,
+   "circadian_profile": {
+    "afternoon": 0.023,
+    "dawn": -0.072,
+    "evening": 0.05,
+    "late": 0.067,
+    "midday": -0.074,
+    "night": 0.013
+   }
+  },
+  "strict": {
+   "n_windows": 21356,
+   "total_var": 0.34790359652383684,
+   "eta2_circadian": 0.0047,
+   "eta2_weekly": 0.0012,
+   "eta2_slow": 0.0498,
+   "n_days": 1193,
+   "daily_acf1": 0.19631509429237415,
+   "daily_acf7": 0.1541616424871634,
+   "circadian_profile": {
+    "afternoon": -0.0,
+    "dawn": -0.092,
+    "evening": 0.029,
+    "late": 0.049,
+    "midday": -0.072,
+    "night": 0.006
+   }
+  }
+ },
+ {
+  "user_id": "U139",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2286,
+   "total_var": 0.30570722370667247,
+   "eta2_circadian": 0.006,
+   "eta2_weekly": 0.0339,
+   "eta2_slow": 0.0028,
+   "n_days": 69,
+   "daily_acf1": -0.09226995984998428,
+   "daily_acf7": 0.07924970364935073,
+   "circadian_profile": {
+    "afternoon": -0.047,
+    "dawn": -0.045,
+    "evening": 0.058,
+    "late": 0.045,
+    "midday": 0.027,
+    "night": -0.022
+   }
+  },
+  "strict": {
+   "n_windows": 1028,
+   "total_var": 0.2763499904508897,
+   "eta2_circadian": 0.0469,
+   "eta2_weekly": 0.0966,
+   "eta2_slow": 0.0105,
+   "n_days": 41,
+   "daily_acf1": 0.18198072536042434,
+   "daily_acf7": -0.14752825698158858,
+   "circadian_profile": {
+    "afternoon": -0.038,
+    "dawn": -0.154,
+    "evening": 0.093,
+    "late": 0.203,
+    "midday": 0.054,
+    "night": -0.172
+   }
+  }
+ },
+ {
+  "user_id": "U140",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 583,
+   "total_var": 0.4497835558930872,
+   "eta2_circadian": 0.0242,
+   "eta2_weekly": 0.076,
+   "eta2_slow": 0.0,
+   "n_days": 12,
+   "daily_acf1": 0.18165978023337834,
+   "daily_acf7": -0.04180229841997418,
+   "circadian_profile": {
+    "dawn": 0.045,
+    "evening": 0.205,
+    "late": 0.164,
+    "midday": -0.027,
+    "night": -0.095
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U141",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1863,
+   "total_var": 0.23843582717616407,
+   "eta2_circadian": 0.0137,
+   "eta2_weekly": 0.0151,
+   "eta2_slow": 0.0156,
+   "n_days": 113,
+   "daily_acf1": -0.051740525699718584,
+   "daily_acf7": 0.0022623202677727323,
+   "circadian_profile": {
+    "afternoon": -0.196,
+    "dawn": -0.015,
+    "evening": -0.001,
+    "late": -0.144,
+    "midday": -0.046,
+    "night": 0.047
+   }
+  },
+  "strict": {
+   "n_windows": 546,
+   "total_var": 0.18340003864631277,
+   "eta2_circadian": 0.0271,
+   "eta2_weekly": 0.0501,
+   "eta2_slow": 0.0398,
+   "n_days": 52,
+   "daily_acf1": 0.04330366466999645,
+   "daily_acf7": 0.07470129632324457,
+   "circadian_profile": {
+    "afternoon": -0.246,
+    "dawn": 0.026,
+    "evening": 0.012,
+    "late": -0.143,
+    "midday": -0.044,
+    "night": 0.053
+   }
+  }
+ },
+ {
+  "user_id": "U142",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2568,
+   "total_var": 0.40564902144695203,
+   "eta2_circadian": 0.0048,
+   "eta2_weekly": 0.0321,
+   "eta2_slow": 0.0034,
+   "n_days": 124,
+   "daily_acf1": 0.060677987772683246,
+   "daily_acf7": -0.0060152159735213295,
+   "circadian_profile": {
+    "afternoon": 0.002,
+    "dawn": -0.013,
+    "evening": 0.066,
+    "late": 0.107,
+    "midday": -0.045,
+    "night": -0.014
+   }
+  },
+  "strict": {
+   "n_windows": 522,
+   "total_var": 0.3179253705244932,
+   "eta2_circadian": 0.0329,
+   "eta2_weekly": 0.0356,
+   "eta2_slow": 0.0228,
+   "n_days": 34,
+   "daily_acf1": 0.043311204872628836,
+   "daily_acf7": -0.048978752557035134,
+   "circadian_profile": {
+    "afternoon": -1.608,
+    "dawn": -0.057,
+    "evening": 0.16,
+    "late": 0.053,
+    "midday": -0.043,
+    "night": -0.032
+   }
+  }
+ },
+ {
+  "user_id": "U143",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2392,
+   "total_var": 0.3451227620839697,
+   "eta2_circadian": 0.0148,
+   "eta2_weekly": 0.0148,
+   "eta2_slow": 0.0092,
+   "n_days": 131,
+   "daily_acf1": 0.04614774955379828,
+   "daily_acf7": -0.025064587072152446,
+   "circadian_profile": {
+    "afternoon": -0.027,
+    "dawn": 0.13,
+    "evening": 0.165,
+    "late": -0.071,
+    "midday": 0.077,
+    "night": -0.032
+   }
+  },
+  "strict": {
+   "n_windows": 658,
+   "total_var": 0.31251357739843255,
+   "eta2_circadian": 0.0383,
+   "eta2_weekly": 0.0837,
+   "eta2_slow": 0.0156,
+   "n_days": 57,
+   "daily_acf1": -0.036618128713146576,
+   "daily_acf7": -0.011724623335275582,
+   "circadian_profile": {
+    "afternoon": 0.003,
+    "dawn": -0.014,
+    "evening": 0.261,
+    "late": -0.079,
+    "midday": 0.14,
+    "night": -0.088
+   }
+  }
+ },
+ {
+  "user_id": "U144",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 4500,
+   "total_var": 0.5912939097821606,
+   "eta2_circadian": 0.0097,
+   "eta2_weekly": 0.0132,
+   "eta2_slow": 0.0198,
+   "n_days": 176,
+   "daily_acf1": 0.016578243670554212,
+   "daily_acf7": -0.07688790628799677,
+   "circadian_profile": {
+    "afternoon": 0.041,
+    "dawn": -0.103,
+    "evening": -0.087,
+    "late": 0.093,
+    "midday": -0.039,
+    "night": 0.075
+   }
+  },
+  "strict": {
+   "n_windows": 940,
+   "total_var": 0.5783293763056584,
+   "eta2_circadian": 0.0351,
+   "eta2_weekly": 0.0588,
+   "eta2_slow": 0.0566,
+   "n_days": 70,
+   "daily_acf1": 0.06002154441408872,
+   "daily_acf7": 0.24245283253518876,
+   "circadian_profile": {
+    "afternoon": -0.287,
+    "dawn": -0.238,
+    "evening": 0.011,
+    "late": -0.181,
+    "midday": 0.183,
+    "night": 0.07
+   }
+  }
+ },
+ {
+  "user_id": "U145",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1069,
+   "total_var": 0.44935509405065915,
+   "eta2_circadian": 0.014,
+   "eta2_weekly": 0.0094,
+   "eta2_slow": 0.0702,
+   "n_days": 61,
+   "daily_acf1": 0.20612324031659587,
+   "daily_acf7": 0.131035124994509,
+   "circadian_profile": {
+    "afternoon": 0.048,
+    "dawn": 0.013,
+    "evening": -0.017,
+    "late": 0.001,
+    "midday": 0.061,
+    "night": -0.175
+   }
+  },
+  "strict": {
+   "n_windows": 497,
+   "total_var": 0.4388709080262141,
+   "eta2_circadian": 0.0359,
+   "eta2_weekly": 0.002,
+   "eta2_slow": 0.1178,
+   "n_days": 36,
+   "daily_acf1": 0.3773016431486914,
+   "daily_acf7": 0.28195355537272676,
+   "circadian_profile": {
+    "afternoon": 0.125,
+    "dawn": -0.165,
+    "evening": 0.007,
+    "late": 0.065,
+    "midday": 0.084,
+    "night": -0.199
+   }
+  }
+ },
+ {
+  "user_id": "U147",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2154,
+   "total_var": 0.34644349740068253,
+   "eta2_circadian": 0.0093,
+   "eta2_weekly": 0.0059,
+   "eta2_slow": 0.0213,
+   "n_days": 173,
+   "daily_acf1": 0.15404905932349333,
+   "daily_acf7": -0.13301389898735455,
+   "circadian_profile": {
+    "afternoon": 0.108,
+    "dawn": -0.068,
+    "evening": -0.12,
+    "late": 0.063,
+    "midday": -0.055,
+    "night": 0.01
+   }
+  },
+  "strict": {
+   "n_windows": 1169,
+   "total_var": 0.3127917645917407,
+   "eta2_circadian": 0.0179,
+   "eta2_weekly": 0.0079,
+   "eta2_slow": 0.0447,
+   "n_days": 113,
+   "daily_acf1": 0.09313001126088553,
+   "daily_acf7": -0.07821328643235197,
+   "circadian_profile": {
+    "afternoon": 0.142,
+    "dawn": -0.033,
+    "evening": -0.146,
+    "late": 0.107,
+    "midday": -0.091,
+    "night": -0.007
+   }
+  }
+ },
+ {
+  "user_id": "U148",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 29849,
+   "total_var": 0.37210266663863467,
+   "eta2_circadian": 0.0016,
+   "eta2_weekly": 0.0008,
+   "eta2_slow": 0.0325,
+   "n_days": 429,
+   "daily_acf1": 0.20549389048124894,
+   "daily_acf7": 0.16170244335215048,
+   "circadian_profile": {
+    "afternoon": 0.047,
+    "dawn": 0.023,
+    "evening": -0.037,
+    "late": -0.005,
+    "midday": 0.002,
+    "night": -0.02
+   }
+  },
+  "strict": {
+   "n_windows": 8347,
+   "total_var": 0.3333597164549388,
+   "eta2_circadian": 0.0125,
+   "eta2_weekly": 0.0033,
+   "eta2_slow": 0.0318,
+   "n_days": 293,
+   "daily_acf1": 0.09148230448929962,
+   "daily_acf7": -0.0028983396942293244,
+   "circadian_profile": {
+    "afternoon": 0.131,
+    "dawn": 0.03,
+    "evening": -0.104,
+    "late": -0.031,
+    "midday": 0.03,
+    "night": 0.007
+   }
+  }
+ },
+ {
+  "user_id": "U149",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 6556,
+   "total_var": 0.37031346400512166,
+   "eta2_circadian": 0.0242,
+   "eta2_weekly": 0.0041,
+   "eta2_slow": 0.0061,
+   "n_days": 223,
+   "daily_acf1": 0.04590838301386282,
+   "daily_acf7": -0.08825573881166938,
+   "circadian_profile": {
+    "afternoon": 0.18,
+    "dawn": -0.127,
+    "evening": 0.014,
+    "late": 0.022,
+    "midday": -0.008,
+    "night": -0.042
+   }
+  },
+  "strict": {
+   "n_windows": 1704,
+   "total_var": 0.3626645331278104,
+   "eta2_circadian": 0.0351,
+   "eta2_weekly": 0.0102,
+   "eta2_slow": 0.0253,
+   "n_days": 107,
+   "daily_acf1": -0.07810410329988908,
+   "daily_acf7": -0.06317033364069526,
+   "circadian_profile": {
+    "afternoon": 0.076,
+    "dawn": -0.131,
+    "evening": -0.286,
+    "late": -0.027,
+    "midday": -0.143,
+    "night": 0.05
+   }
+  }
+ },
+ {
+  "user_id": "U150",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 277,
+   "total_var": 0.43013920858684496,
+   "eta2_circadian": 0.018,
+   "eta2_weekly": 0.0734,
+   "eta2_slow": 0.0035,
+   "n_days": 20,
+   "daily_acf1": 0.2249725284120955,
+   "daily_acf7": 0.07910598226735396,
+   "circadian_profile": {
+    "dawn": 0.083,
+    "evening": -0.005,
+    "late": -0.112,
+    "midday": -0.097,
+    "night": -0.083
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U151",
+  "table": "oref_v7",
+  "base": null,
+  "strict": null
+ },
+ {
+  "user_id": "U152",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1136,
+   "total_var": 0.44417013180072495,
+   "eta2_circadian": 0.045,
+   "eta2_weekly": 0.0291,
+   "eta2_slow": 0.0595,
+   "n_days": 94,
+   "daily_acf1": 0.24164237011336948,
+   "daily_acf7": -0.012609781446920007,
+   "circadian_profile": {
+    "afternoon": -0.036,
+    "dawn": -0.159,
+    "evening": 0.165,
+    "late": 0.051,
+    "midday": -0.147,
+    "night": 0.122
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U153",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 912,
+   "total_var": 0.38475500864652173,
+   "eta2_circadian": 0.0838,
+   "eta2_weekly": 0.0257,
+   "eta2_slow": 0.0046,
+   "n_days": 61,
+   "daily_acf1": 0.20550802836975668,
+   "daily_acf7": 0.0611595640363117,
+   "circadian_profile": {
+    "afternoon": 0.307,
+    "dawn": -0.256,
+    "evening": 0.083,
+    "late": -0.138,
+    "midday": 0.307,
+    "night": -0.03
+   }
+  },
+  "strict": {
+   "n_windows": 589,
+   "total_var": 0.33791355441879734,
+   "eta2_circadian": 0.0447,
+   "eta2_weekly": 0.0582,
+   "eta2_slow": 0.011,
+   "n_days": 46,
+   "daily_acf1": 0.028511471682367333,
+   "daily_acf7": -0.23291720784655173,
+   "circadian_profile": {
+    "afternoon": 0.27,
+    "dawn": -0.176,
+    "evening": 0.14,
+    "late": -0.075,
+    "midday": -0.038,
+    "night": 0.007
+   }
+  }
+ },
+ {
+  "user_id": "U155",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 6672,
+   "total_var": 0.41372056104563637,
+   "eta2_circadian": 0.0027,
+   "eta2_weekly": 0.0098,
+   "eta2_slow": 0.0247,
+   "n_days": 283,
+   "daily_acf1": 0.12199684026215309,
+   "daily_acf7": 0.14578973078097637,
+   "circadian_profile": {
+    "afternoon": 0.087,
+    "dawn": -0.036,
+    "evening": 0.002,
+    "late": 0.097,
+    "midday": 0.012,
+    "night": -0.007
+   }
+  },
+  "strict": {
+   "n_windows": 2787,
+   "total_var": 0.43381099850110383,
+   "eta2_circadian": 0.0157,
+   "eta2_weekly": 0.0249,
+   "eta2_slow": 0.0548,
+   "n_days": 172,
+   "daily_acf1": 0.01872024062345049,
+   "daily_acf7": 0.023187472167267627,
+   "circadian_profile": {
+    "afternoon": 0.102,
+    "dawn": 0.042,
+    "evening": -0.195,
+    "late": -0.288,
+    "midday": -0.026,
+    "night": 0.016
+   }
+  }
+ },
+ {
+  "user_id": "U156",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 13635,
+   "total_var": 0.37501304157001886,
+   "eta2_circadian": 0.0073,
+   "eta2_weekly": 0.0037,
+   "eta2_slow": 0.1122,
+   "n_days": 561,
+   "daily_acf1": 0.2743154225826412,
+   "daily_acf7": 0.18003985746538465,
+   "circadian_profile": {
+    "afternoon": 0.062,
+    "dawn": -0.114,
+    "evening": -0.126,
+    "late": 0.02,
+    "midday": -0.067,
+    "night": 0.018
+   }
+  },
+  "strict": {
+   "n_windows": 6116,
+   "total_var": 0.3372549591359613,
+   "eta2_circadian": 0.0204,
+   "eta2_weekly": 0.0111,
+   "eta2_slow": 0.123,
+   "n_days": 327,
+   "daily_acf1": 0.2701890045155178,
+   "daily_acf7": 0.07995803221178949,
+   "circadian_profile": {
+    "afternoon": 0.115,
+    "dawn": -0.164,
+    "evening": -0.037,
+    "late": 0.1,
+    "midday": -0.131,
+    "night": 0.015
+   }
+  }
+ },
+ {
+  "user_id": "U157",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 826,
+   "total_var": 0.7134736862094864,
+   "eta2_circadian": 0.0269,
+   "eta2_weekly": 0.0125,
+   "eta2_slow": 0.0116,
+   "n_days": 50,
+   "daily_acf1": 0.01485695074028281,
+   "daily_acf7": -0.10381728593989716,
+   "circadian_profile": {
+    "afternoon": 0.176,
+    "dawn": -0.25,
+    "evening": -0.066,
+    "late": 0.134,
+    "midday": 0.072,
+    "night": 0.144
+   }
+  },
+  "strict": {
+   "n_windows": 195,
+   "total_var": 0.6067991602085547,
+   "eta2_circadian": 0.0474,
+   "eta2_weekly": 0.0833,
+   "eta2_slow": 0.0072,
+   "n_days": 15,
+   "daily_acf1": -0.4069348927323058,
+   "daily_acf7": -0.12696556711713575,
+   "circadian_profile": {
+    "afternoon": 0.241,
+    "dawn": -0.04,
+    "evening": -0.168,
+    "late": 1.102,
+    "midday": 0.08
+   }
+  }
+ },
+ {
+  "user_id": "U158",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1874,
+   "total_var": 0.34495752726461654,
+   "eta2_circadian": 0.0265,
+   "eta2_weekly": 0.0164,
+   "eta2_slow": 0.0013,
+   "n_days": 71,
+   "daily_acf1": 0.11972289303110878,
+   "daily_acf7": -0.0834928432998668,
+   "circadian_profile": {
+    "afternoon": 0.042,
+    "dawn": -0.071,
+    "evening": -0.31,
+    "late": 0.062,
+    "midday": -0.201,
+    "night": 0.016
+   }
+  },
+  "strict": {
+   "n_windows": 589,
+   "total_var": 0.32093099230301037,
+   "eta2_circadian": 0.0793,
+   "eta2_weekly": 0.0411,
+   "eta2_slow": 0.0074,
+   "n_days": 52,
+   "daily_acf1": -0.02704945611161634,
+   "daily_acf7": -0.04129574668471688,
+   "circadian_profile": {
+    "afternoon": 0.125,
+    "dawn": -0.05,
+    "evening": -0.372,
+    "late": 0.002,
+    "midday": -0.66,
+    "night": 0.075
+   }
+  }
+ },
+ {
+  "user_id": "U160",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 640,
+   "total_var": 0.43035330090135754,
+   "eta2_circadian": 0.0342,
+   "eta2_weekly": 0.034,
+   "eta2_slow": 0.0,
+   "n_days": 21,
+   "daily_acf1": 0.009784972716176676,
+   "daily_acf7": 0.012099069537396624,
+   "circadian_profile": {
+    "afternoon": -0.159,
+    "dawn": 0.091,
+    "evening": -0.189,
+    "late": 0.207,
+    "midday": 0.085,
+    "night": -0.003
+   }
+  },
+  "strict": {
+   "n_windows": 324,
+   "total_var": 0.3585930127001636,
+   "eta2_circadian": 0.1043,
+   "eta2_weekly": 0.0618,
+   "eta2_slow": 0.0,
+   "n_days": 19,
+   "daily_acf1": -0.3048620636785502,
+   "daily_acf7": 0.08535107931950259,
+   "circadian_profile": {
+    "afternoon": -0.278,
+    "dawn": 0.176,
+    "evening": -0.358,
+    "late": 0.078,
+    "midday": 0.083,
+    "night": -0.064
+   }
+  }
+ },
+ {
+  "user_id": "U165",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1247,
+   "total_var": 0.4563719667174231,
+   "eta2_circadian": 0.0582,
+   "eta2_weekly": 0.0111,
+   "eta2_slow": 0.0739,
+   "n_days": 90,
+   "daily_acf1": 0.19290945084125366,
+   "daily_acf7": 0.20745483794785805,
+   "circadian_profile": {
+    "afternoon": 0.132,
+    "dawn": -0.132,
+    "evening": 0.591,
+    "late": 0.434,
+    "midday": 0.057,
+    "night": 0.142
+   }
+  },
+  "strict": {
+   "n_windows": 904,
+   "total_var": 0.3626570658943542,
+   "eta2_circadian": 0.0732,
+   "eta2_weekly": 0.0091,
+   "eta2_slow": 0.0984,
+   "n_days": 68,
+   "daily_acf1": 0.009789364144716418,
+   "daily_acf7": 0.21706864205375884,
+   "circadian_profile": {
+    "afternoon": 0.17,
+    "dawn": -0.106,
+    "evening": 0.477,
+    "late": 0.499,
+    "midday": -0.094,
+    "night": 0.194
+   }
+  }
+ },
+ {
+  "user_id": "U166",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 18463,
+   "total_var": 0.28742228461448344,
+   "eta2_circadian": 0.0106,
+   "eta2_weekly": 0.004,
+   "eta2_slow": 0.1374,
+   "n_days": 102,
+   "daily_acf1": 0.6743792059105886,
+   "daily_acf7": 0.27755387200379045,
+   "circadian_profile": {
+    "afternoon": 0.014,
+    "dawn": 0.004,
+    "evening": -0.084,
+    "late": 0.169,
+    "midday": 0.006,
+    "night": -0.03
+   }
+  },
+  "strict": {
+   "n_windows": 11149,
+   "total_var": 0.24492724235688992,
+   "eta2_circadian": 0.0182,
+   "eta2_weekly": 0.0106,
+   "eta2_slow": 0.107,
+   "n_days": 102,
+   "daily_acf1": 0.6131716066054462,
+   "daily_acf7": 0.23527276303195035,
+   "circadian_profile": {
+    "afternoon": 0.065,
+    "dawn": -0.007,
+    "evening": -0.061,
+    "late": 0.16,
+    "midday": 0.014,
+    "night": -0.078
+   }
+  }
+ },
+ {
+  "user_id": "U167",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2859,
+   "total_var": 0.5026974116428549,
+   "eta2_circadian": 0.0137,
+   "eta2_weekly": 0.006,
+   "eta2_slow": 0.0244,
+   "n_days": 223,
+   "daily_acf1": 0.03751397328298916,
+   "daily_acf7": 0.019457000737316828,
+   "circadian_profile": {
+    "afternoon": 0.102,
+    "dawn": -0.113,
+    "evening": -0.042,
+    "late": 0.089,
+    "midday": 0.146,
+    "night": -0.092
+   }
+  },
+  "strict": {
+   "n_windows": 251,
+   "total_var": 0.6338540682922434,
+   "eta2_circadian": 0.0326,
+   "eta2_weekly": 0.0743,
+   "eta2_slow": 0.1629,
+   "n_days": 23,
+   "daily_acf1": -0.1592632820437703,
+   "daily_acf7": -0.2907777517926676,
+   "circadian_profile": {
+    "afternoon": 0.135,
+    "dawn": -0.181,
+    "evening": -0.069,
+    "late": 0.446,
+    "midday": -0.142,
+    "night": 0.134
+   }
+  }
+ },
+ {
+  "user_id": "U168",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 439,
+   "total_var": 0.37508121320597226,
+   "eta2_circadian": 0.0305,
+   "eta2_weekly": 0.0709,
+   "eta2_slow": 0.025,
+   "n_days": 40,
+   "daily_acf1": -0.04810560312960651,
+   "daily_acf7": 0.009120483492948353,
+   "circadian_profile": {
+    "afternoon": -0.385,
+    "dawn": 0.019,
+    "evening": -0.293,
+    "late": -0.225,
+    "midday": 0.137,
+    "night": 0.041
+   }
+  },
+  "strict": {
+   "n_windows": 156,
+   "total_var": 0.2640157440043811,
+   "eta2_circadian": 0.1441,
+   "eta2_weekly": 0.1412,
+   "eta2_slow": 0.0477,
+   "n_days": 12,
+   "daily_acf1": 0.14552519000204084,
+   "daily_acf7": -0.35809282441084966,
+   "circadian_profile": {
+    "afternoon": -0.411,
+    "dawn": -0.14,
+    "evening": -0.189,
+    "late": -0.359,
+    "midday": -0.42,
+    "night": 0.139
+   }
+  }
+ },
+ {
+  "user_id": "U169",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 416,
+   "total_var": 0.4478291424991672,
+   "eta2_circadian": 0.0324,
+   "eta2_weekly": 0.0137,
+   "eta2_slow": 0.0632,
+   "n_days": 32,
+   "daily_acf1": 0.1615929048529169,
+   "daily_acf7": 0.24959173905641951,
+   "circadian_profile": {
+    "afternoon": 0.12,
+    "dawn": -0.072,
+    "evening": -0.148,
+    "late": -0.045,
+    "midday": 0.317,
+    "night": 0.012
+   }
+  },
+  "strict": {
+   "n_windows": 167,
+   "total_var": 0.3943270487859148,
+   "eta2_circadian": 0.0449,
+   "eta2_weekly": 0.0842,
+   "eta2_slow": 0.0401,
+   "n_days": 16,
+   "daily_acf1": -0.40934539378543394,
+   "daily_acf7": -0.26523522389886317,
+   "circadian_profile": {
+    "afternoon": 0.107,
+    "dawn": 0.178,
+    "evening": -0.197,
+    "late": 0.027,
+    "midday": 0.479,
+    "night": -0.025
+   }
+  }
+ },
+ {
+  "user_id": "U170",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 570,
+   "total_var": 0.6530164408726493,
+   "eta2_circadian": 0.0287,
+   "eta2_weekly": 0.0328,
+   "eta2_slow": 0.34,
+   "n_days": 40,
+   "daily_acf1": 0.7219917304683751,
+   "daily_acf7": 0.20713184813949528,
+   "circadian_profile": {
+    "afternoon": -0.018,
+    "dawn": -0.16,
+    "evening": 0.265,
+    "late": 0.04,
+    "midday": -0.103,
+    "night": 0.026
+   }
+  },
+  "strict": {
+   "n_windows": 334,
+   "total_var": 0.4386873934240613,
+   "eta2_circadian": 0.0316,
+   "eta2_weekly": 0.0409,
+   "eta2_slow": 0.2087,
+   "n_days": 26,
+   "daily_acf1": 0.3942220173496017,
+   "daily_acf7": 0.1723371062828207,
+   "circadian_profile": {
+    "afternoon": 0.034,
+    "dawn": -0.125,
+    "evening": 0.219,
+    "late": -0.037,
+    "midday": -0.109,
+    "night": 0.048
+   }
+  }
+ },
+ {
+  "user_id": "U171",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1889,
+   "total_var": 0.6326619657197611,
+   "eta2_circadian": 0.0271,
+   "eta2_weekly": 0.0084,
+   "eta2_slow": 0.0254,
+   "n_days": 113,
+   "daily_acf1": 0.10473359736359136,
+   "daily_acf7": 0.1566032150886531,
+   "circadian_profile": {
+    "afternoon": 0.04,
+    "dawn": -0.046,
+    "evening": 0.034,
+    "late": 0.01,
+    "midday": -0.928,
+    "night": -0.166
+   }
+  },
+  "strict": {
+   "n_windows": 376,
+   "total_var": 0.5088728586883537,
+   "eta2_circadian": 0.0878,
+   "eta2_weekly": 0.0421,
+   "eta2_slow": 0.0681,
+   "n_days": 24,
+   "daily_acf1": -0.2551216435942561,
+   "daily_acf7": 0.07062356667739578,
+   "circadian_profile": {
+    "afternoon": 0.047,
+    "dawn": 0.241,
+    "evening": 0.261,
+    "late": 0.298,
+    "midday": -0.71,
+    "night": -0.152
+   }
+  }
+ },
+ {
+  "user_id": "U174",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 10493,
+   "total_var": 0.3900543362109947,
+   "eta2_circadian": 0.0162,
+   "eta2_weekly": 0.0055,
+   "eta2_slow": 0.0092,
+   "n_days": 168,
+   "daily_acf1": 0.04792525857539386,
+   "daily_acf7": 0.14286474989471104,
+   "circadian_profile": {
+    "afternoon": -0.041,
+    "dawn": 0.068,
+    "evening": 0.204,
+    "late": 0.042,
+    "midday": -0.075,
+    "night": -0.075
+   }
+  },
+  "strict": {
+   "n_windows": 3717,
+   "total_var": 0.3339016151642269,
+   "eta2_circadian": 0.045,
+   "eta2_weekly": 0.0136,
+   "eta2_slow": 0.034,
+   "n_days": 116,
+   "daily_acf1": 0.019238954615302728,
+   "daily_acf7": -0.0733446813582989,
+   "circadian_profile": {
+    "afternoon": -0.097,
+    "dawn": 0.117,
+    "evening": 0.257,
+    "late": -0.048,
+    "midday": -0.132,
+    "night": -0.087
+   }
+  }
+ },
+ {
+  "user_id": "U175",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 425,
+   "total_var": 0.5438246922172877,
+   "eta2_circadian": 0.0545,
+   "eta2_weekly": 0.0224,
+   "eta2_slow": 0.1677,
+   "n_days": 36,
+   "daily_acf1": 0.08238795710741574,
+   "daily_acf7": -0.19436224950202,
+   "circadian_profile": {
+    "afternoon": -0.009,
+    "dawn": 0.248,
+    "evening": 0.025,
+    "late": 0.235,
+    "midday": -0.225,
+    "night": 0.241
+   }
+  },
+  "strict": {
+   "n_windows": 198,
+   "total_var": 0.40123175767465846,
+   "eta2_circadian": 0.0848,
+   "eta2_weekly": 0.183,
+   "eta2_slow": 0.2861,
+   "n_days": 16,
+   "daily_acf1": 0.519970730690966,
+   "daily_acf7": -0.03524468736654222,
+   "circadian_profile": {
+    "afternoon": 0.027,
+    "dawn": 0.205,
+    "evening": 0.115,
+    "late": -0.768,
+    "midday": -0.277,
+    "night": 0.177
+   }
+  }
+ },
+ {
+  "user_id": "U176",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1761,
+   "total_var": 0.4269477783582365,
+   "eta2_circadian": 0.0523,
+   "eta2_weekly": 0.0401,
+   "eta2_slow": 0.076,
+   "n_days": 73,
+   "daily_acf1": 0.037322307042932046,
+   "daily_acf7": 0.014216883607460179,
+   "circadian_profile": {
+    "afternoon": 0.083,
+    "dawn": -0.156,
+    "evening": 0.298,
+    "late": 0.29,
+    "midday": -0.009,
+    "night": -0.046
+   }
+  },
+  "strict": null
+ },
+ {
+  "user_id": "U177",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1274,
+   "total_var": 0.663714848945255,
+   "eta2_circadian": 0.029,
+   "eta2_weekly": 0.0325,
+   "eta2_slow": 0.0336,
+   "n_days": 93,
+   "daily_acf1": 0.07683393489721731,
+   "daily_acf7": 0.1704767591868817,
+   "circadian_profile": {
+    "afternoon": 0.009,
+    "dawn": 0.229,
+    "evening": -0.098,
+    "late": -0.008,
+    "midday": 0.335,
+    "night": -0.096
+   }
+  },
+  "strict": {
+   "n_windows": 289,
+   "total_var": 0.5693145950714906,
+   "eta2_circadian": 0.0369,
+   "eta2_weekly": 0.0264,
+   "eta2_slow": 0.0938,
+   "n_days": 19,
+   "daily_acf1": 0.28242232233258646,
+   "daily_acf7": 0.051317980323272984,
+   "circadian_profile": {
+    "afternoon": -0.153,
+    "dawn": 0.131,
+    "evening": 0.098,
+    "late": -0.392,
+    "midday": 0.653,
+    "night": -0.006
+   }
+  }
+ },
+ {
+  "user_id": "U179",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1940,
+   "total_var": 0.38756482517846425,
+   "eta2_circadian": 0.0323,
+   "eta2_weekly": 0.0025,
+   "eta2_slow": 0.0047,
+   "n_days": 126,
+   "daily_acf1": -0.02150860168099664,
+   "daily_acf7": -0.19467998659880895,
+   "circadian_profile": {
+    "afternoon": 0.057,
+    "dawn": -0.092,
+    "evening": 0.083,
+    "late": 0.026,
+    "midday": -0.286,
+    "night": 0.049
+   }
+  },
+  "strict": {
+   "n_windows": 678,
+   "total_var": 0.31772522030945655,
+   "eta2_circadian": 0.0929,
+   "eta2_weekly": 0.0268,
+   "eta2_slow": 0.0475,
+   "n_days": 55,
+   "daily_acf1": 0.16982240493397244,
+   "daily_acf7": -0.11118236013750858,
+   "circadian_profile": {
+    "afternoon": 0.191,
+    "dawn": -0.191,
+    "evening": -0.013,
+    "late": 0.18,
+    "midday": -0.223,
+    "night": 0.054
+   }
+  }
+ },
+ {
+  "user_id": "U180",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 1889,
+   "total_var": 0.5706051340956807,
+   "eta2_circadian": 0.0018,
+   "eta2_weekly": 0.0077,
+   "eta2_slow": 0.036,
+   "n_days": 72,
+   "daily_acf1": 0.34079729693820404,
+   "daily_acf7": 0.03344108693016922,
+   "circadian_profile": {
+    "afternoon": -0.021,
+    "dawn": 0.013,
+    "evening": -0.001,
+    "late": 0.036,
+    "midday": 0.055,
+    "night": -0.042
+   }
+  },
+  "strict": {
+   "n_windows": 1291,
+   "total_var": 0.5192939298496807,
+   "eta2_circadian": 0.0055,
+   "eta2_weekly": 0.0168,
+   "eta2_slow": 0.0436,
+   "n_days": 61,
+   "daily_acf1": 0.36788955415741836,
+   "daily_acf7": 0.19588008895377426,
+   "circadian_profile": {
+    "afternoon": 0.008,
+    "dawn": -0.067,
+    "evening": 0.048,
+    "late": 0.091,
+    "midday": 0.039,
+    "night": -0.054
+   }
+  }
+ },
+ {
+  "user_id": "U182",
+  "table": "oref_v7",
+  "base": {
+   "n_windows": 2238,
+   "total_var": 0.4233246624554468,
+   "eta2_circadian": 0.0242,
+   "eta2_weekly": 0.009,
+   "eta2_slow": 0.0058,
+   "n_days": 88,
+   "daily_acf1": 0.2541658689986751,
+   "daily_acf7": 0.019507791418482672,
+   "circadian_profile": {
+    "afternoon": -0.059,
+    "dawn": 0.05,
+    "evening": 0.093,
+    "late": -0.138,
+    "midday": 0.078,
+    "night": -0.176
+   }
+  },
+  "strict": {
+   "n_windows": 1090,
+   "total_var": 0.386053615315213,
+   "eta2_circadian": 0.0206,
+   "eta2_weekly": 0.0221,
+   "eta2_slow": 0.0157,
+   "n_days": 78,
+   "daily_acf1": 0.1919153364703735,
+   "daily_acf7": -0.06632819805422936,
+   "circadian_profile": {
+    "afternoon": -0.076,
+    "dawn": 0.032,
+    "evening": 0.098,
+    "late": 0.031,
+    "midday": 0.08,
+    "night": -0.131
+   }
+  }
+ }
+]
