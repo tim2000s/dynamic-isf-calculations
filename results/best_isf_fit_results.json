@@ -1,0 +1,196 @@
+{
+ "generated": "2026-06-07 11:56",
+ "n_cohort": 138,
+ "n_empirical": 114,
+ "power_law_empirical": {
+  "A": 86.0,
+  "b": -0.376
+ },
+ "power_law_entered": {
+  "A": 285.1,
+  "b": -0.433
+ },
+ "blend_weight_on_entered": 0.0,
+ "sqrt_rule_empirical_K": 144.8,
+ "sqrt_rule_entered_K": 355.1,
+ "target_empirical_isf": [
+  {
+   "candidate": "Power law + basal_frac",
+   "fitted_cv": true,
+   "median_abs_err": 6.0,
+   "p75_abs_err": 10.9,
+   "median_log_err": 0.294,
+   "frac_within_30pct": 0.439
+  },
+  {
+   "candidate": "K/sqrt(TDD)",
+   "fitted_cv": true,
+   "median_abs_err": 6.2,
+   "p75_abs_err": 10.7,
+   "median_log_err": 0.297,
+   "frac_within_30pct": 0.447
+  },
+  {
+   "candidate": "Fitted C/TDD",
+   "fitted_cv": true,
+   "median_abs_err": 6.7,
+   "p75_abs_err": 12.0,
+   "median_log_err": 0.298,
+   "frac_within_30pct": 0.386
+  },
+  {
+   "candidate": "TDD-quartile bands",
+   "fitted_cv": true,
+   "median_abs_err": 6.6,
+   "p75_abs_err": 10.5,
+   "median_log_err": 0.303,
+   "frac_within_30pct": 0.421
+  },
+  {
+   "candidate": "Power law A\u00b7TDD^b",
+   "fitted_cv": true,
+   "median_abs_err": 6.1,
+   "p75_abs_err": 11.1,
+   "median_log_err": 0.304,
+   "frac_within_30pct": 0.447
+  },
+  {
+   "candidate": "Blend entered\u00d7power law",
+   "fitted_cv": true,
+   "median_abs_err": 6.1,
+   "p75_abs_err": 11.1,
+   "median_log_err": 0.304,
+   "frac_within_30pct": 0.447
+  },
+  {
+   "candidate": "Multivariate (TDD,CR,basal,target)",
+   "fitted_cv": true,
+   "median_abs_err": 6.2,
+   "p75_abs_err": 10.2,
+   "median_log_err": 0.306,
+   "frac_within_30pct": 0.395
+  },
+  {
+   "candidate": "Power law + ln(CR)",
+   "fitted_cv": true,
+   "median_abs_err": 6.5,
+   "p75_abs_err": 11.2,
+   "median_log_err": 0.33,
+   "frac_within_30pct": 0.412
+  },
+  {
+   "candidate": "1700-rule",
+   "fitted_cv": false,
+   "median_abs_err": 16.2,
+   "p75_abs_err": 31.2,
+   "median_log_err": 0.605,
+   "frac_within_30pct": 0.149
+  },
+  {
+   "candidate": "v1 (TDD^-1)",
+   "fitted_cv": false,
+   "median_abs_err": 26.0,
+   "p75_abs_err": 48.0,
+   "median_log_err": 0.813,
+   "frac_within_30pct": 0.07
+  },
+  {
+   "candidate": "Entered profile ISF",
+   "fitted_cv": false,
+   "median_abs_err": 32.0,
+   "p75_abs_err": 50.3,
+   "median_log_err": 0.896,
+   "frac_within_30pct": 0.044
+  },
+  {
+   "candidate": "v2 (TDD^-2)",
+   "fitted_cv": false,
+   "median_abs_err": 44.6,
+   "p75_abs_err": 138.2,
+   "median_log_err": 1.229,
+   "frac_within_30pct": 0.07
+  }
+ ],
+ "target_entered_isf": [
+  {
+   "candidate": "K/sqrt(TDD)",
+   "fitted_cv": true,
+   "median_abs_err": 12.8,
+   "p75_abs_err": 30.8,
+   "median_log_err": 0.256,
+   "frac_within_30pct": 0.514
+  },
+  {
+   "candidate": "Power law A\u00b7TDD^b",
+   "fitted_cv": true,
+   "median_abs_err": 13.5,
+   "p75_abs_err": 29.4,
+   "median_log_err": 0.268,
+   "frac_within_30pct": 0.493
+  },
+  {
+   "candidate": "Power law + basal_frac",
+   "fitted_cv": true,
+   "median_abs_err": 14.4,
+   "p75_abs_err": 24.8,
+   "median_log_err": 0.285,
+   "frac_within_30pct": 0.442
+  },
+  {
+   "candidate": "TDD-quartile bands",
+   "fitted_cv": true,
+   "median_abs_err": 13.8,
+   "p75_abs_err": 28.9,
+   "median_log_err": 0.292,
+   "frac_within_30pct": 0.478
+  },
+  {
+   "candidate": "Multivariate (TDD,CR,basal,target)",
+   "fitted_cv": true,
+   "median_abs_err": 14.7,
+   "p75_abs_err": 28.5,
+   "median_log_err": 0.306,
+   "frac_within_30pct": 0.457
+  },
+  {
+   "candidate": "Power law + ln(CR)",
+   "fitted_cv": true,
+   "median_abs_err": 15.4,
+   "p75_abs_err": 28.4,
+   "median_log_err": 0.318,
+   "frac_within_30pct": 0.428
+  },
+  {
+   "candidate": "v1 (TDD^-1)",
+   "fitted_cv": false,
+   "median_abs_err": 17.0,
+   "p75_abs_err": 37.8,
+   "median_log_err": 0.324,
+   "frac_within_30pct": 0.377
+  },
+  {
+   "candidate": "Fitted C/TDD",
+   "fitted_cv": true,
+   "median_abs_err": 19.3,
+   "p75_abs_err": 37.0,
+   "median_log_err": 0.336,
+   "frac_within_30pct": 0.435
+  },
+  {
+   "candidate": "1700-rule",
+   "fitted_cv": false,
+   "median_abs_err": 17.9,
+   "p75_abs_err": 36.7,
+   "median_log_err": 0.454,
+   "frac_within_30pct": 0.341
+  },
+  {
+   "candidate": "v2 (TDD^-2)",
+   "fitted_cv": false,
+   "median_abs_err": 33.1,
+   "p75_abs_err": 95.0,
+   "median_log_err": 0.566,
+   "frac_within_30pct": 0.275
+  }
+ ]
+}
