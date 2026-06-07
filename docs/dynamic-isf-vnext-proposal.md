@@ -35,21 +35,16 @@ Set sensitivity at normal target in inverse proportion to the **square root of T
 ISF at normal target = K_user / √TDD
 ```
 
-The exponent (−½) is universal; `K_user` is calibrated per person (§4–5). The existing
-glucose scaler then sets ISF at every other glucose level, unchanged — so the full equation,
-with the TDD blend and glucose cap also unchanged, is:
+`K_user / √TDD` is the **TDD term** — the only part that changes. It replaces v1's `1800/TDD`
+and v2's `115000/TDD²`; like them it is just a function of TDD. ISF at other glucose levels
+comes from the existing dynamic-ISF glucose scaler, applied unchanged:
 
 ```
-ISF(BG) = (K_user / √TDD) · ln(target/divisor + 1) / ln(bg_capped/divisor + 1)
+ISF(BG) = (K_user / √TDD) × [existing glucose scaler]
 ```
 
-**K carries no insulin divisor.** The √TDD term was fit directly to ISF (mg/dL per U), so K
-states sensitivity at normal target independent of insulin type. The divisor — which varies
-with insulin peak time (≈75 Lyumjev, 65 Fiasp, 55 standard rapid analogue) — enters *only*
-through the glucose scaler, exactly as in v1 and v2; at normal target the scaler is 1 for
-every insulin type, so K/√TDD is the ISF-at-target regardless of insulin. (Do not fold the
-constant and the divisor's normal-target log term into one number such as a "300 rule" — that
-product is valid for only one divisor.)
+The exponent (−½) is universal; `K_user` is calibrated per person (§4–5). The TDD blend, the
+glucose scaler and everything else are untouched.
 
 - **Exponent: universal −½**, robust across the TDD construct used (§2).
 - **K_user: per-user, recalibrated weekly** from the person's own recent data (§5). The safe
@@ -119,22 +114,17 @@ Four points decide it:
 
 ## 3. What it does, relative to v1 and v2
 
-All three equations share the identical glucose scaler; they differ only in how TDD sets
-the anchor. With the divisor shown as a parameter (≈75 Lyumjev / 65 Fiasp / 55 rapid):
+All three equations apply the same glucose scaler; they differ only in the TDD term that
+sets sensitivity at normal target:
 
 ```
-v1:      ISF(BG) = 1800   / ( TDD  · ln(bg_capped/divisor + 1) )
-v2:      ISF(BG) = 115000 / ( TDD² · ln(bg_capped/divisor + 1) )
-v-next:  ISF(BG) = (355 / √TDD) · ln(target/divisor + 1) / ln(bg_capped/divisor + 1)
+v1:      ∝ 1 / TDD
+v2:      ∝ 1 / TDD²
+v-next:  = K / √TDD
 ```
 
-Note a structural difference the divisor exposes: v1 and v2 fold the normal-target log term
-into their leading constants, so their ISF *at normal target* shifts with insulin type;
-v-next's anchor, 355/√TDD, does not — the divisor in v-next acts only on the glucose-scaling
-shape above target.
-
-The proposed curve rotates v1 about TDD ≈ 36 U/day (ISF at normal target, mg/dL per U,
-shown for divisor 75):
+The proposed curve rotates v1 about TDD ≈ 36 U/day (ISF at normal target, mg/dL per U;
+v-next shown at the cohort K = 355):
 
 | TDD (U/day) | v1 | v2 | **v-next (355/√TDD)** | v-next vs v1 |
 |---|---|---|---|---|
@@ -269,7 +259,6 @@ validation before it doses.
 | Sensitivity (Tier-2) anchor over-aggressive | Not deployed by default; Tier 1 leaves average dosing unchanged; Tier 2 gated behind validation |
 | TDD reconstruction error feeds the equation | √TDD is *less* TDD-sensitive than v1 and far less than v2, so the same TDD error moves ISF less — a robustness gain |
 | Single-cohort generalisation; few true DynISF users | Trial as opt-in; monitor across TDD bands; revisit exponent if the DynISF population shows steeper |
-| Insulin-type / divisor variation | K is divisor-free and applies at normal target for any insulin; the divisor enters only through the unchanged glucose scaler |
 
 ---
 
@@ -283,14 +272,12 @@ untouched. Two pieces change: a weekly per-user K, and the anchor formula.
 K_user = profile_ISF * sqrt(median_TDD_14d)        // clamp vs previous K_user
 
 # every cycle:
-anchor  = K_user / sqrt(TDD)        // ISF at normal target; no divisor term
-                                    // was: 1800 / (TDD · ln(target/divisor + 1))  for v1
-                                    //  or: 2300 / (ln(target/divisor + 1) · TDD² · 0.02)  for v2
-ISF(BG) = anchor * scaler           // scaler unchanged; equals 1 at normal target
+sensNormalTarget = K_user / sqrt(TDD)   // the TDD term; was 1800/TDD (v1) or 115000/TDD² (v2)
+ISF(BG) = sensNormalTarget * scaler     // existing glucose scaler, unchanged
 ```
 
-Because `K_user = profile_ISF · √(median TDD)`, at the user's typical TDD the anchor returns
-their profile ISF exactly — Tier 1 is a behaviour-preserving generalisation of their current
+Because `K_user = profile_ISF · √(median TDD)`, at the user's typical TDD this returns their
+profile ISF exactly — Tier 1 is a behaviour-preserving generalisation of their current
 setting, with the √TDD response added.
 
 ---
