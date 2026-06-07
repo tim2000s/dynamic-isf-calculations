@@ -1,0 +1,23 @@
+{
+ "n_cycles": 6663,
+ "horizon_h": 3.17,
+ "tdd_range": [
+  14.9,
+  36.7
+ ],
+ "loop_MAE": 21.1,
+ "loop_bias": -0.76,
+ "log_MAE": 19.03,
+ "log_bias": 7.76,
+ "best_powerlaw_p1": {
+  "k": 2.25,
+  "MAE": 18.37,
+  "bias": 4.1
+ },
+ "best_powerlaw_sqrtTDD": {
+  "k": 2.5,
+  "MAE": 18.33
+ },
+ "powerlaw_vs_log_pct": 3.5,
+ "powerlaw_vs_loop_pct": 12.9
+}
