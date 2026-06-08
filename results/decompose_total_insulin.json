@@ -1,0 +1,39 @@
+{
+ "n_users": 89,
+ "n_windows": 92918,
+ "pooled": {
+  "isf_at_100": -0.2,
+  "egp_rise_mgdl_per_h_zero_insulin": -1.4,
+  "residual_c_per_mgdl": 0.814,
+  "interaction_d": 0.001,
+  "frac_change_per_mgdl": -0.0075
+ },
+ "high_minus_low_insulin_drop_gap_mgdl": 1.0,
+ "per_user_isf_at_100": {
+  "n": 80,
+  "median": -1.3,
+  "p25": -5.5,
+  "p75": -0.0,
+  "frac_positive": 0.237
+ },
+ "diagnostic_bands": {
+  "centres": [
+   100.0,
+   120.0,
+   142.5,
+   177.5
+  ],
+  "low_ins_drop": [
+   6.0,
+   21.0,
+   39.0,
+   66.0
+  ],
+  "high_ins_drop": [
+   9.0,
+   23.0,
+   39.0,
+   63.0
+  ]
+ }
+}
