@@ -1,0 +1,702 @@
+{
+ "n_patients": 112,
+ "fitted_exponent_free": -0.335,
+ "fitted_exponent_95ci": [
+  -0.572,
+  -0.113
+ ],
+ "fitted_exponent_nwin_weighted": -0.098,
+ "supports_half": true,
+ "excludes_one": true,
+ "K_sqrt_tdd": 207.0,
+ "scores_median_log_err": {
+  "sqrt_TDD": {
+   "K": 207.0,
+   "median_log_err": 0.292
+  },
+  "free_power": {
+   "A": 110.7,
+   "exponent": -0.335,
+   "median_log_err": 0.28
+  },
+  "inv_TDD": {
+   "K": 1432.0,
+   "median_log_err": 0.412
+  }
+ },
+ "note": "level = per-person median overnight sensitivity (supra-target, 4h, carb-screened). Compare exponent to -0.5 (\u221aTDD) and -1 (1/TDD).",
+ "per_person": [
+  {
+   "user": "U002",
+   "tdd": 27.8,
+   "overnight_sens": 41.0,
+   "n_windows": 99
+  },
+  {
+   "user": "U005",
+   "tdd": 11.6,
+   "overnight_sens": 27.8,
+   "n_windows": 3422
+  },
+  {
+   "user": "U007",
+   "tdd": 27.6,
+   "overnight_sens": 38.9,
+   "n_windows": 337
+  },
+  {
+   "user": "U009",
+   "tdd": 77.0,
+   "overnight_sens": 18.9,
+   "n_windows": 56
+  },
+  {
+   "user": "U010",
+   "tdd": 33.9,
+   "overnight_sens": 34.2,
+   "n_windows": 766
+  },
+  {
+   "user": "U011",
+   "tdd": 46.3,
+   "overnight_sens": 28.5,
+   "n_windows": 145
+  },
+  {
+   "user": "U012",
+   "tdd": 22.1,
+   "overnight_sens": 80.6,
+   "n_windows": 145
+  },
+  {
+   "user": "U013",
+   "tdd": 48.8,
+   "overnight_sens": 29.2,
+   "n_windows": 254
+  },
+  {
+   "user": "U014",
+   "tdd": 22.1,
+   "overnight_sens": 35.8,
+   "n_windows": 298
+  },
+  {
+   "user": "U015",
+   "tdd": 53.0,
+   "overnight_sens": 29.5,
+   "n_windows": 147
+  },
+  {
+   "user": "U016",
+   "tdd": 60.3,
+   "overnight_sens": 28.8,
+   "n_windows": 55
+  },
+  {
+   "user": "U017",
+   "tdd": 51.3,
+   "overnight_sens": 23.9,
+   "n_windows": 110
+  },
+  {
+   "user": "U018",
+   "tdd": 53.7,
+   "overnight_sens": 27.1,
+   "n_windows": 37
+  },
+  {
+   "user": "U019",
+   "tdd": 23.0,
+   "overnight_sens": 34.5,
+   "n_windows": 1451
+  },
+  {
+   "user": "U020",
+   "tdd": 29.2,
+   "overnight_sens": 45.5,
+   "n_windows": 59
+  },
+  {
+   "user": "U022",
+   "tdd": 58.6,
+   "overnight_sens": 15.0,
+   "n_windows": 412
+  },
+  {
+   "user": "U031",
+   "tdd": 56.7,
+   "overnight_sens": 54.4,
+   "n_windows": 720
+  },
+  {
+   "user": "U032",
+   "tdd": 30.7,
+   "overnight_sens": 33.5,
+   "n_windows": 101
+  },
+  {
+   "user": "U033",
+   "tdd": 61.5,
+   "overnight_sens": 8.4,
+   "n_windows": 488
+  },
+  {
+   "user": "U042",
+   "tdd": 54.9,
+   "overnight_sens": 15.0,
+   "n_windows": 34
+  },
+  {
+   "user": "U047",
+   "tdd": 106.1,
+   "overnight_sens": 37.4,
+   "n_windows": 1739
+  },
+  {
+   "user": "U049",
+   "tdd": 26.2,
+   "overnight_sens": 31.5,
+   "n_windows": 44
+  },
+  {
+   "user": "U050",
+   "tdd": 84.7,
+   "overnight_sens": 47.5,
+   "n_windows": 421
+  },
+  {
+   "user": "U054",
+   "tdd": 106.8,
+   "overnight_sens": 107.9,
+   "n_windows": 1553
+  },
+  {
+   "user": "U055",
+   "tdd": 75.9,
+   "overnight_sens": 19.2,
+   "n_windows": 1055
+  },
+  {
+   "user": "U059",
+   "tdd": 97.8,
+   "overnight_sens": 27.0,
+   "n_windows": 5125
+  },
+  {
+   "user": "U062",
+   "tdd": 65.6,
+   "overnight_sens": 42.5,
+   "n_windows": 1517
+  },
+  {
+   "user": "U065",
+   "tdd": 138.5,
+   "overnight_sens": 19.4,
+   "n_windows": 758
+  },
+  {
+   "user": "U068",
+   "tdd": 60.9,
+   "overnight_sens": 14.9,
+   "n_windows": 334
+  },
+  {
+   "user": "U071",
+   "tdd": 109.2,
+   "overnight_sens": 65.9,
+   "n_windows": 623
+  },
+  {
+   "user": "U073",
+   "tdd": 34.5,
+   "overnight_sens": 30.1,
+   "n_windows": 286
+  },
+  {
+   "user": "U074",
+   "tdd": 25.9,
+   "overnight_sens": 32.5,
+   "n_windows": 43
+  },
+  {
+   "user": "U075",
+   "tdd": 25.0,
+   "overnight_sens": 33.7,
+   "n_windows": 578
+  },
+  {
+   "user": "U076",
+   "tdd": 42.0,
+   "overnight_sens": 8.9,
+   "n_windows": 36
+  },
+  {
+   "user": "U077",
+   "tdd": 34.1,
+   "overnight_sens": 75.4,
+   "n_windows": 391
+  },
+  {
+   "user": "U078",
+   "tdd": 46.8,
+   "overnight_sens": 32.9,
+   "n_windows": 58
+  },
+  {
+   "user": "U079",
+   "tdd": 40.3,
+   "overnight_sens": 31.4,
+   "n_windows": 411
+  },
+  {
+   "user": "U080",
+   "tdd": 12.3,
+   "overnight_sens": 82.5,
+   "n_windows": 136
+  },
+  {
+   "user": "U081",
+   "tdd": 39.6,
+   "overnight_sens": 36.1,
+   "n_windows": 110
+  },
+  {
+   "user": "U083",
+   "tdd": 43.1,
+   "overnight_sens": 21.5,
+   "n_windows": 6454
+  },
+  {
+   "user": "U084",
+   "tdd": 61.1,
+   "overnight_sens": 27.0,
+   "n_windows": 89
+  },
+  {
+   "user": "U085",
+   "tdd": 58.3,
+   "overnight_sens": 23.7,
+   "n_windows": 182
+  },
+  {
+   "user": "U086",
+   "tdd": 30.7,
+   "overnight_sens": 46.2,
+   "n_windows": 343
+  },
+  {
+   "user": "U088",
+   "tdd": 43.2,
+   "overnight_sens": 21.3,
+   "n_windows": 128
+  },
+  {
+   "user": "U089",
+   "tdd": 9.4,
+   "overnight_sens": 11.7,
+   "n_windows": 58
+  },
+  {
+   "user": "U090",
+   "tdd": 80.4,
+   "overnight_sens": 21.5,
+   "n_windows": 163
+  },
+  {
+   "user": "U091",
+   "tdd": 72.4,
+   "overnight_sens": 24.4,
+   "n_windows": 1809
+  },
+  {
+   "user": "U092",
+   "tdd": 22.9,
+   "overnight_sens": 50.2,
+   "n_windows": 515
+  },
+  {
+   "user": "U093",
+   "tdd": 81.2,
+   "overnight_sens": 27.5,
+   "n_windows": 4369
+  },
+  {
+   "user": "U095",
+   "tdd": 78.8,
+   "overnight_sens": 40.2,
+   "n_windows": 47
+  },
+  {
+   "user": "U096",
+   "tdd": 21.2,
+   "overnight_sens": 42.9,
+   "n_windows": 34
+  },
+  {
+   "user": "U098",
+   "tdd": 13.1,
+   "overnight_sens": 41.8,
+   "n_windows": 44
+  },
+  {
+   "user": "U099",
+   "tdd": 54.4,
+   "overnight_sens": 39.7,
+   "n_windows": 104
+  },
+  {
+   "user": "U100",
+   "tdd": 28.9,
+   "overnight_sens": 104.2,
+   "n_windows": 294
+  },
+  {
+   "user": "U101",
+   "tdd": 80.2,
+   "overnight_sens": 37.9,
+   "n_windows": 400
+  },
+  {
+   "user": "U102",
+   "tdd": 73.4,
+   "overnight_sens": 34.6,
+   "n_windows": 472
+  },
+  {
+   "user": "U103",
+   "tdd": 25.0,
+   "overnight_sens": 75.5,
+   "n_windows": 126
+  },
+  {
+   "user": "U104",
+   "tdd": 26.0,
+   "overnight_sens": 94.6,
+   "n_windows": 112
+  },
+  {
+   "user": "U105",
+   "tdd": 70.1,
+   "overnight_sens": 49.8,
+   "n_windows": 217
+  },
+  {
+   "user": "U106",
+   "tdd": 52.5,
+   "overnight_sens": 15.8,
+   "n_windows": 44
+  },
+  {
+   "user": "U107",
+   "tdd": 34.5,
+   "overnight_sens": 41.5,
+   "n_windows": 70
+  },
+  {
+   "user": "U108",
+   "tdd": 26.7,
+   "overnight_sens": 30.9,
+   "n_windows": 841
+  },
+  {
+   "user": "U109",
+   "tdd": 37.0,
+   "overnight_sens": 50.7,
+   "n_windows": 34
+  },
+  {
+   "user": "U110",
+   "tdd": 52.6,
+   "overnight_sens": 49.0,
+   "n_windows": 273
+  },
+  {
+   "user": "U111",
+   "tdd": 80.7,
+   "overnight_sens": 19.9,
+   "n_windows": 59
+  },
+  {
+   "user": "U115",
+   "tdd": 94.9,
+   "overnight_sens": 28.8,
+   "n_windows": 1049
+  },
+  {
+   "user": "U116",
+   "tdd": 18.1,
+   "overnight_sens": 12.7,
+   "n_windows": 33
+  },
+  {
+   "user": "U117",
+   "tdd": 48.8,
+   "overnight_sens": 35.4,
+   "n_windows": 414
+  },
+  {
+   "user": "U118",
+   "tdd": 19.6,
+   "overnight_sens": 15.9,
+   "n_windows": 1809
+  },
+  {
+   "user": "U119",
+   "tdd": 47.6,
+   "overnight_sens": 22.1,
+   "n_windows": 174
+  },
+  {
+   "user": "U122",
+   "tdd": 33.6,
+   "overnight_sens": 79.8,
+   "n_windows": 179
+  },
+  {
+   "user": "U124",
+   "tdd": 55.3,
+   "overnight_sens": 105.3,
+   "n_windows": 214
+  },
+  {
+   "user": "U125",
+   "tdd": 56.5,
+   "overnight_sens": 5.9,
+   "n_windows": 37
+  },
+  {
+   "user": "U126",
+   "tdd": 36.2,
+   "overnight_sens": 22.4,
+   "n_windows": 122
+  },
+  {
+   "user": "U127",
+   "tdd": 32.7,
+   "overnight_sens": 23.0,
+   "n_windows": 453
+  },
+  {
+   "user": "U128",
+   "tdd": 21.8,
+   "overnight_sens": 46.3,
+   "n_windows": 768
+  },
+  {
+   "user": "U129",
+   "tdd": 28.4,
+   "overnight_sens": 78.6,
+   "n_windows": 404
+  },
+  {
+   "user": "U130",
+   "tdd": 49.7,
+   "overnight_sens": 29.1,
+   "n_windows": 1087
+  },
+  {
+   "user": "U131",
+   "tdd": 32.4,
+   "overnight_sens": 41.0,
+   "n_windows": 700
+  },
+  {
+   "user": "U132",
+   "tdd": 32.8,
+   "overnight_sens": 31.7,
+   "n_windows": 171
+  },
+  {
+   "user": "U133",
+   "tdd": 31.9,
+   "overnight_sens": 36.0,
+   "n_windows": 212
+  },
+  {
+   "user": "U134",
+   "tdd": 31.4,
+   "overnight_sens": 53.6,
+   "n_windows": 90
+  },
+  {
+   "user": "U135",
+   "tdd": 36.4,
+   "overnight_sens": 34.3,
+   "n_windows": 433
+  },
+  {
+   "user": "U137",
+   "tdd": 68.6,
+   "overnight_sens": 24.8,
+   "n_windows": 700
+  },
+  {
+   "user": "U138",
+   "tdd": 26.6,
+   "overnight_sens": 37.7,
+   "n_windows": 5610
+  },
+  {
+   "user": "U139",
+   "tdd": 61.6,
+   "overnight_sens": 31.2,
+   "n_windows": 65
+  },
+  {
+   "user": "U141",
+   "tdd": 64.9,
+   "overnight_sens": 28.0,
+   "n_windows": 1163
+  },
+  {
+   "user": "U142",
+   "tdd": 28.2,
+   "overnight_sens": 21.4,
+   "n_windows": 632
+  },
+  {
+   "user": "U143",
+   "tdd": 31.2,
+   "overnight_sens": 49.2,
+   "n_windows": 879
+  },
+  {
+   "user": "U144",
+   "tdd": 29.3,
+   "overnight_sens": 29.5,
+   "n_windows": 787
+  },
+  {
+   "user": "U145",
+   "tdd": 77.3,
+   "overnight_sens": 14.9,
+   "n_windows": 200
+  },
+  {
+   "user": "U147",
+   "tdd": 85.1,
+   "overnight_sens": 17.0,
+   "n_windows": 1695
+  },
+  {
+   "user": "U148",
+   "tdd": 56.5,
+   "overnight_sens": 27.7,
+   "n_windows": 1209
+  },
+  {
+   "user": "U149",
+   "tdd": 40.8,
+   "overnight_sens": 44.3,
+   "n_windows": 3801
+  },
+  {
+   "user": "U152",
+   "tdd": 33.0,
+   "overnight_sens": 31.6,
+   "n_windows": 921
+  },
+  {
+   "user": "U153",
+   "tdd": 155.2,
+   "overnight_sens": 19.7,
+   "n_windows": 725
+  },
+  {
+   "user": "U155",
+   "tdd": 70.6,
+   "overnight_sens": 35.1,
+   "n_windows": 1643
+  },
+  {
+   "user": "U156",
+   "tdd": 72.2,
+   "overnight_sens": 33.6,
+   "n_windows": 6076
+  },
+  {
+   "user": "U157",
+   "tdd": 16.0,
+   "overnight_sens": 79.2,
+   "n_windows": 161
+  },
+  {
+   "user": "U158",
+   "tdd": 53.4,
+   "overnight_sens": 40.5,
+   "n_windows": 671
+  },
+  {
+   "user": "U165",
+   "tdd": 104.8,
+   "overnight_sens": 13.7,
+   "n_windows": 248
+  },
+  {
+   "user": "U166",
+   "tdd": 72.4,
+   "overnight_sens": 12.8,
+   "n_windows": 2560
+  },
+  {
+   "user": "U167",
+   "tdd": 32.8,
+   "overnight_sens": 52.2,
+   "n_windows": 279
+  },
+  {
+   "user": "U168",
+   "tdd": 63.6,
+   "overnight_sens": 36.4,
+   "n_windows": 447
+  },
+  {
+   "user": "U170",
+   "tdd": 106.3,
+   "overnight_sens": 7.8,
+   "n_windows": 172
+  },
+  {
+   "user": "U171",
+   "tdd": 118.3,
+   "overnight_sens": 19.1,
+   "n_windows": 82
+  },
+  {
+   "user": "U174",
+   "tdd": 51.4,
+   "overnight_sens": 13.6,
+   "n_windows": 322
+  },
+  {
+   "user": "U176",
+   "tdd": 17.1,
+   "overnight_sens": 92.6,
+   "n_windows": 156
+  },
+  {
+   "user": "U177",
+   "tdd": 18.5,
+   "overnight_sens": 60.4,
+   "n_windows": 218
+  },
+  {
+   "user": "U179",
+   "tdd": 46.0,
+   "overnight_sens": 28.4,
+   "n_windows": 154
+  },
+  {
+   "user": "U180",
+   "tdd": 60.1,
+   "overnight_sens": 6.5,
+   "n_windows": 56
+  },
+  {
+   "user": "U182",
+   "tdd": 77.8,
+   "overnight_sens": 19.8,
+   "n_windows": 198
+  }
+ ]
+}
