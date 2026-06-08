@@ -30,17 +30,19 @@ shape) and then scales it logarithmically with glucose. We refer to this as **v1
 later revision of the maths, also by Chris Wilson, makes the anchor inversely proportional
 to **TDD squared**. We refer to this as **v2**.
 
-Both forms share the same TDD-blending step and the same glucose scaler; they differ only
-in how strongly TDD drives the sensitivity anchor. The questions this method answers:
+Both forms share the same TDD-blending step but differ on two counts: how strongly TDD drives
+the sensitivity anchor (1/TDD against 1/TDD²), and the glucose scaler, where v1 keeps a `+1` in
+its log and v2 does not. The questions this method answers:
 
 1. How differently do v1 and v2 dose, across a real population, as a function of TDD?
 2. Does either TDD power law match sensitivity as it is actually observed in user data?
 3. Is there a better-fitting equation among a wider candidate family?
 
-The scope is deliberately narrow: the **between-person sensitivity anchor** as a function
-of TDD. The within-person glucose scaler is identical across the equations and is held
-fixed throughout. This is a retrospective, decision-level analysis of equations; it is not
-a closed-loop outcome study and provides no dosing advice.
+The focus is the between-person sensitivity anchor as a function of TDD, since that is where
+the equations diverge most and where independent ground truth exists. The glucose-scaler
+difference is carried through the replay rather than assumed away. This is a retrospective,
+decision-level analysis of the equations, not a closed-loop outcome study, and it provides no
+dosing advice.
 
 ---
 
@@ -83,15 +85,16 @@ v1:           ISF(BG) = 1800    / ( TDD  · ln(bg_capped/75 + 1) )
 v2:           ISF(BG) = 115 000 / ( TDD² · ln(bg_floored/75) )
 ```
 
-Because v1 uses `ln(BG/divisor+1)` and v2 uses `ln(BG/divisor)`, **the glucose terms differ**
-— so the between-equation ratio is glucose-dependent:
+Because v1 uses `ln(BG/divisor+1)` and v2 uses `ln(BG/divisor)`, the glucose terms differ, so
+the ratio between the two equations changes with glucose as well as TDD:
 
 ```
-ISF_v2 / ISF_v1 = (2300 / (0.02 · 1800 · TDD)) · ln(BG/75 + 1)/ln(BG_floored/75)
-                = (63.9 / TDD) · ln(BG/75 + 1)/ln(BG_floored/75)
+ISF_v2 / ISF_v1  ∝  (1 / TDD) · ln(BG/75 + 1) / ln(BG_floored/75)
 ```
 
-The method therefore replays both axes — reconstructed TDD *and* glucose — per reading.
+That ratio grows large at low glucose, where the v2 log approaches its floor, and falls toward
+a small margin when glucose is high. The method therefore replays both axes, reconstructed TDD
+and glucose, for every reading rather than relying on a single closed form.
 
 ---
 
@@ -124,10 +127,10 @@ workstation.
 
 The v1 and v2 equations and the TDD blend are implemented as vectorised array operations,
 preserving every constant, the glucose cap, and the blend's branch logic. Correctness is
-fixed by **18 unit tests** against hand-computed fixtures: the closed-form 63.9/TDD
-identity, the glucose-cap compression, both branches of the TDD blend, and the
-missing-data gates. *Why:* every downstream conclusion rests on these being exactly the
-equations as defined; the tests are the contract that guarantees it.
+fixed by 26 unit tests against hand-computed fixtures: the v2 glucose floor, the
+glucose-dependent v1/v2 ratio, the glucose-cap compression, both branches of the TDD blend,
+and the missing-data gates. Every downstream conclusion rests on these being exactly the
+equations as defined, and the tests are the contract that guarantees it.
 
 ### 4.2 TDD reconstruction
 
@@ -147,10 +150,10 @@ delivery records:
 4. **Blend:** apply the exact W8H formula; emit a missing value (the real-world fallback
    to profile ISF) wherever a component is absent.
 
-*Why this matters:* the equations are functions of the *blended* TDD, not a flat daily
-average. Reconstructing the actual windowed signal each device would have computed is what
-makes the replay faithful rather than approximate. A flat-TDD arm is carried alongside, to
-measure how much the blend itself contributes.
+This matters because the equations are functions of the blended TDD, not a flat daily average.
+Reconstructing the windowed signal each device would have computed is what makes the replay
+faithful rather than approximate. A flat-TDD arm runs alongside it, to measure how much the
+blend itself contributes.
 
 ### 4.3 Absolute-time recovery and ISF replay
 
@@ -164,18 +167,17 @@ exceeds tolerance.
 Then, for every glucose reading, the replay computes the ISF under both equations using
 that reading's TDD (device-logged where available, reconstructed otherwise). The output is
 a per-person table of (glucose, TDD, anchor, ISF) under each equation. Median join coverage
-was 99.4%; 5 of 148 reconstructed users retain an uncertain anchor. The closed-form ratio
-is reproduced in the replayed output (predicted 1.885 vs observed 1.882 for one
-spot-check), confirming the join is sound.
+was 99.4%, and 5 of 148 reconstructed users retain an uncertain anchor. As a cross-check, the
+analytic v2/v1 ratio computed from a reading's own glucose and TDD matches the ratio of the
+replayed ISFs at sampled readings, which confirms the join is sound.
 
 ### 4.4 Figures
 
 Each person gets a page: the ISF–glucose curves under each equation at their median TDD
 (with a TDD-interquartile band), a two-week sample of both dynamic-ISF traces over their
-real glucose, and the per-reading ratio distribution. Cohort figures: the observed
-ratio-versus-TDD crossover against the 63.9/TDD theory curve; per-person median ISF under
-each equation; and the log-log ISF–TDD relationship with the observed points and fitted
-slope.
+real glucose, and the per-reading ratio distribution. Cohort figures: the per-person median
+v2/v1 ratio against TDD; per-person median ISF under each equation; and the log-log ISF–TDD
+relationship with the observed points and the fitted slope.
 
 ### 4.5 Best-fit equation search
 
@@ -199,8 +201,8 @@ with the power law.
 but one person, predict the held-out person, repeat — so fitted forms are judged
 out-of-sample and are directly comparable with the fixed rules. Metrics: median absolute
 error, median absolute log-error (scale-free), and fraction of people predicted within
-±30%. *Why cross-validation:* without it, fitted equations would carry an unfair in-sample
-advantage; this measures genuine generalisation to a new person.
+±30%. Without cross-validation the fitted equations would carry an unfair in-sample advantage;
+holding out each person in turn measures how well they generalise to someone new.
 
 ### 4.6 Implementation validation against device-logged ISF
 
@@ -221,13 +223,13 @@ the main pipeline never consumes that field.
 
 ## 5. How the outputs support the conclusions
 
-**The v1/v2 difference is purely TDD, and v2 is weaker for most people.** The 63.9/TDD
-ratio is exact algebra (§2) and is reproduced in the replayed data (§4.3). The crossover
-figure shows per-person median ratios lying on that curve across the full TDD range, with
-the majority of users below the 64 U/day crossover. The conclusion — that moving from v1
-to v2 weakens corrections for most people and strengthens them only for the heaviest — is
-therefore not a modelling artefact but a direct consequence of exact algebra confirmed in
-data.
+**v2 is the gentler equation for almost everyone.** Across the replayed cohort, v2 gives a
+higher ISF, and so a weaker correction, than v1 on 92% of readings, a median of 3.0×. The
+margin is widest at low glucose, where the v2 log nears its floor, and narrows to about 1.5×
+when glucose is high. Both differences between the equations push the same way at realistic
+doses: the steeper TDD law and the altered glucose term each lift v2's ISF above v1's, so at
+target glucose the two would only meet near 194 U/day, well beyond anyone in the cohort. The
+pattern is a direct reading of the replayed data, not a modelling artefact.
 
 **Both TDD power laws are too steep.** The log-log fit of independently-calculated
 sensitivity against reconstructed TDD has a slope near −0.5 (bootstrap interval excluding
@@ -253,7 +255,7 @@ output.
 
 | Step | Script | Key output |
 |---|---|---|
-| Equation implementation + tests | `inv008/dynisf.py`, `inv008/tests/` | 18 passing tests |
+| Equation implementation + tests | `inv008/dynisf.py`, `inv008/tests/` | 26 passing tests |
 | TDD reconstruction | `inv008/stage1_tdd.py` (+ `tdd_windows.py`, `sources.py`) | per-person TDD tables |
 | ISF replay | `inv008/stage2_replay.py` | per-person ISF tables |
 | Orchestration | `inv008/runner.py` | run logs + manifests |

@@ -1,9 +1,8 @@
 {
  "n_users": 170,
  "n_ticks": 9517761,
- "median_ratio_v2updated_over_v1": 3.04,
- "median_ratio_v2updated_over_v2old": 1.96,
- "frac_ticks_v2updated_weaker_than_v1": 0.923,
+ "median_ratio_v2_over_v1": 3.04,
+ "frac_ticks_v2_weaker_than_v1": 0.923,
  "ratio_by_BG_band": {
   "(40, 80]": {
    "n": 778636,
@@ -30,5 +29,5 @@
    "median_ratio": 1.48
   }
  },
- "note": "ratio = ISF_v2updated/ISF_v1; >1 means v2updated gives higher ISF (weaker corrections). Now BG-dependent (was flat 63.9/TDD for old v2)."
+ "note": "ratio = ISF_v2/ISF_v1; >1 means v2 gives a higher ISF (weaker correction). Depends on glucose because the two equations use different glucose terms."
 }
