@@ -193,7 +193,12 @@ different from the TDD level:
   ≤2 mg/dL and a power-law sits within noise of the log scaler. So those backtests can
   confirm a power-law is *no worse* than log, but they cannot set or validate the exponent.
   (This is the glucose-axis counterpart of the level result: observational data, confounded
-  by the loop's own behaviour and by glucose mean-reversion, cannot recover g(BG).)
+  by the loop's own behaviour and by glucose mean-reversion, cannot recover g(BG).) Measured
+  sensitivity resolved by glucose makes this vivid: across 1.2 M fasting windows the observed
+  ISF–glucose relationship is flat-to-slightly-rising (fitted exponent ≈ −0.3) — the opposite
+  sign to every equation — because glucose mean-reversion inflates the apparent insulin effect
+  at high BG and suppresses it at low BG. The confound is large enough to reverse the sign, so
+  the curve's direction has to come from clinical data, not these logs.
 - **Validation is prospective, not retrospective.** Establishing the exponent for this
   population requires a prospective / closed-loop trial; retrospective fitting on AID logs
   does not answer it.
@@ -397,6 +402,7 @@ setting, with the √TDD response added.
 - Cohort shadow evaluation (Tier 1): `inv008/phase11_shadow_eval.py` → `results/phase11_shadow_eval.{json,md}`, `charts/inv008/fig_shadow_eval.png`
 - Cohort shadow evaluation (Tier 2): `inv008/phase12_shadow_eval_tier2.py` → `results/phase12_shadow_eval_tier2.{json,md}`, `charts/inv008/fig_shadow_eval_tier2.png`
 - Tier-2 anchor glucose double-count: `inv008/tier2_anchor_debias.py` → `results/tier2_anchor_debias.{json,md}`, `charts/inv008/fig_tier2_anchor_debias.png`
+- Observed sensitivity vs glucose (per-window, vs calculated): `inv008/tier2_window_shape.py` → `results/tier2_window_shape.{json,md}`, `charts/inv008/fig_window_shape.png`
 - Comparison figure: `charts/inv008/fig_best_fit.png`
 - Device validation: `inv008/validate_device_isf.py`, `results/device_isf_validation.{json,md}`
 - Repository: `github.com/tim2000s/dynamic-isf-calculations`
