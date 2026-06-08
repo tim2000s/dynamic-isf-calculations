@@ -317,6 +317,11 @@ already stored.
   means the clamped form barely expresses the measured anchor at all — and the data-derived
   study shows that anchor is hypo-biased. Tier-2 is therefore not deployable without forward,
   outcome-based validation and, most likely, a different level bound than the Tier-1 clamp.
+  A further flaw: the measured slope is fit over fasting windows sitting at a median BG of
+  ~109 mg/dL (above target), so it already carries an average g(BG) ≈ 0.79. Using it as the
+  *at-target* anchor and re-applying g(BG) double-counts the glucose term, making Tier-2 a
+  further ~1.3× too aggressive on average. A clean Tier-2 would divide the measured slope by
+  the mean g(BG) of its own windows, or fit the slope on near-target windows only.
 - The cohort is largely composed of users who never ran dynamic ISF (≈87%); the small
   dynamic-ISF subgroup hints at a steeper slope, with confidence intervals too wide to resolve.
 - All evidence is retrospective and decision-level (counterfactual replay), single-cohort
@@ -391,6 +396,7 @@ setting, with the √TDD response added.
 - Glucose curve + v-next equation: `inv008/dynisf.py` (`g_quartic`, `isf_vnext`, `k_user_tier1`), tests in `inv008/tests/`
 - Cohort shadow evaluation (Tier 1): `inv008/phase11_shadow_eval.py` → `results/phase11_shadow_eval.{json,md}`, `charts/inv008/fig_shadow_eval.png`
 - Cohort shadow evaluation (Tier 2): `inv008/phase12_shadow_eval_tier2.py` → `results/phase12_shadow_eval_tier2.{json,md}`, `charts/inv008/fig_shadow_eval_tier2.png`
+- Tier-2 anchor glucose double-count: `inv008/tier2_anchor_debias.py` → `results/tier2_anchor_debias.{json,md}`, `charts/inv008/fig_tier2_anchor_debias.png`
 - Comparison figure: `charts/inv008/fig_best_fit.png`
 - Device validation: `inv008/validate_device_isf.py`, `results/device_isf_validation.{json,md}`
 - Repository: `github.com/tim2000s/dynamic-isf-calculations`
