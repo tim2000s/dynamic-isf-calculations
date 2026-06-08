@@ -40,7 +40,7 @@ glucose, easing to a modest margin when high.
   tested against calculated sensitivity.
 - Best simple equation across all candidates (leave-one-user-out cross-validation):
   **ISF ≈ K/√TDD** — K=355 anchored to tuned-profile ISF, K=145 anchored to calculated
-  sensitivity (the anchor choice is a safety decision; see the proposal document).
+  sensitivity (the anchor choice is a safety decision).
 - The v1 implementation reproduces device-logged ISF for all dynamic-ISF users, to within
   unmodelled per-person adjustment factor / divisor / autosensitivity.
 
@@ -50,7 +50,7 @@ glucose, easing to a modest margin when high.
 |---|---|
 | `dynamic-isf-methodology.md` | step-by-step methodology and reasoning (start here) |
 | `dynamic-isf-v1-v2-analysis.md` | the v1-vs-v2 comparison results |
-| `dynamic-isf-vnext-proposal.md` | the K/√TDD proposal for v-next + path to deployment |
+| `dynamic-isf-data-derived-findings.md` | can sensitivity be derived from data? feasibility findings |
 
 Figures in `charts/inv008/`; candidate-equation and device-validation results in `results/`.
 
@@ -109,7 +109,7 @@ identifiers.
 
 This is a retrospective, decision-level analysis of equations — not a closed-loop outcome
 study, and nothing here is dosing advice. See the caveats sections in the analysis and
-proposal documents.
+methodology documents.
 
 ## Licence
 

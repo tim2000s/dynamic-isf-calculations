@@ -1,6 +1,6 @@
 # Dynamic ISF — can sensitivity be derived from data? (feasibility findings)
 
-**2026-06-07** · Tim Street / Claude · companion to the v1/v2/v-next set
+**2026-06-07** · Tim Street / Claude · companion to the methodology and v1/v2 analysis
 
 ---
 
@@ -9,7 +9,7 @@
 Can a user's insulin sensitivity (ISF) be derived from device-observable data well enough to
 remove the need to enter it — and, if so, how? This summarises a six-phase feasibility study
 on 138 open-source AID users (Trio, AAPS, OpenAPS), reusing the empirical-ISF ΔIOB estimator
-and the √TDD law established in the v-next work.
+and the √TDD law established in the equation-fit analysis.
 
 ## The two separable parts of ISF
 
@@ -17,8 +17,8 @@ ISF has a shape, meaning how it scales with TDD and glucose, and a per-user leve
 behave very differently.
 
 The shape is derivable and settled. Sensitivity scales with total daily dose as roughly
-1/√TDD (the v-next result), and that holds across users, with the glucose curve a separate
-dimension on top. The shape needs no input from anyone.
+1/√TDD, and that holds across users, with the glucose curve a separate dimension on top. The
+shape needs no input from anyone.
 
 The level is the hard part, and the subject of this study. A single global level leaves the
 typical person about 57% off, so the question is whether the per-user level can be recovered

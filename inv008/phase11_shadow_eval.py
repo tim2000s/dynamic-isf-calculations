@@ -4,8 +4,8 @@
 Compute the v-next ISF — (K_user/√TDD)·g(BG), Diabeloop quartic glucose curve, with
 the Tier-1 (profile-anchored) constant K_user = profile_ISF·√(median TDD) — alongside
 the equation the device actually ran, across every person's real per-tick replay, and
-report how often and by how much it would change a correction dose. This is §8.1 of the
-v-next proposal: a counterfactual "would it have changed dosing?" sweep, not a live trial.
+report how often and by how much it would change a correction dose — a counterfactual
+"would it have changed dosing?" sweep, not a live trial.
 
 Key identity (no profile-ISF value needed for the dosing-change *ratio*):
     ISF_vnext / profile_ISF = √(median_TDD / TDD) · g(BG)
