@@ -25,7 +25,7 @@ import numpy as np
 import pandas as pd
 
 from inv008 import config
-from inv008.dynisf import isf_v1, isf_v2_updated
+from inv008.dynisf import isf_v1, isf_v2
 
 OUT = config.ROOT / "results"
 CHART = config.ROOT / "charts" / "inv008"
@@ -39,7 +39,7 @@ def main():
         if len(d) < 500:
             continue
         bg, tdd, v1 = d.bg.to_numpy(), d.tdd.to_numpy(), d.isf_v1.to_numpy()
-        v2 = isf_v2_updated(bg, tdd)
+        v2 = isf_v2(bg, tdd)
         ok = np.isfinite(v2) & np.isfinite(v1) & (v1 > 0)
         bg, tdd, v1, v2 = bg[ok], tdd[ok], v1[ok], v2[ok]
         rows.append(pd.DataFrame({"bg": bg, "tdd": tdd, "ratio": v2 / v1}))

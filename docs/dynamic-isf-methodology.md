@@ -127,7 +127,7 @@ workstation.
 
 The v1 and v2 equations and the TDD blend are implemented as vectorised array operations,
 preserving every constant, the glucose cap, and the blend's branch logic. Correctness is
-fixed by 26 unit tests against hand-computed fixtures: the v2 glucose floor, the
+fixed by 25 unit tests against hand-computed fixtures: the v2 glucose floor, the
 glucose-dependent v1/v2 ratio, the glucose-cap compression, both branches of the TDD blend,
 and the missing-data gates. Every downstream conclusion rests on these being exactly the
 equations as defined, and the tests are the contract that guarantees it.
@@ -255,7 +255,7 @@ output.
 
 | Step | Script | Key output |
 |---|---|---|
-| Equation implementation + tests | `inv008/dynisf.py`, `inv008/tests/` | 26 passing tests |
+| Equation implementation + tests | `inv008/dynisf.py`, `inv008/tests/` | 25 passing tests |
 | TDD reconstruction | `inv008/stage1_tdd.py` (+ `tdd_windows.py`, `sources.py`) | per-person TDD tables |
 | ISF replay | `inv008/stage2_replay.py` | per-person ISF tables |
 | Orchestration | `inv008/runner.py` | run logs + manifests |

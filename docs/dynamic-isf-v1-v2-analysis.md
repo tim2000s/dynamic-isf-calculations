@@ -61,7 +61,7 @@ device would have computed: device-logged TDD for Trio, and for AAPS and OpenAPS
 reconstructed from raw delivery records (boluses plus temp-basal segments over the profile
 basal, on a 5-minute grid) through the same five-window blend. Relative timestamps were
 re-anchored to absolute time and checked against recorded hour-of-day, with median join
-coverage of 99.4%. The equation implementations carry 26 unit tests against hand-computed
+coverage of 99.4%. The equation implementations carry 25 unit tests against hand-computed
 fixtures, covering the v2 glucose floor, the glucose-dependent v1/v2 ratio, both branches of
 the TDD blend, and the missing-data gates. The companion methodology paper has the full
 pipeline.
