@@ -1,0 +1,969 @@
+{
+ "n_users_windows": [
+  100,
+  81182
+ ],
+ "Q1_glucose_shape": {
+  "isf_at_100_pooled": 1.94,
+  "reversion_c_per_mgdl": 0.763,
+  "interaction_d": 0.0055,
+  "fractional_change_per_mgdl": 0.0028,
+  "direction": "rises with glucose",
+  "naive_without_reversion_term": {
+   "isf_at_100": -5.2,
+   "fractional_change_per_mgdl": -0.0246
+  }
+ },
+ "Q2_per_user_isf_at_100": {
+  "n_users": 91,
+  "median": 0.3,
+  "p25": -2.7,
+  "p75": 3.5,
+  "min": -28.7,
+  "max": 46.1
+ },
+ "Q3_anchor_vs_change": {
+  "corr_anchor_vs_abs_slope": 0.37,
+  "median_fractional_slope_per_user": 0.003,
+  "reading": "if the abs slope d grows with the anchor b (positive corr) and d/b is roughly constant, the glucose effect is multiplicative on the anchor"
+ },
+ "per_user": [
+  {
+   "user": "U002",
+   "n": 99,
+   "isf100_reg": 0.8425124903903431,
+   "reversion_c": 0.8677611491288135,
+   "b_raw": 2.5132870782812717,
+   "d_raw": -0.006694230382904144,
+   "near_target_isf": null,
+   "profile_isf": 55.0
+  },
+  {
+   "user": "U005",
+   "n": 3419,
+   "isf100_reg": 3.6835870705955966,
+   "reversion_c": 0.7369563846693178,
+   "b_raw": 1.0096796771332188,
+   "d_raw": 0.029688318419473485,
+   "near_target_isf": null,
+   "profile_isf": 54.0
+  },
+  {
+   "user": "U007",
+   "n": 337,
+   "isf100_reg": 15.559990247109994,
+   "reversion_c": 0.6682398047587477,
+   "b_raw": 7.259157913176023,
+   "d_raw": 0.16789480206754442,
+   "near_target_isf": null,
+   "profile_isf": 77.1
+  },
+  {
+   "user": "U010",
+   "n": 765,
+   "isf100_reg": 0.27138052386703393,
+   "reversion_c": 0.967801654284036,
+   "b_raw": -0.23461639369616014,
+   "d_raw": 0.012946004416060815,
+   "near_target_isf": null,
+   "profile_isf": 63.0
+  },
+  {
+   "user": "U011",
+   "n": 145,
+   "isf100_reg": 0.3905266234502648,
+   "reversion_c": 0.7776733591135246,
+   "b_raw": -2.241765694067151,
+   "d_raw": 0.05143726681258967,
+   "near_target_isf": null,
+   "profile_isf": 56.0
+  },
+  {
+   "user": "U012",
+   "n": 145,
+   "isf100_reg": 14.425866303329338,
+   "reversion_c": 0.49041578251605883,
+   "b_raw": 31.016886578512512,
+   "d_raw": -0.07319029050549417,
+   "near_target_isf": null,
+   "profile_isf": 187.0
+  },
+  {
+   "user": "U013",
+   "n": 254,
+   "isf100_reg": -0.80627941724859,
+   "reversion_c": 0.9250490710289541,
+   "b_raw": -1.8868984412922303,
+   "d_raw": 0.011897852944704858,
+   "near_target_isf": null,
+   "profile_isf": 60.7
+  },
+  {
+   "user": "U014",
+   "n": 298,
+   "isf100_reg": -4.6762190412780535,
+   "reversion_c": 1.200593651106025,
+   "b_raw": -13.103524527587116,
+   "d_raw": 0.18501503016570695,
+   "near_target_isf": null,
+   "profile_isf": 80.0
+  },
+  {
+   "user": "U015",
+   "n": 142,
+   "isf100_reg": 2.183150223666523,
+   "reversion_c": 0.9909835817830671,
+   "b_raw": 5.066806684708242,
+   "d_raw": -0.03256113618694392,
+   "near_target_isf": 27.144408251900106,
+   "profile_isf": 57.5
+  },
+  {
+   "user": "U017",
+   "n": 109,
+   "isf100_reg": 2.29193451770488,
+   "reversion_c": 0.9174087833190921,
+   "b_raw": 0.404891070521306,
+   "d_raw": 0.0424136219980591,
+   "near_target_isf": null,
+   "profile_isf": 45.0
+  },
+  {
+   "user": "U019",
+   "n": 1378,
+   "isf100_reg": 16.775491588575697,
+   "reversion_c": 0.4873137572122219,
+   "b_raw": 14.98084221094745,
+   "d_raw": 0.020486664473336066,
+   "near_target_isf": null,
+   "profile_isf": 72.0
+  },
+  {
+   "user": "U022",
+   "n": 429,
+   "isf100_reg": -2.8648737326899814,
+   "reversion_c": 1.1222853727431876,
+   "b_raw": -1.74756667166661,
+   "d_raw": -0.01342727968190448,
+   "near_target_isf": 7.602204206456824,
+   "profile_isf": 50.0
+  },
+  {
+   "user": "U031",
+   "n": 720,
+   "isf100_reg": -0.9920072490908455,
+   "reversion_c": 0.8298544319808487,
+   "b_raw": 14.65230278840225,
+   "d_raw": -0.1398593662979435,
+   "near_target_isf": null,
+   "profile_isf": 100.8
+  },
+  {
+   "user": "U032",
+   "n": 101,
+   "isf100_reg": -3.93184936703388,
+   "reversion_c": 0.9806111072891587,
+   "b_raw": -5.77962832454529,
+   "d_raw": 0.03684088579046784,
+   "near_target_isf": null,
+   "profile_isf": 40.0
+  },
+  {
+   "user": "U033",
+   "n": 485,
+   "isf100_reg": -2.068789130114463,
+   "reversion_c": 1.1145499524105928,
+   "b_raw": -3.4108080314163045,
+   "d_raw": 0.12393013947688013,
+   "near_target_isf": 9.03455957902419,
+   "profile_isf": 252.3
+  },
+  {
+   "user": "U047",
+   "n": 1738,
+   "isf100_reg": 3.5756583371466824,
+   "reversion_c": 0.6512025848494603,
+   "b_raw": 4.846497401373127,
+   "d_raw": -0.004152090002204185,
+   "near_target_isf": null,
+   "profile_isf": 61.0
+  },
+  {
+   "user": "U050",
+   "n": 421,
+   "isf100_reg": 2.6333150697543948,
+   "reversion_c": 0.8159199669242133,
+   "b_raw": 0.46149532342676836,
+   "d_raw": 0.03559339986326754,
+   "near_target_isf": null,
+   "profile_isf": 70.0
+  },
+  {
+   "user": "U054",
+   "n": 1553,
+   "isf100_reg": -15.66004850483067,
+   "reversion_c": 0.7439105742914804,
+   "b_raw": 12.758228058010369,
+   "d_raw": -0.11964984440179946,
+   "near_target_isf": null,
+   "profile_isf": 154.8
+  },
+  {
+   "user": "U055",
+   "n": 1050,
+   "isf100_reg": 4.383234535697815,
+   "reversion_c": 0.6111226684665815,
+   "b_raw": 3.953063764597169,
+   "d_raw": 0.011031371303020742,
+   "near_target_isf": 18.54327400504163,
+   "profile_isf": 29.0
+  },
+  {
+   "user": "U059",
+   "n": 5124,
+   "isf100_reg": 6.472289584248308,
+   "reversion_c": 0.7237136066967806,
+   "b_raw": 6.264267702819006,
+   "d_raw": 0.006845969869069331,
+   "near_target_isf": null,
+   "profile_isf": 23.4
+  },
+  {
+   "user": "U062",
+   "n": 1517,
+   "isf100_reg": 1.8783435353845634,
+   "reversion_c": 0.6739153786827832,
+   "b_raw": 9.161338420762553,
+   "d_raw": -0.08544850863137109,
+   "near_target_isf": null,
+   "profile_isf": 45.0
+  },
+  {
+   "user": "U065",
+   "n": 757,
+   "isf100_reg": 2.9766147008206474,
+   "reversion_c": 0.7575810360162301,
+   "b_raw": 1.3531678744046811,
+   "d_raw": 0.024510377764058157,
+   "near_target_isf": null,
+   "profile_isf": 40.0
+  },
+  {
+   "user": "U068",
+   "n": 334,
+   "isf100_reg": -4.49036654392786,
+   "reversion_c": 1.2716642044098723,
+   "b_raw": -2.3696850660012623,
+   "d_raw": -0.031288990822952785,
+   "near_target_isf": null,
+   "profile_isf": 27.0
+  },
+  {
+   "user": "U071",
+   "n": 623,
+   "isf100_reg": -4.747668219873853,
+   "reversion_c": 0.7823416417689881,
+   "b_raw": 2.4904513605363325,
+   "d_raw": -0.11721886874975002,
+   "near_target_isf": null,
+   "profile_isf": 68.0
+  },
+  {
+   "user": "U073",
+   "n": 286,
+   "isf100_reg": -0.49234017784601275,
+   "reversion_c": 0.8618530483289382,
+   "b_raw": -2.220681220313396,
+   "d_raw": 0.013188361451892248,
+   "near_target_isf": null,
+   "profile_isf": 40.0
+  },
+  {
+   "user": "U075",
+   "n": 577,
+   "isf100_reg": 3.899551495002957,
+   "reversion_c": 0.6959222454384438,
+   "b_raw": 2.107141825671413,
+   "d_raw": 0.02829498190938987,
+   "near_target_isf": null,
+   "profile_isf": 39.6
+  },
+  {
+   "user": "U077",
+   "n": 391,
+   "isf100_reg": 1.453491404574329,
+   "reversion_c": 0.44322898410399536,
+   "b_raw": 22.38317786216634,
+   "d_raw": -0.08387609458141561,
+   "near_target_isf": null,
+   "profile_isf": 63.0
+  },
+  {
+   "user": "U079",
+   "n": 411,
+   "isf100_reg": -4.672363431276764,
+   "reversion_c": 0.895043410815811,
+   "b_raw": -18.464512325313876,
+   "d_raw": 0.09666664354106526,
+   "near_target_isf": null,
+   "profile_isf": 40.0
+  },
+  {
+   "user": "U080",
+   "n": 136,
+   "isf100_reg": -6.308635403159827,
+   "reversion_c": 1.1718708950516006,
+   "b_raw": -33.38129765295743,
+   "d_raw": 0.5592683243136815,
+   "near_target_isf": null,
+   "profile_isf": 151.2
+  },
+  {
+   "user": "U081",
+   "n": 110,
+   "isf100_reg": 2.141828786747722,
+   "reversion_c": 0.8056005010291106,
+   "b_raw": 14.234154490695254,
+   "d_raw": -0.09784545286463076,
+   "near_target_isf": null,
+   "profile_isf": 40.0
+  },
+  {
+   "user": "U083",
+   "n": 6440,
+   "isf100_reg": 0.6216273704964045,
+   "reversion_c": 0.5984947543645135,
+   "b_raw": 1.753106891697757,
+   "d_raw": -0.01428443644807743,
+   "near_target_isf": -2.431429971398293,
+   "profile_isf": 45.0
+  },
+  {
+   "user": "U084",
+   "n": 89,
+   "isf100_reg": -2.671360532216891,
+   "reversion_c": 0.5553751256835214,
+   "b_raw": -10.119702419842863,
+   "d_raw": 0.10683597159314528,
+   "near_target_isf": null,
+   "profile_isf": 42.0
+  },
+  {
+   "user": "U085",
+   "n": 182,
+   "isf100_reg": 4.622571607312875,
+   "reversion_c": 1.2915439120782377,
+   "b_raw": 3.2183647424885367,
+   "d_raw": 0.02080032098200501,
+   "near_target_isf": null,
+   "profile_isf": 44.0
+  },
+  {
+   "user": "U086",
+   "n": 343,
+   "isf100_reg": -0.7971306876702786,
+   "reversion_c": 0.7704927772171929,
+   "b_raw": 0.6526221657047472,
+   "d_raw": -0.010002885965729295,
+   "near_target_isf": 17.631383889422473,
+   "profile_isf": 143.0
+  },
+  {
+   "user": "U088",
+   "n": 126,
+   "isf100_reg": 1.4431022539364289,
+   "reversion_c": 0.7762418563514448,
+   "b_raw": 10.943137549543778,
+   "d_raw": -0.09100268939009919,
+   "near_target_isf": null,
+   "profile_isf": 91.8
+  },
+  {
+   "user": "U090",
+   "n": 163,
+   "isf100_reg": -1.9103896569786722,
+   "reversion_c": 1.068126831620864,
+   "b_raw": -10.286030905309824,
+   "d_raw": 0.07547490654707358,
+   "near_target_isf": null,
+   "profile_isf": 52.0
+  },
+  {
+   "user": "U091",
+   "n": 1803,
+   "isf100_reg": 1.8812627205775636,
+   "reversion_c": 0.8097917125034442,
+   "b_raw": 1.3651831712060039,
+   "d_raw": 0.010962300323973976,
+   "near_target_isf": 25.641025641025642,
+   "profile_isf": 34.2
+  },
+  {
+   "user": "U092",
+   "n": 515,
+   "isf100_reg": 0.6197525528444041,
+   "reversion_c": 0.9468818740089102,
+   "b_raw": 0.21707073675161861,
+   "d_raw": 0.01254365499829329,
+   "near_target_isf": null,
+   "profile_isf": 60.0
+  },
+  {
+   "user": "U093",
+   "n": 4356,
+   "isf100_reg": -1.0051622128598938,
+   "reversion_c": 0.8603641654478329,
+   "b_raw": 1.3969667345780847,
+   "d_raw": -0.017103691509052523,
+   "near_target_isf": 3.7142857142857144,
+   "profile_isf": 48.6
+  },
+  {
+   "user": "U099",
+   "n": 104,
+   "isf100_reg": -2.197698707891328,
+   "reversion_c": 0.7365971981281063,
+   "b_raw": 17.81606341402501,
+   "d_raw": -0.11017382553400765,
+   "near_target_isf": null,
+   "profile_isf": 46.8
+  },
+  {
+   "user": "U100",
+   "n": 294,
+   "isf100_reg": -16.848459295465194,
+   "reversion_c": 0.8138279475076368,
+   "b_raw": -45.59203504078365,
+   "d_raw": 0.3088891370091458,
+   "near_target_isf": null,
+   "profile_isf": 129.6
+  },
+  {
+   "user": "U101",
+   "n": 400,
+   "isf100_reg": -7.294903439007599,
+   "reversion_c": 0.7877587555727791,
+   "b_raw": 3.5950316742921906,
+   "d_raw": -0.1230013954118778,
+   "near_target_isf": null,
+   "profile_isf": 50.4
+  },
+  {
+   "user": "U102",
+   "n": 471,
+   "isf100_reg": 4.325340693745735,
+   "reversion_c": 0.5841238616127689,
+   "b_raw": -4.361851478423904,
+   "d_raw": 0.04888403393388631,
+   "near_target_isf": null,
+   "profile_isf": 29.0
+  },
+  {
+   "user": "U103",
+   "n": 123,
+   "isf100_reg": 18.798926846960438,
+   "reversion_c": 0.5525511384092658,
+   "b_raw": 45.17127154508935,
+   "d_raw": -0.8622487352647288,
+   "near_target_isf": null,
+   "profile_isf": 65.0
+  },
+  {
+   "user": "U104",
+   "n": 112,
+   "isf100_reg": 3.554794424634892,
+   "reversion_c": 0.9643531398758767,
+   "b_raw": 35.39397373223785,
+   "d_raw": -0.8295490967613489,
+   "near_target_isf": null,
+   "profile_isf": 45.0
+  },
+  {
+   "user": "U105",
+   "n": 217,
+   "isf100_reg": 29.726119321488238,
+   "reversion_c": 0.42913879026782065,
+   "b_raw": 5.643519156190724,
+   "d_raw": 0.180181926529504,
+   "near_target_isf": null,
+   "profile_isf": 63.0
+  },
+  {
+   "user": "U108",
+   "n": 841,
+   "isf100_reg": -4.651933906633205,
+   "reversion_c": 0.7684431125993058,
+   "b_raw": -2.0210518332913763,
+   "d_raw": -0.03103682806207191,
+   "near_target_isf": null,
+   "profile_isf": 65.0
+  },
+  {
+   "user": "U110",
+   "n": 272,
+   "isf100_reg": -6.440444780550294,
+   "reversion_c": 0.6331296410253794,
+   "b_raw": -9.76171571655797,
+   "d_raw": 0.03668246269566539,
+   "near_target_isf": null,
+   "profile_isf": 50.0
+  },
+  {
+   "user": "U115",
+   "n": 1043,
+   "isf100_reg": 0.810710828565588,
+   "reversion_c": 0.8526695613917155,
+   "b_raw": 0.5474200113349169,
+   "d_raw": 0.008075021682596746,
+   "near_target_isf": 26.605231866825207,
+   "profile_isf": 31.0
+  },
+  {
+   "user": "U117",
+   "n": 414,
+   "isf100_reg": 8.389817071153532,
+   "reversion_c": 0.866846985388378,
+   "b_raw": 1.8264319998803695,
+   "d_raw": 0.08559109074174076,
+   "near_target_isf": null,
+   "profile_isf": 63.0
+  },
+  {
+   "user": "U118",
+   "n": 1804,
+   "isf100_reg": 4.205372450428564,
+   "reversion_c": 0.7447639216918546,
+   "b_raw": 3.834696726553483,
+   "d_raw": 0.012519917220251616,
+   "near_target_isf": 5.5027513756878434,
+   "profile_isf": 28.0
+  },
+  {
+   "user": "U119",
+   "n": 174,
+   "isf100_reg": -8.69835032083494,
+   "reversion_c": 0.7126834511936261,
+   "b_raw": -8.733235146314525,
+   "d_raw": 0.005696818806582373,
+   "near_target_isf": null,
+   "profile_isf": 42.0
+  },
+  {
+   "user": "U122",
+   "n": 179,
+   "isf100_reg": -17.14746941363756,
+   "reversion_c": 0.3240457862483061,
+   "b_raw": 83.5495438859005,
+   "d_raw": -1.06292687559072,
+   "near_target_isf": null,
+   "profile_isf": 104.4
+  },
+  {
+   "user": "U124",
+   "n": 214,
+   "isf100_reg": -4.732902957217324,
+   "reversion_c": 0.8759878095133649,
+   "b_raw": 2.086909357318332,
+   "d_raw": -0.019322479111313618,
+   "near_target_isf": null,
+   "profile_isf": 80.0
+  },
+  {
+   "user": "U126",
+   "n": 121,
+   "isf100_reg": -4.766506821505257,
+   "reversion_c": 1.113757220422028,
+   "b_raw": -3.155837901940875,
+   "d_raw": -0.039328252354362415,
+   "near_target_isf": null,
+   "profile_isf": 39.0
+  },
+  {
+   "user": "U127",
+   "n": 453,
+   "isf100_reg": -1.0830770153647302,
+   "reversion_c": 1.0465272708832782,
+   "b_raw": 1.0490128242582983,
+   "d_raw": -0.02428973684242319,
+   "near_target_isf": null,
+   "profile_isf": 50.0
+  },
+  {
+   "user": "U128",
+   "n": 768,
+   "isf100_reg": -26.9927357044986,
+   "reversion_c": 1.0782434333003312,
+   "b_raw": -25.105889842165933,
+   "d_raw": -0.007125598953476687,
+   "near_target_isf": null,
+   "profile_isf": 75.0
+  },
+  {
+   "user": "U129",
+   "n": 404,
+   "isf100_reg": -0.18287292246605805,
+   "reversion_c": 0.9084219402222377,
+   "b_raw": 26.08389714357473,
+   "d_raw": -0.22273472675528563,
+   "near_target_isf": null,
+   "profile_isf": 150.0
+  },
+  {
+   "user": "U130",
+   "n": 1087,
+   "isf100_reg": 3.7222019175695507,
+   "reversion_c": 0.6834831817389253,
+   "b_raw": 4.3589496477252245,
+   "d_raw": -0.02968110672731937,
+   "near_target_isf": null,
+   "profile_isf": 40.0
+  },
+  {
+   "user": "U131",
+   "n": 700,
+   "isf100_reg": 3.5398179249218096,
+   "reversion_c": 0.7658152446143821,
+   "b_raw": 2.443553531040766,
+   "d_raw": 0.015202923416792604,
+   "near_target_isf": null,
+   "profile_isf": 54.0
+  },
+  {
+   "user": "U132",
+   "n": 171,
+   "isf100_reg": -2.7321823600817106,
+   "reversion_c": 0.9793113179057388,
+   "b_raw": -2.2275807174605244,
+   "d_raw": 0.001276262329823243,
+   "near_target_isf": null,
+   "profile_isf": 63.0
+  },
+  {
+   "user": "U133",
+   "n": 210,
+   "isf100_reg": 21.167406372066047,
+   "reversion_c": 0.5288606809521587,
+   "b_raw": 30.26535662138598,
+   "d_raw": -0.08984911735022008,
+   "near_target_isf": null,
+   "profile_isf": 72.0
+  },
+  {
+   "user": "U134",
+   "n": 90,
+   "isf100_reg": -3.937158263918022,
+   "reversion_c": 1.1835089408004935,
+   "b_raw": 14.181404953323234,
+   "d_raw": -0.15225498049845027,
+   "near_target_isf": null,
+   "profile_isf": 43.0
+  },
+  {
+   "user": "U135",
+   "n": 433,
+   "isf100_reg": -0.00025258984151791655,
+   "reversion_c": 0.7557500037151109,
+   "b_raw": -15.201065271890077,
+   "d_raw": 0.21308845094830853,
+   "near_target_isf": null,
+   "profile_isf": 59.4
+  },
+  {
+   "user": "U137",
+   "n": 700,
+   "isf100_reg": -1.7131128713005852,
+   "reversion_c": 0.8668185268402511,
+   "b_raw": -0.2493280928290023,
+   "d_raw": -0.01112004322894564,
+   "near_target_isf": 2.6523905279270084,
+   "profile_isf": 47.0
+  },
+  {
+   "user": "U138",
+   "n": 5609,
+   "isf100_reg": 5.298579377713364,
+   "reversion_c": 0.6680202559302326,
+   "b_raw": 8.627535642181867,
+   "d_raw": -0.018358763192191818,
+   "near_target_isf": null,
+   "profile_isf": 40.0
+  },
+  {
+   "user": "U141",
+   "n": 1163,
+   "isf100_reg": -12.309328298967436,
+   "reversion_c": 0.8863812434090703,
+   "b_raw": -8.840225367553085,
+   "d_raw": -0.019901162560402797,
+   "near_target_isf": null,
+   "profile_isf": 46.0
+  },
+  {
+   "user": "U142",
+   "n": 621,
+   "isf100_reg": -0.1789282295845862,
+   "reversion_c": 0.9057980880288768,
+   "b_raw": 0.05435944675666714,
+   "d_raw": -0.0023819068209654476,
+   "near_target_isf": 2.323420074349442,
+   "profile_isf": 36.0
+  },
+  {
+   "user": "U143",
+   "n": 879,
+   "isf100_reg": 19.62759893358292,
+   "reversion_c": 0.2974424391086331,
+   "b_raw": 20.969678646193433,
+   "d_raw": -0.007037000733329013,
+   "near_target_isf": null,
+   "profile_isf": 54.0
+  },
+  {
+   "user": "U144",
+   "n": 787,
+   "isf100_reg": 0.8166484617055999,
+   "reversion_c": 0.8812361320051161,
+   "b_raw": 2.0324215383361395,
+   "d_raw": -0.011053890886342833,
+   "near_target_isf": null,
+   "profile_isf": 35.0
+  },
+  {
+   "user": "U145",
+   "n": 199,
+   "isf100_reg": -0.5688815041178047,
+   "reversion_c": 1.197762181992132,
+   "b_raw": -0.17551077436879414,
+   "d_raw": -0.0020550452464409043,
+   "near_target_isf": null,
+   "profile_isf": 27.0
+  },
+  {
+   "user": "U147",
+   "n": 1689,
+   "isf100_reg": -1.786471013123242,
+   "reversion_c": 0.8580584056146969,
+   "b_raw": -1.0065602849089337,
+   "d_raw": -0.003269172503750494,
+   "near_target_isf": 14.905149051490515,
+   "profile_isf": 25.2
+  },
+  {
+   "user": "U148",
+   "n": 1209,
+   "isf100_reg": -5.612895436340934,
+   "reversion_c": 1.0393419025056945,
+   "b_raw": -22.966483799073085,
+   "d_raw": 0.16300336355339512,
+   "near_target_isf": null,
+   "profile_isf": 42.0
+  },
+  {
+   "user": "U149",
+   "n": 3801,
+   "isf100_reg": 10.029451586119755,
+   "reversion_c": 0.5571285820435394,
+   "b_raw": 5.0286966515482225,
+   "d_raw": 0.03202542740217202,
+   "near_target_isf": null,
+   "profile_isf": 50.4
+  },
+  {
+   "user": "U152",
+   "n": 921,
+   "isf100_reg": 5.784327074728897,
+   "reversion_c": 0.7736820927606632,
+   "b_raw": 4.662278664982608,
+   "d_raw": 0.019344054088422626,
+   "near_target_isf": null,
+   "profile_isf": 75.6
+  },
+  {
+   "user": "U153",
+   "n": 723,
+   "isf100_reg": -1.341133371878501,
+   "reversion_c": 0.8197373227344121,
+   "b_raw": 2.932159014339344,
+   "d_raw": -0.07802417900057788,
+   "near_target_isf": 8.574596211605222,
+   "profile_isf": 25.0
+  },
+  {
+   "user": "U155",
+   "n": 1642,
+   "isf100_reg": 2.9504086643773126,
+   "reversion_c": 0.7372931447781788,
+   "b_raw": 3.274683911767789,
+   "d_raw": 0.0028419802794366587,
+   "near_target_isf": null,
+   "profile_isf": 40.0
+  },
+  {
+   "user": "U156",
+   "n": 6074,
+   "isf100_reg": 0.9069166125064396,
+   "reversion_c": 0.7742657212403499,
+   "b_raw": 2.2095538898707057,
+   "d_raw": -0.005714986531070171,
+   "near_target_isf": 1.721170395869191,
+   "profile_isf": 41.4
+  },
+  {
+   "user": "U157",
+   "n": 161,
+   "isf100_reg": 46.12643814276862,
+   "reversion_c": 0.233852242155936,
+   "b_raw": 98.16334724904581,
+   "d_raw": -0.7442537885885555,
+   "near_target_isf": null,
+   "profile_isf": 90.0
+  },
+  {
+   "user": "U158",
+   "n": 671,
+   "isf100_reg": 1.6839557164145267,
+   "reversion_c": 0.8603872365795527,
+   "b_raw": 4.414796571116534,
+   "d_raw": -0.03723288916514805,
+   "near_target_isf": null,
+   "profile_isf": 37.8
+  },
+  {
+   "user": "U165",
+   "n": 248,
+   "isf100_reg": -1.4525447361365889,
+   "reversion_c": 1.0474413882872446,
+   "b_raw": -1.0960678011528477,
+   "d_raw": 0.0015581739091456114,
+   "near_target_isf": null,
+   "profile_isf": 31.0
+  },
+  {
+   "user": "U166",
+   "n": 2560,
+   "isf100_reg": -1.3130673357648994,
+   "reversion_c": 0.5929049470224362,
+   "b_raw": -1.8775307806449941,
+   "d_raw": 0.017957236878841633,
+   "near_target_isf": 17.278617710583152,
+   "profile_isf": 252.3
+  },
+  {
+   "user": "U167",
+   "n": 279,
+   "isf100_reg": 2.340574248072802,
+   "reversion_c": 0.8424602099009413,
+   "b_raw": -6.512230566870597,
+   "d_raw": 0.09463850870538273,
+   "near_target_isf": null,
+   "profile_isf": 83.0
+  },
+  {
+   "user": "U168",
+   "n": 445,
+   "isf100_reg": -2.454540778044852,
+   "reversion_c": 0.8872915854155315,
+   "b_raw": -7.5473583121320775,
+   "d_raw": 0.06998016325716214,
+   "near_target_isf": 76.3157894736842,
+   "profile_isf": 41.4
+  },
+  {
+   "user": "U170",
+   "n": 172,
+   "isf100_reg": 0.29422202598502345,
+   "reversion_c": 0.6652193088985612,
+   "b_raw": 5.055844799023879,
+   "d_raw": -0.060308773649620354,
+   "near_target_isf": null,
+   "profile_isf": 180.2
+  },
+  {
+   "user": "U171",
+   "n": 80,
+   "isf100_reg": 1.7457644031500603,
+   "reversion_c": 0.7271895671719819,
+   "b_raw": -0.8493749005684372,
+   "d_raw": 0.0661872282122999,
+   "near_target_isf": null,
+   "profile_isf": 106.2
+  },
+  {
+   "user": "U174",
+   "n": 319,
+   "isf100_reg": -1.8040134413681077,
+   "reversion_c": 1.061409179047298,
+   "b_raw": -0.6013467912143357,
+   "d_raw": -0.017184998935795275,
+   "near_target_isf": null,
+   "profile_isf": 40.0
+  },
+  {
+   "user": "U176",
+   "n": 156,
+   "isf100_reg": -28.69627857855668,
+   "reversion_c": 2.291989821742675,
+   "b_raw": 135.95632343445857,
+   "d_raw": -0.5654733821762787,
+   "near_target_isf": null,
+   "profile_isf": 150.0
+  },
+  {
+   "user": "U177",
+   "n": 217,
+   "isf100_reg": 7.5506939919305935,
+   "reversion_c": 0.8261380928409461,
+   "b_raw": 29.894942612591265,
+   "d_raw": -0.08716547334073092,
+   "near_target_isf": null,
+   "profile_isf": 70.0
+  },
+  {
+   "user": "U179",
+   "n": 153,
+   "isf100_reg": -4.033081933049209,
+   "reversion_c": 0.7978141597862527,
+   "b_raw": -1.9390125894536578,
+   "d_raw": -0.06801039196380207,
+   "near_target_isf": null,
+   "profile_isf": 48.6
+  },
+  {
+   "user": "U182",
+   "n": 198,
+   "isf100_reg": -1.429871259325691,
+   "reversion_c": 0.8534221038899626,
+   "b_raw": -1.7695346710783577,
+   "d_raw": 0.009930629096742015,
+   "near_target_isf": null,
+   "profile_isf": 30.0
+  }
+ ],
+ "diagnostic": {
+  "corr_iob_vs_bg_above_target": 0.555,
+  "reversion_drop_at_bg160_zero_insulin": 45.8,
+  "high_minus_low_iob_drop_gap_mgdl": 7.0,
+  "band_centres": [
+   107.5,
+   122.5,
+   140.0,
+   162.5,
+   197.5
+  ],
+  "low_iob_drop": [
+   13.299999999999997,
+   23.0,
+   33.0,
+   50.0,
+   74.00867069980549
+  ],
+  "high_iob_drop": [
+   18.0,
+   27.0,
+   40.0,
+   58.0,
+   91.0
+  ]
+ },
+ "conclusion": "Closed-loop observational data cannot identify the insulin sensitivity here. The homeostasis the loop enforces creates two killers: (1) glucose reverts toward target regardless of insulin (~46 mg/dL drop from BG 160 with zero insulin), and that reversion is collinear with IOB (corr 0.56, the loop doses by glucose), so the insulin term collapses when reversion is controlled; (2) at target the loop holds BG there, so almost no excursion exists to measure (few near-target 4h windows, and those that exist read a loop-suppressed value). The best per-user ISF at 100 therefore comes from tuned profiles or the cross-sectional K/\u221aTDD cold-start, not from drop/IOB."
+}
