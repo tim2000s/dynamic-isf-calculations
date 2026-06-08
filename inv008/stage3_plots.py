@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 
 from inv008 import config
-from inv008.dynisf import isf_v1, isf_v2, v2_over_v1_ratio
+from inv008.dynisf import isf_v1, isf_v2
 
 CHART_DIR = config.ROOT / "charts" / "inv008"
 USER_DIR = CHART_DIR / "users"
@@ -39,6 +39,8 @@ EMPIRICAL = {r["user_id"]: r for r in
 def _load(user_id: str):
     df = pd.read_parquet(config.REPLAY_DIR / f"{user_id}.parquet")
     meta = json.loads((config.REPLAY_DIR / f"{user_id}.meta.json").read_text())
+    # recompute v2 from the current equation so figures match the live implementation
+    df["isf_v2"] = isf_v2(df["bg"].to_numpy(), df["tdd"].to_numpy())
     return df[np.isfinite(df["isf_v1"]) & np.isfinite(df["isf_v2"])].copy(), meta
 
 
@@ -108,8 +110,8 @@ def render_user_page(args: tuple[str,]) -> dict:
         ratio = (df["isf_v2"] / df["isf_v1"]).to_numpy()
         ax.hist(ratio, bins=60, color="#9467bd", alpha=0.85)
         ax.axvline(1.0, color="k", lw=1, ls=":")
-        ax.axvline(63.89 / tdd_med, color="#9467bd", lw=1.5, ls="--",
-                   label=f"63.9/TDD = {63.89/tdd_med:.2f}")
+        ax.axvline(float(np.nanmedian(ratio)), color="#9467bd", lw=1.5, ls="--",
+                   label=f"median = {float(np.nanmedian(ratio)):.2f}")
         ax.set_xlabel("ISF V2 / ISF V1 (per tick)")
         ax.set_ylabel("ticks")
         ax.set_title("Correction strength shift (ratio > 1 → V2 doses less)")
@@ -157,12 +159,9 @@ def render_cohort_figs(summary: pd.DataFrame) -> None:
     for plat, g in summary.groupby("platform"):
         ax.scatter(g["median_tdd"], g["median_ratio"], s=22, alpha=0.75,
                    color=colors[plat], label=f"{labels[plat]} (n={len(g)})")
-    tt = np.linspace(summary["median_tdd"].min() * 0.9, summary["median_tdd"].max() * 1.1, 200)
-    ax.plot(tt, v2_over_v1_ratio(tt), "k--", lw=1.2, label="theory: 63.9 / TDD")
     ax.axhline(1.0, color="k", lw=0.8, alpha=0.5)
-    ax.axvline(63.89, color="k", lw=0.8, alpha=0.5)
-    ax.annotate("crossover ≈ 64 U/day", (63.89, summary["median_ratio"].max() * 0.9),
-                fontsize=8, rotation=90, va="top", ha="right")
+    ax.annotate("ratio = 1 (v1 = v2)", (summary["median_tdd"].max(), 1.0),
+                fontsize=8, va="bottom", ha="right")
     ax.set_xscale("log")
     ax.set_xlabel("median TDD (U/day, log scale)")
     ax.set_ylabel("median ISF V2 / ISF V1")

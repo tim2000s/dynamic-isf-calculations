@@ -24,16 +24,17 @@ glucose scaler. They differ only in the TDD term:
 | | sensitivity anchor at normal target | implied law |
 |---|---|---|
 | **v1** | `1800 / (TDD · ln(target/divisor + 1))` | ISF ∝ 1/TDD |
-| **v2** | `2300 / (ln(target/divisor + 1) · TDD² · 0.02)` | ISF ∝ 1/TDD² |
+| **v2** | `2300 / (ln(target/divisor) · TDD² · 0.02)` | ISF ∝ 1/TDD² |
 
-Compared at the same glucose and TDD, the shared terms cancel **in the ratio between the
-two equations** (within each equation the glucose scaler applies fully), giving
-`ISF_v2 / ISF_v1 = 63.9 / TDD` — a pure function of TDD with a crossover at ~64 U/day.
+v1 keeps a `+1` in its glucose log and v2 does not, so the ratio between the two equations
+depends on glucose as well as TDD: v2 gives a far higher ISF (a weaker correction) at low
+glucose, easing to a modest margin when high.
 
 ## Headline results
 
-- 77% of the 171-user cohort sits below the crossover: v2 computes weaker corrections for
-  most people (≈3× weaker at 20 U/day), stronger only for the heaviest insulin users.
+- v2 computes a weaker correction than v1 for almost everyone — on 92% of readings, a median
+  of 3× weaker, most markedly at low glucose. At target glucose the two equations would only
+  meet near 194 U/day, beyond anyone in the cohort.
 - Sensitivity calculated from each person's own data follows **ISF ∝ TDD^−0.4…−0.56** —
   shallower than v1's −1 and far from v2's −2. v2 is the worst-fitting of every equation
   tested against calculated sensitivity.

@@ -42,7 +42,8 @@ def oracle_v1(bg, tdd):
 
 def oracle_v2(bg, tdd):
     bgadj = bg if bg <= 210 else 210 + (bg - 210) / 3
-    return (2300.0 / (math.log(NT / DIV + 1) * tdd**2 * 0.02)) * (math.log(NT / DIV + 1) / math.log(bgadj / DIV + 1))
+    bgf = max(bgadj, DIV + 1)              # v2 floors glucose at divisor+1, no +1 in the log
+    return 115000.0 / (tdd**2 * math.log(bgf / DIV))
 
 
 print("\n1. Equations: independent oracle vs package (random inputs)")
@@ -55,14 +56,16 @@ for _ in range(10000):
 check("v1 oracle vs package", maxd1 < 1e-9, f"max abs diff {maxd1:.2e}")
 check("v2 oracle vs package", maxd2 < 1e-9, f"max abs diff {maxd2:.2e}")
 
-print("\n2. Closed-form ratio 63.888.../TDD (independent of BG)")
+print("\n2. v2/v1 ratio depends on glucose (v1 keeps the +1, v2 does not)")
 worst = 0.0
 for tdd in (12, 20, 36, 64, 100, 200):
     for bg in (70, 120, 180, 250, 350):
-        r = oracle_v2(bg, tdd) / oracle_v1(bg, tdd)
-        worst = max(worst, abs(r - 63.8888889 / tdd))
-check("ratio = 2300/(0.02*1800*TDD), BG-independent", worst < 1e-9, f"max dev {worst:.2e}")
-check("crossover at 63.89 U/day", abs(2300 / (0.02 * 1800) - 63.8888889) < 1e-6)
+        r_oracle = oracle_v2(bg, tdd) / oracle_v1(bg, tdd)
+        worst = max(worst, abs(r_oracle - float(dynisf.v2_over_v1_ratio(bg, tdd))))
+check("package v2/v1 ratio matches independent oracle", worst < 1e-9, f"max dev {worst:.2e}")
+rs = [float(dynisf.v2_over_v1_ratio(bg, 40.0)) for bg in (80, 120, 200)]
+check("v2/v1 falls as glucose rises", rs[0] > rs[1] > rs[2],
+      f"{rs[0]:.1f} > {rs[1]:.1f} > {rs[2]:.1f}")
 
 print("\n3. v-next = 355/sqrt(TDD) at normal target; divisor-free")
 # at normal target the scaler is 1 for ANY divisor → anchor identical across insulin types
@@ -72,11 +75,12 @@ check("355/sqrt(TDD) anchor independent of divisor at target",
       f"all = {list(anch.values())[0]:.3f} at TDD 50")
 
 print("\n4. Proposal comparison table (ISF at normal target, divisor 75)")
-expect = {15: (143, 607, 92), 25: (86, 219, 71), 36: (59, 105, 59),
-          50: (43, 55, 50), 80: (27, 21, 40), 120: (18, 9.5, 32)}
+LT2 = math.log(NT / DIV)   # v2 log term, no +1
+expect = {15: (143, 1840, 92), 25: (86, 663, 71), 36: (59, 320, 59),
+          50: (43, 166, 50), 80: (27, 65, 40), 120: (18, 29, 32)}
 tbl_ok = True
 for tdd, (e1, e2, en) in expect.items():
-    v1 = 1800 / (tdd * LT); v2 = 115000 / (tdd**2 * LT); vn = 355 / math.sqrt(tdd)
+    v1 = 1800 / (tdd * LT); v2 = 115000 / (tdd**2 * LT2); vn = 355 / math.sqrt(tdd)
     if not (abs(round(v1) - e1) <= 1 and abs(v2 - e2) <= max(1, 0.02 * e2) and abs(round(vn) - en) <= 1):
         tbl_ok = False
         print(f"      TDD {tdd}: v1={v1:.1f}(doc {e1}) v2={v2:.1f}(doc {e2}) vnext={vn:.1f}(doc {en})")
@@ -102,28 +106,30 @@ for tgt, col, lo, hi in [("entered", "isf", -0.6, -0.3), ("empirical", "empirica
 check("n_empirical = 114", len(ev) == 114, f"{len(ev)}")
 check("n_cohort = 138", len(df) == 138, f"{len(df)}")
 
-print("\n6. Replay parquet: closed-form ratio holds in actual outputs")
-mr = pd.DataFrame([json.loads(open(f).read()) for f in
-                   glob.glob(str(config.REPLAY_DIR / "*.meta.json"))])
-mr = mr[mr.median_tdd.notna()]
-worst_ratio = 0.0; n_checked = 0
+print("\n6. Replay parquet: v2/v1 reproduced from the equations, glucose-dependent")
+worst_ratio = 0.0; n_checked = 0; low_b, high_b = [], []
 for f in glob.glob(str(config.REPLAY_DIR / "*.parquet")):
-    d = pd.read_parquet(f, columns=["isf_v1", "isf_v2", "tdd"]).dropna()
-    d = d[(d.isf_v1 > 0) & (d.tdd > 0)]
+    d = pd.read_parquet(f, columns=["bg", "isf_v1", "tdd"]).dropna()
+    d = d[(d.isf_v1 > 0) & (d.tdd > 0) & (d.bg > 0)]
     if len(d) < 100:
         continue
-    pred = 63.8888889 / d.tdd.to_numpy()
-    obs = (d.isf_v2 / d.isf_v1).to_numpy()
-    worst_ratio = max(worst_ratio, float(np.nanmax(np.abs(obs - pred))))
+    bg, tdd, v1 = d.bg.to_numpy(), d.tdd.to_numpy(), d.isf_v1.to_numpy()
+    obs = dynisf.isf_v2(bg, tdd) / v1
+    ana = np.array([oracle_v2(b, t) for b, t in zip(bg[:200], tdd[:200])]) / v1[:200]
+    worst_ratio = max(worst_ratio, float(np.nanmax(np.abs(obs[:200] - ana))))
+    if (bg < 90).any():
+        low_b.append(float(np.nanmedian(obs[bg < 90])))
+    if (bg > 180).any():
+        high_b.append(float(np.nanmedian(obs[bg > 180])))
     n_checked += 1
-check("replayed v2/v1 == 63.89/TDD for every user", worst_ratio < 1e-6,
+check("package v2/v1 matches oracle in replayed data", worst_ratio < 1e-6,
       f"{n_checked} users, max dev {worst_ratio:.2e}")
+check("v2/v1 larger at low glucose than high (cohort medians)",
+      np.median(low_b) > np.median(high_b),
+      f"low {np.median(low_b):.1f} vs high {np.median(high_b):.1f}")
 
-print("\n7. Cohort composition + 77%-below-crossover claim")
+print("\n7. Cohort composition")
 summ = pd.read_json(ROOT / "charts/inv008/cohort_summary.json")
-below = (summ.median_tdd < 63.8888889).mean()
-check("~77% of users below 64 U/day crossover", abs(below - 0.77) < 0.03,
-      f"{100*below:.0f}% ({(summ.median_tdd<63.89).sum()}/{len(summ)})")
 plats = summ.platform.value_counts().to_dict()
 check("platform counts (v5/v6/v7)", plats.get("v5") and plats.get("v6") and plats.get("v7"),
       str(plats))

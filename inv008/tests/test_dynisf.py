@@ -9,7 +9,8 @@ from inv008.dynisf import (blend_tdd, cap_bg, isf_v1, isf_v2, scaler,
                               v2_over_v1_ratio)
 
 NT, DIV = 99.0, 75
-LOG_TERM = math.log(NT / DIV + 1.0)  # ln(2.32) = 0.841567...
+LOG_TERM = math.log(NT / DIV + 1.0)  # v1 log term, ln(2.32) = 0.841567...
+LOG_TERM_V2 = math.log(NT / DIV)     # v2 log term (no +1), ln(1.32) = 0.277632...
 
 
 def test_sens_normal_target_v1():
@@ -19,20 +20,20 @@ def test_sens_normal_target_v1():
 
 
 def test_sens_normal_target_v2():
-    # 2300 / (ln(2.32) * 2500 * 0.02) = 54.66
+    # 2300 / (ln(1.32) * 2500 * 0.02) = 165.69  (no +1)
     assert sens_normal_target_v2(50.0) == pytest.approx(
-        2300.0 / (LOG_TERM * 50.0 ** 2 * 0.02))
-    assert sens_normal_target_v2(50.0) == pytest.approx(54.66, abs=0.01)
+        2300.0 / (LOG_TERM_V2 * 50.0 ** 2 * 0.02))
+    assert sens_normal_target_v2(50.0) == pytest.approx(165.69, abs=0.01)
 
 
-def test_closed_form_ratio():
-    # V2/V1 = 63.888../TDD at any BG (velocity = 1)
-    for tdd in (20.0, 63.888888, 100.0):
-        bgs = np.array([80.0, 120.0, 250.0])
-        ratio = isf_v2(bgs, tdd) / isf_v1(bgs, tdd)
-        assert ratio == pytest.approx(v2_over_v1_ratio(tdd), rel=1e-9)
-    # crossover: identical ISF at TDD = 2300/(0.02*1800)
-    assert v2_over_v1_ratio(2300.0 / 36.0) == pytest.approx(1.0)
+def test_v2_over_v1_ratio_bg_dependent():
+    # the ratio takes (bg, tdd) and matches isf_v2/isf_v1
+    bgs = np.array([80.0, 120.0, 250.0])
+    assert v2_over_v1_ratio(bgs, 40.0) == pytest.approx(
+        isf_v2(bgs, 40.0) / isf_v1(bgs, 40.0), rel=1e-9)
+    # it falls as glucose rises — v2 is most protective when low
+    r = v2_over_v1_ratio(np.array([80.0, 150.0, 250.0]), 40.0)
+    assert r[0] > r[1] > r[2]
 
 
 def test_at_normal_target_scaler_is_one():
@@ -87,27 +88,13 @@ def test_vectorised():
     assert np.all(np.diff(out) <= 1e-12)  # ISF monotonically falls as BG rises
 
 
-def test_v2_updated_collapse_and_floor():
-    import math
-    from inv008.dynisf import isf_v2_updated, sens_normal_target_v2_updated
-    T, div = 99.0, 75
-    # ISF at target == anchor (scaler 1)
-    assert isf_v2_updated(T, 50.0) == pytest.approx(float(sens_normal_target_v2_updated(50.0)))
+def test_v2_collapse_and_floor():
+    # ISF at target == anchor (glucose factor 1 at target)
+    assert isf_v2(NT, 50.0) == pytest.approx(float(sens_normal_target_v2(50.0)))
     # collapse: 115000 / (TDD^2 * ln(BG/div)), no +1
-    assert float(isf_v2_updated(140.0, 50.0)) == pytest.approx(115000.0 / (2500 * math.log(140.0 / div)))
+    assert float(isf_v2(140.0, 50.0)) == pytest.approx(115000.0 / (2500 * math.log(140.0 / DIV)))
     # BG floored at divisor+1: BG<=76 clamps to 76
-    assert float(isf_v2_updated(70.0, 50.0)) == pytest.approx(float(isf_v2_updated(76.0, 50.0)))
-    # anchor dropped the +1 → ~3x the old v2 anchor
-    from inv008.dynisf import sens_normal_target_v2
-    assert float(sens_normal_target_v2_updated(50.0)) > 2.5 * float(sens_normal_target_v2(50.0))
-
-
-def test_v2_updated_ratio_is_bg_dependent():
-    from inv008.dynisf import v2updated_over_v1_ratio
-    # the glucose terms no longer cancel → ratio varies with BG (unlike old 63.9/TDD)
-    r_low = float(v2updated_over_v1_ratio(90.0, 50.0))
-    r_high = float(v2updated_over_v1_ratio(250.0, 50.0))
-    assert r_low > r_high > 1.0
+    assert float(isf_v2(70.0, 50.0)) == pytest.approx(float(isf_v2(76.0, 50.0)))
 
 
 # --- v-next: (K_user/√TDD) · g(BG) -----------------------------------------
