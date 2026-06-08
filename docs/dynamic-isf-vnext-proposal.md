@@ -198,7 +198,13 @@ different from the TDD level:
   ISF–glucose relationship is flat-to-slightly-rising (fitted exponent ≈ −0.3) — the opposite
   sign to every equation — because glucose mean-reversion inflates the apparent insulin effect
   at high BG and suppresses it at low BG. The confound is large enough to reverse the sign, so
-  the curve's direction has to come from clinical data, not these logs.
+  the curve's direction has to come from clinical data, not these logs. Extending the horizon
+  does not rescue it: a 4-hour overnight measurement (drop over T+4h ÷ IOB at T, carb-screened,
+  11pm–3am start) is *more* confounded — observed sensitivity rises from negative at BG 80 to
+  ~2.8× target at BG 195 (exponent ≈ −1.4). Over four hours glucose reverts toward its set
+  point regardless of insulin, so the relationship is dominated by mean-reversion at every
+  horizon tested. (Insulin cannot raise glucose, yet the method reports negative sensitivity at
+  low BG — a clear sign it tracks the glucose trajectory, not the insulin effect.)
 - **Validation is prospective, not retrospective.** Establishing the exponent for this
   population requires a prospective / closed-loop trial; retrospective fitting on AID logs
   does not answer it.
@@ -403,6 +409,7 @@ setting, with the √TDD response added.
 - Cohort shadow evaluation (Tier 2): `inv008/phase12_shadow_eval_tier2.py` → `results/phase12_shadow_eval_tier2.{json,md}`, `charts/inv008/fig_shadow_eval_tier2.png`
 - Tier-2 anchor glucose double-count: `inv008/tier2_anchor_debias.py` → `results/tier2_anchor_debias.{json,md}`, `charts/inv008/fig_tier2_anchor_debias.png`
 - Observed sensitivity vs glucose (per-window, vs calculated): `inv008/tier2_window_shape.py` → `results/tier2_window_shape.{json,md}`, `charts/inv008/fig_window_shape.png`
+- Overnight 4h-horizon sensitivity (drop÷IOB, carb-screened): `inv008/overnight_sensitivity.py` → `results/overnight_sensitivity.{json,md}`, `charts/inv008/fig_overnight_sensitivity.png`
 - Comparison figure: `charts/inv008/fig_best_fit.png`
 - Device validation: `inv008/validate_device_isf.py`, `results/device_isf_validation.{json,md}`
 - Repository: `github.com/tim2000s/dynamic-isf-calculations`
