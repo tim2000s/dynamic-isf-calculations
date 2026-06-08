@@ -74,7 +74,7 @@ check("355/sqrt(TDD) anchor independent of divisor at target",
       max(anch.values()) - min(anch.values()) < 1e-12,
       f"all = {list(anch.values())[0]:.3f} at TDD 50")
 
-print("\n4. Proposal comparison table (ISF at normal target, divisor 75)")
+print("\n4. Documented comparison table (ISF at normal target, divisor 75)")
 LT2 = math.log(NT / DIV)   # v2 log term, no +1
 expect = {15: (143, 1840, 92), 25: (86, 663, 71), 36: (59, 320, 59),
           50: (43, 166, 50), 80: (27, 65, 40), 120: (18, 29, 32)}

@@ -147,9 +147,9 @@ corrections come out weak across the board: not only for the lighter-dosing majo
 high glucose too, where v2 is still around 1.5× gentler than v1 above 200 mg/dL and more
 aggression is usually wanted.
 
-So v2 offers good hypo protection but its TDD scaling and level are wrong. The v-next proposal
-keeps the useful idea, strong glucose-dependent protection at low BG, but delivers it through a
-√TDD level and the Diabeloop glucose curve, anchored to each person.
+So v2 offers good hypo protection but its TDD scaling and level are wrong. The better TDD law is
+a √TDD level set per person from their own data — the direction the cross-validation supports
+(§3.3) — keeping v2's useful low-glucose protection without its steep TDD exponent or high level.
 
 ---
 
