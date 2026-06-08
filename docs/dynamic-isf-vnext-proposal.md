@@ -309,7 +309,14 @@ already stored.
 **Provisional:**
 - The **Tier-2 sensitivity anchor** rests on a regression estimator that may be biased low by
   unrecorded carbohydrate or endogenous-glucose effects, and is weak per-user over short
-  windows (median R² ≈ 0.22). Its *shape* is trustworthy; its absolute *level* is not yet.
+  windows (median R² ≈ 0.22). Its *shape* is trustworthy; its absolute *level* is not yet. A
+  cohort shadow run (114 people with a usable fit) puts measured sensitivity at a median 0.39×
+  the profile ISF, so unclamped Tier-2 would dose about 2.6× the correction insulin of the
+  person's current setting. Under the §8.2 level clamp that level is pulled back to the
+  profile/1.5 ceiling for essentially everyone (the clamp binds on ~100% of readings), which
+  means the clamped form barely expresses the measured anchor at all — and the data-derived
+  study shows that anchor is hypo-biased. Tier-2 is therefore not deployable without forward,
+  outcome-based validation and, most likely, a different level bound than the Tier-1 clamp.
 - The cohort is largely composed of users who never ran dynamic ISF (≈87%); the small
   dynamic-ISF subgroup hints at a steeper slope, with confidence intervals too wide to resolve.
 - All evidence is retrospective and decision-level (counterfactual replay), single-cohort
@@ -382,7 +389,8 @@ setting, with the √TDD response added.
 - Equation search: `fit_best_isf.py`, `results/best_isf_fit_results.{json,md}`
 - Personalisation analysis (blended-TDD refit, variance decomposition): `inv008/fit_personalisation.py`
 - Glucose curve + v-next equation: `inv008/dynisf.py` (`g_quartic`, `isf_vnext`, `k_user_tier1`), tests in `inv008/tests/`
-- Cohort shadow evaluation: `inv008/phase11_shadow_eval.py` → `results/phase11_shadow_eval.{json,md}`, `charts/inv008/fig_shadow_eval.png`
+- Cohort shadow evaluation (Tier 1): `inv008/phase11_shadow_eval.py` → `results/phase11_shadow_eval.{json,md}`, `charts/inv008/fig_shadow_eval.png`
+- Cohort shadow evaluation (Tier 2): `inv008/phase12_shadow_eval_tier2.py` → `results/phase12_shadow_eval_tier2.{json,md}`, `charts/inv008/fig_shadow_eval_tier2.png`
 - Comparison figure: `charts/inv008/fig_best_fit.png`
 - Device validation: `inv008/validate_device_isf.py`, `results/device_isf_validation.{json,md}`
 - Repository: `github.com/tim2000s/dynamic-isf-calculations`
