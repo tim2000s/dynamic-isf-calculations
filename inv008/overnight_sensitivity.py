@@ -56,9 +56,9 @@ RISE_MAX = 2.0                     # mg/dL per 5 min; above this over 15 min ⇒
 IOB_MIN = 0.30                     # U; below this the drop/IOB ratio is too noisy
 SENS_RANGE = (-50, 400)            # plausible mg/dL per U for the binned-shape view
 
-BG_EDGES = np.array([70, 90, 105, 120, 140, 170, 220], float)
+BG_EDGES = np.array([99, 112, 125, 145, 175, 220], float)   # at/above target only
 BG_CENTRES = 0.5 * (BG_EDGES[:-1] + BG_EDGES[1:])
-TARGET_BIN = int(np.digitize(TARGET, BG_EDGES) - 1)
+TARGET_BIN = 0                                              # first band sits at target
 
 
 def analyse(user_id, table):
@@ -90,10 +90,16 @@ def analyse(user_id, table):
     slope15 = np.where(ok15, (bg[p15] - bg) / 3.0, 0.0)     # mg/dL per 5 min over next 15 min
 
     rows = []
+    n_subtarget = 0
     for i in range(n):
         if hour[i] not in START_HOURS or not ok_end[i] or iob[i] < IOB_MIN:
             continue
         j = end4[i]
+        # exclude sub-target starting points: below target the loop withholds insulin (and IOB
+        # can go negative), so drop/IOB there does not reflect insulin sensitivity.
+        if bg[i] < TARGET:
+            n_subtarget += 1
+            continue
         # carb screen: no 15-min forward slope above RISE_MAX anywhere in [T, T+4h]
         seg = slope15[i:j + 1]
         if seg.size == 0 or np.nanmax(seg) > RISE_MAX:
