@@ -13,13 +13,16 @@ and the √TDD law established in the v-next work.
 
 ## The two separable parts of ISF
 
-ISF has a **shape** (how it scales with TDD and glucose) and a **per-user level**.
+ISF has a shape, meaning how it scales with TDD and glucose, and a per-user level. The two
+behave very differently.
 
-- **Shape — derivable and settled.** Sensitivity scales with total daily dose as ≈ **1/√TDD**
-  (the v-next result), universal across users; the glucose scaler is a separate, retained
-  dimension. The shape needs no user input.
-- **Level — the hard part, and the subject of this study.** A single global level fails (±57%
-  per-user error). So can the per-user level be derived from data?
+The shape is derivable and settled. Sensitivity scales with total daily dose as roughly
+1/√TDD (the v-next result), and that holds across users, with the glucose curve a separate
+dimension on top. The shape needs no input from anyone.
+
+The level is the hard part, and the subject of this study. A single global level leaves the
+typical person about 57% off, so the question is whether the per-user level can be recovered
+from data rather than entered.
 
 ## The feasibility arc (Phases 1–6)
 
@@ -34,25 +37,27 @@ ISF has a **shape** (how it scales with TDD and glucose) and a **per-user level*
 
 ## What this settles
 
-1. **The √TDD shape is derivable and needs no entry.** Anchored to working (tuned) profiles the
-   constant is K ≈ 355 (ISF ≈ 355/√TDD); anchored to measured sensitivity it is ≈ 145 — and
-   Phase 5/6 show the measured anchor is unsafe, so **the working-anchored 355 is the right
-   cold-start**.
+1. The √TDD shape is derivable and needs no entry. Anchored to working (tuned) profiles the
+   constant is K ≈ 355 (ISF ≈ 355/√TDD); anchored to measured sensitivity it is ≈ 145. Since
+   Phases 5 and 6 show the measured anchor is unsafe, the working-anchored 355 is the right
+   cold start.
 
-2. **A zero-entry cold start is feasible and reasonably good.** From observable TDD alone,
-   ISF ≈ 355/√TDD places a brand-new user within **±28% of the value they would have tuned to**
-   (Phase 7). (Against the *measured* empirical baseline the figure is ±42% — but that baseline
-   is the hypo-biased one, so the working-ISF comparison is the relevant deployable number.)
+2. A zero-entry cold start is feasible and reasonably good. From observable TDD alone,
+   ISF ≈ 355/√TDD places a brand-new user within ±28% of the value they would have tuned to
+   (Phase 7). Against the measured empirical baseline the figure is ±42%, but that baseline is
+   the hypo-biased one, so the working-ISF comparison is the number that matters for deployment.
 
-3. **The per-user *level* cannot be safely derived from observed sensitivity — in any window.**
-   The ΔIOB sensitivity estimate is **entangled with the user's existing insulin excess/deficit**:
-   it reads as "very sensitive" (low ISF) exactly for people who run low, so dosing to it would
-   give the most insulin to the most hypo-prone. Restricting to clean overnight data does not fix
-   this; it is intrinsic to measuring sensitivity from observational BG-vs-insulin.
+3. The per-user level cannot be safely derived from observed sensitivity, in any window. The
+   ΔIOB sensitivity estimate is entangled with the user's existing insulin excess or deficit:
+   it reads as "very sensitive" (low ISF) precisely for people who run low, so dosing to it
+   would give the most insulin to the most hypo-prone. Restricting to clean overnight data does
+   not fix this. It is intrinsic to measuring sensitivity from observational glucose against
+   insulin.
 
-4. **Beyond a stable baseline there is little to track for correction ISF** (Phase 2). So the
-   right architecture is *not* an elaborate adaptive ISF — it is a stable baseline plus the
-   √TDD demand-track, with autosens covering the bounded sub-daily/safety role it already serves.
+4. Beyond a stable baseline there is little left to track for correction ISF (Phase 2). The
+   right architecture is therefore not an elaborate adaptive ISF but a stable baseline plus the
+   √TDD demand-track, with autosens covering the bounded sub-daily and safety role it already
+   serves.
 
 ## The constructive conclusion
 

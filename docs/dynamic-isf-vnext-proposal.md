@@ -6,23 +6,23 @@
 
 ## Context
 
-Dynamic ISF sets correction sensitivity from total daily dose (TDD) and current glucose.
-The original equation (**v1**, Chris Wilson) makes the sensitivity anchor inversely
-proportional to TDD. A later revision of the maths (**v2**) makes it inversely proportional
-to TDD squared — a steeper dependence of sensitivity on TDD.
+Dynamic ISF sets correction sensitivity from total daily dose (TDD) and current glucose. The
+original equation (v1, Chris Wilson) makes the sensitivity anchor inversely proportional to
+TDD. A later revision (v2) makes it inversely proportional to TDD squared, a steeper
+dependence.
 
-Testing both against sensitivity calculated directly from 171 people's own glucose and
-insulin data shows the steeper exponent moved the wrong way: the observed TDD dependence is
-*shallower* than even v1. v2 is the worst-fitting of every equation tested against
-calculated sensitivity, and in practice it weakens corrections for the 77% of people below
-~64 U/day while over-estimating their sensitivity more severely than v1.
+Tested against sensitivity calculated directly from 171 people's own glucose and insulin data,
+the steeper exponent moves the wrong way: the observed TDD dependence is shallower than even
+v1. v2 is the worst-fitting of every equation we tried, and in practice it gives a weaker
+correction than v1 for almost everyone (a median of 3×, most markedly at low glucose) while
+over-estimating sensitivity more severely than v1.
 
-This document proposes the next version. It also answers the question that follows directly
-from the data: a single fixed equation is not enough on its own. The **exponent** of the
-TDD law should be universal, but the **level** of the curve must be calibrated per person —
-the same TDD predicts ISFs that differ ~9-fold between people, and most of that is a stable
-per-person offset. The proposal is therefore a **universal shape with a per-user constant,
-recalibrated weekly** from the person's own recent data when dynamic ISF is enabled.
+This document proposes the next version, and answers the question the data raises: one fixed
+equation is not enough on its own. The exponent of the TDD law can be universal, but the level
+of the curve has to be set per person, because the same TDD predicts ISFs that differ around
+ninefold between people and most of that is a stable per-person offset. The proposal is a
+universal shape with a per-user constant, recalibrated weekly from the person's own recent
+data once dynamic ISF is enabled.
 
 ---
 
