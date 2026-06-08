@@ -1,0 +1,35 @@
+{
+ "n_users": 93,
+ "n_windows": 44060,
+ "condition": "overnight, carb-screened, |iob_iob| < 0.2 (delivery \u2248 scheduled basal)",
+ "pooled_median_drift_mgdl_per_h": -5.5,
+ "per_user_median_drift": {
+  "median": -5.5,
+  "p25": -9.0,
+  "p75": -3.0,
+  "frac_falling": 0.914
+ },
+ "drift_by_bg_band": {
+  "100-115": [
+   -5.0,
+   16057
+  ],
+  "115-130": [
+   -7.1,
+   8103
+  ],
+  "130-150": [
+   -11.0,
+   2754
+  ],
+  "150-175": [
+   -19.0,
+   1284
+  ],
+  "175-220": [
+   -20.8,
+   1432
+  ]
+ },
+ "conclusion": "At neutral net IOB overnight, glucose falls (median ~-5.5 mg/dL/h, 91% of users) \u2014 scheduled basal is delivering net insulin over EGP. This is the insulin that iob_iob does not capture; the 'reversion' is over-basalisation, not spontaneous glucose decline. Sensitivity from drop/iob_iob is therefore biased; total insulin (scheduled basal + temp + bolus) is the right denominator."
+}
