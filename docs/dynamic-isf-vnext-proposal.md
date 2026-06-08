@@ -200,11 +200,13 @@ different from the TDD level:
   at high BG and suppresses it at low BG. The confound is large enough to reverse the sign, so
   the curve's direction has to come from clinical data, not these logs. Extending the horizon
   does not rescue it: a 4-hour overnight measurement (drop over T+4h ÷ IOB at T, carb-screened,
-  11pm–3am start) is *more* confounded — observed sensitivity rises from negative at BG 80 to
-  ~2.8× target at BG 195 (exponent ≈ −1.4). Over four hours glucose reverts toward its set
-  point regardless of insulin, so the relationship is dominated by mean-reversion at every
-  horizon tested. (Insulin cannot raise glucose, yet the method reports negative sensitivity at
-  low BG — a clear sign it tracks the glucose trajectory, not the insulin effect.)
+  11pm–3am start, restricted to BG ≥ target so the loop is actually dosing) still has observed
+  sensitivity *rising* with glucose — from the target band to ~2.3× at BG 200 (exponent ≈ −1.1),
+  the opposite sign to every equation. Over four hours glucose reverts toward its set point
+  regardless of insulin, so a higher start simply falls further, inflating apparent sensitivity.
+  The confound is present at every horizon tested. (The same measurement gives a sensible
+  *level*, a per-person median ≈ 31 mg/dL per U — but only the level; the glucose dependence
+  is unrecoverable.)
 - **Validation is prospective, not retrospective.** Establishing the exponent for this
   population requires a prospective / closed-loop trial; retrospective fitting on AID logs
   does not answer it.
