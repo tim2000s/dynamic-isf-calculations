@@ -16,7 +16,9 @@ error(ISF)         = actual_end − predicted_end(ISF)
 
 Also derive the per-window realised ISF (the ISF that would have made the prediction exact):
     realised_isf = sug_isf · (BG − actual_end) / (BG − reason_iobpredbg)
-saved with features (bg, tdd, iob, hour) as the dataset for the ML pattern step.
+saved with features (bg, tdd, iob, hour, start_slope, bg_end) as the dataset for the
+pattern/error-curve step. start_slope = the 15-min glucose slope entering the window
+(mg/dL per 5 min) — a confound control for dawn/rising windows; bg_end = realised 4h-end glucose.
 
 Units: per user, if median sug_isf < 20 it is mmol/L per U → ×18.018 to mg/dL (same for profile).
 v6 is excluded (its iob/isf accounting did not reconcile). Output:
@@ -97,6 +99,11 @@ def analyse(args):
     oke = np.abs(ts[end4] - (ts + HZ)) <= TOL
     p15 = np.searchsorted(ts, ts + 900); p15 = np.where(p15 < n, p15, n - 1)
     sl = np.where(np.abs(ts[p15] - (ts + 900)) <= TOL, (bg[p15] - bg) / 3.0, 0.0)
+    # backward 30-min slope entering the window (mg/dL per 5 min). Computed from glucose BEFORE
+    # the window opens, so it indexes the trajectory/endogenous momentum the loop is acting into,
+    # not the post-decision fall. NaN when no reading sits ~30 min back (e.g. start of a trace).
+    pre = np.searchsorted(ts, ts - 1800); pre = np.clip(pre, 0, n - 1)
+    sl_pre = np.where(np.abs(ts[pre] - (ts - 1800)) <= TOL, (bg - bg[pre]) / 6.0, np.nan)
 
     rows = []
     for i in range(n):
@@ -122,11 +129,13 @@ def analyse(args):
         e_loop = act_end - pred[i]
         realised = sugisf[i] * act_drop / pdl
         rows.append((bg[i], tdd[i], iob[i], hr[i], sugisf[i], pisf or np.nan,
-                     v1[i], v2[i], realised, e_static, e_v1, e_v2, e_loop))
+                     v1[i], v2[i], realised, e_static, e_v1, e_v2, e_loop,
+                     sl[i], sl_pre[i], act_end))
     if len(rows) < 40:
         return None
     cols = ["bg", "tdd", "iob", "hour", "sug_isf", "profile_isf", "isf_v1", "isf_v2",
-            "realised_isf", "err_static", "err_v1", "err_v2", "err_loop"]
+            "realised_isf", "err_static", "err_v1", "err_v2", "err_loop",
+            "start_slope", "pre_slope", "bg_end"]
     df = pd.DataFrame(rows, columns=cols); df["user"] = user_id; df["table"] = table
     return df
 
