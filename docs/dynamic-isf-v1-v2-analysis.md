@@ -1,6 +1,6 @@
 # Dynamic ISF — analysis of the v1 and v2 equations
 
-**2026-06-07** · Tim Street / Claude · Data: 171 people using open-source AID systems
+**2026-06-07** (same-window outcome test §3.6 added 2026-06-09) · Tim Street / Claude · Data: 171 people using open-source AID systems
 
 ---
 
@@ -25,6 +25,11 @@ data scales as roughly TDD^−0.5, or shallower; v2 assumes TDD^−2. As a betwe
 of sensitivity, v2 is the worst of every form we tested (median error around 171 mg/dL per unit
 against measured sensitivity), and its overall level sits well above where observed sensitivity
 lies. So v2's glucose behaviour points the right way while its TDD scaling and level are off.
+
+A separate, outcome-anchored test backs this up: rescaling the loop's own glucose prediction to
+each candidate ISF on 62,751 identical overnight windows, a person's tuned static ISF predicts
+the realised drop about as well as the loop itself and better than either dynamic equation,
+v2 worst — the same ranking, reached from outcomes rather than from the equations (§3.6).
 
 ---
 
@@ -133,6 +138,46 @@ logged ISF mid-history, and a per-reading correction resolves all four.
 A page like this exists for each of the 170 people: the ISF–glucose curves at their TDD, a
 two-week sample of dynamic-ISF traces over real glucose, and the per-reading ratio.
 
+### 3.6 Same-window outcome test: which ISF predicts the realised drop?
+
+The results above compare the ISF each equation *would have computed*. A separate test asks
+which ISF best predicts the glucose drop that *actually happened*. The loop's IOB-based glucose
+prediction is linear in ISF — predicted drop = ISF × an activity integral that does not depend
+on ISF — so on any window we can take the loop's own prediction (made with the ISF it ran) and
+rescale it to any candidate ISF, then compare to the observed end glucose. Every ISF form is
+tested on the *same* window, which removes the between-person confound that the cross-validation
+in §3.3 cannot: each person's outcomes only ever score their own equation there, whereas here
+all four forms are scored on one shared set of windows.
+
+Over 62,751 overnight, carbohydrate-screened, four-hour windows from 89 people (v1's `+1` makes
+its prediction well defined throughout; AAPS users excluded for the same TDD-reconciliation
+reason as elsewhere), scoring error as observed end glucose minus predicted end glucose:
+
+![Prediction error by ISF form (left) and bias vs glucose (right)](charts/inv008/fig_head_to_head.png)
+
+| ISF form | median \|error\| (mg/dL) | bias |
+|---|---|---|
+| loop (what ran) | 18.6 | +7.4 |
+| static (tuned profile ISF) | 20.3 | +6.6 |
+| v1 (TDD⁻¹) | 24.6 | −10.4 |
+| v2 (TDD⁻²) | 49.7 | +25.2 |
+
+The person's tuned static ISF is within 1.7 mg/dL of the loop's own calibrated ISF and beats
+either dynamic equation; v2 is more than twice as far off as static. Counting which form is the
+single best predictor per person (80 people with enough windows), the loop wins for 35, static
+for 24, v1 for 17 and v2 for only 4.
+
+The bias-by-glucose panel shows *why* the dynamic forms lose. v1's error is strongly
+glucose-dependent — it over-predicts the drop at low glucose (+14.9 mg/dL in the 80–100 band)
+and badly under-predicts it when high (−33.2 in the 175–230 band) — which is the 1/TDD curve
+coupling sensitivity too tightly to glucose. v2 over-predicts the drop almost everywhere (its
+correction is too weak), worst at low glucose. A near-constant static ISF carries no such
+glucose-linked error.
+
+This is the outcome-anchored counterpart to §3.2–3.3 and reaches the same conclusion from the
+other direction: a well-tuned static level is hard to beat, both dynamic equations are worse,
+and v2 is worst.
+
 ---
 
 ## 4. Reading the result
@@ -155,8 +200,11 @@ a √TDD level set per person from their own data — the direction the cross-va
 
 ## 5. Caveats
 
-1. Counterfactual replay: we compare the ISF each equation would have computed, not closed-loop
-   outcomes.
+1. Counterfactual replay: the main comparison (§3.1–3.5) is of the ISF each equation would have
+   computed, not closed-loop outcomes. The same-window test in §3.6 partly addresses this by
+   scoring each ISF against the realised glucose drop, but it still rescales the loop's own
+   linear prediction rather than re-running the controller, so second-order effects (changed
+   insulin delivery feeding back into later IOB and glucose) are not captured.
 2. Basal approximation: AAPS exports lack temp-basal records, so basal TDD for those 39 users
    uses the profile schedule.
 3. The calculated-sensitivity benchmark is per-person and may be biased low by unrecorded
@@ -170,5 +218,6 @@ a √TDD level set per person from their own data — the direction the cross-va
 
 - Implementation and tests: `inv008/dynisf.py`, `inv008/tests/`
 - v1 vs v2 comparison: `inv008/compare_v1_v2.py` → `results/v1_v2_comparison.*`, `charts/inv008/fig_v1_v2.png`
+- Same-window outcome test: `inv008/head_to_head.py` → `results/head_to_head.{json,md}`, `results/head_to_head_windows.parquet`, `charts/inv008/fig_head_to_head.png`
 - Pipeline and candidate search: `inv008/`, `fit_best_isf.py`
 - Repository: `github.com/tim2000s/dynamic-isf-calculations`
