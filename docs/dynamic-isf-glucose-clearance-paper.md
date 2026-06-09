@@ -156,11 +156,17 @@ and model-independent conservation) over the available history. The two gave opp
 the difference is informative.
 
 **User A — AAPS DynamicISF, fully closed-loop without announced carbohydrate (UAM).** Twelve months,
-409 fasting windows. The effective ISF **falls steeply with glucose**, and critically this is
-confirmed by the model-independent conservation estimate (slope k≈2.0 both ways), so it is **not** the
-insulin-action-model artifact. A glucose-dependent ISF predicts this person's realised drops far
-better than a static profile (median error: Diabeloop quartic 25, the dynISF they run 28, static
-profile 49 mg/dL). For this individual, dynamic ISF demonstrably earns its keep.
+409 windows. Across all hours the effective ISF **falls steeply with glucose** (model-free slope
+k≈2.0, so it is not the insulin-action-model artifact), and a glucose-dependent ISF predicts this
+person's realised drops far better than a static profile (median error: Diabeloop quartic 25, the
+dynISF they run 28, static profile 49 mg/dL). **But the fall is a daytime phenomenon.** Restricting to
+the overnight sleep window — genuinely carbohydrate-free even for a non-announcing user — the
+model-free slope collapses from k≈2.0 to **k≈0.5** (n=185): roughly three-quarters of the apparent
+glucose dependence disappears once the person is asleep and not eating. This is direct evidence that
+User A's "resistance" is largely **uncovered-carbohydrate load** depressing the drop-per-unit-insulin
+at high glucose during the day — not glucose-dependent insulin sensitivity. The dynISF this user runs
+usefully *compensates* for that carbohydrate load operationally, but it is not correcting a glucotoxic
+effect.
 
 **User B — oref with autosens, carbohydrate-aware.** Five months available, 610 fasting windows. The
 effective ISF is **flat to mildly rising** (loop k≈0, conservation k≈−0.8), matching the cohort. A
@@ -169,14 +175,15 @@ while the steep Diabeloop quartic and v2 forms are worse (21 and 69). For this i
 curve does not help.
 
 These do not contradict the cohort; they illustrate the heterogeneity it contains, and the split
-tracks **carbohydrate-announcement behaviour rather than algorithm**. User B announces carbohydrate,
-so its fasting windows are genuinely carb-free and the effective ISF is flat. User A is UAM, so
-*uncovered carbohydrate load is present in every window*; uncovered carbs at high glucose depress the
-drop-per-unit-insulin and read as a falling ISF. The most likely interpretation is therefore that User
-A's apparent glucose dependence is substantially uncovered-carb dynamics that its dynISF usefully
-*compensates* for — not pure glucotoxic resistance. Each case is N=1 (User A 12 months, User B 5
-months) and the conservation *level* is biased low (basal under-counting), so we read only the
-slopes, which are robust.
+tracks **carbohydrate-announcement behaviour, not algorithm**. User B announces carbohydrate, so its
+fasting windows are genuinely carb-free and the effective ISF is flat. User A is UAM, so uncovered
+carbohydrate is present whenever it eats — and the overnight test above isolates exactly this: remove
+the daytime eating and the fall largely vanishes. This also explains *why* the cohort analysis used
+overnight windows — to strip carbohydrate contamination — and confirms that the carbohydrate-controlled
+truth is flat: in genuinely fasting windows, even the UAM user is close to the cohort. Each case is N=1
+(User A 12 months, User B 5 months; User A overnight n=185, noisy at the top band), and the
+conservation *level* is biased low (basal under-counting), so we read only the slopes, which are
+robust in direction.
 
 ## 4. The resistance question is open, not resolved
 
@@ -249,10 +256,11 @@ beneath an offsetting clearance is a reasonable hypothesis this data cannot sett
 conclusion is independent of that question: individualise the *net* ISF level online, keep a near-target
 safety clamp, and do not add a glucose curve by default. Two external individual case studies (§3.6)
 sharpen this: a carbohydrate-aware user matched the cohort (flat, model-confirmed), while a UAM user
-showed a genuine falling effective ISF that a dynISF helps — most plausibly by compensating for routine
-uncovered-carbohydrate load rather than for glucotoxic resistance. A glucose term thus earns its place
-mainly where uncovered carbohydrate is routine; per-user adaptation should learn it for those
-individuals while defaulting to flat for the carbohydrate-aware majority.
+showed a falling effective ISF by day that **largely disappeared overnight when genuinely
+carbohydrate-free** (model-free slope k≈2.0 → ≈0.5) — identifying it as uncovered-carbohydrate load,
+not glucotoxic resistance. A glucose term thus earns its place mainly where uncovered carbohydrate is
+routine, where it compensates for carbs rather than sensitivity; per-user adaptation should learn it
+for those individuals while defaulting to flat for the carbohydrate-aware majority.
 
 ---
 
