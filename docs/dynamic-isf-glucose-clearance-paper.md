@@ -148,6 +148,36 @@ In daytime fasting windows the net effective ISF was flat and indistinguishable 
 dynamics are excluded by the carbohydrate screen and are a meal-bolus problem, not a correction-ISF
 one.
 
+### 3.6 Two individual case studies (external Nightscout data)
+
+To test the method on data entirely outside the cohort, we applied it to two individual open-source
+AID users via their live Nightscout instances, computing the effective ISF both ways (loop-prediction
+and model-independent conservation) over the available history. The two gave opposite results — and
+the difference is informative.
+
+**User A — AAPS DynamicISF, fully closed-loop without announced carbohydrate (UAM).** Twelve months,
+409 fasting windows. The effective ISF **falls steeply with glucose**, and critically this is
+confirmed by the model-independent conservation estimate (slope k≈2.0 both ways), so it is **not** the
+insulin-action-model artifact. A glucose-dependent ISF predicts this person's realised drops far
+better than a static profile (median error: Diabeloop quartic 25, the dynISF they run 28, static
+profile 49 mg/dL). For this individual, dynamic ISF demonstrably earns its keep.
+
+**User B — oref with autosens, carbohydrate-aware.** Five months available, 610 fasting windows. The
+effective ISF is **flat to mildly rising** (loop k≈0, conservation k≈−0.8), matching the cohort. A
+static or autosens-adjusted ISF and the gentle v1 form all predict well (median error ≈15–19 mg/dL),
+while the steep Diabeloop quartic and v2 forms are worse (21 and 69). For this individual a glucose
+curve does not help.
+
+These do not contradict the cohort; they illustrate the heterogeneity it contains, and the split
+tracks **carbohydrate-announcement behaviour rather than algorithm**. User B announces carbohydrate,
+so its fasting windows are genuinely carb-free and the effective ISF is flat. User A is UAM, so
+*uncovered carbohydrate load is present in every window*; uncovered carbs at high glucose depress the
+drop-per-unit-insulin and read as a falling ISF. The most likely interpretation is therefore that User
+A's apparent glucose dependence is substantially uncovered-carb dynamics that its dynISF usefully
+*compensates* for — not pure glucotoxic resistance. Each case is N=1 (User A 12 months, User B 5
+months) and the conservation *level* is biased low (basal under-counting), so we read only the
+slopes, which are robust.
+
 ## 4. The resistance question is open, not resolved
 
 Molecular physiology and the Diabeloop population model say hyperglycaemia causes insulin resistance,
@@ -217,7 +247,12 @@ to mildly rising above. Dynamic equations that lower ISF as glucose rises theref
 net data does not deliver and degrade prediction. Whether a hidden insulin-only resistance exists
 beneath an offsetting clearance is a reasonable hypothesis this data cannot settle. The actionable
 conclusion is independent of that question: individualise the *net* ISF level online, keep a near-target
-safety clamp, and do not add a glucose curve.
+safety clamp, and do not add a glucose curve by default. Two external individual case studies (§3.6)
+sharpen this: a carbohydrate-aware user matched the cohort (flat, model-confirmed), while a UAM user
+showed a genuine falling effective ISF that a dynISF helps — most plausibly by compensating for routine
+uncovered-carbohydrate load rather than for glucotoxic resistance. A glucose term thus earns its place
+mainly where uncovered carbohydrate is routine; per-user adaptation should learn it for those
+individuals while defaulting to flat for the carbohydrate-aware majority.
 
 ---
 
