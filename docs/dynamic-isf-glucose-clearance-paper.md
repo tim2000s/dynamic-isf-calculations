@@ -12,9 +12,10 @@ the premise — well supported by molecular physiology — that hyperglycaemia i
 resistance. Population data from thousands of patients (the Diabeloop glucose-related ISF model) and a
 single-patient power-law analysis both recover a steep glucose dependence (ISF ∝ (target/BG)^k,
 k≈3.5). Yet on outcome data, dynamic equations rarely beat a well-set static ISF. We resolve this
-paradox. Using a *same-window* method that rescales the loop's own insulin-on-board (IOB) prediction
-to any candidate ISF — removing the between-person confound exactly — we test static, the v1/v2
-dynamic equations, and the Diabeloop/power-law shapes on identical fasting windows. The dynamic
+paradox. Using a *same-window* method — computing each window's effective ISF from the realised four-hour drop
+and scoring every candidate against it (equivalently, rescaling the loop's own insulin-on-board
+prediction), which removes the between-person confound exactly — we test static, the v1/v2 dynamic
+equations, and the Diabeloop/power-law shapes on identical fasting windows. The dynamic
 shapes degrade prediction; a per-user *level* fit captures essentially all recoverable individual
 signal while the best shared glucose steepness is k=0. Decomposing the realised glucose drop into its
 insulin and non-insulin components — estimating insulin-independent clearance directly from windows
@@ -71,6 +72,23 @@ predicted and realised drops, delivered correction insulin (super-micro-bolus un
 trajectory (a 30-minute backward slope), and the realised ISF — the ISF that would have made the
 prediction exact.
 
+This is mathematically identical to computing each window's **effective ISF directly from the
+realised drop** and comparing it to the candidate forms — the method a reader might expect. The
+effective ISF is `effective_ISF = realised_drop / activity_integral`, where `activity_integral =
+predicted_drop / sug_isf` is the insulin action the loop's model attributes to the window. The
+candidate-ISF error then reduces exactly to
+`err(candidate) = activity_integral × (candidate_ISF − effective_ISF)` (an identity we verified to
+machine precision): each candidate is scored by its distance from the effective ISF, weighted by the
+insulin that was actually acting. Two points follow. First, the comparison is **not circular** —
+`sug_isf` cancels, so the effective ISF is independent of which ISF the loop ran. Second, the error
+(mg/dL) framing is the *correctly precision-weighted* form of "effective ISF versus candidate": the
+raw effective ISF is a noise-amplifying ratio that diverges when little insulin was acting, and
+weighting by the activity integral down-weights exactly those uninformative windows. The one
+assumption both framings share is the loop's insulin-action model, which supplies the activity
+integral; §3.4 shows that model over-states action, so every ISF estimate here is conditional on it,
+and the only model-free alternative (attributing the drop to delivered insulin, §5) is defeated by
+reactive-dosing endogeneity.
+
 **Confound controls.** The realised drop is not pure insulin action; it also reflects insulin-
 independent clearance (renal excretion above the ~180 mg/dL threshold, and glucose effectiveness /
 mass action), endogenous glucose production, and counterregulation near target. We control these
@@ -91,6 +109,26 @@ On identical windows, median absolute prediction error (mg/dL) was: loop 18.6, s
 20.3, v1 24.6, v2 49.7. A well-set static ISF essentially ties the loop and beats both dynamic forms;
 v2 — the steepest TDD dependence — is far the worst. The empirical ISF–TDD relationship scales as
 ≈TDD^−0.5, consistent with a √TDD law and inconsistent with v1's −1 or v2's −2.
+
+Equivalently, the window-level effective ISF (computed from the realised drop; §2) diverges from
+every dynamic form as glucose rises (Table 1; each candidate normalised to the user's own profile to
+remove the between-person level). The effective (net) ISF is flat-to-rising with glucose, whereas v1,
+v2, and the Diabeloop quartic all fall steeply — i.e. the dynamic forms predict a declining ISF that
+the net realised data does not show.
+
+**Table 1. Window-level effective ISF versus candidate forms, by glucose (median, ÷ each user's
+profile ISF).**
+
+| glucose (mg/dL) | effective ISF | v1 (dynISF) | v2 (dynISF) | Diabeloop quartic |
+|---|---|---|---|---|
+| 100–120 | 0.71 | 0.93 | 2.89 | 0.87 |
+| 120–145 | 0.82 | 0.87 | 2.35 | 0.68 |
+| 145–175 | 0.91 | 0.72 | 1.57 | 0.53 |
+| 175–205 | 0.89 | 0.60 | 1.08 | 0.42 |
+| 205–260 | 0.94 | 0.50 | 0.78 | 0.34 |
+
+(The effective ISF here is the *net*; §3.5 shows its insulin-only component does fall with glucose,
+as the dynamic forms expect — but is offset by clearance.)
 
 ### 3.2 Every observational glucose slope is a different confound
 
@@ -127,7 +165,7 @@ glucose| < 5 mg/dL), the observed four-hour change is the non-insulin flux at th
 monotonically and accelerates above ~180 mg/dL — the renal-threshold signature — reaching ~81 mg/dL
 at 205–260 (Table 1).
 
-**Table 1. Realised-ISF ratio (realised ÷ profile; <1 = insulin did less than expected), overnight.**
+**Table 2. Realised-ISF ratio (realised ÷ profile; <1 = insulin did less than expected), overnight.**
 
 | glucose (mg/dL) | non-insulin flux (mg/dL/4h) | raw (net) ratio | clearance-corrected (insulin-only) ratio |
 |---|---|---|---|
