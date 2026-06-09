@@ -334,6 +334,25 @@ function / hydration / individual variation (e.g. **SGLT2-inhibitor users** have
 net even flatter; **impaired-renal** users have less → net resistant), which is precisely why
 **online per-user net adaptation** beats a fixed glucose curve.
 
+### 3.14 Phase C — daytime + adaptive-k: the glucose-term question is fully closed
+Two tests to check whether a glucose term is warranted in any regime the overnight analysis didn't cover.
+
+- **Daytime** (`inv008/daytime_clearance.py`, 100 users, 64k daytime carb-screened windows, start hours
+  09–16): the **NET realised ISF by day is flat and identical to overnight** (k=−0.09 vs −0.10;
+  ratio 0.59→0.89 across BG, matching overnight to ±0.01). Clearance still rises with BG and offsets
+  resistance → **no daytime glucose term.** The *insulin-only* daytime resistance looks steeper
+  (k≈2.8, noisy — consistent with the power-law's daytime k→4), which fits the reconciliation: insulin
+  resistance is steeper by day but clearance offsets it in the net just the same. *(Caveat: tests
+  daytime between-meal fasting, not active postprandial — carbs are screened out; active meal dynamics
+  are a meal-bolus problem, not a correction-ISF one, and out of scope.)*
+- **Adaptive-k** (`inv008/adaptive_k_nestedcv.py`, nested per-user 60/40 split): the 36% who preferred
+  k≥1 was **selection overfit**. Out-of-sample a per-user k beats flat for only **24% of users (below
+  the 50% chance line)**, median gain 0.0 mg/dL. **k=0 stands; no per-user glucose-k term.**
+
+**Conclusion: across overnight, daytime, and per-user adaptation, no glucose-dependent correction-ISF
+term is warranted.** The deployable spec is fully closed: per-user-adapted flat net ISF + near-target
+clamp + cold-start gentle-k fade.
+
 ## 4. What we have found (consolidated)
 
 1. **A well-set static ISF predicts realised drops as well as the loop and far better than v1/v2.**
@@ -437,12 +456,11 @@ genuine scientific gaps. Priority order:
   infrastructure) — because observational identification is weak, any change is validated
   prospectively, not from history.
 
-**Phase C — close the two real scientific gaps.**
-- **Daytime / postprandial replication** — the highest-value open question: clearance may *not*
-  offset resistance when carb absorption dominates (the power law steepened to k→4 by day). If a
-  glucose term is ever warranted, it is here, not overnight. Run the clearance-corrected analysis on
-  daytime windows.
-- **Nested-CV diagnostic** for the per-user adaptive-`k` minority (is the 36% real out-of-sample?).
+**Phase C — close the two real scientific gaps. ✅ DONE (§3.14).**
+- **Daytime replication:** net realised ISF flat by day = overnight (clearance offsets resistance by
+  day too) → no daytime glucose term. (Active postprandial is a meal-bolus problem, out of scope.)
+- **Nested-CV adaptive-k:** the 36% was selection overfit (beats flat for only 24% out-of-sample) →
+  no per-user glucose-k term. **k=0 confirmed across all regimes.**
 
 **Phase D — deploy.**
 - Port the validated net-ISF + online adaptation to an oref instantiation (AAPS/Trio), behind a
