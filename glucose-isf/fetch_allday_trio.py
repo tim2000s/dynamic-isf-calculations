@@ -27,20 +27,9 @@ def isf_quartic(bg):
 
 QUARTIC_AT_99 = float(isf_quartic(99.0))
 
-SITES = [
-    {'name': 'henny425',    'model': 'sigmoid', 'url': '***REDACTED-URL***',               'token': '***REDACTED-TOKEN***'},
-    {'name': 'aadiabetes',  'model': 'sigmoid', 'url': '***REDACTED-URL***',     'token': '***REDACTED-TOKEN***'},
-    {'name': 'diajesse',    'model': 'sigmoid', 'url': '***REDACTED-URL***',       'token': None},
-    {'name': 'svns',        'model': 'sigmoid', 'url': '***REDACTED-URL***',  'token': None},
-    {'name': 'andycgm',     'model': 'log',     'url': '***REDACTED-URL***',     'token': '***REDACTED-TOKEN***'},
-    {'name': 'noahr',       'model': 'log',     'url': '***REDACTED-URL***',             'token': None},
-    {'name': 'fuxchr',      'model': 'sigmoid', 'url': '***REDACTED-URL***',               'token': '***REDACTED-TOKEN***'},
-    {'name': 'nightscout1', 'model': 'log',     'url': '***REDACTED-URL***',     'token': '***REDACTED-TOKEN***'},
-    {'name': 'eli',         'model': 'log',     'url': '***REDACTED-URL***',            'token': '***REDACTED-TOKEN***'},
-    {'name': 'mikens',      'model': 'sigmoid', 'url': '***REDACTED-URL***',          'token': '***REDACTED-TOKEN***'},
-    {'name': 'ns_rot6',     'model': 'log',     'url': '***REDACTED-URL***',                      'token': '***REDACTED-TOKEN***'},
-    {'name': 'kelseyhuss',  'model': 'log',     'url': '***REDACTED-URL***',  'token': '***REDACTED-TOKEN***'},
-]
+# Nightscout sites + tokens are loaded from ns_sites.json (gitignored — never commit credentials).
+import json as _json, os as _os
+SITES = _json.load(open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "ns_sites.json")))
 
 ANON = {
     'henny425': 'User-A', 'aadiabetes': 'User-B', 'diajesse': 'User-C',

@@ -6,3 +6,7 @@ __pycache__/
 inv008_cache/
 240 NS samples/
 *.log
+
+# local Nightscout credentials — never commit
+glucose-isf/ns_sites.json
+ns_sites.json
