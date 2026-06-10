@@ -7,29 +7,44 @@
 
 ## Abstract
 
-Dynamic insulin sensitivity factor (ISF) algorithms lower the correction factor as glucose rises, on
-the premise — well supported by molecular physiology and by a large clinical population model
-(Diabeloop) — that hyperglycaemia induces insulin resistance. Yet on outcome data, dynamic equations
-rarely beat a well-set static ISF. We examine this paradox in open-source automated insulin delivery
-(AID) data using a *same-window* method: each window's **effective ISF** is computed from the realised
-four-hour glucose drop and compared to candidate forms on the identical window, removing the
-between-person confound exactly. We compute the effective ISF two independent ways — by rescaling the
-loop's own insulin-on-board prediction, and, to remove any dependence on the loop's insulin-action
-model, by conservation from the insulin that actually acted (ΔIOB plus delivered insulin). Both agree
-on the central result: **the *net* effective ISF — the quantity an AID controller predicts and doses
-against — does not fall with glucose.** It is suppressed near target (counterregulation) and flat to
-mildly rising above it, whereas the v1, v2, and Diabeloop dynamic forms all fall steeply; transplanted
-onto this cohort the dynamic shapes degrade prediction, the steeper the worse. The recoverable
-individual signal lives in the per-user *level*, not a glucose curve: a best-fit model assigns a
-+7 mg/dL gain to per-user scale and an optimal shared glucose steepness of zero. We considered whether
-a hidden high-glucose *insulin* resistance, offset by glucose-rising insulin-independent clearance,
-could reconcile the resistance premise with the flat net response; we show this decomposition is **not
-testable** in fasting AID data — clean insulin-free high-glucose windows are essentially absent and the
-result flips sign with the window selection — and we therefore present it only as a hypothesis. We
-recommend a per-user-adapted *net* effective ISF (K/√TDD prior, online scale adaptation) with a
-near-target easing clamp, and no glucose-dependent correction term.
+**Background.** Dynamic-ISF algorithms lower the insulin sensitivity factor (ISF) as glucose rises, on
+the premise — backed by molecular physiology and a large clinical model (Diabeloop) — that
+hyperglycaemia reduces insulin effectiveness. Yet dynamic equations rarely beat a well-set static ISF.
+
+**Method.** On open-source automated insulin delivery (AID) data, we compute each window's *effective
+ISF* from the realised four-hour glucose drop and compare it to candidate forms on the identical
+window, removing the between-person confound. We compute it two ways: by rescaling the loop's
+insulin-on-board prediction, and — to remove any dependence on the loop's insulin model — by
+conservation from the insulin that actually acted (ΔIOB plus delivered insulin).
+
+**Findings.** Both agree: the **net effective ISF — the quantity an AID controller doses against — does
+not fall with glucose.** It is suppressed near target (counterregulation) and flat-to-rising above —
+the opposite shape to dynamic ISF. The v1, v2, and Diabeloop forms fall steeply, diverge from the data,
+and degrade prediction. The recoverable individual signal is the per-user *level* (+7 mg/dL), not a
+glucose curve (best-fit glucose steepness = 0). The apparent glucose effect is largely correction
+*magnitude* and, in two external individuals, **carbohydrate**: a carbohydrate-aware user was flat,
+while a UAM user fell steeply by day but flattened overnight when genuinely carbohydrate-free.
+
+**Conclusion.** Individualise the net ISF level online, keep a near-target safety clamp, and do not add
+a glucose curve by default. A glucose-lowering ISF mainly compensates for unannounced carbohydrate, not
+glucotoxic resistance. (An earlier draft proposed a clearance-cancels-resistance resolution; it was
+withdrawn after audit as untestable, and this revision treats the resistance question as open.)
 
 ---
+
+## Key points
+
+- A well-set **static ISF predicts the glucose drop as well as the loop**, and far better than the
+  dynamic v1/v2 equations.
+- The **effective ISF does not fall as glucose rises** — it is lowest near target (the body defending
+  against hypos) and flat-to-higher when high. Confirmed two ways, including one free of any
+  insulin-action-model assumption.
+- The accuracy gain is from **personalising each user's sensitivity level** (~7 mg/dL), not a glucose
+  curve (best-fit glucose steepness = 0).
+- The apparent "insulin works worse when high" is **mostly carbohydrate plus correction-size**, not
+  physiology: in a UAM user it falls by day and **flattens overnight** when genuinely not eating.
+- **Recommendation:** a per-user-adapted static ISF (√TDD start, refined online) + a near-target easing
+  clamp; no glucose curve by default. A glucose-lowering ISF mainly compensates for unannounced carbs.
 
 ## 1. Introduction
 
