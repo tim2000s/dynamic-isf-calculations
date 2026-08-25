@@ -16,7 +16,8 @@ exponent is -0.83 between people and -0.645 within a person, against the -1 that
 v1 assumes and the -2 that v2 assumes.
 
 Glucose. Sensitivity varies with glucose, and it varies in the opposite direction
-to the one both equations encode. Measured without imposing a shape, sensitivity
+to the one both equations encode. Three methods return that reversal, including
+one that computes a sensitivity at every reading and fits nothing. Measured without imposing a shape, sensitivity
 is 0.64 of its mid-range value below 120 mg/dL and rises to 1.16 by 190 to 300
 mg/dL. v1 predicts that profile running from 1.18 down to 0.75, and v2 from 1.75
 down to 0.54. Part of what remains after that correction is carbohydrate still
@@ -357,6 +358,66 @@ shows no relationship with how much insulin they use (Spearman -0.017, n = 971),
 so the between-person version of separability survives even though the
 within-person version does not.
 
+## The same question asked at every reading
+
+Everything above fits a slope across a person's windows. The direct alternative
+is to compute a sensitivity at each reading and place it beside what each
+equation calculates at the same instant, which is the comparison a person
+choosing between them would want to see.
+
+At every reading, six hours of history are convolved with the insulin model to
+give the units that acted over that period, from every dose contributing to it,
+basal and bolus together. Both equations are then evaluated at the reading the
+lookback opens on, from the blended dose figure available at that moment. Only
+periods with no recorded carbohydrate inside the lookback or in the six hours
+before it are used, so the glucose change is attributable to insulin.
+
+One correction makes the ratio meaningful. Across any six hours the glucose
+change is insulin action minus hepatic glucose output, and basal exists to cancel
+that output, so when basal is correct glucose is flat and the raw ratio returns
+zero. That is a correct basal rate rather than a sensitivity of zero. Both halves
+are therefore taken as departures from what that person usually does at that time
+of day: how much further glucose moved than usual, over how much more insulin
+acted than usual.
+
+That gives 1,408,861 readings from 1,004 people.
+
+![Measured sensitivity against both equations at the same reading](../charts/inv009/fig_pointwise.png)
+
+| Glucose at lookback start | Measured | v1 calculates | v2 calculates |
+|---|---|---|---|
+| 70 to 100 mg/dL | -0.0 | 72.9 | 791.5 |
+| 100 to 120 | -1.5 | 58.7 | 261.5 |
+| 120 to 150 | 1.8 | 49.1 | 158.2 |
+| 150 to 190 | 11.3 | 40.5 | 100.3 |
+| 190 to 250 | 21.1 | 33.8 | 70.4 |
+| 250 to 400 | 26.9 | 30.5 | 58.0 |
+
+The measured column rises across the range while both calculated columns fall,
+which is the third method to return that reversal and the first to do it without
+fitting anything.
+
+The level is not readable from this. A ratio of two noisy quantities has a median
+biased toward zero, and the noise in a six hour glucose change is large against
+the signal from a fraction of a unit, so the measured column understates. The
+exponent does survive it, and there is a check available: running the same
+recovery on the values v1 and v2 themselves produce returns their own built-in
+exponents.
+
+| Series | Recovered dose exponent | Built in |
+|---|---|---|
+| Measured sensitivity | -0.843 (95% CI -0.970 to -0.720) | not applicable |
+| v1's own output | -1.026 | -1 |
+| v2's own output | -2.085 | -2 |
+
+The recovery is accurate to within about 0.03 on quantities whose exponents are
+known, and on the measurement it returns -0.843. That sits on the -0.83 obtained
+between people by regression, from an estimator sharing none of its assumptions.
+
+Across all readings, v1 sits at 2.49 times the measured value and lands within
+30% of it 16% of the time. v2 sits at 5.61 times and lands within 30% 9% of the
+time.
+
 ## Physiology, or carbohydrate the model has not caught?
 
 Both explanations predict the same observation. If sensitivity genuinely falls
@@ -604,6 +665,7 @@ python3 -m inv009.tdd_axis && python3 -m inv009.glucose_axis
 python3 -m inv009.head_to_head && python3 -m inv009.synthetic
 python3 -m inv009.loop_model_infer && python3 -m inv009.ml_shap
 python3 -m inv009.carb_hypothesis && python3 -m inv009.joint_surface
+python3 -m inv009.pointwise_isf
 python3 -m inv009.figures
 ```
 
