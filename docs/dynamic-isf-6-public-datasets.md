@@ -7,8 +7,21 @@ date: "25 August 2026"
 
 ## Summary
 
-Sensitivity does fall as total daily dose rises. The relationship appears in four
-independent measurements, one of which was free to find no relationship at all.
+The question underneath both equations is whether the effect they encode is a
+property of insulin action or an artefact of carbohydrate the absorption model
+has not fully accounted for. The two halves of the equations answer differently.
+
+The dose relationship is largely real. It appears in four independent
+measurements, one of which was free to find no relationship at all, and holding
+recent carbohydrate intake constant retains 83% of it.
+
+The glucose relationship is smaller than either equation assumes and is
+substantially inflated by carbohydrate. Within four hours of a recorded meal,
+measured sensitivity is negative, meaning insulin appears to achieve nothing
+because glucose is still arriving from the gut. The apparent glucose dependence
+in that window is roughly three times its value in clean fasting. Some
+dependence survives the exclusion of meals, so carbohydrate does not account for
+all of it, and what survives does not improve prediction.
 
 The exponent is the point at issue between the two equations. Settings people had
 entered scale with daily dose at a slope of -0.979 (95% CI -1.030 to -0.934),
@@ -256,12 +269,29 @@ quantity implying that sensitivity itself moved.
 
 Two results follow.
 
-Pooled across 1,528 people the exponent is -2.67, and its sign is opposite to what
-both equations assume: net sensitivity rises with glucose. Approximately 40% of
-people show the direction the equations assume. This agrees with the earlier
-finding on looping data, where the reasoning is set out at length. In short, the
-effect the equations are reaching for competes against clearance that rises with
-glucose and against counter-regulation near target.
+Pooled across 973 people the exponent is +0.238 (SE 0.044), in the direction both
+equations assume, with 54% of people showing that sign. Its magnitude is well
+below what either encodes. Over the range 100 to 200 mg/dL, v1's scaler
+corresponds to an exponent near +0.62 and v2's to one near +1.77, so the measured
+value is around two fifths of v1 and an eighth of v2.
+
+That figure is sensitive to the glucose range it is measured over, and the
+sensitivity is larger than the quantity being measured. Restricting to windows
+starting between 120 and 220 mg/dL, which excludes those beginning near target,
+raises the pooled exponent to approximately +1.0. Near target the body opposes a
+further fall, so those windows read as high sensitivity at low glucose and pull
+the exponent down. Any value quoted for a glucose exponent has to carry the range
+it came from, which is a caution that applies to the earlier literature as much
+as to this analysis.
+
+An earlier draft of this document reported -2.67 for this quantity. That was an
+indexing defect: the interaction term had been inserted ahead of the insulin
+coefficient in the design matrix while the coefficient was still read from a
+fixed position, so the interaction was divided by the starting glucose term. The
+error was found when a second implementation, written for the carbohydrate tests
+below, disagreed on the sign. Design matrix columns are now addressed by name and
+a regression test covers it. The shape comparison below uses a separate code path
+and was unaffected.
 
 The practical result is more useful.
 
@@ -272,6 +302,98 @@ each other and the flat shape ranks first. Both equations' scalers rank in the
 lower half. The threshold set before running this analysis was an improvement of
 0.5 mg/dL before a glucose term could be said to earn its place. The largest
 observed improvement was under a tenth of that.
+
+## Physiology, or carbohydrate the model has not caught?
+
+Both explanations predict the same observation. If sensitivity genuinely falls
+when glucose is high and when recent dose is large, the equations describe
+something real. If instead carbohydrate from a recent meal is still absorbing and
+unaccounted for, glucose is high for that reason, insulin appears to achieve less
+than it should, and recent dose is large because the person ate. The measurement
+is identical and the implication is not.
+
+Loop and REPLACE-BG recorded what people ate, so time since the last meal is
+known rather than inferred. That allows three tests, each with a prediction that
+differs between the two explanations.
+
+### Sensitivity against time since the last meal
+
+![Measured sensitivity by time since the last meal](../charts/inv009/fig_carb_tail.png)
+
+Within four hours of a recorded meal the median measured sensitivity is -1.62
+mg/dL per unit. A negative value is not a physiological quantity. It states that
+glucose rose while insulin acted, which is what happens when carbohydrate is
+still arriving from a meal the absorption model has already discounted. The
+figure recovers to 6.06 mg/dL per unit in the six to nine hour band and declines
+again beyond that.
+
+This is the absorption tail, measured directly, and it is large. It is also the
+reason the main screen requires six hours of clearance.
+
+### The apparent glucose dependence against the same axis
+
+![Apparent glucose dependence by time since the last meal](../charts/inv009/fig_carb_glucose.png)
+
+Under the carbohydrate explanation the apparent glucose dependence is strongest
+close to a meal and decays as absorption completes. Under the physiological
+explanation it is constant, because a person's sensitivity does not know when
+they last ate.
+
+| Time since last meal | Exponent, glucose 90 to 300 | Exponent, glucose 120 to 220 |
+|---|---|---|
+| Under 4 hours | +0.58 | +1.57 |
+| 4 to 6 hours | +0.28 | +0.98 |
+| 6 to 9 hours | +0.19 | +1.01 |
+| 9 to 14 hours | +0.69 | +1.24 |
+| Over 14 hours | +0.72 | +1.13 |
+| v1's scaler implies | +0.62 | +0.62 |
+| v2's scaler implies | +1.77 | +1.77 |
+
+Close to a meal the exponent is roughly three times its value in clean fasting on
+the wider range, and around 55% larger on the narrower one. That part of the
+effect is carbohydrate.
+
+It does not fall to zero. In the cleanest band the exponent remains positive and
+statistically distinguishable from zero, so carbohydrate does not account for all
+of the glucose dependence on this evidence.
+
+The rise beyond nine hours has no explanation I am confident of. Windows more than
+fourteen hours clear of a recorded meal show a median of zero grams across the
+whole preceding day while carrying the second highest insulin on board of any
+band, which indicates food that was eaten and not recorded. Restricting to nights
+where the day's intake was recorded removes most of those windows and leaves the
+exponent unchanged at +0.82, so unrecorded food does not appear to be the
+explanation. It is reported here as an open question rather than resolved.
+
+### The dose relationship with recent carbohydrate held constant
+
+A person whose recent dose is high has usually been eating, so the dose
+relationship could be the same artefact wearing different clothes. Adding grams
+recorded in the preceding 8 and 24 hours to the model, both directly and
+interacted with insulin action, tests that.
+
+| Cohort | Unadjusted | With carbohydrate held constant | Retained |
+|---|---|---|---|
+| Loop | -0.586 (SE 0.040) | -0.500 (SE 0.047) | 85% |
+| REPLACE-BG | -1.443 (SE 0.186) | -0.978 (SE 0.180) | 68% |
+| Pooled | -0.648 (SE 0.040) | -0.539 (SE 0.045) | 83% |
+
+Most of the dose relationship survives. Carbohydrate accounts for roughly a
+sixth of it in Loop and around a third in REPLACE-BG, and the remainder is not
+explained by what people ate.
+
+### What the three tests support
+
+The dose half of the equations describes something that is mostly not
+carbohydrate. The glucose half is contaminated by carbohydrate to a degree that
+depends on how recently the person ate, is smaller than either equation encodes
+once meals are excluded, and varies by more than its own magnitude according to
+the glucose range it is measured over.
+
+A fourth comparison, between cohorts that recorded meals and cohorts that did
+not, returned no consistent pattern and is not evidence either way. The cohorts
+differ in controller, in age and in dose alongside their record keeping, so the
+comparison was never well identified.
 
 ## Predicting the overnight fall
 
@@ -346,12 +468,12 @@ is close to chance, and for the youngest cohort it falls below it. Those cohorts
 replicate a direction rather than establishing one. The open-loop cohort and the
 entered settings carry the argument.
 
-The analysis is confined to overnight fasting windows. It says nothing about the
-postprandial hours, which is where a glucose term might still earn its place, and
-where carbohydrate the absorption model has not fully accounted for remains a
-viable alternative explanation for anything resembling a shift in sensitivity.
-That question strikes me as the more interesting one, and this work cannot answer
-it.
+The analysis is confined to overnight fasting windows, so the carbohydrate tests
+above reach only into the tail of a meal rather than across the meal itself. The
+first four hours after eating are measured here and show sensitivity going
+negative, which bounds the size of the effect but does not model it. A proper
+treatment of the postprandial hours would need the absorption model itself under
+examination, which this work does not attempt.
 
 Sensitivity varying with the day rather than with the dose falls outside this
 scope. Exercise, illness and a change in diet all move sensitivity over hours and
@@ -388,12 +510,20 @@ archives never collected for this purpose. Work approaching the question by
 another route would be welcome, and the equations under examination advanced the
 discussion that this analysis rests on.
 
+On the question these equations exist to answer, the two halves separate. A dose
+term describes something real: it survives holding recent carbohydrate constant,
+and it appears in a model given no functional form to fit. A glucose term
+describes something largely, though not entirely, attributable to carbohydrate
+still absorbing, and what remains of it after meals are excluded improved
+prediction by 0.00 mg/dL against a flat sensitivity.
+
 Where a dose term is wanted, these data support an exponent between roughly -0.65
 and -1.0, applied to a person's own level rather than used to set it. Given that a
 static 1800 rule out-predicted every dynamic form tested, the question I am left
-with concerns not the exponent but the placement: whether the sensitivity factor
-is the appropriate location for this adjustment, and whether the same effort would
-return more on the carbohydrate side, where the residual is larger.
+with concerns the placement rather than the exponent. Sensitivity is where these
+equations put the adjustment. The measurement that most needs it, on this
+evidence, is what a meal is still doing four hours after it was recorded, which
+is a carbohydrate absorption question wearing a sensitivity label.
 
 ## Reproduction
 
@@ -408,7 +538,7 @@ python3 -m inv009.entered_isf && python3 -m inv009.effective_isf
 python3 -m inv009.tdd_axis && python3 -m inv009.glucose_axis
 python3 -m inv009.head_to_head && python3 -m inv009.synthetic
 python3 -m inv009.loop_model_infer && python3 -m inv009.ml_shap
-python3 -m inv009.figures
+python3 -m inv009.carb_hypothesis && python3 -m inv009.figures
 ```
 
 Windows run four hours from starts between 23:00 and 03:00, requiring 80% sensor

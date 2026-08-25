@@ -49,14 +49,25 @@ def shapes(bg: np.ndarray, tdd: np.ndarray) -> dict[str, np.ndarray]:
 
 
 def _design(d: pd.DataFrame, extra: np.ndarray | None = None):
-    cols = [np.ones(len(d)), d.a_pre.to_numpy(float),
-            d.bg0.to_numpy() - 100.0, d.pre_slope.to_numpy(float),
-            d.bg_m60.to_numpy() - 100.0, d.bg_m120.to_numpy() - 100.0]
+    """Design matrix, returned with a name to column index map.
+
+    The map is not decoration. An earlier version inserted the interaction in the
+    middle of a positional list and then read the insulin coefficient from a
+    fixed index, which after the insert was the starting glucose coefficient.
+    The reported exponent was the interaction divided by the wrong term, and it
+    came out with the wrong sign. Columns are named here so that cannot recur.
+    """
+    named = [("const", np.ones(len(d))), ("a_pre", d.a_pre.to_numpy(float))]
     if extra is not None:
-        cols.insert(2, extra)
+        named.append(("interaction", extra))
+    named += [("bg0", d.bg0.to_numpy() - 100.0),
+              ("pre_slope", d.pre_slope.to_numpy(float)),
+              ("bg_m60", d.bg_m60.to_numpy() - 100.0),
+              ("bg_m120", d.bg_m120.to_numpy() - 100.0)]
     for hh in sorted(d.hour.unique())[1:]:
-        cols.append((d.hour == hh).to_numpy(float))
-    return np.column_stack(cols)
+        named.append((f"hour_{hh}", (d.hour == hh).to_numpy(float)))
+    idx = {n: i for i, (n, _) in enumerate(named)}
+    return np.column_stack([v for _, v in named]), idx
 
 
 def linearised_k(study: str) -> pd.DataFrame:
@@ -78,7 +89,7 @@ def linearised_k(study: str) -> pd.DataFrame:
         if len(d) < config.MIN_WINDOWS or d.a_pre.std() < config.MIN_A_SD:
             continue
         inter = d.a_pre.to_numpy(float) * d.logr.to_numpy(float)
-        X = _design(d, extra=inter)
+        X, idx = _design(d, extra=inter)
         y = d["drop"].to_numpy(float)
         xtx = np.linalg.pinv(X.T @ X)
         beta = xtx @ (X.T @ y)
@@ -86,11 +97,12 @@ def linearised_k(study: str) -> pd.DataFrame:
         n, kk = X.shape
         meat = (X * (resid ** 2)[:, None]).T @ X
         cov = xtx @ meat @ xtx * (n / max(n - kk, 1))
-        s, c = float(beta[3]), float(beta[2])   # a_pre sits after the inserted interaction
+        ia, ii = idx["a_pre"], idx["interaction"]
+        s, c = float(beta[ia]), float(beta[ii])
         if s <= 0:
             continue
         rows.append(dict(subject_id=sid, study=study, n=int(n), s=s, c=c,
-                         k=c / s, se_k=float(np.sqrt(max(cov[2, 2], 0))) / s,
+                         k=c / s, se_k=float(np.sqrt(max(cov[ii, ii], 0))) / s,
                          tdd_u=d.tdd_u.iloc[0]))
     return pd.DataFrame(rows)
 
@@ -116,12 +128,13 @@ def shape_contest(study: str, folds: int = 5) -> pd.DataFrame:
         # Built once over the whole subject, then split by row. Building it inside
         # the fold would give train and test different hour dummies and different
         # widths whenever a fold happens to miss an hour.
-        X_full = _design(d)
+        X_full, idx_full = _design(d)
+        ia_full = idx_full["a_pre"]
         a = d.a_pre.to_numpy(float)
         y = d["drop"].to_numpy(float)
         for name, g in sh.items():
             X = X_full.copy()
-            X[:, 1] = a * g
+            X[:, ia_full] = a * g
             err = []
             for f in range(folds):
                 tr, te = block != f, block == f
