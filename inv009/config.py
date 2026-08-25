@@ -49,7 +49,14 @@ BG_FLOOR_IN_WINDOW = 70.0
 
 MIN_WINDOWS = 40                # per subject, to enter per-subject statistics
 MIN_DAYS_TDD = 30               # per subject, to have a trustworthy daily dose
-MIN_A_SD = 0.3                  # within-subject spread of acting insulin, in units
+# A floor on the within-subject spread of acting insulin, only to keep a slope
+# from being read off no variation at all. It is deliberately tiny and NOT a
+# quality bar: a threshold of a third of a unit sounds reasonable and quietly
+# excludes small children, whose whole daily dose is ten units, which would be
+# selection on the very axis this investigation measures. Precision is handled
+# where it belongs, by weighting each subject by the standard error of their own
+# slope.
+MIN_A_SD = 0.05
 
 # Isolated correction boluses, for the difference-in-differences estimator.
 EVENT_MIN_U = 0.3               # smaller than this moves nothing measurable

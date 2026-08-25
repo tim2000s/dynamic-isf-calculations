@@ -1,0 +1,141 @@
+{
+  "specs": [
+    "pre",
+    "total",
+    "net_pre"
+  ],
+  "by_study": [
+    {
+      "study": "DCLP3",
+      "label": "DCLP3 (Control-IQ)",
+      "closed_loop": true,
+      "n": 112,
+      "median_pre": 0.9848719717470544,
+      "frac_positive_pre": 0.5446428571428571,
+      "n_pre": 112,
+      "median_total": -7.384990187461327,
+      "frac_positive_total": 0.09821428571428571,
+      "n_total": 112,
+      "median_net_pre": 0.589608176698043,
+      "frac_positive_net_pre": 0.5535714285714286,
+      "n_net_pre": 112,
+      "event_n": 175,
+      "event_subjects": 78,
+      "event_isf_median": -0.24660442841657645,
+      "event_isf_ci": [
+        -21.365739531784072,
+        17.89820917159488
+      ]
+    },
+    {
+      "study": "DCLP5",
+      "label": "DCLP5 (Control-IQ, 6-13y)",
+      "closed_loop": true,
+      "n": 100,
+      "median_pre": 0.8301278682693578,
+      "frac_positive_pre": 0.53,
+      "n_pre": 100,
+      "median_total": -8.030997736484323,
+      "frac_positive_total": 0.26,
+      "n_total": 100,
+      "median_net_pre": 0.5965483961249234,
+      "frac_positive_net_pre": 0.52,
+      "n_net_pre": 100,
+      "event_n": 95,
+      "event_subjects": 41,
+      "event_isf_median": 3.701786055600018,
+      "event_isf_ci": [
+        -16.848667862374533,
+        26.96327986493869
+      ]
+    },
+    {
+      "study": "IOBP2",
+      "label": "IOBP2 (bionic pancreas)",
+      "closed_loop": true,
+      "n": 334,
+      "median_pre": 1.9885572327266487,
+      "frac_positive_pre": 0.688622754491018,
+      "n_pre": 334,
+      "median_total": -0.18243104754214823,
+      "frac_positive_total": 0.47604790419161674,
+      "n_total": 334,
+      "median_net_pre": 2.069995983713042,
+      "frac_positive_net_pre": 0.7125748502994012,
+      "n_net_pre": 334,
+      "event_n": 2,
+      "event_subjects": 1,
+      "event_isf_median": -12.200479552220282,
+      "event_isf_ci": [
+        -15.427103357371497,
+        -8.973855747069067
+      ]
+    },
+    {
+      "study": "Loop",
+      "label": "Loop (DIY)",
+      "closed_loop": true,
+      "n": 838,
+      "median_pre": 5.368063317586092,
+      "frac_positive_pre": 0.8063337393422655,
+      "n_pre": 821,
+      "median_total": -2.149989673690378,
+      "frac_positive_total": 0.31303288672350793,
+      "n_total": 821,
+      "median_net_pre": 3.9151855316948456,
+      "frac_positive_net_pre": 0.7746650426309378,
+      "n_net_pre": 821,
+      "event_n": 885,
+      "event_subjects": 373,
+      "event_isf_median": 1.1465094954262343,
+      "event_isf_ci": [
+        -14.748696277878977,
+        23.226037236190667
+      ]
+    },
+    {
+      "study": "PEDAP",
+      "label": "PEDAP (Control-IQ, 2-5y)",
+      "closed_loop": true,
+      "n": 98,
+      "median_pre": -2.317742386596734,
+      "frac_positive_pre": 0.4489795918367347,
+      "n_pre": 98,
+      "median_total": -23.305249129402313,
+      "frac_positive_total": 0.08163265306122448,
+      "n_total": 98,
+      "median_net_pre": -1.990747522824897,
+      "frac_positive_net_pre": 0.4489795918367347,
+      "n_net_pre": 98,
+      "event_n": 98,
+      "event_subjects": 38,
+      "event_isf_median": 0.2919068973822141,
+      "event_isf_ci": [
+        -57.33914859903417,
+        22.537859769681543
+      ]
+    },
+    {
+      "study": "ReplaceBG",
+      "label": "REPLACE-BG (open loop)",
+      "closed_loop": false,
+      "n": 196,
+      "median_pre": 5.017527545149324,
+      "frac_positive_pre": 0.711340206185567,
+      "n_pre": 194,
+      "median_total": 5.694179372180628,
+      "frac_positive_total": 0.7835051546391752,
+      "n_total": 194,
+      "median_net_pre": 3.877778340857816,
+      "frac_positive_net_pre": 0.6735751295336787,
+      "n_net_pre": 193,
+      "event_n": 519,
+      "event_subjects": 138,
+      "event_isf_median": 12.93639523371695,
+      "event_isf_ci": [
+        -4.9551143016799895,
+        38.99576275683133
+      ]
+    }
+  ]
+}
