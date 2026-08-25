@@ -104,20 +104,51 @@ def analyse(job):
         if not np.isfinite(max_daily_basal) or max_daily_basal <= 0.05:
             return None
 
-        # Units acting in each bin, from every dose contributing to it.
+        # Units acting in each bin, from insulin NET OF SCHEDULED BASAL.
+        #
+        # This is the part that has to be right. AAPS builds insulin on board
+        # from boluses and from the difference between a temp basal and the
+        # profile, so somebody running on their own schedule contributes zero.
+        # Using total delivery instead makes bgi permanently negative, every
+        # deviation permanently positive, and autosens permanently pinned at its
+        # resistant ceiling, which is what a first version of this did.
         kern = M.kernel(MODEL)
         act_kern = -np.diff(np.append(kern, 0.0))
-        acting = np.convolve(total, act_kern)[:n]
+        sched = g.sched_u.to_numpy(float)
+        if not np.isfinite(sched).any():
+            # DCLP5 and PEDAP record the programmed schedule at each visit, so
+            # use it rather than a proxy. Under a controller that modulates basal
+            # heavily, the person's median delivery is not their schedule, and
+            # taking it for one leaves autosens pinned at its ceiling.
+            hh = db.basal_schedule(subject_id)
+            if hh is not None and np.isfinite(hh).any():
+                slot = (g.ts.dt.hour * 2 + g.ts.dt.minute // 30).to_numpy()
+                rate = np.where(np.isfinite(hh), hh, np.nanmedian(hh))[slot]
+                sched = rate * (BIN / 60.0)          # U/h to units per bin
+            else:
+                sched = action.reference_profile(g.ts, total)
+        net = total - np.nan_to_num(sched)
+        acting = np.convolve(net, act_kern)[:n]
 
-        # deviation = what glucose did, minus what the insulin should have done.
+        # deviation = what glucose did, minus what that insulin should have done.
         dev = np.full(n, np.nan)
         dev[:-1] = (cgm[1:] - cgm[:-1]) + acting[:-1] * sens_ref
 
-        # AAPS marks a deviation invalid while carbohydrate is still absorbing.
+        # AAPS marks a deviation invalid while carbohydrate is still absorbing,
+        # which its own carbohydrate model tells it. These archives mostly do not
+        # record meals, and without an exclusion every meal reads as resistance:
+        # four of the six cohorts sat pinned at the autosens ceiling until this
+        # was added. Where meals are recorded they are used directly. Where they
+        # are not, a bolus large against that person's own daily total stands in,
+        # which is the same proxy the window screening uses.
+        win = int(CARB_ABSORPTION_H * 60 / BIN)
         if (carbs > 0).any():
-            absorbing = pd.Series((carbs > 0).astype(float)).rolling(
-                int(CARB_ABSORPTION_H * 60 / BIN), min_periods=1).max().to_numpy() > 0
-            dev = np.where(absorbing, np.nan, dev)
+            meal = (carbs > 0).astype(float)
+        else:
+            thr = config.MEAL_BOLUS_FRAC_TDD * subj["tdd_u"]
+            meal = (g.bolus_u.to_numpy(float) >= thr).astype(float)
+        absorbing = pd.Series(meal).rolling(win, min_periods=1).max().to_numpy() > 0
+        dev = np.where(absorbing, np.nan, dev)
 
         # oref1 only: a positive deviation below 80 mg/dL is not treated as resistance.
         dev_oref1 = np.where((cgm < 80) & (dev > 0), 0.0, dev)
@@ -249,12 +280,25 @@ def main() -> int:
         tr, te = d.iloc[:n_tr], d.iloc[n_tr:]
         rec = {"subject_id": sid, "study": d.study.iloc[0], "n": len(d)}
 
+        # One scale factor per person, fitted on the training half only, so a
+        # detector is not rewarded for happening to compensate a base that was
+        # never calibrated. Without it the winner is whichever detector saturates
+        # hardest in the direction the base was wrong.
+        a_tr = tr.a_pre.to_numpy(float)
+        y_tr = tr["drop"].to_numpy(float)
+        x_tr = tr.base_isf.to_numpy(float) * a_tr
+        den = float(np.sum((x_tr - x_tr.mean()) ** 2))
+        cal = (float(np.sum((x_tr - x_tr.mean()) * (y_tr - y_tr.mean()))) / den
+               if den > 0 else 1.0)
+        cal = float(np.clip(cal, 0.05, 5.0))
+        rec["calibration"] = cal
+
         def score(ratio_all):
             r_tr = ratio_all[:n_tr]
             r_te = ratio_all[n_tr:]
-            p_tr = (tr.base_isf.to_numpy(float) / r_tr) * tr.a_pre.to_numpy(float)
+            p_tr = (cal * tr.base_isf.to_numpy(float) / r_tr) * tr.a_pre.to_numpy(float)
             off = float(np.mean(tr["drop"].to_numpy(float) - p_tr))
-            p_te = (te.base_isf.to_numpy(float) / r_te) * te.a_pre.to_numpy(float)
+            p_te = (cal * te.base_isf.to_numpy(float) / r_te) * te.a_pre.to_numpy(float)
             return float(np.median(np.abs(te["drop"].to_numpy(float) - (p_te + off))))
 
         rec["static"] = score(np.ones(len(d)))
@@ -272,7 +316,8 @@ def main() -> int:
     R = pd.DataFrame(rows)
     R.to_parquet(config.RESULTS / "inv009_detector_scores.parquet", index=False)
 
-    cols = [c for c in R.columns if c not in ("subject_id", "study", "n")]
+    # calibration is the per-person scale factor, not a detector score.
+    cols = [c for c in R.columns if c not in ("subject_id", "study", "n", "calibration")]
     med = {c: float(R[c].median()) for c in cols}
     base = med["static"]
     print(f"\n{len(R)} people scored. Error in the predicted overnight fall, mg/dL.\n")
