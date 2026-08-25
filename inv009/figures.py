@@ -416,6 +416,47 @@ def fig_pointwise(out):
     fig.tight_layout(); fig.savefig(out, bbox_inches="tight"); plt.close(fig)
 
 
+def fig_detectors(out):
+    """Sensitivity detectors, the ones AndroidAPS ships against alternatives."""
+    r = json.loads((config.RESULTS / "inv009_detectors.json").read_text())
+    med, base = r["medians"], r["medians"]["static"]
+    shipped = set(r["shipped"]) | {f"{x}_wide" for x in r["shipped"]}
+    names = {"aaps24": "AAPS median, 24 h", "aaps8": "AAPS median, 8 h",
+             "oref1_24": "oref1, 24 h", "oref1_8": "oref1, 8 h",
+             "wavg24": "weighted average, 24 h",
+             "kalman3": "variance weighted", "ewma1": "nightly, 1 night",
+             "ewma3": "nightly, 3 nights", "ewma7": "nightly, 7 nights"}
+
+    def label(k):
+        if k == "static":
+            return "no adjustment"
+        wide = k.endswith("_wide") or "0.5-1.5" in k
+        stem = k.replace("_wide", "").split("_0.")[0]
+        return f"{names.get(stem, stem)}  ({'0.5 to 1.5' if wide else '0.7 to 1.2'})"
+
+    items = [(k, base - v) for k, v in med.items() if k != "static"]
+    items.sort(key=lambda kv: kv[1])
+    fig, ax = plt.subplots(figsize=(7.6, 6.0))
+    y = np.arange(len(items))
+    for yi, (k, gain) in zip(y, items):
+        col = C1 if k in shipped else C2
+        ax.barh(yi, gain, height=0.68, color=col, zorder=3)
+        ax.text(gain + 0.05, yi, f"{gain:.2f}", va="center", fontsize=7.5, color=INK)
+    ax.set_yticks(y)
+    ax.set_yticklabels([label(k) for k, _ in items], fontsize=8)
+    ax.set_xlabel("improvement over a sensitivity that never moves (mg/dL)")
+    ax.set_xlim(0, max(g for _, g in items) * 1.14)
+    ax.text(0.98, 0.05, "shipped in AndroidAPS", transform=ax.transAxes, ha="right",
+            fontsize=8.5, color=C1, fontweight="semibold")
+    ax.text(0.98, 0.02, "alternatives tested here", transform=ax.transAxes, ha="right",
+            fontsize=8.5, color=C2, fontweight="semibold")
+    ax.set_title("The detector AndroidAPS already ships wins. Its clamp is what holds it back.",
+                 pad=10)
+    _despine(ax, keep=("bottom",))
+    ax.tick_params(axis="y", length=0)
+    fig.tight_layout(); fig.savefig(out, bbox_inches="tight"); plt.close(fig)
+
+
 def main() -> int:
     config.ensure_dirs()
     res_tdd = json.loads((config.RESULTS / "inv009_tdd_axis.json").read_text())
@@ -432,6 +473,7 @@ def main() -> int:
         ("fig_glucose_profile.png", fig_glucose_profile),
         ("fig_surface.png", fig_surface),
         ("fig_pointwise.png", fig_pointwise),
+        ("fig_detectors.png", fig_detectors),
     ]
     for name, fn in jobs:
         p = config.CHARTS / name
