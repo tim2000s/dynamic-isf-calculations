@@ -9,6 +9,16 @@
   "spearman_p": 0.6790129273681406,
   "frac_closer_after": 0.6458333333333334,
   "wilcoxon_p": 0.003654448460960414,
+  "saturation_test": {
+    "n": 48,
+    "ceiling_before_raised": 0.14840169854552698,
+    "ceiling_before_lowered": 0.08763213405384906,
+    "floor_before_raised": 0.0,
+    "floor_before_lowered": 0.0,
+    "mannwhitney_p": 0.5552260353444001,
+    "spearman": -0.009639259264520495,
+    "spearman_p": 0.9481550235169174
+  },
   "min_change": 0.1,
   "window_days": 10
 }
