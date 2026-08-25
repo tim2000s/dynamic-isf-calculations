@@ -9,22 +9,26 @@ date: "25 August 2026"
 
 A pump holds one number that decides how hard it corrects: how far one unit of
 insulin moves glucose. Most people arrive at it from the 1800 rule, which divides
-1800 by total daily dose, then adjust it when corrections land too hard or too
-soft.
+1800 by total daily dose, TDD from here on, then adjust it when corrections land
+too hard or too soft.
+
+Dose and TDD are separate things throughout what follows. A dose is one delivery,
+a bolus or a basal increment. TDD is the total across a day, and it is what both
+equations key on.
 
 Dynamic ISF replaces that fixed number with a calculated one. The algorithm works
 out a fresh sensitivity every few minutes from how much insulin the person has
 been using and where their glucose sits.
 
-Two versions exist and they disagree about how much the daily dose should count.
-The original, v1, keeps the 1800 rule's shape. Double the daily dose and
-sensitivity halves. The revised version, v2, squares the dose term. Double the
-daily dose and sensitivity falls to a quarter.
+Two versions exist and they disagree about how much TDD should count.
+The original, v1, keeps the 1800 rule's shape. Double the TDD and
+sensitivity halves. The revised version, v2, squares the TDD term. Double the
+TDD and sensitivity falls to a quarter.
 
 Compare somebody on 20 units a day with somebody on 60. v1 makes the second
 person's corrections three times smaller per unit. v2 makes them nine times
-smaller. The two cross near 64 units a day, so a person's dose decides whether
-the newer maths corrects them harder or softer than the older one.
+smaller. The two cross near 64 units a day, so a person's TDD decides whether the
+newer maths corrects them harder or softer than the older one.
 
 Both versions also cut sensitivity when glucose runs high, on the reasoning that
 insulin works less well up there.
@@ -33,9 +37,8 @@ I tested all of it against seven public study archives.
 
 ## What the archives show
 
-Daily dose changes sensitivity, close to the way v1 says. Sensitivity falls as
-dose rises, at an exponent near the one the 1800 rule assumes and a little
-shallower. Four methods agree, and one of them could have found nothing.
+TDD changes sensitivity, close to the way v1 says. Sensitivity falls as TDD
+rises, at an exponent near the one the 1800 rule assumes and a little shallower. Four methods agree, and one of them could have found nothing.
 
 Glucose changes sensitivity too, in the direction opposite to both equations.
 They make insulin work best near target and worst when glucose is high. It works
@@ -43,7 +46,7 @@ worst near target, where the body defends against a further fall, and slightly
 better when glucose is high.
 
 The two axes do not multiply the way both equations multiply them. Each treats
-the glucose term as the same whatever the dose. It is not.
+the glucose term as the same whatever the TDD. It is not.
 
 Food explains a real share of what the glucose term picks up. For four hours
 after a logged meal, measured sensitivity turns negative: glucose climbs while
@@ -55,12 +58,12 @@ missed by four times as much as anything else on the list.
 
 ## What that means for somebody running one
 
-Running v1, the dose half holds up. The glucose half points the wrong way but
+Running v1, the TDD half holds up. The glucose half points the wrong way but
 stays small enough to cost little.
 
-Running v2, nothing here supports the squared dose term. It never beat the
-alternatives for a single person out of 1,626, and it fails hardest at small
-doses. Squaring the dose hands a child on ten units a day a sensitivity of
+Running v2, nothing here supports the squared TDD term. It never beat the
+alternatives for a single person out of 1,626, and it fails hardest at low TDD.
+Squaring the TDD hands a child on ten units a day a sensitivity of
 several thousand, which turns a correction into almost nothing.
 
 Running neither, the 1800 rule already in most pumps describes these archives
@@ -71,10 +74,10 @@ the rule survives this analysis in good shape.
 
 ## The archives
 
-Seven public study archives, about 1,700 people, ages 2 to 82, daily doses from 7
-to 107 units.
+Seven public study archives, about 1,700 people, ages 2 to 82, TDD from 7 to 107
+units.
 
-| Study | System in use | People | Food logged | Median days | Median dose |
+| Study | System in use | People | Food logged | Median days | Median TDD |
 |---|---|---|---|---|---|
 | Loop | Do-it-yourself Loop, fixed sensitivity | 842 | yes | 397 | 38.6 U |
 | REPLACE-BG | Pump and sensor, nothing automating | 196 | yes | 246 | 41.9 U |
@@ -146,40 +149,56 @@ the pump data and compare.
 
 Across 158 people the rebuild tracks Loop's own figure at a correlation of 0.927,
 typically within a third of a unit. Something outside my own assumptions confirms
-the dose arithmetic.
+the delivery arithmetic.
 
 Reaching it needed the basal profile, which no settings file in the archive
 holds, because Loop counts insulin on board net of scheduled basal. Every temp
 basal record turns out to carry the rate it overrode.
 
-## Does daily dose change sensitivity?
+## Does TDD change sensitivity?
 
 Yes, by close to the amount the 1800 rule assumes.
+
+### What the equations actually put in the TDD slot
+
+The name suggests a figure that holds steady across a day. What both equations
+receive does not. The blend takes a four hour window, multiplies it by three, and
+gives that a third of the weight, with the rest split between yesterday's total
+and a seven day average.
+
+Measured against each person's own true average daily total, that blended figure
+runs from 0.72 at the tenth percentile to 1.14 at the ninetieth, across 960
+people. It swings by about 41% of a daily total inside a single record.
+
+So the quantity these equations vary sensitivity on moves within the day, several
+times an hour, whatever its name suggests. The within-person exponent below
+measures exactly that: how sensitivity tracks the blended figure as it moves,
+which is what the algorithm acts on.
 
 ### What people had entered
 
 Of the 596 people with a sensitivity factor on record, 581 also have enough pump
-data for a daily dose.
+data for a TDD.
 
-![Entered sensitivity against daily dose](../charts/inv009/fig_entered_scatter.png)
+![Entered sensitivity against TDD](../charts/inv009/fig_entered_scatter.png)
 
-The slope against dose is -0.979, with a 95% interval from -1.030 to -0.934. An
+The slope against TDD is -0.979, with a 95% interval from -1.030 to -0.934. An
 exponent of -1 is the 1800 rule, so that interval sits on it.
 
-Multiplying each person's sensitivity by their daily dose gives a median of 2067.
-v1 works out to 2139. If the rule holds, that product should not drift with dose.
+Multiplying each person's sensitivity by their TDD gives a median of 2067.
+v1 works out to 2139. If the rule holds, that product should not drift with TDD.
 It does not: the two correlate at +0.024. The same test on v2's squared version
 returns +0.859, which is a rule failing across the whole range.
 
 One caveat belongs here rather than in a footnote. An entered setting records a
 decision, not a measurement, and most people reach it through the 1800 rule.
-Finding that people sit on 1800 over dose partly measures how far that rule
+Finding that people sit on 1800 over TDD partly measures how far that rule
 reaches into practice.
 
 The circle does not close the other way. Nothing in practice pushes anyone
 towards a squared law, and nothing people run looks like one.
 
-Carb ratios follow more loosely. Multiplying each carb ratio by daily dose gives
+Carb ratios follow more loosely. Multiplying each carb ratio by TDD gives
 a median of 411, so the 500 rule describes practice less tightly.
 
 ### What glucose actually did
@@ -191,7 +210,7 @@ several times an hour, it comes to -0.645 across 1,313 people, standard error
 
 ![Exponents measured by each method](../charts/inv009/fig_exponents.png)
 
-An exponent of -1 halves sensitivity when dose doubles. An exponent of -2
+An exponent of -1 halves sensitivity when TDD doubles. An exponent of -2
 quarters it. An exponent of -0.65 multiplies it by about 0.64.
 
 Both estimates land between the square root and v1. Neither approaches v2.
@@ -229,15 +248,15 @@ the time. v2 runs five and a half times high and lands within 30% 9% of the time
 
 The three estimates above all fit a shape and read off its parameter, so each
 answer depends on the shape chosen. A gradient boosted model chooses none. Given
-687,067 stretches from 1,660 people it could find sensitivity falling with dose,
-rising with it, moving in steps, or ignoring dose entirely.
+687,067 stretches from 1,660 people it could find sensitivity falling with TDD,
+rising with it, moving in steps, or ignoring TDD entirely.
 
-What matters is how insulin action and daily dose interact, not what dose does on
-its own. Dose shifts the overnight fall for reasons unconnected to sensitivity,
+What matters is how insulin action and TDD interact, not what TDD does on its
+own. TDD shifts the overnight fall for reasons unconnected to sensitivity,
 because people on more insulin differ in other ways. Sensitivity multiplies
 insulin, so the interaction is where it lives.
 
-| Daily dose | Shift in sensitivity the model attributes to dose |
+| TDD | Shift in sensitivity the model attributes to TDD |
 |---|---|
 | 15 U | +0.28 mg/dL per unit |
 | 25 U | +0.06 |
@@ -307,12 +326,12 @@ term could earn its place. The best of them cleared under a tenth of that.
 
 No.
 
-Both multiply a dose term by a glucose term, which assumes the glucose profile
+Both multiply a TDD term by a glucose term, which assumes the glucose profile
 looks the same at 15 units a day and at 80.
 
-![Glucose profile at each dose band](../charts/inv009/fig_surface.png)
+![Glucose profile at each TDD band](../charts/inv009/fig_surface.png)
 
-| Daily dose | 90 to 120 | 120 to 150 | 150 to 190 | 190 to 300 |
+| TDD | 90 to 120 | 120 to 150 | 150 to 190 | 190 to 300 |
 |---|---|---|---|---|
 | Under 25 U | 0.81 | 1.04 | 1.15 | 1.21 |
 | 25 to 40 U | 0.53 | 0.75 | 1.14 | 1.13 |
@@ -321,18 +340,18 @@ looks the same at 15 units a day and at 80.
 
 Those rows would have to match for either equation to hold. The dip near target
 runs mild under 25 units a day and about twice as deep above it. Fitting the
-interaction directly returns -0.444, roughly half the size of the dose term.
+interaction directly returns -0.444, roughly half the size of the TDD term.
 
 One thing behaves. Comparing across people, somebody's glucose profile tracks
-their daily dose not at all, at a rank correlation of -0.017 over 971 people. The
+their TDD not at all, at a rank correlation of -0.017 over 971 people. The
 two axes tangle within a person, not between them.
 
 ## Sensitivity, or food?
 
 Both explanations predict the same measurement. Sensitivity really falling when
-glucose runs high and when recent dose runs large would mean the equations
+glucose runs high and when recent TDD runs large would mean the equations
 describe something real. Carbohydrate still absorbing after the model stops
-counting it would raise glucose, make insulin look weak, and enlarge recent dose
+counting it would raise glucose, make insulin look weak, and enlarge recent TDD
 because the person ate. The two look identical from the outside.
 
 Loop and REPLACE-BG recorded meals, so time since eating tells them apart.
@@ -355,7 +374,7 @@ glucose term responds to.
 It does not drive all of it. Well clear of a meal some glucose dependence
 remains.
 
-Dose behaves differently. Holding recent carbohydrate constant keeps 83% of it.
+TDD behaves differently. Holding recent carbohydrate constant keeps 83% of it.
 
 | Group | Before | Holding food constant | Kept |
 |---|---|---|---|
@@ -363,7 +382,7 @@ Dose behaves differently. Holding recent carbohydrate constant keeps 83% of it.
 | REPLACE-BG | -1.443 | -0.978 | 68% |
 | Together | -0.648 | -0.539 | 83% |
 
-The dose half describes something mostly real. The glucose half is substantially
+The TDD half describes something mostly real. The glucose half is substantially
 food.
 
 ## Predicting the night
@@ -381,7 +400,7 @@ it never had.
 | Best single value for that person | 34.4 |
 | v1 | 36.7 |
 | The person's own entered setting | 37.3 |
-| 355 over the square root of dose | 37.9 |
+| 355 over the square root of TDD | 37.9 |
 | v2 | 140.9 |
 
 Of 1,626 people the best candidate was a single fitted value for 638, the static
@@ -389,8 +408,8 @@ Of 1,626 people the best candidate was a single fitted value for 638, the static
 setting for 71. It was v2 for none.
 
 v2 also overshoots rather than merely scattering: it expects 41 mg/dL more fall
-than happens, at the median. Its worst ground is small doses, where its typical
-miss reaches 322 mg/dL below twenty units a day. The miss shrinks as dose climbs,
+than happens, at the median. Its worst ground is low TDD, where its typical
+miss reaches 322 mg/dL below twenty units a day. The miss shrinks as TDD climbs,
 reaching 83 mg/dL above 64 units a day, which is the crossover behaving as the
 algebra requires. Even there it misses by more than twice anything else.
 
@@ -422,7 +441,7 @@ enough to show sensitivity turning negative. Working out what a meal really does
 across those hours would put the carbohydrate absorption model itself under
 examination, which is different work and probably more useful.
 
-It says nothing about sensitivity that moves with the day rather than the dose.
+It says nothing about sensitivity that moves with the day rather than with TDD.
 Exercise, illness and a change in diet all move it over hours and days. None of
 that appears here, and none of it is being argued against.
 
@@ -439,7 +458,7 @@ working from these archives will meet both.
 
 ## Where the two equations stand
 
-v1's dose term holds up, and holds up best in the ground it came from: it
+v1's TDD term holds up, and holds up best in the ground it came from: it
 describes what people run their pumps at to within a few per cent. Against the
 glucose response it looks a touch steep, with support running between the square
 root and v1.
@@ -448,10 +467,10 @@ Its glucose term points the wrong way, as does v2's. Both make insulin most
 effective near target where the measurement makes it least effective. The term
 stays small enough to cost little.
 
-v2's squared dose term finds no support here. What people run contradicts it, what
+v2's squared TDD term finds no support here. What people run contradicts it, what
 glucose does contradicts it, it never beat the alternatives for anyone, and the
 simulation says a squared law could not have looked like anything I measured. It
-behaves worst in children and at small daily doses, where a correction that comes
+behaves worst in children and at low TDD, where a correction that comes
 out far too small does the most harm.
 
 The scope of that conclusion is narrow. It describes what a large and varied group
@@ -460,7 +479,7 @@ overnight fasting in archives collected for other purposes, and the equations
 under examination moved the discussion to where this work could begin. Another
 route into the same question would be welcome.
 
-Anyone wanting a dose term will find support here for something between about
+Anyone wanting a TDD term will find support here for something between about
 -0.65 and -1.0, applied to a person's own level rather than used to set it. But a
 plain static 1800 rule out-predicted every dynamic version tested, so the question
 I am left with is not which exponent to use. It is whether sensitivity is the
@@ -472,7 +491,7 @@ what a meal keeps doing four hours after somebody logged it.
 Windows run four hours from starts between 23:00 and 03:00. Each needs 80% sensor
 coverage, a starting glucose between 90 and 300 mg/dL, and either six hours clear
 of logged carbohydrate or, where nothing is logged, four hours clear of a bolus
-large against that person's own daily dose. Screening looks only backwards, never
+large against that person's own TDD. Screening looks only backwards, never
 at what glucose did next. Dropping the nights where glucose rose removes the
 nights insulin worked least well and inflates the result.
 
@@ -493,7 +512,7 @@ for that half hour of the day, and requires the excess insulin action to clear 0
 units so the denominator is not noise.
 
 Testing whether the axes multiply cleanly means fitting insulin action against
-glucose, against dose, and against the product, then reading the third
+glucose, against TDD, and against the product, then reading the third
 coefficient. The glucose profile is measured as a power law and, because the power
 law describes it poorly, by interacting insulin action with glucose band
 indicators, which imposes no shape.
