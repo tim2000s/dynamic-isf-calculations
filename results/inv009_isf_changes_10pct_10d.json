@@ -1,0 +1,14 @@
+{
+  "n": 48,
+  "n_raised": 18,
+  "n_lowered": 30,
+  "ratio_before_raised": 1.0410496484375256,
+  "ratio_before_lowered": 1.061080425102183,
+  "mannwhitney_p": 0.2933715860788637,
+  "spearman_change_vs_before": -0.061287716720108125,
+  "spearman_p": 0.6790129273681406,
+  "frac_closer_after": 0.6458333333333334,
+  "wilcoxon_p": 0.003654448460960414,
+  "min_change": 0.1,
+  "window_days": 10
+}
