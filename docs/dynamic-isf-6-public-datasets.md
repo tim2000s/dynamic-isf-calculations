@@ -182,6 +182,35 @@ figure blended from the last few hours and days.
 
 Both numbers sit between the square root and v1, and neither is near v2.
 
+### A second opinion that assumes no shape
+
+Every figure above comes from fitting a shape and reading off its parameter,
+which makes the answer only as good as the shape assumed. A gradient boosted
+model assumes none. Given 687,067 windows from 1,660 people it is free to find
+that sensitivity falls with dose, rises with it, moves in steps, or does not
+depend on dose at all.
+
+What has to be read from it is the interaction between insulin action and daily
+dose, not the importance of dose on its own. Dose has a large effect on how far
+glucose falls overnight that has nothing to do with sensitivity, because people
+on more insulin are different people. Sensitivity is the multiplier on insulin,
+so the interaction is where it lives.
+
+| Daily dose | Shift in sensitivity attributable to dose |
+|---|---|
+| 15 U | +0.28 mg/dL per unit |
+| 25 U | +0.06 |
+| 34 U | +0.06 |
+| 43 U | +0.02 |
+| 55 U | 0.00 |
+| 77 U | -0.04 |
+
+The profile falls monotonically, which is the relationship the equations assert,
+found without being asked for. It flattens above about forty units a day, which
+is the shape a shallow exponent makes and not the shape a steep one makes. I
+would not read the magnitudes as sensitivity itself: they are shifts around the
+model's own baseline and they carry the same attenuation as everything else here.
+
 ### The confound, and why one small cohort carries weight
 
 There is a reason to distrust all of this, and it is worth showing rather than
