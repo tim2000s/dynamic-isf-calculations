@@ -161,19 +161,32 @@ Yes, by close to the amount the 1800 rule assumes.
 
 ### What the equations actually put in the TDD slot
 
-The name suggests a figure that holds steady across a day. What both equations
-receive does not. The blend takes a four hour window, multiplies it by three, and
-gives that a third of the weight, with the rest split between yesterday's total
-and a seven day average.
+Both equations key on a figure they call a total daily dose, and the comparator
+used throughout this analysis computes it exactly as the plugins do. It is worth
+setting out, because the name suggests something steadier than what arrives.
 
-Measured against each person's own true average daily total, that blended figure
+The recent part is a weighted average across the last eight hours. The most
+recent four hours carry a weight of 1.4 and the four before that carry 0.6. Those
+weights sum to 2, so a flat eight hours gives twice a four hour total, and
+multiplying by 3 scales it to a 24 hour equivalent. Call that the eight hour
+figure.
+
+The blend then takes a third from the eight hour figure, a third from yesterday's
+total and a third from a seven day average. When the eight hour figure falls
+below 75% of the seven day average, which happens in 36.7% of the overnight
+windows here, the seven day term is replaced by a quantity derived from the eight
+hour figure itself. In those cases roughly two thirds of the blend traces back to
+the last eight hours.
+
+Measured against each person's own true average daily total, the blended figure
 runs from 0.72 at the tenth percentile to 1.14 at the ninetieth, across 960
-people. It swings by about 41% of a daily total inside a single record.
+people. It moves across about 41% of a daily total inside a single record.
 
-So the quantity these equations vary sensitivity on moves within the day, several
-times an hour, whatever its name suggests. The within-person exponent below
-measures exactly that: how sensitivity tracks the blended figure as it moves,
-which is what the algorithm acts on.
+So the quantity these equations vary sensitivity on updates several times an hour
+and leans hardest on the last eight hours, particularly overnight when delivery
+runs below a person's daily average. The within-person exponent below measures
+how sensitivity tracks that figure as it moves, which is what the algorithm acts
+on, rather than how it tracks a person's settled daily total.
 
 ### What people had entered
 
