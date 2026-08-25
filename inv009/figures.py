@@ -317,6 +317,67 @@ def fig_carb_tail(out):
     fig.tight_layout(); fig.savefig(out, bbox_inches="tight"); plt.close(fig)
 
 
+# Blue sequential ramp, light to dark, for the ordered dose bands. Dose is a
+# magnitude, so it takes one hue in steps rather than categorical slots.
+DOSE_RAMP = ["#9ec5f4", "#5598e7", "#2a78d6", "#184f95"]
+
+
+def fig_glucose_profile(out):
+    """Measured sensitivity by glucose band, against what each equation predicts."""
+    r = json.loads((config.RESULTS / "inv009_joint_surface.json").read_text())
+    bands = ["90-120", "120-150", "150-190", "190-300"]
+    measured = [r["band_profile"][b] for b in bands]
+    # Both equations evaluated at a 40 U/day dose, relative to the same reference
+    # band, which is where the printed run takes them from.
+    v1 = [1.18, 1.00, 0.87, 0.75]
+    v2 = [1.75, 1.00, 0.72, 0.54]
+    fig, ax = plt.subplots(figsize=(6.8, 4.2))
+    x = np.arange(len(bands))
+    for vals, label, col, mk, dy in ((measured, "what the data show", C1, "o", 0),
+                                     (v1, "v1 predicts", C2, "s", 0),
+                                     (v2, "v2 predicts", C3, "^", 0)):
+        ax.plot(x, vals, mk + "-", color=col, markersize=7, linewidth=2.0, zorder=4,
+                markeredgecolor="white", markeredgewidth=1.0)
+        ax.annotate(label, xy=(x[-1], vals[-1]), xytext=(8, dy),
+                    textcoords="offset points", color=col, fontsize=8.5,
+                    va="center", fontweight="semibold")
+    ax.axhline(1.0, color=MUTED, linestyle=":", linewidth=0.9, zorder=1)
+    ax.set_xticks(x); ax.set_xticklabels(bands, fontsize=8.5)
+    ax.set_xlim(-0.3, len(bands) - 0.3 + 1.4)
+    ax.set_xlabel("glucose at the start of the window (mg/dL)")
+    ax.set_ylabel("sensitivity, relative to the 120 to 150 band")
+    ax.set_title("Both equations have the glucose axis the wrong way round", pad=10)
+    _despine(ax)
+    fig.tight_layout(); fig.savefig(out, bbox_inches="tight"); plt.close(fig)
+
+
+def fig_surface(out):
+    """The glucose profile at each dose band. A separable law gives parallel lines."""
+    r = json.loads((config.RESULTS / "inv009_joint_surface.json").read_text())
+    surf = r["surface"]
+    bands = ["90-120", "120-150", "150-190", "190-300"]
+    order = ["under 25", "25-40", "40-60", "over 60"]
+    fig, ax = plt.subplots(figsize=(6.8, 4.2))
+    x = np.arange(len(bands))
+    for i, tb in enumerate(order):
+        if tb not in surf:
+            continue
+        vals = [surf[tb].get(b) for b in bands]
+        ax.plot(x, vals, "o-", color=DOSE_RAMP[i], markersize=6.5, linewidth=2.0,
+                zorder=4, markeredgecolor="white", markeredgewidth=1.0)
+        ax.annotate(f"{tb} U/day", xy=(x[-1], vals[-1]), xytext=(8, 0),
+                    textcoords="offset points", color=DOSE_RAMP[i], fontsize=8.5,
+                    va="center", fontweight="semibold")
+    ax.set_xticks(x); ax.set_xticklabels(bands, fontsize=8.5)
+    ax.set_xlim(-0.3, len(bands) - 0.3 + 1.5)
+    ax.set_xlabel("glucose at the start of the window (mg/dL)")
+    ax.set_ylabel("sensitivity, as a fraction of that person's own")
+    ax.set_title("The glucose profile changes with dose, which a separable law forbids",
+                 pad=10)
+    _despine(ax)
+    fig.tight_layout(); fig.savefig(out, bbox_inches="tight"); plt.close(fig)
+
+
 def main() -> int:
     config.ensure_dirs()
     res_tdd = json.loads((config.RESULTS / "inv009_tdd_axis.json").read_text())
@@ -330,6 +391,8 @@ def main() -> int:
         ("fig_endogeneity.png", fig_endogeneity),
         ("fig_carb_glucose.png", fig_carb_glucose),
         ("fig_carb_tail.png", fig_carb_tail),
+        ("fig_glucose_profile.png", fig_glucose_profile),
+        ("fig_surface.png", fig_surface),
     ]
     for name, fn in jobs:
         p = config.CHARTS / name

@@ -1,5 +1,5 @@
 ---
-title: "Does insulin sensitivity scale with total daily dose, and with what exponent?"
+title: "Does insulin sensitivity vary with both glucose and total daily dose, and is there a clear relationship between the three?"
 subtitle: "Both dynamic ISF equations tested against 1,684 people in seven public study archives"
 author: "Tim Street"
 date: "25 August 2026"
@@ -7,37 +7,33 @@ date: "25 August 2026"
 
 ## Summary
 
-The question underneath both equations is whether the effect they encode is a
-property of insulin action or an artefact of carbohydrate the absorption model
-has not fully accounted for. The two halves of the equations answer differently.
+The question has three parts, and they do not receive the same answer.
 
-The dose relationship is largely real. It appears in four independent
-measurements, one of which was free to find no relationship at all, and holding
-recent carbohydrate intake constant retains 83% of it.
+Dose. Sensitivity does fall as total daily dose rises. The relationship appears
+in four independent measurements, one of which was free to find no relationship
+at all, and holding recent carbohydrate intake constant retains 83% of it. The
+exponent is -0.83 between people and -0.645 within a person, against the -1 that
+v1 assumes and the -2 that v2 assumes.
 
-The glucose relationship is smaller than either equation assumes and is
-substantially inflated by carbohydrate. Within four hours of a recorded meal,
-measured sensitivity is negative, meaning insulin appears to achieve nothing
-because glucose is still arriving from the gut. The apparent glucose dependence
-in that window is roughly three times its value in clean fasting. Some
-dependence survives the exclusion of meals, so carbohydrate does not account for
-all of it, and what survives does not improve prediction.
+Glucose. Sensitivity varies with glucose, and it varies in the opposite direction
+to the one both equations encode. Measured without imposing a shape, sensitivity
+is 0.64 of its mid-range value below 120 mg/dL and rises to 1.16 by 190 to 300
+mg/dL. v1 predicts that profile running from 1.18 down to 0.75, and v2 from 1.75
+down to 0.54. Part of what remains after that correction is carbohydrate still
+absorbing: within four hours of a recorded meal, measured sensitivity is
+negative.
 
-The exponent is the point at issue between the two equations. Settings people had
-entered scale with daily dose at a slope of -0.979 (95% CI -1.030 to -0.934),
-which is the assumption v1 makes. Measured from the overnight glucose response the
-relationship is shallower: -0.83 between people (95% CI -1.23 to -0.36) and -0.645
-within a person (SE 0.033, n = 1,313). No measurement here approached the
-exponent of -2 that v2 assumes.
+The relationship between all three. Both equations multiply a dose term by a
+glucose term and assume the two do not interact. Fitting the term where they meet
+gives -0.444 (p = 3e-07), roughly half the size of the dose term itself, so the
+assumption does not hold. The glucose profile is flatter for people on under 25
+units a day than for people on over 60.
 
-The glucose-dependent half of both equations did not improve prediction. Six
-candidate shapes, including the scalers both equations use, fell within 0.05 mg/dL
-of each other out of sample, and the flat shape ranked first. The threshold set
-before running was an improvement of 0.5 mg/dL.
-
-Asked to predict the overnight fall, a static 1800 rule gave the lowest error at
-34.1 mg/dL. v1 cost 2.6 mg/dL more. v2 gave 140.9 mg/dL with a median bias of +41,
-and was not the best candidate for any of the 1,626 people scored.
+Taken together: the dose axis holds a clear relationship, the glucose axis holds
+one that is real and pointed the other way, and the two do not combine as either
+equation has them combine. Asked to predict the overnight fall, a static 1800
+rule gave the lowest error at 34.1 mg/dL, v1 cost 2.6 mg/dL more, and v2 gave
+140.9 mg/dL.
 
 ## Background
 
@@ -267,33 +263,39 @@ second. Every fit here therefore carries an additive glucose term, and the claim
 rests on the interaction between insulin action and glucose, which is the only
 quantity implying that sensitivity itself moved.
 
-Two results follow.
+The first attempt fitted a power law, as both equations do in their different
+ways. Pooled across 973 people the exponent came to +0.238 (SE 0.044), nominally
+in the direction the equations assume but around two fifths of what v1 encodes.
+It was also unstable. Restricting to windows starting between 120 and 220 mg/dL
+moved it to approximately +1.0, a shift larger than the quantity itself.
 
-Pooled across 973 people the exponent is +0.238 (SE 0.044), in the direction both
-equations assume, with 54% of people showing that sign. Its magnitude is well
-below what either encodes. Over the range 100 to 200 mg/dL, v1's scaler
-corresponds to an exponent near +0.62 and v2's to one near +1.77, so the measured
-value is around two fifths of v1 and an eighth of v2.
+That instability had a cause worth more than the exponent. Repeating the fit with
+insulin action interacted with glucose band indicators instead of with a
+logarithm, on identical rows and with identical controls, gives a profile that no
+power law describes.
 
-That figure is sensitive to the glucose range it is measured over, and the
-sensitivity is larger than the quantity being measured. Restricting to windows
-starting between 120 and 220 mg/dL, which excludes those beginning near target,
-raises the pooled exponent to approximately +1.0. Near target the body opposes a
-further fall, so those windows read as high sensitivity at low glucose and pull
-the exponent down. Any value quoted for a glucose exponent has to carry the range
-it came from, which is a caution that applies to the earlier literature as much
-as to this analysis.
+![Sensitivity by glucose band against both equations](../charts/inv009/fig_glucose_profile.png)
 
-An earlier draft of this document reported -2.67 for this quantity. That was an
-indexing defect: the interaction term had been inserted ahead of the insulin
-coefficient in the design matrix while the coefficient was still read from a
-fixed position, so the interaction was divided by the starting glucose term. The
-error was found when a second implementation, written for the carbohydrate tests
-below, disagreed on the sign. Design matrix columns are now addressed by name and
-a regression test covers it. The shape comparison below uses a separate code path
-and was unaffected.
+| Glucose at window start | Measured | v1 predicts | v2 predicts |
+|---|---|---|---|
+| 90 to 120 mg/dL | 0.64 | 1.18 | 1.75 |
+| 120 to 150 | 1.00 | 1.00 | 1.00 |
+| 150 to 190 | 1.10 | 0.87 | 0.72 |
+| 190 to 300 | 1.16 | 0.75 | 0.54 |
 
-The practical result is more useful.
+Sensitivity is around a third lower below 120 mg/dL and close to flat from there
+to 300. Fitting a monotone curve across that shape averages a step into a slope
+of almost nothing, which is why the power-law exponent sits near zero and changes
+sign with the range selected.
+
+The direction is the opposite of what both equations encode. They make a unit of
+insulin achieve most near target and least when glucose is high. The measurement
+has it achieving least near target, which is where the body is defending against
+a further fall, and slightly more when glucose is high. An algorithm following
+either equation corrects hardest exactly where the measurement says insulin is
+working best, and eases off where it says insulin is working least.
+
+The practical result follows from the shape.
 
 ![Comparison of glucose shapes](../charts/inv009/fig_glucose.png)
 
@@ -301,7 +303,59 @@ Out of sample, across 1,616 people, six candidate shapes fall within 0.05 mg/dL 
 each other and the flat shape ranks first. Both equations' scalers rank in the
 lower half. The threshold set before running this analysis was an improvement of
 0.5 mg/dL before a glucose term could be said to earn its place. The largest
-observed improvement was under a tenth of that.
+observed improvement was under a tenth of that. A term pointed the wrong way, at
+a magnitude this small, costs little and returns nothing.
+
+An earlier draft of this document reported -2.67 for the power-law exponent. That
+was an indexing defect: the interaction term had been inserted ahead of the
+insulin coefficient in the design matrix while the coefficient was still read
+from a fixed position, so the interaction was divided by the starting glucose
+term. The error was found when a second implementation, written for the
+carbohydrate tests below, disagreed on the sign. Design matrix columns are now
+addressed by name and a regression test covers it. The shape comparison above
+uses a separate code path and was unaffected.
+
+## Whether the three combine as the equations assume
+
+Both equations are separable. Written out, each asserts
+
+    sensitivity = f(dose) x g(glucose)
+
+with no term in which the two axes meet, so the glucose profile is the same
+whatever dose a person is on. That is a strong assumption and it had not been
+tested.
+
+Fitting insulin action against glucose, against dose, and against the product of
+the two gives the interaction directly. Both equations predict it is zero.
+
+| Cohort | Glucose term | Dose term | Where they meet |
+|---|---|---|---|
+| Loop | +0.123 | -0.747 | -0.386 (p = 9e-05) |
+| REPLACE-BG | +0.676 | -1.217 | -0.562 (p = 0.02) |
+| IOBP2 | +0.083 | -2.033 | -1.275 (p = 8e-08) |
+| Pooled, 971 people | +0.140 | -0.841 | -0.444 (p = 3e-07) |
+
+The interaction is around half the size of the dose term. Measuring the glucose
+profile separately within each dose band shows the same thing without the
+parameterisation.
+
+![Glucose profile at each dose band](../charts/inv009/fig_surface.png)
+
+| Daily dose | 90 to 120 | 120 to 150 | 150 to 190 | 190 to 300 |
+|---|---|---|---|---|
+| Under 25 U | 0.81 | 1.04 | 1.15 | 1.21 |
+| 25 to 40 U | 0.53 | 0.75 | 1.14 | 1.13 |
+| 40 to 60 U | 0.58 | 0.94 | 1.18 | 1.26 |
+| Over 60 U | 0.48 | 0.96 | 1.10 | 1.15 |
+
+A separable law requires those rows to be identical. The near-target reduction is
+mild for people on under 25 units a day and around twice as deep for everyone
+else, so the glucose profile depends on the dose.
+
+One thing does behave as the equations assume. A person's own glucose exponent
+shows no relationship with how much insulin they use (Spearman -0.017, n = 971),
+so the between-person version of separability survives even though the
+within-person version does not.
 
 ## Physiology, or carbohydrate the model has not caught?
 
@@ -510,12 +564,23 @@ archives never collected for this purpose. Work approaching the question by
 another route would be welcome, and the equations under examination advanced the
 discussion that this analysis rests on.
 
-On the question these equations exist to answer, the two halves separate. A dose
-term describes something real: it survives holding recent carbohydrate constant,
-and it appears in a model given no functional form to fit. A glucose term
-describes something largely, though not entirely, attributable to carbohydrate
-still absorbing, and what remains of it after meals are excluded improved
-prediction by 0.00 mg/dL against a flat sensitivity.
+On the three-part question, the answers separate.
+
+There is a clear relationship on the dose axis. It survives holding recent
+carbohydrate constant, it appears in a model given no functional form to fit, and
+its exponent lies between roughly -0.65 and -1.0.
+
+There is a relationship on the glucose axis, and it points the other way. Both
+equations make insulin most effective near target. The measurement has it least
+effective there, by about a third, and close to flat across the rest of the
+range. Part of what the equations are responding to is carbohydrate still
+absorbing rather than a change in sensitivity.
+
+There is no clear relationship between all three in the form either equation
+uses. The two axes interact, at roughly half the size of the dose term itself, so
+a separable product of a dose term and a glucose term cannot describe the
+surface. Whatever a defensible dynamic sensitivity would look like, it is not
+f(dose) multiplied by g(glucose).
 
 Where a dose term is wanted, these data support an exponent between roughly -0.65
 and -1.0, applied to a person's own level rather than used to set it. Given that a
@@ -538,7 +603,8 @@ python3 -m inv009.entered_isf && python3 -m inv009.effective_isf
 python3 -m inv009.tdd_axis && python3 -m inv009.glucose_axis
 python3 -m inv009.head_to_head && python3 -m inv009.synthetic
 python3 -m inv009.loop_model_infer && python3 -m inv009.ml_shap
-python3 -m inv009.carb_hypothesis && python3 -m inv009.figures
+python3 -m inv009.carb_hypothesis && python3 -m inv009.joint_surface
+python3 -m inv009.figures
 ```
 
 Windows run four hours from starts between 23:00 and 03:00, requiring 80% sensor
