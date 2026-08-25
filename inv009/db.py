@@ -59,6 +59,24 @@ def streams(subject_id: str) -> dict[str, pd.DataFrame]:
     return out
 
 
+def basal_schedule(subject_id: str) -> np.ndarray | None:
+    """The 48 half-hourly programmed basal rates, where a study recorded them.
+
+    DCLP5 and PEDAP ship the pump programme at each visit. Loop's schedule comes
+    from the rate each temp basal suppressed and arrives through streams().
+    Everything else has no schedule on record.
+    """
+    d = _q("SELECT basal_hh FROM studies.pump_settings WHERE subject_id=%s "
+           "AND basal_hh IS NOT NULL ORDER BY visit_seq", (subject_id,))
+    if d.empty:
+        return None
+    arrs = [np.array([np.nan if v is None else float(v) for v in row], dtype=float)
+            for row in d.basal_hh if row is not None and len(row) == 48]
+    if not arrs:
+        return None
+    return np.nanmedian(np.vstack(arrs), axis=0)
+
+
 def entered_isf() -> pd.DataFrame:
     """One entered sensitivity factor and carb ratio per subject, from either source.
 
