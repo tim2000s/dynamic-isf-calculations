@@ -1,210 +1,206 @@
 ---
-title: "Does your sensitivity really halve when your dose doubles?"
-subtitle: "Testing both dynamic ISF equations against 1,684 people in seven public study archives"
+title: "Does insulin sensitivity scale with total daily dose, and with what exponent?"
+subtitle: "Both dynamic ISF equations tested against 1,684 people in seven public study archives"
 author: "Tim Street"
 date: "25 August 2026"
 ---
 
-## Where this starts
+## Summary
 
-If you loop, there's a number in your settings that decides how hard the system
-corrects you: how far one unit moves your glucose. Most of us set it once, from a
-rule of thumb, and then nudge it when something feels off.
+Sensitivity does fall as total daily dose rises. The relationship appears in four
+independent measurements, one of which was free to find no relationship at all.
 
-The dynamic ISF equations take a different view. They say that number shouldn't
-be fixed at all, because sensitivity depends on how much insulin you use, and
-they recalculate it from your recent total daily dose several times an hour.
+The exponent is the point at issue between the two equations. Settings people had
+entered scale with daily dose at a slope of -0.979 (95% CI -1.030 to -0.934),
+which is the assumption v1 makes. Measured from the overnight glucose response the
+relationship is shallower: -0.83 between people (95% CI -1.23 to -0.36) and -0.645
+within a person (SE 0.033, n = 1,313). No measurement here approached the
+exponent of -2 that v2 assumes.
 
-There are two versions. The original, which I'll call v1 throughout, has
-sensitivity falling in step with your dose: double the dose, halve the
-sensitivity. The revised maths, v2, has it falling with the square of the dose:
-double the dose and sensitivity drops to a quarter. That's not a small
-difference. For two people whose doses differ threefold, v1 says one is three
-times more sensitive and v2 says nine times. The two cross at around 64 units a
-day, so whether the newer version makes your corrections stronger or weaker
-depends on which side of that you sit.
+The glucose-dependent half of both equations did not improve prediction. Six
+candidate shapes, including the scalers both equations use, fell within 0.05 mg/dL
+of each other out of sample, and the flat shape ranked first. The threshold set
+before running was an improvement of 0.5 mg/dL.
 
-I've looked at this before, on data from people running loops, and came away
-thinking the relationship was real but shallower than either version assumed. I
-couldn't settle it. The group was a few hundred people, nearly all on doses
-between 20 and 80 units a day, so there wasn't much to see either side of the
-crossover. And every estimate I made leaned on the loop's own insulin model,
-which is uncomfortably close to using the thing you're questioning to answer the
-question.
+Asked to predict the overnight fall, a static 1800 rule gave the lowest error at
+34.1 mg/dL. v1 cost 2.6 mg/dL more. v2 gave 140.9 mg/dL with a median bias of +41,
+and was not the best candidate for any of the 1,626 people scored.
 
-The public study archives fix that. What follows uses seven of them: about 1,700
-people, ages 2 to 82, daily doses from 7 to 107 units, four different systems,
-and one group who weren't using any system at all.
+## Background
 
-I should say at the outset that this isn't an attack on anyone's work. These
-equations came out of the same rule of thumb most of us set our pumps from, built
-by people giving their time to make looping better, and one of the things I found
-is that the rule holds up remarkably well. What I couldn't find was support for
-the squared version.
+Both dynamic ISF equations recalculate a person's sensitivity factor from their
+recent total daily dose, several times an hour, in place of the fixed value in
+their settings. They disagree about how steeply sensitivity falls as dose rises.
+The original, referred to throughout as v1, has sensitivity inversely proportional
+to daily dose. The revised form, v2, has it inversely proportional to the square
+of daily dose. For two people whose doses differ threefold, v1 implies a
+threefold difference in sensitivity and v2 a ninefold one. The two curves cross
+near 64 units a day, so which of them gives the stronger correction depends on
+which side of that a person sits.
 
-## What I found
+I examined this question previously using data from people running loops, and
+concluded that the dose relationship was real but shallower than either equation
+assumed. That work left the question open for reasons that were structural. The
+cohort was a few hundred people, almost all on doses between 20 and 80 units a
+day, which gave little leverage either side of the crossover. Every estimate
+depended on the loop's own insulin model, which is the object under examination.
+And no open-loop comparison was available.
 
-Sensitivity does fall as daily dose rises. That much is solid, and it shows up in
-four different ways, including one that was free to find no relationship at all.
+The public study archives address all of these. The analysis below uses seven of
+them, covering approximately 1,700 people, ages 2 to 82, daily doses from 7 to 107
+units, and four automated systems alongside one cohort using none.
 
-How steeply is the interesting part. Measured from what people had entered in
-their pumps, it's almost exactly the 1800 rule, which is v1's assumption.
-Measured from how glucose actually responded overnight, it's a bit shallower than
-that. Nothing I looked at came anywhere near the squared law.
-
-The other half of both equations, the bit that changes sensitivity according to
-where your glucose is right now, didn't earn its place. Six different shapes
-including the ones both equations use came out within 0.05 mg/dL of each other,
-and the flat one was best. That matches what I found on looping data last year,
-so I'll not go over the same ground again here.
-
-And when I asked each version to predict how far glucose would actually fall
-overnight, a plain static 1800 rule beat all of them.
+These equations derive from the same rule of thumb that most pump settings come
+from, and were built by people contributing their time to open-source automated
+insulin delivery. One finding here is that the rule holds up well against what
+people run. The finding I could not support is the squared form.
 
 ## The archives
 
-| Study | What people were using | People | Carbs logged | Median days | Median dose |
+| Study | System in use | People | Carbohydrate logged | Median days | Median dose |
 |---|---|---|---|---|---|
 | Loop | Do-it-yourself Loop, fixed sensitivity | 842 | yes | 397 | 38.6 U |
-| REPLACE-BG | **A pump and a sensor, nothing automating** | 196 | yes | 246 | 41.9 U |
-| DCLP3 | Control-IQ, adults and teenagers | 112 | no | 183 | 50.0 U |
+| REPLACE-BG | Pump and sensor, no automation | 196 | yes | 246 | 41.9 U |
+| DCLP3 | Control-IQ, adults and adolescents | 112 | no | 183 | 50.0 U |
 | DCLP5 | Control-IQ, ages 6 to 13 | 100 | no | 203 | 37.4 U |
 | PEDAP | Control-IQ, ages 2 to 5 | 98 | no | 273 | 13.6 U |
 | IOBP2 | Bionic pancreas | 336 | no | 93 | 49.0 U |
 
-FLAIR is in the archive too, but its release ships no pump file, so it can tell
-us about daily totals and nothing else.
+FLAIR is present in the archive but its release ships no pump file, so it
+contributes daily totals and nothing further.
 
-Two rows there do most of the work later on. REPLACE-BG ran in 2015 on a pump and
-a sensor with nobody's algorithm in between, which makes it the only group where
-the insulin someone got wasn't chosen by a machine watching their glucose. And
-Loop and REPLACE-BG are the only two where people logged what they ate, so
-they're the only two where I can genuinely screen out a meal rather than guess.
+Two rows carry disproportionate weight in what follows. REPLACE-BG ran in 2015 on
+a pump and a sensor with no algorithm between them, making it the only cohort
+where the insulin a person received was not selected by a system observing their
+glucose. Loop and REPLACE-BG are also the only cohorts where people recorded what
+they ate, so they are the only two where a meal can be screened out rather than
+inferred.
 
-That comes to about 2.2 million candidate overnight windows, of which 708,106
-survive screening, from 1,659 people with at least forty each.
+The extraction produced 2.2 million candidate overnight windows, of which 708,106
+passed screening, from 1,659 people contributing at least forty each.
 
-## Working out sensitivity when nobody wrote it down
+## Method
 
-None of these archives holds an insulin on board figure, or a loop's prediction,
-or in most cases even a sensitivity setting. It all has to be rebuilt from the
-basal and boluses that were delivered.
+None of these archives holds an insulin-on-board figure, a loop prediction, or in
+most cases a sensitivity setting. Everything was reconstructed from delivered
+basal and boluses.
 
-The idea is simple enough. Take four hours overnight, starting on the hour
-somewhere between 11pm and 3am. Note how far glucose fell. Work out how much
-insulin was actually acting across those four hours by running the delivery
-record through an insulin model. Loop users get the models Loop itself shipped,
-lifted from the LoopKit source rather than approximated; everyone else gets the
-oref curve. The fall divided by the insulin that acted, allowing for where
-glucose started and where it had been, gives milligrams per decilitre per unit,
-which is what a sensitivity factor is.
+Each window covers four hours from a start on the hour between 23:00 and 03:00.
+The fall in glucose across those four hours was measured against the insulin
+acting during them, obtained by convolving the delivery record with an insulin
+model. Loop subjects were given the models Loop itself ships, taken from the
+LoopKit source rather than approximated; the remaining cohorts were given the oref
+exponential. Dividing the fall by the acting insulin, holding starting glucose and
+prior glucose constant, yields milligrams per decilitre per unit.
 
-Two details in there matter more than they look.
+Two aspects of that construction do most of the work.
 
-**I keep insulin separate depending on when it was decided.** Insulin already in
-you when the four hours start was committed before anything in that window
-happened, so it can't be a reaction to the glucose I'm about to measure. Insulin
-delivered during the window can be, and if a system is running it usually is.
-Those go in separate columns and stay there.
+Insulin was separated by when it was committed. Insulin already present when a
+window opened was determined before anything in that window occurred, so it cannot
+be a response to the glucose the window subsequently measures. Insulin delivered
+during the window can be, and under an automated system usually is. The two enter
+every fit as separate terms.
 
-**The screen only looks backwards.** A window is kept or dropped on where glucose
-started, on how complete the sensor trace is, and on how long since the person
-last ate. It's never dropped on what glucose then did. It's tempting to bin the
-nights where glucose rose, on the grounds that someone must have eaten, and it's
-a mistake: those are exactly the nights insulin worked least well. Dropping them
-doesn't clean the answer up, it flatters it.
+Screening looked only backwards. A window was retained or dropped on its starting
+glucose, on sensor coverage, and on time since the person last ate. It was never
+screened on the subsequent glucose trajectory. Excluding nights on which glucose
+rose, on the reasoning that something must have been eaten, removes
+disproportionately the nights on which insulin acted least effectively, which
+inflates the estimated sensitivity rather than cleaning it. Those filters exist in
+the code as a sensitivity arm and move nothing material.
 
-### Checking the arithmetic against something real
+### Validation of the dose reconstruction
 
-Loop wrote down its own insulin on board figure at every bolus, and that's the
-one place in all of this where an app's internal state got recorded. So I can
-rebuild it from the pump record and see whether I get what the app got.
+Loop recorded its own insulin-on-board figure at every bolus. That is the only
+point in these archives where an application's internal state was written down, so
+it can be recomputed from the pump record and compared against what the
+application held.
 
-Across 158 people with enough of those records, my reconstruction tracks Loop's
-own figure at a **median correlation of 0.927**, with a median difference of 0.32
-units. That's the whole dose reconstruction checked against something other than
-my own assumptions, which is not a luxury this kind of work usually gets.
+Across 158 people with sufficient records, the reconstruction tracked Loop's own
+figure at a median correlation of 0.927, with a median absolute difference of 0.32
+units. This validates the dose reconstruction against a recorded quantity rather
+than against internal assumptions.
 
-Getting there needed something the archives don't obviously contain. Loop counts
-insulin on board net of your scheduled basal, so a temp basal only contributes
-the difference between what it gave and what your profile would have given
-anyway. Rebuilding that needs the basal profile, which isn't in any settings file
-in the archive. It turns out to be recoverable: every temp basal record carries
-the rate it was overriding. Six and a half gigabytes of raw text boils down to
-1.6 million rate changes, and gives basal schedules for 842 people.
+Producing it required something the archives do not obviously contain. Loop counts
+insulin on board net of scheduled basal, so a temporary basal contributes only the
+difference between what it delivered and what the profile would have delivered.
+Reconstructing that requires the basal profile, which appears in no settings file
+in the archive. It proved recoverable: every temporary basal record carries the
+rate it suppressed. Six and a half gigabytes of raw text reduces to 1.6 million
+rate changes, giving basal schedules for 842 people.
 
-I'll be straight about the limit of that check. Every candidate insulin model
-comes out with a small positive bias, so the fastest-decaying one wins by
-soaking it up, which means I can't really say which model each person was
-running. The correlation is the finding. The model choice isn't, and nothing
-downstream leans on it.
+The limit of that check should be stated. Every candidate insulin model shows a
+small positive level bias, so the fastest-decaying model wins by absorbing it,
+which leaves the model each person was running only weakly identified. The
+correlation is the finding. The model selection is a weaker claim, and nothing
+downstream depends on it.
 
-## What people had actually entered
+## Settings people had entered
 
-The narrowest question first, and the cleanest one. Of the 596 people with a
-sensitivity factor on record, 581 also have thirty or more complete days of pump
-data to take a daily dose from.
+Of the 596 people with a recorded sensitivity factor, 581 also have thirty or more
+complete days of pump record from which to take a daily dose.
 
-Their settings track dose almost exactly as the 1800 rule says they should. The
-slope is **-0.979**, with a 95% interval from -1.030 to -0.934. Multiply each
-person's sensitivity by their daily dose and the median comes to 2067, against
-the 2139 that v1 works out to at a normal target. If the rule holds, that product
-shouldn't drift with dose, and it doesn't: the correlation between them is
-**+0.024**. Do the same for the squared law and you get **+0.859**, which is what
-it looks like when a rule doesn't hold, consistently, right across the range.
+Their entered settings scale with daily dose at a log-log slope of -0.979, with a
+95% interval from -1.030 to -0.934. Multiplying each person's sensitivity by their
+daily dose gives a median of 2067, against the 2139 that v1 evaluates to at a
+normal target. Under the 1800 rule that product should not vary with dose, and it
+does not: the Spearman correlation between them is +0.024. The equivalent test for
+the squared law returns +0.859, which indicates the relationship failing
+consistently across the range rather than at one end of it.
 
 ![Entered sensitivity against daily dose](../charts/inv009/fig_entered_scatter.png)
 
-This needs a caveat said out loud rather than tucked away, because it's close to
-circular. What you've entered isn't a measurement, it's a decision, and you and
-your team probably arrived at it through the 1800 rule in the first place. That's
-the same rule v1's maths came from. So finding that people sit on 1800 over dose
-is partly a finding about how much grip that rule has on practice.
+This result carries a caveat that should be stated rather than buried, because it
+approaches circularity. An entered sensitivity factor records a decision. People
+and their clinical teams commonly arrive at it through the 1800 rule, which is the
+source of v1's exponent. Finding that entered settings sit
+on 1800 over dose is therefore in part a finding about the reach of that rule in
+practice.
 
-It isn't circular in the other direction, though. Nothing in clinical practice
-nudges anyone towards a squared law, and nothing in what people run looks like
+The circularity does not run in the other direction. Nothing in clinical practice
+directs people towards a squared law, and nothing in what people run resembles
 one.
 
-Two smaller things worth keeping. Within a single age band the slope is
-shallower, somewhere between -0.68 and -1.10, so a chunk of that tidy -0.98 comes
-from pooling toddlers with adults. And carb ratios track dose at -0.63 with a
-median product of 411, so the 500 rule is a looser fit to practice than the 1800
-rule is.
+Two secondary results are worth recording. Within a single age band the slope is
+shallower, between -0.68 and -1.10, so part of the pooled -0.98 reflects combining
+young children with adults. Carbohydrate ratios scale at -0.63 with a median
+product of 411, making the 500 rule a looser description of practice than the 1800
+rule.
 
-## What the glucose actually did
+## The dose relationship in the glucose response
 
-Now the harder question. Not what people entered, but what a unit did.
+The harder question is what a unit of insulin achieved, rather than what people
+had entered.
 
-![Every exponent I measured](../charts/inv009/fig_exponents.png)
+![Exponents measured by each method](../charts/inv009/fig_exponents.png)
 
-Comparing between people, using only the insulin that was already committed, the
-slope is **-0.83**, with a 95% interval of -1.23 to -0.36. Taking logs means
-dropping anyone whose estimate came out negative, and those aren't a random
-subset, so I also fitted the power law directly on the natural scale where
-everybody survives. That gives -0.75, which is close enough to be reassuring.
+Between people, using only insulin committed before each window opened, the slope
+is -0.83 with a 95% interval of -1.23 to -0.36. Taking logarithms requires
+dropping anyone whose estimate came out negative, and those people are not a
+random subset, so the power law was also fitted directly on the natural scale
+where all of them survive. That fit returns -0.75.
 
-Within a single person it's **-0.645**, with a standard error of 0.033, pooled
-across 1,313 of them, and about three quarters share the direction. This is the version that's never been
-tested, and it's the one that matters most in practice. A pattern that holds
-across a population doesn't have to hold inside one person, and it's inside one
-person that these equations run, several times an hour, off a dose figure blended
-from your last few hours and days.
+Within a single person the exponent is -0.645, with a standard error of 0.033,
+pooled across 1,313 people, of whom roughly three quarters share the sign. This is
+the version that has not previously been tested, and it is the version these
+equations implement: they run inside one person, several times an hour, from a
+dose figure blended over recent hours and days. A relationship holding across a
+population need not hold within an individual.
 
-Both sit between the square root and v1. Neither is close to v2.
+Both estimates fall between the square root and v1. Neither approaches v2.
 
-### A second opinion that assumes nothing
+### A second estimate that assumes no functional form
 
-Everything above comes from fitting a shape and reading off a number, which makes
-the answer only as good as the shape I picked. So I gave the whole thing to a
-gradient boosted model instead, which assumes nothing. With 687,067 windows from
-1,660 people it's free to decide sensitivity falls with dose, rises with it,
-moves in steps, or doesn't depend on dose at all.
+The measurements above fit a shape and report its parameter, which makes each
+answer conditional on the shape chosen. A gradient boosted model imposes none.
+Given 687,067 windows from 1,660 people it was free to find sensitivity falling
+with dose, rising with it, moving in steps, or not depending on dose.
 
-The thing to read off it is how insulin action and daily dose interact, not how
-important dose is on its own. Dose has a big effect on how far glucose falls
-overnight that has nothing to do with sensitivity, because people on more insulin
-are different people. Sensitivity is the multiplier on insulin, so that's where
-it lives.
+The quantity to read from it is the interaction between insulin action and daily
+dose. Dose on its own has a substantial effect on the overnight fall that has
+nothing to do with sensitivity, because people on more insulin differ in other
+ways. Sensitivity is the multiplier on insulin, so the interaction is where it
+appears.
 
 | Daily dose | Shift in sensitivity attributable to dose |
 |---|---|
@@ -215,200 +211,194 @@ it lives.
 | 55 U | 0.00 |
 | 77 U | -0.04 |
 
-It falls, steadily, without being asked to. And it flattens off above about forty
-units a day, which is the shape a shallow relationship makes rather than a steep
-one. I wouldn't read the sizes as sensitivity itself; they're shifts around the
-model's own baseline and they carry the same shrinkage as everything else here.
+The profile declines monotonically without having been asked to, and flattens
+above roughly forty units a day, which is the shape a shallow exponent produces.
+The magnitudes should not be read as sensitivity itself. They are shifts around
+the model's own baseline and carry the same attenuation as every other estimate
+here.
 
-### Why one small group matters more than its size
+### Confounding by indication, and why one small cohort matters
 
-There's a reason to be suspicious of all of this, and it's better shown than
+There is a reason to distrust all of the above, and it is better demonstrated than
 argued.
 
-If a system is running, insulin is close to a function of your recent glucose.
-You get more of it precisely when glucose isn't coming down. Regress the fall on
-all the insulin that acted and the answer goes negative, which would mean insulin
-puts glucose up. It doesn't. What you've measured is the algorithm's policy, not
-anybody's physiology.
+Under an automated system, insulin approximates a function of recent glucose. More
+of it is delivered precisely when glucose is not falling. Regressing the fall on
+all the insulin that acted returns a negative slope, which would imply that
+insulin raises glucose. What that estimate measures is the algorithm's policy
+rather than anyone's physiology.
 
-![The confound, made visible](../charts/inv009/fig_endogeneity.png)
+![The confounding, made visible](../charts/inv009/fig_endogeneity.png)
 
-Read across those groups and the share of people whose sensitivity comes out
-positive collapses from 78% to 8% as the system gets more reactive, then recovers
-once I use only the insulin that was already committed. REPLACE-BG behaves the
-way the design predicts: it's the only group where counting all the insulin makes
-the answer better rather than worse, because in 2015 there was no algorithm
-choosing it.
+Across the cohorts, the proportion of people whose sensitivity estimate is
+positive falls from 78% to 8% as the system becomes more reactive, and recovers
+when only committed insulin is used. REPLACE-BG behaves as the design predicts. It
+is the only cohort in which including all the insulin improves the estimate rather
+than degrading it, because in 2015 no algorithm was choosing it.
 
-That's why 196 people from a decade ago carry more weight than their number
-suggests, and why I report them separately throughout. Their own within-person
-slope is **-1.38**, steeper than the pooled figure and the closest anything here
-gets to v1. It isn't close to v2 either.
+That is why 196 people from a decade ago carry weight out of proportion to their
+number, and why they are reported separately throughout. Their within-person
+exponent is -1.38, steeper than the pooled figure and the closest any cohort comes
+to v1. It does not approach v2 either.
 
-## Does sensitivity change with where your glucose is?
+## Dependence on glucose level
 
-Both equations say it does, through a term that makes a unit do less when you're
-running high.
+Both equations include a term that reduces sensitivity when glucose is high.
 
-There's a trap in testing that. High glucose falls further than low glucose
-whatever insulin is doing, through mass action, through what the kidneys clear,
-and through plain regression to the mean. Near target your body actively pushes
-back against a further fall. So if you let glucose explain the size of the drop,
-and then ask whether the drop per unit also depends on glucose, you'll answer the
-first question and write it down as the second. Every fit here carries a glucose
-term of its own for that reason, and what carries the claim is the interaction
-between insulin and glucose, because that's the only thing that means sensitivity
-itself moved.
+Testing that term has a trap in it. High glucose falls further than low glucose
+irrespective of insulin, through mass action, renal clearance and regression to
+the mean, and near target the body opposes a further fall. A model that allows
+glucose to explain the size of the fall, and then asks whether the fall per unit
+also depends on glucose, will answer the first question and record it as the
+second. Every fit here therefore carries an additive glucose term, and the claim
+rests on the interaction between insulin action and glucose, which is the only
+quantity implying that sensitivity itself moved.
 
-Two answers came back.
+Two results follow.
 
-Pooled across 1,528 people the exponent comes out at **-2.67**, and the sign is
-the opposite of what both equations expect: net sensitivity goes up with glucose,
-not down. Only about 40% of people
-show it going the other way. That agrees with what I found on looping data last
-year, and with the reasoning there, so I won't rehearse it beyond noting that
-whatever the equations are reaching for is competing with clearance that rises
-with glucose and with your body defending you near target.
+Pooled across 1,528 people the exponent is -2.67, and its sign is opposite to what
+both equations assume: net sensitivity rises with glucose. Approximately 40% of
+people show the direction the equations assume. This agrees with the earlier
+finding on looping data, where the reasoning is set out at length. In short, the
+effect the equations are reaching for competes against clearance that rises with
+glucose and against counter-regulation near target.
 
-The more useful answer is the practical one.
+The practical result is more useful.
 
-![No glucose shape earns its place](../charts/inv009/fig_glucose.png)
+![Comparison of glucose shapes](../charts/inv009/fig_glucose.png)
 
-Out of sample, across 1,616 people, six candidate shapes land within 0.05 mg/dL
-of each other and the flat one wins. Both equations' curves are in the losing
-half. Before running any of this I'd set the bar at half a milligram per
-decilitre before a glucose term could be said to earn its keep. Nothing came
-within a tenth of that.
+Out of sample, across 1,616 people, six candidate shapes fall within 0.05 mg/dL of
+each other and the flat shape ranks first. Both equations' scalers rank in the
+lower half. The threshold set before running this analysis was an improvement of
+0.5 mg/dL before a glucose term could be said to earn its place. The largest
+observed improvement was under a tenth of that.
 
-## Predicting the night
+## Predicting the overnight fall
 
-The slopes are the science. This is the bit that matters if you're actually using
-one of these: if you'd used each version's sensitivity to predict how far glucose
-would fall overnight, how wrong would you have been?
+The exponents address the science. The comparison below addresses the practical
+consequence of using either equation.
 
-Each candidate gets its own offset for each person, fitted on that person's first
-70% of nights and scored on the rest. That's generous to the equations rather
-than harsh on them. Overnight most of your insulin is basal, and it's there to
-offset the glucose your liver is putting out, so charging that to the sensitivity
-factor would be blaming an equation for something it was never asked to do.
+Each candidate received a per-person intercept fitted on that person's first 70%
+of nights and was scored on the remainder. This is generous to the equations. Most
+overnight insulin is basal, delivered to offset endogenous glucose production, so
+requiring the sensitivity factor to account for that offset would penalise an
+equation for a quantity it was never intended to supply.
 
-![Predicting the overnight fall](../charts/inv009/fig_head_to_head.png)
+![Predicted overnight fall by candidate](../charts/inv009/fig_head_to_head.png)
 
 | Candidate | Median error | Median bias |
 |---|---|---|
-| Static 1800 rule | **34.1 mg/dL** | +2.9 |
-| Best single number for that person | 34.4 | -1.4 |
+| Static 1800 rule | 34.1 mg/dL | +2.9 |
+| Best single value for that person | 34.4 | -1.4 |
 | v1 | 36.7 | +0.9 |
-| Their own entered setting | 37.3 | -0.2 |
+| The person's own entered setting | 37.3 | -0.2 |
 | 355 over the square root of dose | 37.9 | +3.8 |
-| v2 | **140.9** | +41.1 |
+| v2 | 140.9 | +41.1 |
 
-Out of 1,626 people, the best option is a single well-chosen number for 638, the
-static 1800 rule for 587, the square root form for 195, v1 for 135, and their own
-setting for 71. There's nobody it's v2 for.
+Of 1,626 people, the best candidate was a single fitted value for 638, the static
+1800 rule for 587, the square root form for 195, v1 for 135, and the person's own
+setting for 71. It was v2 for none of them.
 
-Where v2 struggles most is where I'd least want it to. For people on under twenty
-units a day its median error is 322 mg/dL, because squaring the dose hands a
-small child a sensitivity of several thousand and therefore a correction dose of
-almost nothing. The error comes down as dose goes up, to 83 mg/dL above 64 units
-a day, which is the crossover doing exactly what the algebra says it should. Even
-there it's more than twice as far out as anything else on the list.
+v2's error is largest at the doses where the clinical consequence is greatest. For
+people on under twenty units a day the median error is 322 mg/dL, because squaring
+the dose gives a young child a sensitivity of several thousand milligrams per
+decilitre per unit and therefore a correction dose close to zero. The error falls
+as dose rises, reaching 83 mg/dL above 64 units a day, which is the crossover
+behaving as the algebra requires. Even there it is more than twice the error of
+any other candidate.
 
-## What would have shown up if the steeper version were right
+## Recovering a known relationship
 
-Everything above estimates something nobody observed, using a reconstruction of
-insulin that's certainly imperfect. The sensitivities I get are well below what
-people have entered, so something is shrinking them. The question that matters is
-whether that shrinkage also bends the slope. The way to find out is to build
-people whose sensitivity genuinely follows a law I chose, and run them through
-the identical machinery.
+Every estimate above targets a quantity nobody observed, using a reconstruction of
+insulin that is imperfect. The fitted sensitivities fall well below what people
+had entered, so attenuation is present. What matters is whether that attenuation
+also bends the exponent. The way to establish this is to construct people whose
+sensitivity follows a chosen law and pass them through identical machinery.
 
-![Recovering a known relationship](../charts/inv009/fig_synthetic.png)
+![Recovery of a known relationship](../charts/inv009/fig_synthetic.png)
 
-| The truth I built in | What came back, no system | With a reactive system | With 45% of meals never logged |
+| Simulated exponent | Recovered, no automation | With a reactive system | With 45% of meals unrecorded |
 |---|---|---|---|
 | -0.50 | -0.50 | -0.42 | -0.72 |
-| -1.00 | **-1.02** | -0.80 | -1.03 |
-| -2.00 | **-1.57** | -1.85 | -1.56 |
+| -1.00 | -1.02 | -0.80 | -1.03 |
+| -2.00 | -1.57 | -1.85 | -1.56 |
 
-Shallow relationships come back almost exactly. Steep ones come back a bit
-flattened. The row that matters is the bottom one: a squared law comes back
-reading between -1.56 and -1.85 under everything I tried, including a run where
-nearly half of all meals go unlogged and there's a third of a unit of error on
-what actually acted. What I measured was -0.65 to -0.88. I can't get a squared
-law to look like that.
+Shallow exponents are recovered closely. Steep ones are compressed. The bottom row
+carries the argument: a squared law returns between -1.56 and -1.85 under every
+condition tested, including one in which nearly half of all meals go unrecorded
+and a third of a unit of error is applied to what acted. The measured range was
+-0.65 to -0.88.
 
-The shrinkage in the simulation runs between 0.38 and 0.63 of the truth, which is
-less than the real gap against what people have entered. So the level isn't
-something this method recovers well, and I'm not claiming it does. The shape is.
+Attenuation in the simulation runs between 0.38 and 0.63 of the true sensitivity,
+which is less severe than the observed gap against entered settings. The level is
+therefore not a quantity this method recovers, and no claim is made that it does.
+The exponent is.
 
-## What this doesn't settle
+## Limitations
 
-**It doesn't give you a number to set.** The sensitivities I fit are shrunk, so
-you can't read a constant off this work, only the shape of the relationship.
+The level of sensitivity is not measured here. The fitted values are attenuated,
+so no constant for any equation can be read from this work. Only the shape of the
+relationship can.
 
-**The groups using a system are weak evidence on their own.** In the Control-IQ
-studies the share of people with a positive sensitivity is barely better than a
-coin toss, and for the youngest group it's worse than one. They replicate a
-direction. They don't establish it. The open-loop group and what people had
-entered are carrying the argument.
+The cohorts using automated systems are weak evidence in isolation. In the
+Control-IQ studies the proportion of people with a positive sensitivity estimate
+is close to chance, and for the youngest cohort it falls below it. Those cohorts
+replicate a direction rather than establishing one. The open-loop cohort and the
+entered settings carry the argument.
 
-**All of this is overnight and fasting.** It says nothing about the hours after a
-meal, and that's exactly where a glucose term might still earn its place. It's
-also where carbs the absorption model hasn't fully caught remain a perfectly good
-alternative explanation for anything that looks like sensitivity moving. That
-seems to me the more interesting open question, and it isn't one this work can
-answer.
+The analysis is confined to overnight fasting windows. It says nothing about the
+postprandial hours, which is where a glucose term might still earn its place, and
+where carbohydrate the absorption model has not fully accounted for remains a
+viable alternative explanation for anything resembling a shift in sensitivity.
+That question strikes me as the more interesting one, and this work cannot answer
+it.
 
-**Sensitivity that moves with the day rather than the dose is out of scope.**
-Exercise, illness, a change in how you eat: all of them move sensitivity over
-hours and days. Nothing here measures any of that, and nothing here says it isn't
-real.
+Sensitivity varying with the day rather than with the dose falls outside this
+scope. Exercise, illness and a change in diet all move sensitivity over hours and
+days. Nothing here measures those effects, and nothing here argues against them.
 
-**Two faults in the underlying data turned up**, and anyone else working from
-these archives will want to know. Extended bolus durations arrive in milliseconds
-for three of the six studies and in seconds for the other two, so a one hour
-square wave lands as a thousand hours; spreading a bolus across that put insulin
-into 41,591 of one person's 46,176 five minute periods. And the database hands
-back timestamps at microsecond resolution, which quietly divided every basal
-total by a thousand until I checked my reconstruction against the database's own
-sums. Both are fixed here at the point of reading rather than in the data itself.
+Two faults in the underlying data were identified and repaired at the point of
+reading. Extended bolus durations arrive in milliseconds for three of the six
+studies and in seconds for the other two, so a one-hour square wave is recorded as
+a thousand hours; distributing a bolus across that interval placed insulin in
+41,591 of one person's 46,176 five-minute periods. Separately, the database
+returns timestamps at microsecond resolution, which divided every basal total by a
+thousand until the reconstruction was checked against the database's own sums.
+Anyone else working from these archives will encounter both.
 
-## Where that leaves the two versions
+## Interpretation
 
-v1's assumption about dose is close to right, and it's closest of all in the
-place it came from: it matches what people actually run their pumps at, almost
-exactly. Measured against how glucose behaves it looks a touch steep, with the
-honest range somewhere between the square root and v1, but it's the right shape
-and the right size. Its glucose term doesn't earn its place, though it costs
-little either way.
+v1's assumption about dose is close to correct, and it is closest in the domain it
+was drawn from: it describes what people run their pumps at to within a few per
+cent. Measured against the glucose response it is somewhat steep, with the
+supported range falling between the square root and v1. Its glucose term does not
+earn its place, at little cost either way.
 
-For v2 I couldn't find support in any of this. What people run contradicts it,
-the glucose response contradicts it, it wasn't the best predictor for a single
-one of 1,626 people, and the simulation says a squared law couldn't have hidden
-as anything I saw. What concerns me most is where it struggles hardest, which is
-in children and in anyone on a small daily dose, the people least able to absorb
-a correction that turns out to be far too small.
+For v2 I found no support in these data. Entered settings run counter to it, the
+glucose response runs counter to it, it was not the best predictor for any of
+1,626 people, and the simulation indicates that a squared law could not have
+presented as any of the measurements obtained. Its error is largest in children
+and in anyone on a small daily dose, who are least able to absorb a correction
+that is far too small.
 
-I want to be careful about what that does and doesn't mean. It's a statement
-about what a large and varied group of people did, not about anybody's intent or
-competence, and the work behind these equations has moved the conversation
-forward in ways this analysis is standing on. It's also one analysis, overnight
-and fasting, from archives that were never collected for this purpose. I'd be
-glad to see someone come at it differently.
+The scope of that statement should be clear. It describes what a large and varied
+group of people did, and carries no implication about anyone's intent or
+competence. It is one analysis, confined to overnight fasting windows, drawn from
+archives never collected for this purpose. Work approaching the question by
+another route would be welcome, and the equations under examination advanced the
+discussion that this analysis rests on.
 
-If a dose term is wanted, what's here supports something between about -0.65 and
--1.0, applied to a person's own level rather than used to set it. But given that
-a plain static 1800 rule outpredicted every dynamic form I tested, the question I
-keep coming back to isn't which exponent to use. It's whether the sensitivity
-factor is the right place to be putting any of this, and whether the effort would
-land better on the carbohydrate side, where the residual is bigger and nobody
-thinks the problem is solved.
+Where a dose term is wanted, these data support an exponent between roughly -0.65
+and -1.0, applied to a person's own level rather than used to set it. Given that a
+static 1800 rule out-predicted every dynamic form tested, the question I am left
+with concerns not the exponent but the placement: whether the sensitivity factor
+is the appropriate location for this adjustment, and whether the same effort would
+return more on the carbohydrate side, where the residual is larger.
 
-## Method, and how to repeat it
+## Reproduction
 
 The code is in `inv009/` in the `dynamic-isf-calculations` repository, with 28
-tests. The window cache rebuilds in about nine minutes on a laptop.
+tests. The window cache rebuilds in approximately nine minutes.
 
 ```
 psql -d oref -f inv009/ingest/sql/05_settings.sql
@@ -421,13 +411,13 @@ python3 -m inv009.loop_model_infer && python3 -m inv009.ml_shap
 python3 -m inv009.figures
 ```
 
-Windows are four hours from starts between 11pm and 3am, needing 80% sensor
+Windows run four hours from starts between 23:00 and 03:00, requiring 80% sensor
 coverage, a starting glucose between 90 and 300 mg/dL, and either six hours clear
-of logged carbohydrate or, where none is logged, four hours clear of a bolus that
-is large relative to that person's own daily dose. Per-person fits are ordinary
-least squares with a heteroskedasticity-robust standard error; population figures
-pool the per-person estimates using DerSimonian and Laird, as in the earlier
-work, so the two can be read side by side.
+of logged carbohydrate or, where none is logged, four hours clear of a bolus large
+relative to that person's own daily dose. Per-person fits use ordinary least
+squares with a heteroskedasticity-robust standard error. Population figures pool
+the per-person estimates by the method of DerSimonian and Laird, as in the earlier
+work, so the two bodies of results can be read against each other.
 
 ## Data attribution
 
@@ -442,9 +432,9 @@ of the authors and have not been reviewed or approved by the Bionic Pancreas
 Research Group or Beta Bionics.
 
 DCLP3, DCLP5, PEDAP and REPLACE-BG are also public datasets from the Jaeb Center
-for Health Research, whose releases carry no attribution wording of their own.
-The analyses, content and conclusions here are solely mine and have not been
-reviewed or approved by any study sponsor.
+for Health Research, whose releases carry no attribution wording of their own. The
+analyses, content and conclusions here are solely mine and have not been reviewed
+or approved by any study sponsor.
 
 Dates in these archives are shifted or rebased per participant, so time of day is
-intact and calendar date isn't. Nothing here depends on calendar date.
+preserved and calendar date is not. Nothing here depends on calendar date.
