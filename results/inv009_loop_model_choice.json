@@ -1,0 +1,44 @@
+{
+  "n_subjects": 158,
+  "accepted": 95,
+  "accept_rate": 0.6012658227848101,
+  "median_rel_mad": 0.16895322308043959,
+  "median_mad_u": 0.31755909957829853,
+  "median_corr": 0.9273742302444508,
+  "median_bias_u": 0.12135455267009373,
+  "bias_by_model": {
+    "loop_adult": 0.5962829910392459,
+    "loop_child": 0.4696988477672591,
+    "loop_fiasp": 0.2973370356433223,
+    "walsh_3h": 0.07851882517347868,
+    "walsh_4h": 0.5621153475096997,
+    "walsh_5h": 0.9663994560059577,
+    "walsh_6h": 1.4236150710678133
+  },
+  "corr_by_model": {
+    "loop_adult": 0.8793949799403713,
+    "loop_child": 0.9019405392696276,
+    "loop_fiasp": 0.9158806900888197,
+    "walsh_3h": 0.9157109248735301,
+    "walsh_4h": 0.8834732272452644,
+    "walsh_5h": 0.8269521808308917,
+    "walsh_6h": 0.7594752765256415
+  },
+  "model_counts": {
+    "walsh_3h": 120,
+    "loop_fiasp": 15,
+    "walsh_4h": 10,
+    "loop_child": 8,
+    "loop_adult": 3,
+    "walsh_5h": 1,
+    "walsh_6h": 1
+  },
+  "model_counts_accepted": {
+    "walsh_3h": 60,
+    "loop_fiasp": 14,
+    "walsh_4h": 9,
+    "loop_child": 8,
+    "loop_adult": 3,
+    "walsh_5h": 1
+  }
+}
