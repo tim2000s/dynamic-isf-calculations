@@ -27,8 +27,15 @@ TDD and sensitivity falls to a quarter.
 
 Compare somebody on 20 units a day with somebody on 60. v1 makes the second
 person's corrections three times smaller per unit. v2 makes them nine times
-smaller. The two cross near 64 units a day, so a person's TDD decides whether the
-newer maths corrects them harder or softer than the older one.
+smaller.
+
+The two do cross, but far higher up than the coefficients alone suggest, and the
+crossing point moves with glucose. At 150 mg/dL it sits at 101 units a day, at
+120 mg/dL at 130, and near target at 194. Only 53 of the 1,678 people here, 3.2%
+of them, run above the crossing point at any realistic glucose. So for almost
+everybody in these archives v2 reads a higher sensitivity than v1 and therefore
+gives the weaker correction: 6.8 times weaker at 15 units a day, 2.5 times at 40,
+1.3 times at 80.
 
 Both versions also cut sensitivity when glucose runs high, on the reasoning that
 insulin works less well up there.
@@ -420,11 +427,13 @@ Of 1,626 people the best candidate was a single fitted value for 638, the static
 1800 rule for 587, the square root form for 195, v1 for 135, and their own
 setting for 71. It was v2 for none.
 
-v2 also overshoots rather than merely scattering: it expects 41 mg/dL more fall
-than happens, at the median. Its worst ground is low TDD, where its typical
-miss reaches 322 mg/dL below twenty units a day. The miss shrinks as TDD climbs,
-reaching 83 mg/dL above 64 units a day, which is the crossover behaving as the
-algebra requires. Even there it misses by more than twice anything else.
+v2 also misses in one direction rather than merely scattering. Glucose fell 41
+mg/dL further than it predicted, at the median, which is what believing each unit
+does several times its real work looks like from the outside. Its worst ground is low TDD, where its typical miss reaches 322 mg/dL below
+twenty units a day. The miss shrinks as TDD climbs, reaching 83 mg/dL above 64
+units a day, because its sensitivity approaches v1's as the daily total rises
+towards the crossing point. Even there it misses by more than twice anything
+else.
 
 ## Could the method be producing this?
 
@@ -535,6 +544,30 @@ The body above does not quote it because it is unstable: a narrower glucose rang
 moves it to about +1.0, a larger shift than the number itself. A power law cannot
 describe a step, so fitting one across the profile in the table averages the step
 into almost no slope, whose sign follows whichever range was chosen.
+
+Both equations are implemented in `inv008/dynisf.py` and every v1 and v2 figure
+here comes from them. They follow the Boost variant of the plugin code, which
+differs from the stock AAPS DynamicISF plugin in two places. Stock computes
+`1800 / (tdd * ln(glucose / divisor + 1))` with no cap on glucose, while the
+Boost variant counts glucose above 210 mg/dL at a third. Stock blends the TDD as
+`0.33 * w8h + 0.34 * tdd7D + 0.33 * tdd1D` with no branch, while the Boost
+variant substitutes a lower figure for the seven day term when the eight hour
+figure falls under 75% of it.
+
+Repeating the overnight comparison under the stock formulas moves v1 from 36.7 to
+36.6 mg/dL and v2 from 140.9 to 126.8. The ordering, the counts of who each
+candidate suits best, and every conclusion here are the same under either. Both
+sets of formulas are pinned to the plugin source by tests in
+`inv009/tests/test_equations.py`.
+
+An earlier draft of this document, and an earlier note in this series, put the
+crossing point between v1 and v2 at 64 units a day. That figure is the ratio of
+the two leading coefficients, 115000 over 1800, and it is not the crossing point.
+v1 takes the logarithm of glucose over the divisor plus one and v2 takes it
+without the plus one, and that pair differs by a factor of two to three across
+the range. The crossing point therefore carries a glucose term and sits much
+higher: 101 units a day at 150 mg/dL, 130 at 120 mg/dL, and 194 near target. A
+test now covers it.
 
 An earlier draft reported a glucose exponent of -2.67. An indexing defect caused
 it. The interaction term had been inserted ahead of the insulin coefficient in
