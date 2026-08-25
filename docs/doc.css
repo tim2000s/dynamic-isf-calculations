@@ -1,0 +1,19 @@
+@page { size: A4; margin: 20mm 18mm; }
+body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+       font-size: 10.5pt; line-height: 1.45; color: #14140f; }
+h1 { font-size: 19pt; line-height: 1.2; margin: 0 0 2pt 0; }
+h1.subtitle, .subtitle { font-size: 12pt; font-weight: 400; color: #52514e; margin: 0 0 14pt 0; }
+h2 { font-size: 13pt; margin: 20pt 0 6pt 0; border-bottom: 1px solid #e3e2dc; padding-bottom: 3pt; }
+h3 { font-size: 11pt; margin: 14pt 0 4pt 0; color: #33322e; }
+p { margin: 0 0 8pt 0; }
+ul { margin: 0 0 10pt 0; padding-left: 16pt; }
+li { margin-bottom: 4pt; }
+table { border-collapse: collapse; width: 100%; margin: 10pt 0 12pt 0; font-size: 9.5pt; }
+th { text-align: left; border-bottom: 1.2px solid #52514e; padding: 4pt 6pt; font-weight: 600; }
+td { border-bottom: 1px solid #e3e2dc; padding: 4pt 6pt; }
+img { max-width: 100%; height: auto; margin: 8pt 0 4pt 0; }
+code { font-family: "SF Mono", Menlo, monospace; font-size: 9pt; background: #f4f4f1; padding: 1pt 3pt; }
+pre { background: #f7f7f4; border-left: 2px solid #d8d7d0; padding: 8pt 10pt; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+strong { font-weight: 650; }
+blockquote { border-left: 2px solid #d8d7d0; margin: 0 0 8pt 0; padding-left: 10pt; color: #52514e; }
