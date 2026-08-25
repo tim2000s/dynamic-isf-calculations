@@ -10,3 +10,6 @@ inv008_cache/
 # local Nightscout credentials — never commit
 glucose-isf/ns_sites.json
 ns_sites.json
+
+# inv009 per-subject caches
+inv009_cache/
