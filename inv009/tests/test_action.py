@@ -84,3 +84,28 @@ def test_action_recovers_a_known_sensitivity():
     fit = np.linalg.lstsq(np.c_[np.ones(len(starts)), (a_pre + a_in)[starts]],
                           drop, rcond=None)[0]
     assert fit[1] == pytest.approx(isf, rel=1e-6)
+
+
+def test_design_matrix_indices_are_named_not_positional():
+    """The interaction must not displace the coefficient it is divided by.
+
+    Reading the insulin coefficient from a fixed position, after inserting an
+    interaction column ahead of it, returned the starting-glucose coefficient
+    instead and flipped the sign of the reported exponent.
+    """
+    import pandas as pd
+    from inv009.glucose_axis import _design
+
+    d = pd.DataFrame({"a_pre": [1.0, 2.0, 3.0, 4.0], "bg0": [100.0, 150.0, 120.0, 180.0],
+                      "pre_slope": [0.0, 0.1, -0.1, 0.2], "bg_m60": [100.0] * 4,
+                      "bg_m120": [100.0] * 4, "hour": [0, 0, 1, 1]})
+    X_plain, idx_plain = _design(d)
+    X_int, idx_int = _design(d, extra=d.a_pre.to_numpy() * 0.5)
+
+    assert np.allclose(X_plain[:, idx_plain["a_pre"]], d.a_pre)
+    assert np.allclose(X_int[:, idx_int["a_pre"]], d.a_pre)
+    assert np.allclose(X_int[:, idx_int["interaction"]], d.a_pre * 0.5)
+    # The point of the map: adding the interaction moves bg0, and a positional
+    # read of index 3 would silently pick it up as the insulin term.
+    assert idx_int["bg0"] != idx_plain["bg0"]
+    assert np.allclose(X_int[:, idx_int["bg0"]], d.bg0 - 100.0)

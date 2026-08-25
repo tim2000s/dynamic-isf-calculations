@@ -116,6 +116,21 @@ def extract_windows(grid: pd.DataFrame, tddw: pd.DataFrame, subject_id: str, stu
     csum_b = np.concatenate([[0.0], np.cumsum(bolus_u)])
     csum_meal = np.concatenate([[0.0], np.cumsum(np.where(bolus_u >= meal_thr, bolus_u, 0.0))])
     csum_c = np.concatenate([[0.0], np.cumsum(carbs)])
+
+    def carbs_before(hours: float) -> np.ndarray:
+        """Grams recorded in the `hours` before each bin.
+
+        Needed to separate two explanations that make the same prediction. A
+        person whose recent dose is high has usually been eating, so
+        carbohydrate still absorbing at the start of a window would look like
+        reduced sensitivity, and would track recent dose while doing it.
+        Without this column the dose relationship and the carbohydrate tail
+        cannot be told apart.
+        """
+        k = int(hours * 60 / config.GRID_MIN)
+        lo = np.maximum(np.arange(n) - k, 0)
+        return csum_c[np.arange(n)] - csum_c[lo]
+
     csum_bas = np.concatenate([[0.0], np.cumsum(grid.basal_u.to_numpy(dtype=float))])
     first30 = max(int(30 / config.GRID_MIN), 1)
 
@@ -143,6 +158,10 @@ def extract_windows(grid: pd.DataFrame, tddw: pd.DataFrame, subject_id: str, stu
         "bolus_first30_u": csum_b[starts + first30] - csum_b[starts],
         "meal_in_u": csum_meal[starts + h] - csum_meal[starts],
         "carbs_in_g": csum_c[starts + h] - csum_c[starts],
+        "carbs_prev_4h": carbs_before(4)[starts],
+        "carbs_prev_8h": carbs_before(8)[starts],
+        "carbs_prev_12h": carbs_before(12)[starts],
+        "carbs_prev_24h": carbs_before(24)[starts],
         "basal_in_u": csum_bas[starts + h] - csum_bas[starts],
     })
     out["drop"] = out.bg0 - out.bg_end

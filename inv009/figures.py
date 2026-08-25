@@ -253,6 +253,70 @@ def fig_endogeneity(out):
     fig.tight_layout(); fig.savefig(out, bbox_inches="tight"); plt.close(fig)
 
 
+# The power-law exponent each equation's scaler corresponds to over 100 to 200
+# mg/dL, so the measured values can be read against them on the same axis.
+V1_K, V2_K = 0.62, 1.77
+
+
+def fig_carb_glucose(out):
+    """Apparent glucose dependence against time since the last recorded meal."""
+    r = json.loads((config.RESULTS / "inv009_carb_hypothesis.json").read_text())
+    arms = [("glucose 90 to 300", "glucose_k_by_gap", C1, 10),
+            ("glucose 120 to 220", "glucose_k_by_gap_midrange", C2, -16)]
+    fig, ax = plt.subplots(figsize=(7.0, 4.2))
+    for val, name, style in ((V2_K, "v2's scaler", "-"), (V1_K, "v1's scaler", "--"),
+                             (0.0, "no dependence", ":")):
+        ax.axhline(val, color=INK2 if style == "-" else MUTED, linestyle=style,
+                   linewidth=0.9, zorder=1)
+        ax.annotate(name, xy=(1.0, val), xycoords=("axes fraction", "data"),
+                    xytext=(4, 0), textcoords="offset points", fontsize=7.5,
+                    color=INK2, va="center")
+    for label, key, col, dy in arms:
+        rows = r.get(key, [])
+        if not rows:
+            continue
+        x = np.arange(len(rows))
+        y = [v["pooled"] for v in rows]
+        e = [1.96 * v["se"] for v in rows]
+        ax.errorbar(x, y, yerr=e, fmt="o-", color=col, markersize=7, linewidth=1.7,
+                    capsize=3, elinewidth=1.2, zorder=4,
+                    markeredgecolor="white", markeredgewidth=1.0)
+        ax.annotate(label, xy=(x[-1], y[-1]), xytext=(8, dy),
+                    textcoords="offset points", color=col, fontsize=8.5,
+                    va="center", fontweight="semibold")
+        ax.set_xticks(x)
+        ax.set_xticklabels([v["band"] for v in rows], fontsize=8)
+    ax.set_xlim(-0.4, len(r.get("glucose_k_by_gap", [])) - 0.1 + 1.1)
+    ax.set_xlabel("time since the last recorded meal, at the start of the window")
+    ax.set_ylabel("apparent glucose dependence (exponent k)")
+    ax.set_title("Carbohydrate inflates the glucose effect near a meal, and does not\n"
+                 "account for all of it", pad=10)
+    _despine(ax)
+    fig.tight_layout(); fig.savefig(out, bbox_inches="tight"); plt.close(fig)
+
+
+def fig_carb_tail(out):
+    """Measured sensitivity against time since the last recorded meal."""
+    r = json.loads((config.RESULTS / "inv009_carb_hypothesis.json").read_text())
+    rows = r["sensitivity_by_gap"]
+    fig, ax = plt.subplots(figsize=(6.4, 3.4))
+    x = np.arange(len(rows))
+    vals = [v["median_s"] for v in rows]
+    cols = [RED if v < 0 else C1 for v in vals]
+    ax.bar(x, vals, width=0.6, color=cols, zorder=3)
+    for xi, v in zip(x, vals):
+        ax.annotate(f"{v:+.2f}", xy=(xi, v), xytext=(0, 4 if v > 0 else -12),
+                    textcoords="offset points", ha="center", fontsize=8, color=INK)
+    ax.axhline(0, color=INK2, linewidth=0.9, zorder=4)
+    ax.set_xticks(x); ax.set_xticklabels([v["band"] for v in rows], fontsize=8)
+    ax.set_xlabel("time since the last recorded meal")
+    ax.set_ylabel("measured sensitivity (mg/dL per unit)")
+    ax.set_title("Within four hours of a meal insulin appears to achieve nothing,\n"
+                 "because carbohydrate is still arriving", pad=10)
+    _despine(ax)
+    fig.tight_layout(); fig.savefig(out, bbox_inches="tight"); plt.close(fig)
+
+
 def main() -> int:
     config.ensure_dirs()
     res_tdd = json.loads((config.RESULTS / "inv009_tdd_axis.json").read_text())
@@ -264,6 +328,8 @@ def main() -> int:
         ("fig_head_to_head.png", fig_head_to_head),
         ("fig_glucose.png", fig_glucose),
         ("fig_endogeneity.png", fig_endogeneity),
+        ("fig_carb_glucose.png", fig_carb_glucose),
+        ("fig_carb_tail.png", fig_carb_tail),
     ]
     for name, fn in jobs:
         p = config.CHARTS / name
