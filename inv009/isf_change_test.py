@@ -91,6 +91,21 @@ def _autosens(dev: np.ndarray, sens: float, max_daily_basal: float) -> float:
     return float(np.clip(1.0 + basal_off / max_daily_basal, AUTOSENS_MIN, AUTOSENS_MAX))
 
 
+def _rolling_ratios(dev: np.ndarray, sens: float, max_daily_basal: float,
+                    hours: float = 24.0) -> np.ndarray:
+    """The ratio as it would have been read through the period, not once over it.
+
+    People do not act on an average. They act on seeing the value stuck at a
+    bound, so the quantity that matters is how much of the time it spent there,
+    which needs the reading reconstructed rolling rather than pooled.
+    """
+    n_back = int(hours * 60 / BIN)
+    s = pd.Series(dev)
+    med = s.rolling(n_back, min_periods=MIN_NIGHTS).median().to_numpy()
+    basal_off = med * (60.0 / BIN) / sens
+    return np.clip(1.0 + basal_off / max_daily_basal, AUTOSENS_MIN, AUTOSENS_MAX)
+
+
 def analyse(job):
     # Every setting a worker needs travels in the job tuple. macOS spawns rather
     # than forks, so a worker re-imports this module and never sees anything
@@ -153,10 +168,24 @@ def analyse(job):
         r_after = _autosens(dev[post], float(np.nanmedian(entered[post])), mdb)
         if not (np.isfinite(r_before) and np.isfinite(r_after)):
             return None
+
+        # How often the reading sat at a bound, which is what people report acting on.
+        roll = _rolling_ratios(dev, float(np.nanmedian(entered[np.isfinite(entered)])), mdb)
+        def sat(mask):
+            v = roll[mask]
+            v = v[np.isfinite(v)]
+            if len(v) < MIN_NIGHTS:
+                return np.nan, np.nan
+            return (float(np.mean(v >= AUTOSENS_MAX - 1e-6)),
+                    float(np.mean(v <= AUTOSENS_MIN + 1e-6)))
+        ceil_b, floor_b = sat(pre)
+        ceil_a, floor_a = sat(post)
         return dict(subject_id=subject_id, t_change=t_change,
                     isf_before=isf_before, isf_after=isf_after, rel_change=rel,
                     raised=bool(rel > 0), ratio_before=r_before, ratio_after=r_after,
                     moved_toward_one=abs(r_after - 1.0) - abs(r_before - 1.0),
+                    ceiling_before=ceil_b, floor_before=floor_b,
+                    ceiling_after=ceil_a, floor_after=floor_a,
                     tdd_u=subj["tdd_u"])
     except Exception:
         return None
@@ -206,6 +235,32 @@ def main() -> int:
         closer = float((d.moved_toward_one < 0).mean())
         print(f"    {name:>8s}  before {d.ratio_before.median():.3f}  after "
               f"{d.ratio_after.median():.3f}  closer to 1 for {100 * closer:.0f}%")
+    print("\n  THE BETTER TEST  people act on the reading being STUCK at a bound.")
+    print("  Pinned at the ceiling means the loop wants more insulin than the clamp")
+    print("  allows, so the setting is too weak and should be lowered.")
+    S = R.dropna(subset=["ceiling_before", "floor_before"])
+    if len(S) > 10:
+        su, sd = S[S.raised], S[~S.raised]
+        print(f"  {'group':>34s} {'n':>5s} {'% at ceiling':>13s} {'% at floor':>11s}")
+        print(f"  {'before raising the setting':>34s} {len(su):5d} "
+              f"{100 * su.ceiling_before.median():13.1f} {100 * su.floor_before.median():11.1f}")
+        print(f"  {'before lowering the setting':>34s} {len(sd):5d} "
+              f"{100 * sd.ceiling_before.median():13.1f} {100 * sd.floor_before.median():11.1f}")
+        cu = sps.mannwhitneyu(sd.ceiling_before, su.ceiling_before, alternative="greater")
+        print(f"  one-sided, lowerers more ceiling-bound than raisers: p = {cu.pvalue:.3g}")
+        rr = sps.spearmanr(S.rel_change, S.ceiling_before)
+        print(f"  Spearman(size of change, time at ceiling) = {rr.statistic:+.3f} "
+              f"p = {rr.pvalue:.3g}")
+        res_sat = dict(n=int(len(S)),
+                       ceiling_before_raised=float(su.ceiling_before.median()),
+                       ceiling_before_lowered=float(sd.ceiling_before.median()),
+                       floor_before_raised=float(su.floor_before.median()),
+                       floor_before_lowered=float(sd.floor_before.median()),
+                       mannwhitney_p=float(cu.pvalue),
+                       spearman=float(rr.statistic), spearman_p=float(rr.pvalue))
+    else:
+        res_sat = None
+
     w = sps.wilcoxon(R.moved_toward_one) if len(R) > 10 else None
     if w is not None:
         print(f"    Wilcoxon on the move toward 1: p = {w.pvalue:.3g}")
@@ -218,6 +273,7 @@ def main() -> int:
                spearman_p=float(rho.pvalue),
                frac_closer_after=float((R.moved_toward_one < 0).mean()),
                wilcoxon_p=float(w.pvalue) if w is not None else None)
+    res["saturation_test"] = res_sat
     res["min_change"], res["window_days"] = MIN_CHANGE, WINDOW_DAYS
     (config.RESULTS / f"inv009_isf_changes_{tag}.json").write_text(
         json.dumps(res, indent=2, default=str))
