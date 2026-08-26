@@ -1,0 +1,104 @@
+{
+  "n_users": 10,
+  "n_moving": 6,
+  "median_spearman": 0.38213378611502447,
+  "median_sign_agreement": 0.4941113622970739,
+  "per_user": [
+    {
+      "user": "K",
+      "n": 9260,
+      "moves": false,
+      "mdb_observed": NaN
+    },
+    {
+      "user": "I",
+      "n": 6210,
+      "moves": true,
+      "spearman": 0.13368447711265471,
+      "p": 4.105813899659317e-26,
+      "sign_agreement": 0.6825135713110709,
+      "mdb_implied": 1.4683863328822715,
+      "mdb_observed": 5.0,
+      "recorded_sd": 0.10907399170143121,
+      "mine_sd": 0.025449614718531233
+    },
+    {
+      "user": "F",
+      "n": 9728,
+      "moves": true,
+      "spearman": 0.2693668130090359,
+      "p": 3.872710941925689e-161,
+      "sign_agreement": 0.020640493669539312,
+      "mdb_implied": 0.03968540484788235,
+      "mdb_observed": 3.15,
+      "recorded_sd": 0.0161493858601634,
+      "mine_sd": 0.04297996812608513
+    },
+    {
+      "user": "tim",
+      "n": 9992,
+      "moves": true,
+      "spearman": 0.43425472822634925,
+      "p": 0.0,
+      "sign_agreement": 0.01936969950790493,
+      "mdb_implied": -0.32726635786851893,
+      "mdb_observed": 3.2,
+      "recorded_sd": 0.06293633911677175,
+      "mine_sd": 0.04061319499782293
+    },
+    {
+      "user": "B",
+      "n": 10091,
+      "moves": false,
+      "mdb_observed": 6.9
+    },
+    {
+      "user": "A",
+      "n": 9958,
+      "moves": false,
+      "mdb_observed": 3.5
+    },
+    {
+      "user": "C",
+      "n": 8435,
+      "moves": true,
+      "spearman": 0.6700907122523494,
+      "p": 0.0,
+      "sign_agreement": 0.7635574837310195,
+      "mdb_implied": 3.864922480620153,
+      "mdb_observed": 10.8216,
+      "recorded_sd": 0.07143503826179146,
+      "mine_sd": 0.03146534046453717
+    },
+    {
+      "user": "D",
+      "n": 10172,
+      "moves": false,
+      "mdb_observed": 1.75
+    },
+    {
+      "user": "E",
+      "n": 10086,
+      "moves": true,
+      "spearman": 0.51589379549693,
+      "p": 0.0,
+      "sign_agreement": 0.4323284156510584,
+      "mdb_implied": 0.7589251439539991,
+      "mdb_observed": 3.0,
+      "recorded_sd": 0.07943562510741835,
+      "mine_sd": 0.03439638746230284
+    },
+    {
+      "user": "H",
+      "n": 2048,
+      "moves": true,
+      "spearman": 0.3300128440036996,
+      "p": 6.287003181556191e-53,
+      "sign_agreement": 0.5558943089430894,
+      "mdb_implied": 0.3401394487865076,
+      "mdb_observed": 4.8,
+      "recorded_sd": 0.23550145407499115,
+      "mine_sd": 0.031057028901378264
+    }
+  ]
+}
