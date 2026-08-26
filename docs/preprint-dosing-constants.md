@@ -29,12 +29,10 @@ abstract: |
   or negative because comparison nights had already been corrected through basal.
   Entered and measured sensitivity are different quantities, since a pump setting
   encodes the whole expected fall including spontaneous reversion of 21 to 30
-  mg/dL over four hours. Fitting ISF = K / TDD^b to predict the overnight fall on
-  held-out periods gave K = 880 (844 to 918) at Walsh's exponent of 1.0 across
-  1,613 people, which is 46% of the entered constant and is a marginal rather than
-  a total quantity. The constant at that exponent spans 423 to 1433 between
-  cohorts and the best-fitting exponent spans 0.50 to 1.10, so a single universal
-  constant is not supported.
+  mg/dL over four hours. Measured directly from isolated overnight corrections in
+  the open-loop cohort, with a six-hour window, the fall was 31.6 mg/dL per unit
+  given and the constant 1558 (1319 to 1737) in 78 people over 422 nights, an
+  interval that covers Walsh's 1700 and lies below the 1915 people enter.
 ---
 
 # Introduction
@@ -411,77 +409,64 @@ cohorts.
 
 ## The constant fitted from observed response
 
-The matched estimator above answers a narrow question, whether one additional unit
-can be shown to have done something, and under an algorithm it cannot. That is a
-property of that contrast rather than of the data. A constant can still be fitted,
-by asking which law of the form ISF = K / TDD^b best predicts the overnight fall on
-periods the fit never saw. Every person receives their own intercept, since
-overnight most insulin is basal offsetting hepatic glucose output and no
-sensitivity factor should be asked to carry that. Scoring is a per-person 70/30
-split in time with median absolute error on the held-out tail.
+A settings file claims something narrow: that a correction of U units will lower
+glucose by ISF times U. That claim can be measured directly. Isolated overnight
+corrections of at least 1 U were selected at a starting glucose between 150 and
+300 mg/dL, with a six-hour window so that the response of a six-hour insulin model
+falls inside the observation, and the fall per unit given was taken as the median
+across each person's nights and multiplied by their measured daily dose.
 
-Across 1,613 people the constant at Walsh's exponent of 1.0 was 880 (95% CI 844 to
-918) with a held-out error of 23.41 mg/dL. The best-fitting exponent was 0.90 with
-a constant of 616 and an error of 23.39 mg/dL. Walsh's inverse-proportional form
-therefore costs 0.02 mg/dL against the best fit in this corpus, which is no
-meaningful penalty, and the form can be retained.
-
-| Cohort | People | Best exponent | Constant there | Constant at b = 1 | Held-out MAE |
+| Cohort | People | Nights | Fall per unit, mg/dL | Constant | 95% CI |
 |---|---|---|---|---|---|
-| Loop | 796 | 0.80 | 384 | 774 | 19.93 |
-| IOBP2 | 323 | 0.55 | 143 | 869 | 30.67 |
-| REPLACE-BG | 187 | 1.10 | 623 | 423 | 29.26 |
-| DCLP3 | 112 | 0.50 | 169 | 1177 | 21.61 |
-| DCLP5 | 100 | 0.95 | 1203 | 1433 | 20.39 |
-| PEDAP | 95 | 1.00 | 1233 | 1233 | 23.38 |
-| Pooled | 1,613 | 0.90 | 616 | 880 | 23.41 |
+| REPLACE-BG, open loop | 78 | 422 | 31.6 | 1558 | 1319 to 1737 |
+| Loop, DIY closed loop | 80 | 365 | 42.0 | 1947 | 1660 to 2249 |
 
-Two readings of this table are needed together. A constant is obtainable from
-observational data, and the pooled figure of 880 is estimated with a narrow
-interval on a large sample and validated out of sample. A single universal
-constant is not supported by these cohorts: the value at b = 1 spans 423 to 1433,
-a factor of 3.39, and the best exponent spans 0.50 to 1.10. The open-loop cohort,
-in which the matched estimator was the only one to work, returns the lowest value
-at 423, and its agreement with the matched estimate of 399 for the same people is
-the one place two independent methods can be checked against each other.
+REPLACE-BG is the cohort to read. It is the only one in which nothing but the
+person's own correction and their programmed basal is acting during the window,
+so the fall can be attributed to the dose. Its interval covers Walsh's 1700 and
+lies below the 1915 those people and their peers have entered, which says that
+entered settings are slightly weak rather than substantially so: a correction
+delivers a little more than the setting predicts.
 
-The pooled constant of 880 is 46% of the entered constant of 1915 for adults. That
-ratio is consistent with every other route taken in this paper, which found
-measured-to-entered ratios between 0.39 and 0.50.
+The Loop figure of 1947 is larger and should not be read as a sensitivity. The
+algorithm continues to act throughout the window, so part of that fall is the
+controller's work rather than the bolus, and the estimate is biased upward for the
+same reason the matched estimator was biased downward.
 
-The reason for the gap follows from the design rather than from error in either
-number. The fit gives each person an intercept, so 880 is the marginal fall per
-acting unit relative to that person's own baseline trajectory. A settings file
-encodes the whole fall a person expects after a correction, and part of that fall
-occurs without insulin: overnight and carbohydrate-free between 150 and 250 mg/dL,
-glucose fell a median 21 to 30 mg/dL over four hours with no correction given.
-Comparing 880 with 1700 or with 1915 without stating this is comparing a marginal
-quantity with a total one.
+The horizon was tested rather than assumed. Rebuilding every window at six hours
+instead of four moved the pooled fitted constant from 880 to 874, so truncation of
+the insulin tail is not a material source of bias in this design.
 
-## A scaling claim withdrawn
+## An estimator withdrawn, and a constant with it
 
-An earlier version of this analysis reported a different route to the same
-question, regressing a per-person measured constant on daily dose, and found a
-slope of +0.107 with an interval of -0.024 to +0.240. That was presented as
-evidence that one constant fits the whole dose range. It is withdrawn.
+Two earlier attempts on this question are withdrawn, and both failed in ways worth
+recording because the failures are not obvious from their output.
 
-Two faults account for it. The regression was fitted only to the 1,182 people of
-1,660 whose measured sensitivity came out above zero, which is selection on the
-outcome. More seriously, it pooled cohorts whose bias differs. Within-cohort
-slopes from that estimator run -0.053 in REPLACE-BG, -0.014 in IOBP2, +0.127 in
-DCLP3, +0.155 in PEDAP, +0.245 in Loop with an interval of +0.083 to +0.411 that
-excludes zero, and +0.323 in DCLP5. The pooled interval covered zero only by
-averaging across that spread.
+The first regressed a per-person measured sensitivity on daily dose and reported a
+slope of +0.107 with an interval of -0.024 to +0.240 as evidence that one constant
+fits the whole dose range. It was fitted only to the 1,182 people of 1,660 whose
+measured sensitivity came out above zero, which is selection on the outcome, and
+it pooled cohorts whose bias differs. Within-cohort slopes from that estimator run
+-0.053 in REPLACE-BG to +0.323 in DCLP5, with the largest cohort excluding zero at
++0.245. The defence offered was that a multiplier common to everyone cannot alter
+a slope, and the multiplier is not common: the endogeneity measure above spans
+0.054 to 0.447 between cohorts and cohort median daily dose spans 13.6 to 55.5 U,
+so a cohort-specific bias varies along the axis the slope is measured on.
 
-The defence offered for the pooled figure was that a multiplier common to everyone
-cannot alter a slope. The multiplier is not common. The endogeneity measure above
-runs from 0.054 to 0.447 between cohorts, and cohort median daily dose spans 13.6
-to 55.5 U, so a bias that differs by cohort differs along the axis the slope is
-measured on. This is the same composition artefact identified earlier in this
-paper for entered settings, arising in the author's own measured analysis. The
-predictive fit reported in the preceding section is the sounder route to the same
-question and reaches a compatible conclusion: the exponent is not stable across
-cohorts either, spanning 0.50 to 1.10.
+The second fitted ISF = K / TDD^b to predict the overnight fall out of sample and
+reported K = 880 at Walsh's exponent. The exposure was the action within the
+window from insulin given before it opened, chosen because pre-committed insulin
+cannot respond to what happens inside the window. That choice discards the
+correction. On isolated correction nights only 22 to 29% of the action is
+pre-window, and the remainder is the tail of the basal rate, so the fitted
+coefficient was the effect of the basal tail rather than of a dose. Refitting on
+total action does not repair it, giving 355, because overnight most of that total
+is also basal, and basal holds glucose level rather than lowering it. A per-person
+intercept does not separate the two, since within a person both exposures vary
+mostly through basal.
+
+The direct measurement above avoids this by restricting to nights when the dose is
+identifiable, at the cost of using 78 people rather than 1,511.
 
 # Discussion
 
@@ -515,23 +500,26 @@ once stated but is worth separating from any claim about the person. The
 sensitivity rule is 13% out in adults and 41% out in children, in the same
 direction, and covers 1700 only in adults aged 45 and over.
 
-The third concerns what the sensitivity factor is, and it is the reason two
-defensible constants differ by a factor of two. A pump setting encodes the whole
-glucose fall a person expects after a correction. Part of that fall occurs without
-insulin: overnight and carbohydrate-free, between 150 and 250 mg/dL, glucose fell
-a median 21 to 30 mg/dL over four hours with no correction given. Any estimator
-that separates the insulin effect from that baseline returns a marginal quantity,
-and both estimators used here do. The predictive fit gives 880 divided by daily
-dose across 1,613 people and the matched design gives 15 to 20 mg/dL per unit
-against 45 entered in the open-loop cohort, which agree with each other and are
-each about 46% of the entered figure.
+The third concerns which of the three original constants survives measurement,
+and the answer inverts the picture from entered settings alone. Measured from
+isolated corrections where nothing else was intervening, the sensitivity constant
+is 1558 with an interval of 1319 to 1737, which covers Walsh's 1700. What people
+enter, 1915 in adults, sits above both, so entered settings are slightly weak and
+a correction delivers a little more than the setting predicts. The carbohydrate
+ratio goes the other way and further: 415 measured against 500, with entered
+settings at 409 agreeing with the measurement rather than with the rule.
 
-These are therefore two quantities rather than two estimates of one. Substituting
-the marginal value into a pump would roughly double correction doses. The entered
-constant of 1915 in adults remains the number to set, and 880 describes what an
-additional unit does against a person's own baseline. Reporting either without
-naming which one it is has caused confusion in this work and would cause it in
-anybody else's.
+So Walsh's sensitivity constant is closer to what insulin does than to what people
+have written down, and the carbohydrate rule is wrong by a fifth in both. That
+distinction is only visible because both quantities were measured rather than read
+off settings, and it is the reason this analysis was worth doing on device data at
+all.
+
+A caution attaches to the sensitivity figure that does not attach to the
+carbohydrate one. It rests on 78 people in a single cohort, because it requires a
+correction whose effect is attributable, and that requires no algorithm to be
+running. The carbohydrate constant rests on 742 people across cohorts. The
+intervals reflect this and the sensitivity interval is correspondingly wide.
 
 The fourth concerns study design. The absence of a measurable bolus effect in
 four automated cohorts is a finding about those systems rather than a failure of
@@ -587,13 +575,12 @@ carbohydrate ratio constant is 415 rather than 500 and the basal share is 0.51
 where no algorithm is adjusting delivery. The sensitivity constant is 1915 in
 adults and 2390 in people under 18, and pooling those groups produces both a
 constant and a functional form that describe neither. The inverse-proportional
-form is not supported once age is held constant. A sensitivity constant can be
-fitted from observed glucose response, at 880 divided by daily dose across 1,613
-people, and it predicts held-out overnight falls to 23.4 mg/dL. It is 46% of the
-constant people enter, because it is the marginal fall per unit against each
-person's own baseline while a settings file encodes the total expected fall. It is
-not universal, spanning 423 to 1433 between cohorts at a fixed exponent, so it is
-a population starting value rather than a law.
+form is not supported once age is held constant. Measured directly from isolated
+overnight corrections where no algorithm was intervening, the sensitivity constant
+is 1558 with an interval of 1319 to 1737, which covers Walsh's 1700 and sits below
+the 1915 people enter. Of the three rules, sensitivity is therefore the one whose
+original constant survives measurement, and the carbohydrate ratio is the one that
+does not.
 
 # Data availability
 
