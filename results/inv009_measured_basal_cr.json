@@ -1,0 +1,113 @@
+{
+  "basal": [
+    {
+      "cohort": "DCLP3 (Control-IQ)",
+      "n": 112,
+      "median": 0.4843341233996971,
+      "ci": [
+        0.4660254274724195,
+        0.5067018252140553
+      ],
+      "covers_walsh": true
+    },
+    {
+      "cohort": "DCLP5 (Control-IQ, 6-13y)",
+      "n": 100,
+      "median": 0.4614104118049762,
+      "ci": [
+        0.43957708927605,
+        0.48420247171426806
+      ],
+      "covers_walsh": false
+    },
+    {
+      "cohort": "IOBP2 (bionic pancreas)",
+      "n": 326,
+      "median": 0.3878213103740521,
+      "ci": [
+        0.37887634071661974,
+        0.3939651088298379
+      ],
+      "covers_walsh": false
+    },
+    {
+      "cohort": "Loop (DIY)",
+      "n": 830,
+      "median": 0.6043560693941687,
+      "ci": [
+        0.5966946672176171,
+        0.6148081017387593
+      ],
+      "covers_walsh": false
+    },
+    {
+      "cohort": "PEDAP (Control-IQ, 2-5y)",
+      "n": 95,
+      "median": 0.40626191715128224,
+      "ci": [
+        0.3875828680866505,
+        0.4297952038732104
+      ],
+      "covers_walsh": false
+    },
+    {
+      "cohort": "REPLACE-BG (open loop)",
+      "n": 196,
+      "median": 0.5090283023566171,
+      "ci": [
+        0.4879954885177059,
+        0.5313166596986271
+      ],
+      "covers_walsh": true
+    },
+    {
+      "cohort": "EVERYONE",
+      "n": 1659,
+      "median": 0.5143430469010719,
+      "ci": [
+        0.5024961932228418,
+        0.5235225068660614
+      ],
+      "covers_walsh": false
+    }
+  ],
+  "cr": [
+    {
+      "cohort": "Loop (DIY)",
+      "n": 594,
+      "median": 417.87997536370574,
+      "ci": [
+        407.99144645012353,
+        429.20942124633285
+      ],
+      "covers_walsh": false,
+      "median_cr": 10.0,
+      "median_entered": 10.0
+    },
+    {
+      "cohort": "REPLACE-BG (open loop)",
+      "n": 148,
+      "median": 390.436074818906,
+      "ci": [
+        362.41789358386205,
+        427.3232822461262
+      ],
+      "covers_walsh": false,
+      "median_cr": 9.999999999999659,
+      "median_entered": 10.0
+    },
+    {
+      "cohort": "EVERYONE",
+      "n": 742,
+      "median": 415.10237568137535,
+      "ci": [
+        405.1457528218685,
+        424.9500630946547
+      ],
+      "covers_walsh": false,
+      "median_cr": 10.0,
+      "median_entered": 10.0
+    }
+  ],
+  "cr_entered_over_measured": 1.0169908256881628
+}
