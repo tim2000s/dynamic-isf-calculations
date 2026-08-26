@@ -181,28 +181,67 @@ survives one automated system unchanged. The other two move it substantially, in
 opposite directions, and that is a property of the algorithm rather than of the
 person using it.
 
-### Sensitivity: the level cannot be measured here
+### Sensitivity: what a unit does, and why that is not the constant
 
-The third rule resists the same treatment, and INV-009 established why before this
-analysis began. Fitting the overnight fall against insulin recovers the shape of a
-person's sensitivity and not its level, because insulin action is reconstructed
-rather than observed, residual carbohydrate rides along with meal boluses, and a
-loop delivers most insulin when glucose is refusing to move.
+The third rule resists the treatment that worked for the other two, and it took
+the whole cohort to see why.
 
-The size of that is now measured. Against 394 people with both, the regression
-reads 15% of a working sensitivity. A matched-correction estimator needing neither
-settings nor a basal model disagrees, reading between 50% in the open-loop cohort
-and 19% in the youngest, and an attenuation that tracks how reactive each
-controller is rules out a single correction factor.
+The design is the overnight window used throughout INV-009. Carb-free, quiet
+before it opens, and the fall compared against nights from the same person at the
+same hour, the same starting glucose, the same slope into the window and the same
+level an hour earlier. The exposure is insulin delivered above or below that
+person's own scheduled basal, by whatever route it arrived, because an algorithm
+running high temporary basal has given a correction and one that suspends has
+given a negative one.
 
-One thing survives, because a common multiplier cannot change it. The measured
-constant does not drift with daily dose: slope +0.106, interval -0.026 to +0.241.
-A single sensitivity constant does fit across the dose range, which is the part of
-Walsh's claim this data can settle. What that constant equals, it cannot.
+| Study | control | events | matched fall, 1-3.5 U | per acting unit | entered |
+|---|---|---|---|---|---|
+| REPLACE-BG | open loop | 239 | 22 to 35 mg/dL | **15 to 20** | 45 |
+| Loop | DIY closed loop | 269 | -4 to 5 | -2 to 5 | 57 |
+| DCLP3 | Control-IQ | 79 | -8 to -4 | -5 to -4 | - |
+| DCLP5 | Control-IQ, 6-13y | 38 | -7 | -9 | 68 |
+| PEDAP | Control-IQ, 2-5y | 50 | -6 | -11 | 161 |
 
-Establishing the level would need a fixed correction, no carbohydrate, no
-algorithm intervening, and glucose watched afterwards. REPLACE-BG is the only
-cohort here with no algorithm.
+Only the open-loop cohort returns anything. The reason sits in the control nights
+rather than the treated ones. In REPLACE-BG a night with no correction falls 18 to
+25 mg/dL over four hours; under an algorithm the same night falls 51 to 59 in
+Loop, and in PEDAP as much as 146 from the highest starting glucose. Those nights
+were never untreated. The algorithm corrected them through basal and arrived in
+the same place, so an added bolus has nothing left to do and nothing to measure.
+
+That is not a limitation of the window design, and conditioning harder does not
+help. Tightening the match from glucose alone to glucose, slope and the level an
+hour back moves the Loop estimate from 2.8 to 2.6 mg/dL per unit, a plateau, which
+rules out error in the reconstructed dose. What remains is that the controller's
+dose is tied to need the CGM trace does not show: within an identical trace, the
+correlation between insulin committed before a window and insulin given during it
+is 0.054 in REPLACE-BG and 0.447 in Loop. Someone boluses once and goes to sleep,
+while a controller sampling every five minutes keeps answering something we cannot
+see. No amount of conditioning on the trace breaks a tie to what is not in it.
+
+In the one cohort where the question can be asked, a unit does 15 to 20 mg/dL
+overnight against 45 entered. As a constant that is 630 to 840 against 1886. The
+ratio of measured to entered is 0.39 to 0.50 and it holds across four studies,
+reproducing the affine relation INV-009 found on oref data with a different cohort
+and a different estimator.
+
+Three things could produce a ratio near 0.4 and this design cannot separate them:
+a four-hour window truncating a six-hour insulin tail, people correcting precisely
+when they expect glucose to stay up, and entered settings being optimistic.
+Extending the horizon would settle the first.
+
+What does survive is the shape, because a common multiplier cannot change a slope.
+The measured constant does not drift with daily dose: slope +0.106, interval
+-0.026 to +0.241. A single constant does fit across the dose range, which is the
+part of Walsh's claim this data settles. What that constant equals, it does not.
+
+The practical reading is that these are two quantities and not two estimates of
+one. A sensitivity factor in a pump is a dosing parameter, and it encodes the
+whole fall a person expects after a correction, including the part that would have
+happened anyway. The measurement above deliberately removes that part. Replacing
+one with the other would multiply correction doses by about two and a half, which
+is why the entered constant remains the number to set and the measured one remains
+the number that describes physiology.
 
 ## What to do with this
 
