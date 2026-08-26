@@ -16,22 +16,32 @@ the earlier result can be read beside the new ones rather than replaced by them,
 and it reproduces exactly.
 
 The main finding is one the smaller cohort could not have shown. **Walsh's
-constants are close to right for adults and substantially wrong for children**,
-and the pooled figures everyone quotes, the May analysis included, are driven by
-which ages happen to be in the sample.
+sensitivity constant is nearer right for adults than for children and wrong for
+both**, and the pooled figures everyone quotes, the May analysis included, are
+driven by which ages happen to be in the sample. In adults it is out by 13% and
+in children by 41%, in the same direction; the carb ratio rule misses by a fifth
+at every age; only the basal rule holds.
 
 ## The three constants
 
 | Constant | Walsh | All 719 | 95% interval | Adults only | Under 18 |
 |---|---|---|---|---|---|
-| Sensitivity x daily dose | 1700 | 2108 | 2048 to 2183 | **1799** | 2390 |
-| Carb ratio x daily dose | 500 | 409 | 392 to 422 | 408 | 414 |
-| Basal share of daily dose | 0.50 | **0.49** | 0.48 to 0.50 | 0.54 | 0.47 |
+| Sensitivity x daily dose | 1700 | 2108 | 2048 to 2183 | **1915** | 2390 |
+| Carb ratio x daily dose | 500 | 409 | 392 to 422 | 404 | 414 |
+| Basal share of daily dose | 0.50 | **0.49** | 0.48 to 0.50 | 0.52 | 0.47 |
 
-Read across the sensitivity row rather than down it. Pooled, the constant sits 24%
-above Walsh and the interval excludes it. Restricted to adults it lands at 1799,
-and for people over 45 at 1766 with an interval of 1680 to 1839, which is the one
-cell in this entire analysis consistent with 1700.
+Read across the sensitivity row rather than down it. Both the pooled and the adult
+columns cover all 719 people; the under-18 column is the JAEB studies alone, because
+the OpenAPS Commons cohort contains no children. Pooled, the constant sits 24% above
+Walsh and the interval excludes it. Restricted to adults it lands at 1915, and within
+that the two sources disagree: 1799 in the JAEB studies against 2381 in Commons, whose
+members set their own numbers rather than being given them. For JAEB people over 45 it
+falls to 1766 with an interval of 1680 to 1839, which is the one cell in this entire
+analysis consistent with 1700.
+
+Half of the pooled sample is under 18, so the headline 2108 is close to an average of
+two different populations rather than a description of either. That is the reason to
+read the row and not the corner, and it is the trap the May analysis fell into.
 
 The carb ratio rule is the clearest failure and the most consistent. At 409 it
 misses 500 by a fifth in every cohort and at every age, so people enter more
@@ -196,10 +206,12 @@ cohort here with no algorithm.
 
 ## What to do with this
 
-For an adult, 1700 divided by daily dose remains a defensible starting sensitivity
-factor and the data supports it more than the May analysis suggested. For a child
-it is too aggressive by roughly a third, and the gap widens through the school-age
-years.
+For an adult, the measured figure is 1915 divided by daily dose and the interval,
+1828 to 1986, excludes 1700. Walsh survives only in the JAEB over-45s at 1766. So
+1700 is a reasonable floor rather than the centre: it will read slightly strong for
+most adults, which is the safer direction to be wrong in for a starting number, but
+it should not be defended as the measured value. For a child it is too aggressive by
+roughly a third, and the gap widens through the school-age years.
 
 The 500 rule should be about 415. That comes from measurement rather than from
 settings and carries no detectable bias, so it is the firmest number in this
