@@ -30,9 +30,11 @@ abstract: |
   Entered and measured sensitivity are different quantities, since a pump setting
   encodes the whole expected fall including spontaneous reversion of 21 to 30
   mg/dL over four hours. Measured directly from isolated overnight corrections in
-  the open-loop cohort, with a six-hour window, the fall was 31.6 mg/dL per unit
-  given and the constant 1558 (1319 to 1737) in 78 people over 422 nights, an
-  interval that covers Walsh's 1700 and lies below the 1915 people enter.
+  the open-loop cohort, with a six-hour window, the constant was 1483 (1291 to
+  1654) in 136 people, an interval covering Walsh's 1700 and lying below the 1915
+  people enter. Measured in the paediatric cohorts it was around 2744, so the
+  age effect is confirmed independently of settings and is larger in measurement,
+  at a ratio near 1.6 against 1.25 entered.
 ---
 
 # Introduction
@@ -416,22 +418,50 @@ corrections of at least 1 U were selected at a starting glucose between 150 and
 falls inside the observation, and the fall per unit given was taken as the median
 across each person's nights and multiplied by their measured daily dose.
 
-| Cohort | People | Nights | Fall per unit, mg/dL | Constant | 95% CI |
-|---|---|---|---|---|---|
-| REPLACE-BG, open loop | 78 | 422 | 31.6 | 1558 | 1319 to 1737 |
-| Loop, DIY closed loop | 80 | 365 | 42.0 | 1947 | 1660 to 2249 |
+| Cohort | Ages | People | Nights | Fall per unit, mg/dL | Constant | 95% CI |
+|---|---|---|---|---|---|---|
+| REPLACE-BG, open loop | adult | 136 | 500 | 34.6 | 1483 | 1291 to 1654 |
+| DCLP3, Control-IQ | 14+ | 52 | 79 | 36.8 | 1715 | 1407 to 2078 |
+| Loop, DIY closed loop | mixed | 261 | 565 | 46.0 | 1896 | 1751 to 2096 |
+| DCLP5, Control-IQ | 6 to 13 | 30 | 54 | 62.1 | 2749 | 1907 to 3309 |
+| PEDAP, Control-IQ | 2 to 5 | 47 | 93 | 197.8 | 2744 | 2157 to 2962 |
 
-REPLACE-BG is the cohort to read. It is the only one in which nothing but the
-person's own correction and their programmed basal is acting during the window,
-so the fall can be attributed to the dose. Its interval covers Walsh's 1700 and
-lies below the 1915 those people and their peers have entered, which says that
-entered settings are slightly weak rather than substantially so: a correction
-delivers a little more than the setting predicts.
+The dose threshold is 2.5% of each person's own daily dose rather than a flat
+number of units, which is 1.0 U at a daily dose of 40 and 0.34 U at 13.5. A flat
+threshold of 1 U silently excluded the youngest cohorts, keeping 11 of PEDAP's 295
+isolated corrections, and those cohorts carry the only measured check on the age
+pattern. IOBP2 cannot be measured at all: the bionic pancreas doses through
+automatic micro-boluses and there is no user correction to isolate, leaving 2
+qualifying nights from 343 people.
 
-The Loop figure of 1947 is larger and should not be read as a sensitivity. The
-algorithm continues to act throughout the window, so part of that fall is the
-controller's work rather than the bolus, and the estimate is biased upward for the
-same reason the matched estimator was biased downward.
+REPLACE-BG is the cohort to read for the level. It is the only one in which
+nothing but the person's own correction and their programmed basal is acting, so
+the fall can be attributed to the dose. Its interval covers Walsh's 1700 and lies
+below the 1915 those people and their peers have entered, which says entered
+settings are slightly weak: a correction delivers a little more than the setting
+predicts.
+
+Every closed-loop cohort is biased upward, because the algorithm continues to act
+through the window and part of the fall is the controller rather than the bolus.
+The size of that bias can be approximated. DCLP3 and REPLACE-BG are both adult
+cohorts, and DCLP3 sits 16% higher at 1715 against 1483, which is the only handle
+this data offers on the magnitude. It rests on two cohorts that differ in more
+than their automation, so it is an indication rather than a correction factor.
+
+That approximation matters for the age question, because both paediatric cohorts
+run Control-IQ and neither has an open-loop counterpart. Taking their figures at
+face value gives 2749 and 2744 against an adult 1483, and discounting them by 16%
+gives roughly 2370 against 1483. Either way the measured constant is around 1.6
+times higher in children than in adults.
+
+That is the same direction as the entered settings and a larger gap. Entered, the
+ratio of the under-18 constant to the adult one is 2390 to 1915, or 1.25. Measured,
+it is nearer 1.6. So paediatric settings reproduce the direction of the age effect
+and understate its size, and children appear to be more sensitive than their own
+settings record. This is the only place in this analysis where measurement and
+entered settings disagree about something other than level, and it is the strongest
+form of the age finding because it does not depend on what anybody typed into a
+pump.
 
 The horizon was tested rather than assumed. Rebuilding every window at six hours
 instead of four moved the pooled fitted constant from 880 to 874, so truncation of
@@ -503,9 +533,12 @@ direction, and covers 1700 only in adults aged 45 and over.
 The third concerns which of the three original constants survives measurement,
 and the answer inverts the picture from entered settings alone. Measured from
 isolated corrections where nothing else was intervening, the sensitivity constant
-is 1558 with an interval of 1319 to 1737, which covers Walsh's 1700. What people
+is 1483 with an interval of 1291 to 1654, which covers Walsh's 1700. What people
 enter, 1915 in adults, sits above both, so entered settings are slightly weak and
-a correction delivers a little more than the setting predicts. The carbohydrate
+a correction delivers a little more than the setting predicts. In the paediatric
+cohorts the measured constant is near 2744, so the age pattern found in entered
+settings is reproduced by measurement and is larger there, at a ratio near 1.6
+against 1.25. The carbohydrate
 ratio goes the other way and further: 415 measured against 500, with entered
 settings at 409 agreeing with the measurement rather than with the rule.
 
@@ -516,9 +549,11 @@ off settings, and it is the reason this analysis was worth doing on device data 
 all.
 
 A caution attaches to the sensitivity figure that does not attach to the
-carbohydrate one. It rests on 78 people in a single cohort, because it requires a
-correction whose effect is attributable, and that requires no algorithm to be
-running. The carbohydrate constant rests on 742 people across cohorts. The
+carbohydrate one. The level rests on 136 people in a single cohort,
+because attributing a fall to a dose requires no algorithm to be running, and the
+age comparison rests on paediatric cohorts that are all closed loop and therefore
+biased upward by an amount estimated from a single adult pair. The carbohydrate
+constant rests on 742 people across cohorts. The
 intervals reflect this and the sensitivity interval is correspondingly wide.
 
 The fourth concerns study design. The absence of a measurable bolus effect in
@@ -577,8 +612,9 @@ adults and 2390 in people under 18, and pooling those groups produces both a
 constant and a functional form that describe neither. The inverse-proportional
 form is not supported once age is held constant. Measured directly from isolated
 overnight corrections where no algorithm was intervening, the sensitivity constant
-is 1558 with an interval of 1319 to 1737, which covers Walsh's 1700 and sits below
-the 1915 people enter. Of the three rules, sensitivity is therefore the one whose
+is 1483 with an interval of 1291 to 1654, which covers Walsh's 1700 and sits below
+the 1915 people enter, and it is around 1.6 times higher in children than adults
+against 1.25 in entered settings. Of the three rules, sensitivity is therefore the one whose
 original constant survives measurement, and the carbohydrate ratio is the one that
 does not.
 

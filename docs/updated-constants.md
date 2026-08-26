@@ -19,8 +19,8 @@ The main finding is one the smaller cohort could not have shown. **Walsh's
 sensitivity constant describes what a correction does better than it describes
 what people enter**, and the pooled entered figures everyone quotes, the May
 analysis included, are driven by which ages happen to be in the sample. Measured
-at 1558 the interval covers 1700; entered it is 1915 in adults and 2390 in
-children. The carb ratio rule misses by a fifth however it is measured. The basal
+at 1483 the interval covers 1700; entered it is 1915 in adults and 2390 in
+children, and measurement puts the child-to-adult ratio nearer 1.6 than 1.25. The carb ratio rule misses by a fifth however it is measured. The basal
 rule holds where nothing is adjusting delivery.
 
 ## The three constants
@@ -229,19 +229,36 @@ fell per unit given. Isolated overnight corrections of at least 1 U from 150 to
 300 mg/dL, with a six-hour window so a six-hour insulin model has finished inside
 the observation:
 
-| Cohort | People | Nights | Fall per unit | Constant | 95% interval |
-|---|---|---|---|---|---|
-| REPLACE-BG, open loop | 78 | 422 | 31.6 mg/dL | **1558** | 1319 to 1737 |
-| Loop, DIY closed loop | 80 | 365 | 42.0 mg/dL | 1947 | 1660 to 2249 |
+| Cohort | Ages | People | Nights | Fall per unit | Constant | 95% interval |
+|---|---|---|---|---|---|---|
+| REPLACE-BG, open loop | adult | 136 | 500 | 34.6 | **1483** | 1291 to 1654 |
+| DCLP3, Control-IQ | 14+ | 52 | 79 | 36.8 | 1715 | 1407 to 2078 |
+| Loop, DIY | mixed | 261 | 565 | 46.0 | 1896 | 1751 to 2096 |
+| DCLP5, Control-IQ | 6 to 13 | 30 | 54 | 62.1 | 2749 | 1907 to 3309 |
+| PEDAP, Control-IQ | 2 to 5 | 47 | 93 | 197.8 | 2744 | 2157 to 2962 |
 
-REPLACE-BG is the one to read, because nothing but the person's own correction and
-their programmed basal is acting. Its interval covers Walsh's 1700 and sits below
-the 1915 people enter. So a correction delivers slightly more than the setting
-predicts, and entered settings are a little weak rather than badly wrong.
+IOBP2 is absent and cannot be done. The bionic pancreas doses through automatic
+micro-boluses, so there is no user correction to isolate: 2 qualifying nights from
+343 people.
 
-The Loop figure is higher because the algorithm keeps working through the window,
-so part of that fall is the controller rather than the bolus. It is not a
-sensitivity.
+REPLACE-BG is the one to read for the level, because nothing but the person's own
+correction and their programmed basal is acting. Its interval covers Walsh's 1700
+and sits below the 1915 people enter, so entered settings are a little weak.
+
+The age finding now has a measured counterpart, which it did not before. Children
+measure near 2744 against an adult 1483, a ratio of about 1.6. Entered, that ratio
+is 2390 to 1915, or 1.25. So measurement reproduces the direction and makes the gap
+larger, and paediatric settings understate how sensitive those children are.
+
+The dose threshold is 2.5% of the person's own daily dose, not a flat 1 U. A flat
+threshold kept 11 of PEDAP's 295 isolated corrections, because 1 U is a large dose
+for a child of three, and that silently removed the only measured check on age.
+
+Every closed-loop figure is biased upward, because the algorithm keeps working
+through the window and part of the fall is the controller rather than the bolus.
+DCLP3 and REPLACE-BG are both adult, and DCLP3 sits 16% higher, which is the only
+handle this data gives on the size of that bias. Discounting the paediatric
+figures by 16% leaves them near 2370, still well above the adult 1483.
 
 Two earlier attempts at this are withdrawn. One regressed per-person sensitivity on
 daily dose and reported a slope of +0.106 as evidence that one constant fits the
