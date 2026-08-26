@@ -11,7 +11,9 @@ import os
 from pathlib import Path
 
 ROOT = Path(os.environ.get("DYNISF_ROOT", Path(__file__).resolve().parent.parent))
-CACHE = ROOT / "inv009_cache"
+# The horizon can be overridden so a longer-window build lands in its own cache
+# rather than overwriting the four-hour one. Both are then readable side by side.
+CACHE = ROOT / os.environ.get("INV009_CACHE", "inv009_cache")
 GRID_CACHE = CACHE / "grid"
 WINDOW_CACHE = CACHE / "windows"
 RESULTS = ROOT / "results"
@@ -28,7 +30,7 @@ MMOL_TO_MGDL = 18.018
 # attributed to insulin without also modelling a meal, and these hours are the
 # ones people are least likely to be eating in.
 START_HOURS = (23, 0, 1, 2, 3)
-HORIZON_MIN = 240               # 4 h, matching INV-008
+HORIZON_MIN = int(os.environ.get("INV009_HORIZON_MIN", "240"))   # 4 h, matching INV-008
 ENDPOINT_TOL_MIN = 5.0          # how far an endpoint reading may sit from the mark
 ENDPOINT_MEDIAN_MIN = 15.0      # endpoints are a median over this much glucose
 MIN_CGM_FRACTION = 0.8          # of the horizon's bins that must carry a reading
