@@ -120,6 +120,80 @@ while the JAEB cohorts sit between -0.72 and -1.00. These are people who have
 tuned settings themselves over years against people whose settings came from a
 clinic within a trial. A rule fits best where people follow it.
 
+## Measured rather than entered
+
+Everything above multiplies a setting somebody typed into a pump by their daily
+dose, which answers what people run. It does not answer what the constant should
+be. Two of the three rules can be measured from behaviour instead.
+
+### Carb ratio: 415, and the measurement is trustworthy
+
+For a meal that was announced, dosed for, and left glucose where it started, the
+ratio that person needed was the grams divided by the units. No insulin model, no
+basal assumption, no settings file.
+
+Of 78,705 announced meals from 1,011 people, 23,596 ended within 20 mg/dL of their
+starting glucose. Restricting to people with at least eight such meals gives 742.
+
+| Cohort | n | Carb ratio x dose | 95% interval | Covers 500 |
+|---|---|---|---|---|
+| Loop | 594 | 418 | 408 to 429 | no |
+| REPLACE-BG | 148 | 390 | 362 to 427 | no |
+| Everyone | 742 | **415** | 405 to 425 | no |
+
+The estimator passes its own honesty test. Across the 289 people who also have an
+entered carb ratio, entered divided by measured is **1.02**. So this measurement
+carries no meaningful bias, and 415 is what the rule should be rather than what
+people happen to have typed. It agrees with the entered figure of 409 because in
+this case people have already found the right answer.
+
+### Basal share: 0.51, but it belongs to the system rather than the person
+
+Delivered basal over delivered total needs no model at all, so it covers the two
+cohorts with no settings file. That is 438 people every table above omits.
+
+| Cohort | System | n | Basal share | Covers 0.50 |
+|---|---|---|---|---|
+| Loop | DIY loop | 830 | 0.60 | no |
+| REPLACE-BG | none | 196 | 0.51 | yes |
+| DCLP3 | Control-IQ | 112 | 0.48 | yes |
+| DCLP5 | Control-IQ | 100 | 0.46 | no |
+| PEDAP | Control-IQ | 95 | 0.41 | no |
+| IOBP2 | bionic pancreas | 326 | 0.39 | no |
+| Everyone | mixed | 1,659 | 0.51 | no |
+
+Restricting to adults removes age as the explanation and the pattern sharpens.
+REPLACE-BG, where no algorithm is running, sits at 0.51 and Control-IQ at 0.50,
+both on Walsh. The bionic pancreas delivers 0.40 and the do-it-yourself loop 0.63.
+
+So Walsh's half describes what people programme when nothing is adjusting it, and
+survives one automated system unchanged. The other two move it substantially, in
+opposite directions, and that is a property of the algorithm rather than of the
+person using it.
+
+### Sensitivity: the level cannot be measured here
+
+The third rule resists the same treatment, and INV-009 established why before this
+analysis began. Fitting the overnight fall against insulin recovers the shape of a
+person's sensitivity and not its level, because insulin action is reconstructed
+rather than observed, residual carbohydrate rides along with meal boluses, and a
+loop delivers most insulin when glucose is refusing to move.
+
+The size of that is now measured. Against 394 people with both, the regression
+reads 15% of a working sensitivity. A matched-correction estimator needing neither
+settings nor a basal model disagrees, reading between 50% in the open-loop cohort
+and 19% in the youngest, and an attenuation that tracks how reactive each
+controller is rules out a single correction factor.
+
+One thing survives, because a common multiplier cannot change it. The measured
+constant does not drift with daily dose: slope +0.106, interval -0.026 to +0.241.
+A single sensitivity constant does fit across the dose range, which is the part of
+Walsh's claim this data can settle. What that constant equals, it cannot.
+
+Establishing the level would need a fixed correction, no carbohydrate, no
+algorithm intervening, and glucose watched afterwards. REPLACE-BG is the only
+cohort here with no algorithm.
+
 ## What to do with this
 
 For an adult, 1700 divided by daily dose remains a defensible starting sensitivity
@@ -127,8 +201,14 @@ factor and the data supports it more than the May analysis suggested. For a chil
 it is too aggressive by roughly a third, and the gap widens through the school-age
 years.
 
-The 500 rule should be about 400 for adults. The half-of-daily-dose basal
-convention can stay as it is.
+The 500 rule should be about 415. That comes from measurement rather than from
+settings and carries no detectable bias, so it is the firmest number in this
+document.
+
+The half-of-daily-dose basal convention can stay for someone with no automation
+and for Control-IQ. It does not describe what a do-it-yourself loop delivers, at
+0.63 in adults, or a bionic pancreas at 0.40, and neither of those is a setting
+anybody chose.
 
 None of these are settings to hold to. INV-009 measured the spread of what people
 actually run against the rule at 0.68 to 2.07, so any constant is a starting point
@@ -150,5 +230,13 @@ Basal share is the programmed share where a study records a schedule and the
 delivered share otherwise, and the two are labelled separately in the machine
 readable output because they are not the same quantity.
 
-Code is `inv009/walsh_constants.py`; results are `results/inv009_walsh_by_cohort.parquet`
-and `results/inv009_walsh_constants.json`.
+Measured carb ratio takes announced meals of at least 20 g with a dose within 20
+minutes, no other carbohydrate for four hours before or five hours after, and no
+further insulin during, keeping those that ended within 20 mg/dL of their starting
+glucose. Meals that did not end neutral are excluded rather than corrected.
+
+Code is `inv009/walsh_constants.py` for the entered figures and
+`inv009/measured_basal_cr.py` for the measured ones; `inv009/measured_constant.py`
+holds the sensitivity attempt and documents why its level is not reported.
+Results are in `results/inv009_walsh_by_cohort.parquet`,
+`results/inv009_measured_basal_cr.json` and their companions.
