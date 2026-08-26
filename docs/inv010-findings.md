@@ -16,11 +16,15 @@ widening the autosens clamp does not stand.
 Phases two and three use only values the device wrote down, so they hold whatever
 the reconstruction does. Both produced findings worth reporting.
 
-In this cohort oref autosens sits at exactly 1.000 for a median of 90% of
-decisions, and never moves at all for four of the ten users. Where it does move,
-it agrees only weakly with the dose-derived ratio Boost applies alongside it, and
-when both are away from neutral they point in opposite directions a third of the
-time.
+Four of the ten users show a ratio that never varies from 1.000, and Boost's own
+guidance is to switch autosens off, so those are switched off rather than finding
+nothing. Among the six where the computation is demonstrably live, autosens is
+neutral for a median of 39% of decisions rather than the 90% a naive average
+across all ten gives.
+
+Where it does move, it agrees only weakly with the dose-derived ratio Boost
+applies alongside it, and when both are away from neutral they point in opposite
+directions a third of the time.
 
 ## A correction to the scope
 
@@ -61,33 +65,40 @@ widening the autosens clamp from 0.7 to 1.2 out to 0.5 to 1.5 was worth about
 0.9 mg/dL. That result had already required three corrections, the last of which
 inverted it. It should now be treated as unsupported.
 
-## Phase two: autosens is mostly not moving
+## Phase two: how much autosens moves, once the switched-off users are removed
 
-| User | Exactly 1.000 | At ceiling | At floor | Active |
-|---|---|---|---|---|
-| A, B, D, K | 100% | 0% | 0% | 0% |
-| F | 96.1% | 0% | 0.2% | 3.9% |
-| tim | 84.7% | 0% | 2.2% | 15.3% |
-| E | 49.8% | 7.0% | 0.2% | 50.2% |
-| I | 27.3% | 55.2% | 1.3% | 72.7% |
-| C | 27.1% | 0% | 0% | 72.9% |
-| H | 21.5% | 33.6% | 0% | 78.5% |
+An earlier version of this note reported that autosens is neutral for 90% of
+decisions across all ten users. That figure is wrong to quote, because Boost's
+guidance is to switch autosens off when using it, and four of the ten users show
+a ratio that takes exactly one distinct value across their whole record. Those
+are disabled, not quiet.
 
-Median across the ten: neutral for 90% of decisions.
+Separating them on whether the value ever varies:
 
-Two readings are available and this data cannot separate them. Either autosens
-is examining the record and finding nothing worth adjusting, or it is not being
-fed in this configuration and returns neutral by default. Four users at exactly
-100% neutral points at the second. Every user here runs Boost in its
-dose-derived mode, where the oref ratio is computed alongside rather than
-applied, so a plugin that is not receiving data would look exactly like this.
+| User | Distinct values | Neutral share | At ceiling | At floor | Status |
+|---|---|---|---|---|---|
+| H | 85 | 21.5% | 33.6% | 0% | live |
+| I | 51 | 27.3% | 55.2% | 1.3% | live |
+| E | 47 | 49.8% | 7.0% | 0.2% | live |
+| C | 44 | 27.1% | 0% | 0% | live |
+| tim | 31 | 84.7% | 0% | 2.2% | live |
+| F | 18 | 96.1% | 0% | 0.2% | live |
+| A, B, D, K | 1 | 100% | 0% | 0% | off |
 
-Distinguishing them needs a user running oref autosens as the applied mechanism.
-None of these ten is.
+Among the six live users the neutral share has a median of **39%**, so autosens
+is adjusting something for roughly three fifths of decisions. That is a very
+different picture from the one the pooled figure gave, and it is the one to
+carry forward.
 
-Where autosens is active it does reach both bounds, which the INV-009
-reconstruction never managed: I sits at the ceiling 55.2% of the time and H
-33.6%, while tim reaches the floor 2.2% of the time.
+Two of the six are still mostly neutral. tim at 84.7% and F at 96.1% look more
+like the disabled group than like their live peers, and the plugin fades its
+ratio toward 1 when it has under an hour of valid deviations, so a record with
+frequent carbohydrate entries can sit near neutral while running normally. Those
+two should not be read as evidence either way.
+
+Where autosens is active it reaches both bounds, which the INV-009 reconstruction
+never managed: I sits at the ceiling 55.2% of the time and H 33.6%, while tim
+reaches the floor 2.2% of the time.
 
 ## Phase three: the two mechanisms are largely unrelated
 
@@ -119,13 +130,14 @@ The INV-009 detector work needs redoing against a device before any of it is
 quoted. That means a cohort running oref autosens as the applied mechanism, which
 this one is not.
 
-The phase two question is the more interesting one and is unresolved for a
-mundane reason. If autosens really is neutral 90% of the time in normal use, the
-mechanism is doing much less than its reputation suggests, and the INV-009
-finding that per-person base error is large and mostly uncorrected would matter
-more, not less. If instead it is a configuration artefact, the number means
-nothing. One user on profile sensitivity with autosens applied would separate
-them.
+The phase two question resolved once the switched-off users were separated out.
+Among users whose computation is live, autosens is adjusting for about three
+fifths of decisions, which is a working mechanism rather than a dormant one.
+
+What remains open is whether that generalises. Every user here runs Boost in its
+dose-derived mode, so even the live oref ratio is a shadow rather than the number
+doing the dosing. Whether autosens behaves the same way when it is the applied
+mechanism, on profile sensitivity, is not something this cohort can show.
 
 ## Scope
 
