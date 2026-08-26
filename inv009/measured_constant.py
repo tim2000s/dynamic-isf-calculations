@@ -87,6 +87,17 @@ def main() -> int:
     R = per_subject()
     print(f"{len(R)} people with a measurable sensitivity, across "
           f"{R.study.nunique()} cohorts")
+    # WITHDRAWN 2026-08-26. The slope of the calibrated constant against daily
+    # dose computed below was reported as evidence that one constant fits the
+    # whole dose range. It is not evidence of that. It is fitted only to the 71%
+    # of people whose measured sensitivity came out positive, which is selection
+    # on the outcome, and it pools cohorts whose bias differs: within-cohort
+    # slopes run from -0.05 in REPLACE-BG to +0.32 in DCLP5, and Loop excludes
+    # zero at +0.245 [+0.083, +0.411]. Cohort median daily dose spans 13.6 to
+    # 55.5 U, so a bias that varies by cohort varies along the axis the slope is
+    # measured on. See inv009/net_dose_isf.py for the endogeneity measure that
+    # differs by cohort, 0.054 to 0.447, and docs/preprint-dosing-constants.md
+    # for the corrected text.
     pos = R[R.isf_measured > 0]
     print(f"  {len(pos)} of them positive, which is the group a constant can be "
           f"formed from\n")

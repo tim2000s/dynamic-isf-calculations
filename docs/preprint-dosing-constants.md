@@ -29,8 +29,9 @@ abstract: |
   or negative because comparison nights had already been corrected through basal.
   Entered and measured sensitivity are different quantities, since a pump setting
   encodes the whole expected fall including spontaneous reversion of 21 to 30
-  mg/dL over four hours. The shape of the relationship is recoverable and its
-  level is not.
+  mg/dL over four hours. Neither the level of measured sensitivity nor its scaling
+  with daily dose is recoverable from these data once an algorithm is delivering
+  insulin, because the bias is cohort-specific rather than a common multiplier.
 ---
 
 # Introduction
@@ -405,23 +406,59 @@ of fall overnight against 45 entered, which as a constant is 630 to 840 against
 1886. The ratio of measured to entered lay between 0.39 and 0.50 across four
 cohorts.
 
-One property of the relationship does survive, because a common multiplier cannot
-alter a slope. The measured constant does not drift with daily dose: the slope of
-the measured constant on daily dose was +0.106 with an interval of -0.026 to
-+0.241. A single constant does fit across the range of daily doses sampled, which
-is the component of Walsh's claim these data can adjudicate.
+It is tempting to argue that the scaling survives even where the level does not,
+on the grounds that a multiplier common to everyone cannot alter a slope. Pooled
+across cohorts the measured constant appeared not to drift with daily dose, at a
+slope of +0.107 with an interval of -0.024 to +0.240, and an earlier version of
+this analysis reported that as evidence that one constant fits the whole dose
+range.
+
+That argument does not hold here, for two reasons. The pooled estimate was fitted
+only to the 1,182 people of 1,660 whose measured sensitivity came out above zero,
+which is selection on the outcome, and within-cohort estimates disagree with the
+pooled one and with each other.
+
+| Cohort | n | Median TDD, U | Measured constant | Slope on daily dose | 95% CI |
+|---|---|---|---|---|---|
+| REPLACE-BG | 138 | 41.3 | 358 | -0.053 | -0.607 to +0.459 |
+| DCLP3 | 61 | 55.5 | 225 | +0.127 | -0.355 to +0.628 |
+| DCLP5 | 53 | 39.0 | 366 | +0.323 | -0.205 to +0.860 |
+| PEDAP | 44 | 13.6 | 164 | +0.155 | -0.762 to +1.111 |
+| IOBP2 | 226 | 48.8 | 177 | -0.014 | -0.401 to +0.371 |
+| Loop | 660 | 38.5 | 266 | +0.245 | +0.083 to +0.411 |
+
+The measured constant ranges from 164 to 366 between cohorts, a factor of 2.2, and
+the ordering bears no relation to the endogeneity measure above. In the largest
+cohort the slope is +0.245 and its interval excludes zero. The pooled interval
+covers zero only by averaging cohorts whose slopes run from -0.05 to +0.32.
+
+The multiplier is therefore not common. The bias documented in this section
+differs by cohort, cohorts differ in median daily dose by a factor of four, and
+that difference maps directly onto the axis the slope is measured along. This is
+the same composition artefact identified earlier in this paper for entered
+settings, arising here in the author's own measured analysis. These data do not
+adjudicate whether one sensitivity constant fits across the range of daily doses.
 
 # Discussion
 
 Four findings follow from this analysis.
 
-The first concerns method. An inverse-proportional relationship between
-sensitivity and daily dose can be manufactured by pooling age groups that differ
-in level, and in this corpus it was: the pooled slope of -0.98 became -0.73 in the
-same people restricted to adults, and 51% of the pooled sample was under 18. Any
-validation of a dose-derived constant performed on a cohort of mixed age is
-therefore weak evidence for the functional form, and the direction of the artefact
-is toward confirmation. This applies to the author's earlier work.
+The first concerns method, and it arose twice in this work. An
+inverse-proportional relationship between sensitivity and daily dose can be
+manufactured by pooling groups that differ in level, and in this corpus it was:
+the pooled slope of -0.98 became -0.73 in the same people restricted to adults,
+with 51% of the pooled sample under 18. Any validation of a dose-derived constant
+performed on a cohort of mixed age is therefore weak evidence for the functional
+form, and the direction of the artefact is toward confirmation.
+
+The same artefact then appeared in the measured analysis, where the author
+initially reported a pooled slope near zero as evidence that one constant fits the
+whole dose range. It does not survive stratification either. Within-cohort slopes
+run from -0.05 to +0.32, the largest cohort excludes zero at +0.245, and the
+measured constant itself varies between cohorts by a factor of 2.2. Pooling
+estimates whose bias differs by group, across groups that differ in the exposure,
+reproduces the error in a second place. This applies to the author's earlier work
+and to an earlier draft of the present paper.
 
 The second concerns the constants themselves. The carbohydrate ratio rule is the
 clearest departure from practice and the most consistent, at 415 measured and 409
@@ -468,6 +505,13 @@ optimism in entered settings a third. The present design does not separate them,
 and extending the horizon to six hours would address the first. That extension is
 planned.
 
+The measured sensitivity estimator returns a value at or below zero for 29% of
+people, 478 of 1,660, and any analysis restricted to positive values is selecting
+on the outcome. Survival of that filter is close to independent of daily dose, at
+Spearman +0.042 with p = 0.084, so it does not by itself generate a spurious
+scaling. It does mean the surviving group is not a random sample of the cohort,
+and the pooled estimates in the measured section should be read with that in mind.
+
 Insulin action is reconstructed rather than observed. For the Loop cohort the
 model was selected per person against the app's own recorded insulin on board,
 reaching r = 0.927, but elsewhere a single model was assumed.
@@ -490,10 +534,12 @@ carbohydrate ratio constant is 415 rather than 500 and the basal share is 0.51
 where no algorithm is adjusting delivery. The sensitivity constant is 1915 in
 adults and 2390 in people under 18, and pooling those groups produces both a
 constant and a functional form that describe neither. The inverse-proportional
-form is not supported once age is held constant. A single constant across the
-range of daily doses is supported. The level of a person's sensitivity is
-recoverable from entered settings and, on this evidence, not from observational
-device data once an algorithm is delivering insulin.
+form is not supported once age is held constant. Whether one constant fits across
+the range of daily doses is not settled by this work: the measured estimator
+carries a bias that differs by cohort, and cohorts differ in daily dose, so its
+apparent scaling cannot be separated from its composition. The level of a person's
+sensitivity is recoverable from entered settings and, on this evidence, not from
+observational device data once an algorithm is delivering insulin.
 
 # Data availability
 
