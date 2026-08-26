@@ -219,21 +219,34 @@ is 0.054 in REPLACE-BG and 0.447 in Loop. Someone boluses once and goes to sleep
 while a controller sampling every five minutes keeps answering something we cannot
 see. No amount of conditioning on the trace breaks a tie to what is not in it.
 
-In the one cohort where the question can be asked, a unit does 15 to 20 mg/dL
-overnight against 45 entered. As a constant that is 630 to 840 against 1886. The
-ratio of measured to entered is 0.39 to 0.50 and it holds across four studies,
-reproducing the affine relation INV-009 found on oref data with a different cohort
-and a different estimator.
+In the one cohort where that contrast works, a unit does 15 to 20 mg/dL overnight
+against 45 entered, a constant of 630 to 840 against 1886.
 
-Three things could produce a ratio near 0.4 and this design cannot separate them:
-a four-hour window truncating a six-hour insulin tail, people correcting precisely
-when they expect glucose to stay up, and entered settings being optimistic.
-Extending the horizon would settle the first.
+The matched contrast is not the only route, and the other one covers everybody.
+Fitting ISF = K / TDD^b to predict the overnight fall on periods the fit never saw,
+with a per-person intercept, gives K = 880 with an interval of 844 to 918 across
+1,613 people at Walsh's exponent of 1.0, and 616 at the best-fitting 0.90. The
+difference between those two exponents is 0.02 mg/dL of held-out error, so the
+inverse-proportional form costs nothing here and can be kept.
 
-What does survive is the shape, because a common multiplier cannot change a slope.
-The measured constant does not drift with daily dose: slope +0.106, interval
--0.026 to +0.241. A single constant does fit across the dose range, which is the
-part of Walsh's claim this data settles. What that constant equals, it does not.
+So the constant from observational data is 880, which is 46% of the 1915 adults
+enter. The ratio of measured to entered runs 0.39 to 0.50 by every route taken,
+and the open-loop cohort's predictive constant of 423 agrees with its matched
+estimate of 399, which is the one place two independent methods can be checked
+against each other.
+
+The gap is a difference of quantity rather than an error in either number. The fit
+gives every person an intercept, so 880 is the marginal fall per unit against that
+person's own baseline. A settings file encodes the whole expected fall, and part of
+it happens without insulin: 21 to 30 mg/dL over four hours at 150 to 250 mg/dL with
+nothing given. Comparing 880 to 1700 without saying that is comparing a marginal
+quantity to a total one.
+
+A single universal constant is not supported. At a fixed exponent it spans 423 to
+1433 between cohorts and the best exponent spans 0.50 to 1.10. An earlier version
+of this note claimed the opposite, from a slope of +0.106 fitted only to people
+whose measured sensitivity came out positive and pooled across cohorts whose bias
+differs. That claim is withdrawn.
 
 The practical reading is that these are two quantities and not two estimates of
 one. A sensitivity factor in a pump is a dosing parameter, and it encodes the
