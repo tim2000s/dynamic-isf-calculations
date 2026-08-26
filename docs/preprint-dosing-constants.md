@@ -29,9 +29,12 @@ abstract: |
   or negative because comparison nights had already been corrected through basal.
   Entered and measured sensitivity are different quantities, since a pump setting
   encodes the whole expected fall including spontaneous reversion of 21 to 30
-  mg/dL over four hours. Neither the level of measured sensitivity nor its scaling
-  with daily dose is recoverable from these data once an algorithm is delivering
-  insulin, because the bias is cohort-specific rather than a common multiplier.
+  mg/dL over four hours. Fitting ISF = K / TDD^b to predict the overnight fall on
+  held-out periods gave K = 880 (844 to 918) at Walsh's exponent of 1.0 across
+  1,613 people, which is 46% of the entered constant and is a marginal rather than
+  a total quantity. The constant at that exponent spans 423 to 1433 between
+  cohorts and the best-fitting exponent spans 0.50 to 1.10, so a single universal
+  constant is not supported.
 ---
 
 # Introduction
@@ -406,38 +409,79 @@ of fall overnight against 45 entered, which as a constant is 630 to 840 against
 1886. The ratio of measured to entered lay between 0.39 and 0.50 across four
 cohorts.
 
-It is tempting to argue that the scaling survives even where the level does not,
-on the grounds that a multiplier common to everyone cannot alter a slope. Pooled
-across cohorts the measured constant appeared not to drift with daily dose, at a
-slope of +0.107 with an interval of -0.024 to +0.240, and an earlier version of
-this analysis reported that as evidence that one constant fits the whole dose
-range.
+## The constant fitted from observed response
 
-That argument does not hold here, for two reasons. The pooled estimate was fitted
-only to the 1,182 people of 1,660 whose measured sensitivity came out above zero,
-which is selection on the outcome, and within-cohort estimates disagree with the
-pooled one and with each other.
+The matched estimator above answers a narrow question, whether one additional unit
+can be shown to have done something, and under an algorithm it cannot. That is a
+property of that contrast rather than of the data. A constant can still be fitted,
+by asking which law of the form ISF = K / TDD^b best predicts the overnight fall on
+periods the fit never saw. Every person receives their own intercept, since
+overnight most insulin is basal offsetting hepatic glucose output and no
+sensitivity factor should be asked to carry that. Scoring is a per-person 70/30
+split in time with median absolute error on the held-out tail.
 
-| Cohort | n | Median TDD, U | Measured constant | Slope on daily dose | 95% CI |
+Across 1,613 people the constant at Walsh's exponent of 1.0 was 880 (95% CI 844 to
+918) with a held-out error of 23.41 mg/dL. The best-fitting exponent was 0.90 with
+a constant of 616 and an error of 23.39 mg/dL. Walsh's inverse-proportional form
+therefore costs 0.02 mg/dL against the best fit in this corpus, which is no
+meaningful penalty, and the form can be retained.
+
+| Cohort | People | Best exponent | Constant there | Constant at b = 1 | Held-out MAE |
 |---|---|---|---|---|---|
-| REPLACE-BG | 138 | 41.3 | 358 | -0.053 | -0.607 to +0.459 |
-| DCLP3 | 61 | 55.5 | 225 | +0.127 | -0.355 to +0.628 |
-| DCLP5 | 53 | 39.0 | 366 | +0.323 | -0.205 to +0.860 |
-| PEDAP | 44 | 13.6 | 164 | +0.155 | -0.762 to +1.111 |
-| IOBP2 | 226 | 48.8 | 177 | -0.014 | -0.401 to +0.371 |
-| Loop | 660 | 38.5 | 266 | +0.245 | +0.083 to +0.411 |
+| Loop | 796 | 0.80 | 384 | 774 | 19.93 |
+| IOBP2 | 323 | 0.55 | 143 | 869 | 30.67 |
+| REPLACE-BG | 187 | 1.10 | 623 | 423 | 29.26 |
+| DCLP3 | 112 | 0.50 | 169 | 1177 | 21.61 |
+| DCLP5 | 100 | 0.95 | 1203 | 1433 | 20.39 |
+| PEDAP | 95 | 1.00 | 1233 | 1233 | 23.38 |
+| Pooled | 1,613 | 0.90 | 616 | 880 | 23.41 |
 
-The measured constant ranges from 164 to 366 between cohorts, a factor of 2.2, and
-the ordering bears no relation to the endogeneity measure above. In the largest
-cohort the slope is +0.245 and its interval excludes zero. The pooled interval
-covers zero only by averaging cohorts whose slopes run from -0.05 to +0.32.
+Two readings of this table are needed together. A constant is obtainable from
+observational data, and the pooled figure of 880 is estimated with a narrow
+interval on a large sample and validated out of sample. A single universal
+constant is not supported by these cohorts: the value at b = 1 spans 423 to 1433,
+a factor of 3.39, and the best exponent spans 0.50 to 1.10. The open-loop cohort,
+in which the matched estimator was the only one to work, returns the lowest value
+at 423, and its agreement with the matched estimate of 399 for the same people is
+the one place two independent methods can be checked against each other.
 
-The multiplier is therefore not common. The bias documented in this section
-differs by cohort, cohorts differ in median daily dose by a factor of four, and
-that difference maps directly onto the axis the slope is measured along. This is
-the same composition artefact identified earlier in this paper for entered
-settings, arising here in the author's own measured analysis. These data do not
-adjudicate whether one sensitivity constant fits across the range of daily doses.
+The pooled constant of 880 is 46% of the entered constant of 1915 for adults. That
+ratio is consistent with every other route taken in this paper, which found
+measured-to-entered ratios between 0.39 and 0.50.
+
+The reason for the gap follows from the design rather than from error in either
+number. The fit gives each person an intercept, so 880 is the marginal fall per
+acting unit relative to that person's own baseline trajectory. A settings file
+encodes the whole fall a person expects after a correction, and part of that fall
+occurs without insulin: overnight and carbohydrate-free between 150 and 250 mg/dL,
+glucose fell a median 21 to 30 mg/dL over four hours with no correction given.
+Comparing 880 with 1700 or with 1915 without stating this is comparing a marginal
+quantity with a total one.
+
+## A scaling claim withdrawn
+
+An earlier version of this analysis reported a different route to the same
+question, regressing a per-person measured constant on daily dose, and found a
+slope of +0.107 with an interval of -0.024 to +0.240. That was presented as
+evidence that one constant fits the whole dose range. It is withdrawn.
+
+Two faults account for it. The regression was fitted only to the 1,182 people of
+1,660 whose measured sensitivity came out above zero, which is selection on the
+outcome. More seriously, it pooled cohorts whose bias differs. Within-cohort
+slopes from that estimator run -0.053 in REPLACE-BG, -0.014 in IOBP2, +0.127 in
+DCLP3, +0.155 in PEDAP, +0.245 in Loop with an interval of +0.083 to +0.411 that
+excludes zero, and +0.323 in DCLP5. The pooled interval covered zero only by
+averaging across that spread.
+
+The defence offered for the pooled figure was that a multiplier common to everyone
+cannot alter a slope. The multiplier is not common. The endogeneity measure above
+runs from 0.054 to 0.447 between cohorts, and cohort median daily dose spans 13.6
+to 55.5 U, so a bias that differs by cohort differs along the axis the slope is
+measured on. This is the same composition artefact identified earlier in this
+paper for entered settings, arising in the author's own measured analysis. The
+predictive fit reported in the preceding section is the sounder route to the same
+question and reaches a compatible conclusion: the exponent is not stable across
+cohorts either, spanning 0.50 to 1.10.
 
 # Discussion
 
@@ -453,12 +497,14 @@ form, and the direction of the artefact is toward confirmation.
 
 The same artefact then appeared in the measured analysis, where the author
 initially reported a pooled slope near zero as evidence that one constant fits the
-whole dose range. It does not survive stratification either. Within-cohort slopes
-run from -0.05 to +0.32, the largest cohort excludes zero at +0.245, and the
-measured constant itself varies between cohorts by a factor of 2.2. Pooling
-estimates whose bias differs by group, across groups that differ in the exposure,
-reproduces the error in a second place. This applies to the author's earlier work
-and to an earlier draft of the present paper.
+whole dose range. It does not survive stratification. Within-cohort slopes from
+that estimator run from -0.05 to +0.32 and the largest cohort excludes zero at
++0.245. The independent predictive fit reaches the same conclusion by a sounder
+route, since the best-fitting exponent there spans 0.50 to 1.10 between cohorts
+and the constant at a fixed exponent spans a factor of 3.39. Pooling estimates
+whose bias differs by group, across groups that differ in the exposure, reproduces
+the error in a second place. This applies to the author's earlier work and to an
+earlier draft of the present paper.
 
 The second concerns the constants themselves. The carbohydrate ratio rule is the
 clearest departure from practice and the most consistent, at 415 measured and 409
@@ -469,16 +515,23 @@ once stated but is worth separating from any claim about the person. The
 sensitivity rule is 13% out in adults and 41% out in children, in the same
 direction, and covers 1700 only in adults aged 45 and over.
 
-The third concerns what the sensitivity factor is. A pump setting encodes the
-whole glucose fall a person expects after a correction. Part of that fall occurs
-without insulin: overnight and carbohydrate-free, between 150 and 250 mg/dL,
-glucose fell a median 21 to 30 mg/dL over four hours with no correction given. A
-matched design necessarily removes that component and returns the marginal effect
-of an additional unit, which was 15 to 20 mg/dL per unit against 45 entered.
-These are two quantities rather than two estimates of one, and substituting the
-measured value into a pump would multiply correction doses by roughly two and a
-half. The entered constant remains the appropriate number to set, and the measured
-one describes physiology.
+The third concerns what the sensitivity factor is, and it is the reason two
+defensible constants differ by a factor of two. A pump setting encodes the whole
+glucose fall a person expects after a correction. Part of that fall occurs without
+insulin: overnight and carbohydrate-free, between 150 and 250 mg/dL, glucose fell
+a median 21 to 30 mg/dL over four hours with no correction given. Any estimator
+that separates the insulin effect from that baseline returns a marginal quantity,
+and both estimators used here do. The predictive fit gives 880 divided by daily
+dose across 1,613 people and the matched design gives 15 to 20 mg/dL per unit
+against 45 entered in the open-loop cohort, which agree with each other and are
+each about 46% of the entered figure.
+
+These are therefore two quantities rather than two estimates of one. Substituting
+the marginal value into a pump would roughly double correction doses. The entered
+constant of 1915 in adults remains the number to set, and 880 describes what an
+additional unit does against a person's own baseline. Reporting either without
+naming which one it is has caused confusion in this work and would cause it in
+anybody else's.
 
 The fourth concerns study design. The absence of a measurable bolus effect in
 four automated cohorts is a finding about those systems rather than a failure of
@@ -534,12 +587,13 @@ carbohydrate ratio constant is 415 rather than 500 and the basal share is 0.51
 where no algorithm is adjusting delivery. The sensitivity constant is 1915 in
 adults and 2390 in people under 18, and pooling those groups produces both a
 constant and a functional form that describe neither. The inverse-proportional
-form is not supported once age is held constant. Whether one constant fits across
-the range of daily doses is not settled by this work: the measured estimator
-carries a bias that differs by cohort, and cohorts differ in daily dose, so its
-apparent scaling cannot be separated from its composition. The level of a person's
-sensitivity is recoverable from entered settings and, on this evidence, not from
-observational device data once an algorithm is delivering insulin.
+form is not supported once age is held constant. A sensitivity constant can be
+fitted from observed glucose response, at 880 divided by daily dose across 1,613
+people, and it predicts held-out overnight falls to 23.4 mg/dL. It is 46% of the
+constant people enter, because it is the marginal fall per unit against each
+person's own baseline while a settings file encodes the total expected fall. It is
+not universal, spanning 423 to 1433 between cohorts at a fixed exponent, so it is
+a population starting value rather than a law.
 
 # Data availability
 
