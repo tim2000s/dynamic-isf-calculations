@@ -1,0 +1,343 @@
+{
+ "studies": [
+  {
+   "study": "ReplaceBG",
+   "label": "REPLACE-BG (open loop)",
+   "closed_loop": false,
+   "n_people": 196,
+   "n_events": 519,
+   "n_event_subjects": 138,
+   "tdd_median": 41.869982168190376,
+   "isf_regression": 5.017527545149324,
+   "isf_total": 17.645499571906825,
+   "isf_spont": 8.122360345809735,
+   "isf_causal": 9.523139226097092,
+   "causal_lo": 7.0764606224070015,
+   "causal_hi": 12.076418744176918,
+   "isf_entered": 45.04499816894531,
+   "k_regression": 210.08378884380625,
+   "k_total": 738.8167524245497,
+   "k_causal": 398.73366958187955,
+   "k_entered": 1886.0332700999083,
+   "total_over_entered": 0.39173049815044486,
+   "causal_over_entered": 0.21141391082711786
+  },
+  {
+   "study": "Loop",
+   "label": "Loop (DIY closed loop)",
+   "closed_loop": true,
+   "n_people": 838,
+   "n_events": 885,
+   "n_event_subjects": 373,
+   "tdd_median": 38.60843190058475,
+   "isf_regression": 5.368063317586092,
+   "isf_total": 27.501000264825354,
+   "isf_spont": 27.940112713468743,
+   "isf_causal": -0.43911244864339666,
+   "causal_lo": -1.9459242228267544,
+   "causal_hi": 1.212715286188558,
+   "isf_entered": 56.507511138916016,
+   "k_regression": 207.25250703504966,
+   "k_total": 1061.7704959224727,
+   "k_causal": -16.953443070147596,
+   "k_entered": 2181.666395678373,
+   "total_over_entered": 0.48667866820780503,
+   "causal_over_entered": -0.007770868682641119
+  },
+  {
+   "study": "DCLP3",
+   "label": "DCLP3 (Control-IQ, adult)",
+   "closed_loop": true,
+   "n_people": 112,
+   "n_events": 175,
+   "n_event_subjects": 78,
+   "tdd_median": 49.98686158061143,
+   "isf_regression": 0.9848719717470544,
+   "isf_total": 18.75839324246414,
+   "isf_spont": 21.085132101538054,
+   "isf_causal": -2.3267388590739086,
+   "causal_lo": -6.1067418062392,
+   "causal_hi": 1.508539111173543,
+   "isf_entered": NaN,
+   "k_regression": 49.230658926343864,
+   "k_total": 937.6732064857318,
+   "k_causal": -116.30637328275724,
+   "k_entered": NaN,
+   "total_over_entered": NaN,
+   "causal_over_entered": NaN
+  },
+  {
+   "study": "DCLP5",
+   "label": "DCLP5 (Control-IQ, 6-13y)",
+   "closed_loop": true,
+   "n_people": 100,
+   "n_events": 95,
+   "n_event_subjects": 41,
+   "tdd_median": 37.44819901975036,
+   "isf_regression": 0.8301278682693578,
+   "isf_total": 33.47415631899629,
+   "isf_spont": 35.280662725474876,
+   "isf_causal": -1.8065064064785796,
+   "causal_lo": -10.40494739291766,
+   "causal_hi": 5.6609553481397645,
+   "isf_entered": 68.27864456176758,
+   "k_regression": 31.086793622792023,
+   "k_total": 1253.5468678520074,
+   "k_causal": -67.6504114402639,
+   "k_entered": 2556.912270347868,
+   "total_over_entered": 0.4902580672748159,
+   "causal_over_entered": -0.02645785396112165
+  },
+  {
+   "study": "PEDAP",
+   "label": "PEDAP (Control-IQ, 2-5y)",
+   "closed_loop": true,
+   "n_people": 98,
+   "n_events": 98,
+   "n_event_subjects": 38,
+   "tdd_median": 13.551627357435004,
+   "isf_regression": -2.317742386596734,
+   "isf_total": 38.53583898375047,
+   "isf_spont": 44.642062865255205,
+   "isf_causal": -6.106223881504729,
+   "causal_lo": -14.547323935698198,
+   "causal_hi": 1.4886666545006333,
+   "isf_entered": 161.25,
+   "k_regression": -31.409181133691,
+   "k_total": 522.2233298139032,
+   "k_causal": -82.74927060322244,
+   "k_entered": 2185.1999113863944,
+   "total_over_entered": 0.23898194718604945,
+   "causal_over_entered": -0.03786805507909909
+  },
+  {
+   "study": "IOBP2",
+   "label": "IOBP2 (bionic pancreas)",
+   "closed_loop": true,
+   "n_people": 334,
+   "n_events": 2,
+   "n_event_subjects": 1,
+   "tdd_median": 49.31455702806407,
+   "isf_regression": 1.9885572327266487,
+   "isf_total": NaN,
+   "isf_spont": NaN,
+   "isf_causal": NaN,
+   "causal_lo": NaN,
+   "causal_hi": NaN,
+   "isf_entered": NaN,
+   "k_regression": 98.0648190568676,
+   "k_total": NaN,
+   "k_causal": NaN,
+   "k_entered": NaN,
+   "total_over_entered": NaN,
+   "causal_over_entered": NaN
+  }
+ ],
+ "spontaneous": {
+  "ReplaceBG": [
+   {
+    "lo": 90,
+    "hi": 120,
+    "n": 9360,
+    "fall": -2.0
+   },
+   {
+    "lo": 120,
+    "hi": 150,
+    "n": 8987,
+    "fall": 12.0
+   },
+   {
+    "lo": 150,
+    "hi": 180,
+    "n": 6473,
+    "fall": 21.0
+   },
+   {
+    "lo": 180,
+    "hi": 220,
+    "n": 5090,
+    "fall": 30.0
+   },
+   {
+    "lo": 220,
+    "hi": 260,
+    "n": 2668,
+    "fall": 35.0
+   },
+   {
+    "lo": 260,
+    "hi": 400,
+    "n": 1289,
+    "fall": 43.0
+   }
+  ],
+  "Loop": [
+   {
+    "lo": 90,
+    "hi": 120,
+    "n": 104673,
+    "fall": 2.000354999999999
+   },
+   {
+    "lo": 120,
+    "hi": 150,
+    "n": 79380,
+    "fall": 20.002689999999987
+   },
+   {
+    "lo": 150,
+    "hi": 180,
+    "n": 41774,
+    "fall": 40.005369999999985
+   },
+   {
+    "lo": 180,
+    "hi": 220,
+    "n": 24165,
+    "fall": 62.007859999999994
+   },
+   {
+    "lo": 220,
+    "hi": 260,
+    "n": 9390,
+    "fall": 85.01216
+   },
+   {
+    "lo": 260,
+    "hi": 400,
+    "n": 3674,
+    "fall": 104.01422500000001
+   }
+  ],
+  "DCLP3": [
+   {
+    "lo": 90,
+    "hi": 120,
+    "n": 8626,
+    "fall": -10.0
+   },
+   {
+    "lo": 120,
+    "hi": 150,
+    "n": 9836,
+    "fall": 13.0
+   },
+   {
+    "lo": 150,
+    "hi": 180,
+    "n": 5311,
+    "fall": 39.0
+   },
+   {
+    "lo": 180,
+    "hi": 220,
+    "n": 2566,
+    "fall": 67.0
+   },
+   {
+    "lo": 220,
+    "hi": 260,
+    "n": 802,
+    "fall": 96.5
+   },
+   {
+    "lo": 260,
+    "hi": 400,
+    "n": 303,
+    "fall": 112.0
+   }
+  ],
+  "DCLP5": [
+   {
+    "lo": 90,
+    "hi": 120,
+    "n": 11985,
+    "fall": -11.0
+   },
+   {
+    "lo": 120,
+    "hi": 150,
+    "n": 12596,
+    "fall": 11.0
+   },
+   {
+    "lo": 150,
+    "hi": 180,
+    "n": 7532,
+    "fall": 37.0
+   },
+   {
+    "lo": 180,
+    "hi": 220,
+    "n": 4807,
+    "fall": 68.0
+   },
+   {
+    "lo": 220,
+    "hi": 260,
+    "n": 2166,
+    "fall": 102.0
+   },
+   {
+    "lo": 260,
+    "hi": 400,
+    "n": 969,
+    "fall": 126.0
+   }
+  ],
+  "PEDAP": [
+   {
+    "lo": 90,
+    "hi": 120,
+    "n": 16873,
+    "fall": -13.0
+   },
+   {
+    "lo": 120,
+    "hi": 150,
+    "n": 16856,
+    "fall": 11.0
+   },
+   {
+    "lo": 150,
+    "hi": 180,
+    "n": 8834,
+    "fall": 38.0
+   },
+   {
+    "lo": 180,
+    "hi": 220,
+    "n": 4958,
+    "fall": 72.0
+   },
+   {
+    "lo": 220,
+    "hi": 260,
+    "n": 1772,
+    "fall": 111.0
+   },
+   {
+    "lo": 260,
+    "hi": 400,
+    "n": 690,
+    "fall": 146.0
+   }
+  ],
+  "IOBP2": [
+   {
+    "lo": 90,
+    "hi": 120,
+    "n": 1188,
+    "fall": -11.0
+   },
+   {
+    "lo": 120,
+    "hi": 150,
+    "n": 412,
+    "fall": 11.5
+   }
+  ]
+ },
+ "note": "isf_* are mg/dL per acting unit; k_* are that times median TDD"
+}
