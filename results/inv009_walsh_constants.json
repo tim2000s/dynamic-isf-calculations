@@ -1,5 +1,40 @@
 [
   {
+    "cohort": "DCLP3",
+    "n": 112,
+    "basal_basis": "delivered",
+    "isf_x_tdd_n": 112,
+    "isf_x_tdd_median": 1890.9048708632595,
+    "isf_x_tdd_ci": [
+      1709.8351661751599,
+      1978.4706446493317
+    ],
+    "isf_x_tdd_excludes_walsh": true,
+    "cr_x_tdd_n": 112,
+    "cr_x_tdd_median": 414.85771553060783,
+    "cr_x_tdd_ci": [
+      404.62884588158806,
+      448.54738960782134
+    ],
+    "cr_x_tdd_excludes_walsh": true,
+    "basal_frac_n": 112,
+    "basal_frac_median": 0.48433412339969706,
+    "basal_frac_ci": [
+      0.46602542747241943,
+      0.5079461004018637
+    ],
+    "basal_frac_excludes_walsh": false,
+    "slope": -0.6700690364019329,
+    "slope_ci": [
+      -0.7863142110567317,
+      -0.5516941516622423
+    ],
+    "slope_n": 112,
+    "slope_excludes_minus_one": true,
+    "median_tdd": 49.98686158061143,
+    "median_isf": 40.52083396911621
+  },
+  {
     "cohort": "DCLP5",
     "n": 100,
     "basal_basis": "delivered",
@@ -246,38 +281,38 @@
   },
   {
     "cohort": "ALL JAEB",
-    "n": 581,
+    "n": 693,
     "basal_basis": "mixed",
-    "isf_x_tdd_n": 581,
-    "isf_x_tdd_median": 2066.883363016747,
+    "isf_x_tdd_n": 693,
+    "isf_x_tdd_median": 2043.9804900755157,
     "isf_x_tdd_ci": [
-      2029.1397310794048,
-      2128.060786843895
+      1973.9216607661283,
+      2103.7176907645753
     ],
     "isf_x_tdd_excludes_walsh": true,
-    "cr_x_tdd_n": 581,
-    "cr_x_tdd_median": 411.1093519205949,
+    "cr_x_tdd_n": 693,
+    "cr_x_tdd_median": 411.3486157407408,
     "cr_x_tdd_ci": [
-      392.48352454106504,
-      427.32328224612934
+      396.6082720354973,
+      428.9895283039058
     ],
     "cr_x_tdd_excludes_walsh": true,
-    "basal_frac_n": 581,
-    "basal_frac_median": 0.49957767696170663,
+    "basal_frac_n": 693,
+    "basal_frac_median": 0.49832346946936845,
     "basal_frac_ci": [
-      0.4869772087667435,
-      0.5100234169984855
+      0.4854559158183789,
+      0.5064285678949877
     ],
     "basal_frac_excludes_walsh": false,
-    "slope": -0.9792022215763976,
+    "slope": -0.96554624880453,
     "slope_ci": [
-      -1.0282643883213127,
-      -0.932352511687443
+      -1.0099363416800367,
+      -0.9251384843714309
     ],
-    "slope_n": 581,
+    "slope_n": 693,
     "slope_excludes_minus_one": false,
-    "median_tdd": 33.85450237880273,
-    "median_isf": 59.99993896484375
+    "median_tdd": 36.236480404290226,
+    "median_isf": 50.625
   },
   {
     "cohort": "ALL OpenAPS Commons",
@@ -316,108 +351,108 @@
   },
   {
     "cohort": "EVERYTHING",
-    "n": 719,
+    "n": 831,
     "basal_basis": "mixed",
-    "isf_x_tdd_n": 719,
-    "isf_x_tdd_median": 2107.5817319461726,
+    "isf_x_tdd_n": 831,
+    "isf_x_tdd_median": 2078.1089705122504,
     "isf_x_tdd_ci": [
-      2048.0042098343038,
-      2182.760517876897
+      2033.5190135135408,
+      2131.038891762592
     ],
     "isf_x_tdd_excludes_walsh": true,
-    "cr_x_tdd_n": 719,
-    "cr_x_tdd_median": 408.72978395432517,
+    "cr_x_tdd_n": 831,
+    "cr_x_tdd_median": 410.1947101289684,
     "cr_x_tdd_ci": [
-      392.48352454106504,
-      422.3819887812507
+      396.6082720354973,
+      425.55506907660936
     ],
     "cr_x_tdd_excludes_walsh": true,
-    "basal_frac_n": 719,
-    "basal_frac_median": 0.4924222359992822,
+    "basal_frac_n": 831,
+    "basal_frac_median": 0.49230868012907164,
     "basal_frac_ci": [
-      0.4810451772930743,
-      0.5025315201900478
+      0.4816749654202582,
+      0.5010985696442921
     ],
     "basal_frac_excludes_walsh": false,
-    "slope": -0.8721758707555587,
+    "slope": -0.8753871829112247,
     "slope_ci": [
-      -0.9281007759305848,
-      -0.8192401325437625
+      -0.9248263995310986,
+      -0.8220372199923408
     ],
-    "slope_n": 719,
+    "slope_n": 831,
     "slope_excludes_minus_one": true,
-    "median_tdd": 35.43052342278721,
-    "median_isf": 57.5
+    "median_tdd": 37.6105205610023,
+    "median_isf": 51.00679397583008
   },
   {
     "cohort": "JAEB 13-17",
-    "n": 54,
+    "n": 85,
     "basal_basis": "delivered",
-    "isf_x_tdd_n": 54,
-    "isf_x_tdd_median": 2350.165612076007,
+    "isf_x_tdd_n": 85,
+    "isf_x_tdd_median": 2329.231292669484,
     "isf_x_tdd_ci": [
-      2243.099422625591,
-      2624.2206825213434
+      2247.625307191177,
+      2563.0233136601005
     ],
     "isf_x_tdd_excludes_walsh": true,
-    "cr_x_tdd_n": 54,
-    "cr_x_tdd_median": 460.8774769137973,
+    "cr_x_tdd_n": 85,
+    "cr_x_tdd_median": 462.5005171725245,
     "cr_x_tdd_ci": [
-      438.8467328684148,
-      519.5008229389797
+      445.4711708271981,
+      507.95010497016204
     ],
     "cr_x_tdd_excludes_walsh": false,
-    "basal_frac_n": 54,
-    "basal_frac_median": 0.5406781102928566,
+    "basal_frac_n": 85,
+    "basal_frac_median": 0.498362918346377,
     "basal_frac_ci": [
-      0.4905534534122059,
-      0.5836976325128125
+      0.4750724368368592,
+      0.5235764083156031
     ],
     "basal_frac_excludes_walsh": false,
-    "slope": -1.101173875308271,
+    "slope": -1.012085903042626,
     "slope_ci": [
-      -1.4086602352376338,
-      -0.8241736048276522
+      -1.2784317151239861,
+      -0.7518368252366112
     ],
-    "slope_n": 54,
+    "slope_n": 85,
     "slope_excludes_minus_one": false,
-    "median_tdd": 56.35170503569432,
-    "median_isf": 45.006080627441406
+    "median_tdd": 61.56068020307242,
+    "median_isf": 40.005367279052734
   },
   {
     "cohort": "JAEB 18-44",
-    "n": 162,
+    "n": 215,
     "basal_basis": "delivered",
-    "isf_x_tdd_n": 162,
-    "isf_x_tdd_median": 1829.629691178905,
+    "isf_x_tdd_n": 215,
+    "isf_x_tdd_median": 1838.7431661720368,
     "isf_x_tdd_ci": [
-      1738.1055828547094,
-      1944.1449051138388
+      1736.0080626035724,
+      1904.353521392466
     ],
     "isf_x_tdd_excludes_walsh": true,
-    "cr_x_tdd_n": 162,
-    "cr_x_tdd_median": 396.59859463103805,
+    "cr_x_tdd_n": 215,
+    "cr_x_tdd_median": 405.3687322160202,
     "cr_x_tdd_ci": [
-      379.63603253968245,
-      435.9245325102887
+      385.68196897615945,
+      414.9519465017371
     ],
     "cr_x_tdd_excludes_walsh": true,
-    "basal_frac_n": 162,
-    "basal_frac_median": 0.5473564838567907,
+    "basal_frac_n": 215,
+    "basal_frac_median": 0.5398589926553118,
     "basal_frac_ci": [
-      0.5291887563334535,
-      0.5826821769672088
+      0.5235922851912385,
+      0.5590361542951986
     ],
     "basal_frac_excludes_walsh": true,
-    "slope": -0.6780739476740975,
+    "slope": -0.6745404801577952,
     "slope_ci": [
-      -0.7948119747441381,
-      -0.5639380688856663
+      -0.7748097625472059,
+      -0.5787215727671866
     ],
-    "slope_n": 162,
+    "slope_n": 215,
     "slope_excludes_minus_one": true,
-    "median_tdd": 41.17186368859142,
-    "median_isf": 46.4864387512207
+    "median_tdd": 41.98145462513299,
+    "median_isf": 45.04499816894531
   },
   {
     "cohort": "JAEB 2-5",
@@ -456,35 +491,35 @@
   },
   {
     "cohort": "JAEB 45+",
-    "n": 122,
+    "n": 150,
     "basal_basis": "delivered",
-    "isf_x_tdd_n": 122,
-    "isf_x_tdd_median": 1765.7942443504044,
+    "isf_x_tdd_n": 150,
+    "isf_x_tdd_median": 1741.635516220289,
     "isf_x_tdd_ci": [
-      1679.9903718074584,
-      1839.1278793002896
+      1648.0982666846612,
+      1811.2653675719291
     ],
     "isf_x_tdd_excludes_walsh": false,
-    "cr_x_tdd_n": 122,
-    "cr_x_tdd_median": 412.2213687803619,
+    "cr_x_tdd_n": 150,
+    "cr_x_tdd_median": 401.88965473970256,
     "cr_x_tdd_ci": [
-      377.0196781290239,
-      437.0265866388886
+      366.1746487403101,
+      426.0438148271105
     ],
     "cr_x_tdd_excludes_walsh": true,
-    "basal_frac_n": 122,
-    "basal_frac_median": 0.5269477130138052,
+    "basal_frac_n": 150,
+    "basal_frac_median": 0.5101906266200305,
     "basal_frac_ci": [
-      0.49152625567328984,
-      0.5492169520913548
+      0.4830589564351092,
+      0.5322759354702409
     ],
     "basal_frac_excludes_walsh": false,
-    "slope": -0.8039282747576142,
+    "slope": -0.8333903781566492,
     "slope_ci": [
-      -0.9327490607602763,
-      -0.67221427060522
+      -0.9364421544552295,
+      -0.7313792482313943
     ],
-    "slope_n": 122,
+    "slope_n": 150,
     "slope_excludes_minus_one": true,
     "median_tdd": 38.33037419355917,
     "median_isf": 45.04499816894531
@@ -526,72 +561,72 @@
   },
   {
     "cohort": "JAEB adults (18+)",
-    "n": 284,
+    "n": 365,
     "basal_basis": "delivered",
-    "isf_x_tdd_n": 284,
-    "isf_x_tdd_median": 1799.1481246049543,
+    "isf_x_tdd_n": 365,
+    "isf_x_tdd_median": 1795.7178960075435,
     "isf_x_tdd_ci": [
-      1736.0080626035724,
-      1861.0247345794473
+      1729.195307036956,
+      1850.6668056746664
     ],
     "isf_x_tdd_excludes_walsh": true,
-    "cr_x_tdd_n": 284,
-    "cr_x_tdd_median": 407.5846086438296,
+    "cr_x_tdd_n": 365,
+    "cr_x_tdd_median": 403.88895954715593,
     "cr_x_tdd_ci": [
-      384.0076621886109,
-      420.91356790123297
+      385.1959766489597,
+      414.5966637579672
     ],
     "cr_x_tdd_excludes_walsh": true,
-    "basal_frac_n": 284,
-    "basal_frac_median": 0.5357646981052587,
+    "basal_frac_n": 365,
+    "basal_frac_median": 0.5293622340632315,
     "basal_frac_ci": [
-      0.5261551549637123,
-      0.5514228464138504
+      0.5151316371251997,
+      0.5419744854677151
     ],
     "basal_frac_excludes_walsh": true,
-    "slope": -0.7307011360417316,
+    "slope": -0.737823332641601,
     "slope_ci": [
-      -0.8181940241947584,
-      -0.6464821686343373
+      -0.8130264919742718,
+      -0.6684154526675018
     ],
-    "slope_n": 284,
+    "slope_n": 365,
     "slope_excludes_minus_one": true,
-    "median_tdd": 40.66747367586337,
+    "median_tdd": 40.95897662037037,
     "median_isf": 45.04499816894531
   },
   {
     "cohort": "JAEB under 18",
-    "n": 297,
+    "n": 328,
     "basal_basis": "delivered",
-    "isf_x_tdd_n": 297,
-    "isf_x_tdd_median": 2389.714966039851,
+    "isf_x_tdd_n": 328,
+    "isf_x_tdd_median": 2380.5154764306462,
     "isf_x_tdd_ci": [
       2280.597548573534,
-      2525.686540232912
+      2507.5121938631933
     ],
     "isf_x_tdd_excludes_walsh": true,
-    "cr_x_tdd_n": 297,
-    "cr_x_tdd_median": 414.39893217929443,
+    "cr_x_tdd_n": 328,
+    "cr_x_tdd_median": 430.5793467726671,
     "cr_x_tdd_ci": [
-      389.2924831211303,
-      439.96214701843996
+      405.2666904202292,
+      443.7072698941215
     ],
     "cr_x_tdd_excludes_walsh": true,
-    "basal_frac_n": 297,
-    "basal_frac_median": 0.47035903508650095,
+    "basal_frac_n": 328,
+    "basal_frac_median": 0.4701528313991672,
     "basal_frac_ci": [
       0.4480574267229472,
-      0.4798544508865936
+      0.47789558171651736
     ],
     "basal_frac_excludes_walsh": true,
-    "slope": -0.9050882416520465,
+    "slope": -0.9245003501306962,
     "slope_ci": [
-      -0.9581739287440812,
-      -0.8456813616672468
+      -0.9761251687010165,
+      -0.873747039871444
     ],
-    "slope_n": 297,
+    "slope_n": 328,
     "slope_excludes_minus_one": true,
-    "median_tdd": 23.490935678054996,
-    "median_isf": 100.01341247558594
+    "median_tdd": 27.488137919689688,
+    "median_isf": 100.0
   }
 ]
