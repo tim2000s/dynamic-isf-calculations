@@ -105,12 +105,21 @@ def schedule_units(g: pd.DataFrame, subject_id: str, streams: dict) -> tuple[np.
     return med.reindex(hh).to_numpy(dtype=float), "typical delivery"
 
 
-def analyse(subject_id: str) -> dict | None:
+def analyse(subject_id: str, grid: pd.DataFrame | None = None,
+            model: str | None = None) -> dict | None:
+    """One person's estimate. `grid` and `model` are injection points for the audit,
+    so a synthetic record with a known sensitivity runs through this same code
+    rather than through a copy of it, which is the only way the audit means
+    anything."""
     study = subject_id.split(":")[0]
-    model = _loop_model(subject_id) if study == "Loop" else MODEL_DEFAULT
+    if model is None:
+        model = _loop_model(subject_id) if study == "Loop" else MODEL_DEFAULT
 
-    streams = db.streams(subject_id)
-    g = gridmod.build_grid(streams)
+    if grid is not None:
+        streams, g = {}, grid
+    else:
+        streams = db.streams(subject_id)
+        g = gridmod.build_grid(streams)
     if g is None or g.empty:
         return None
     n = len(g)
