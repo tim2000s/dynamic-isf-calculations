@@ -35,10 +35,22 @@ MIN_EVENTS = 10
 
 STUDIES = ("ReplaceBG", "Loop", "DCLP3", "DCLP5", "PEDAP", "IOBP2")
 
+# The action model is the physiological one everywhere, including Loop.
+#
+# Loop users were previously given the model that best reproduced the insulin on
+# board their app displayed, and 120 of 158 matched Walsh at three hours. That is
+# a good description of the app's display and a poor one of what the insulin did.
+# Computing action on a three-hour curve treats a dose given four hours before T
+# as finished when it is still working, which understates IOB(T), understates
+# action, and inflates the sensitivity that comes out. The app model is still
+# computed alongside so the size of that difference is reported rather than
+# assumed.
+MODEL_ACTION = "oref_6h75"
+
 
 def analyse(subject_id: str) -> dict | None:
     study = subject_id.split(":")[0]
-    model = _loop_model(subject_id) if study == "Loop" else "oref_6h75"
+    app_model = _loop_model(subject_id) if study == "Loop" else MODEL_ACTION
     st = db.streams(subject_id)
     g = gridmod.build_grid(st)
     if g is None or g.empty:
@@ -59,7 +71,8 @@ def analyse(subject_id: str) -> dict | None:
     tdd = float(np.nansum(tot) / max((n * config.GRID_MIN) / 1440.0, 1e-9))
     min_dose = max(MIN_DOSE_FRAC_TDD * tdd, 0.2)
 
-    iob = np.convolve(net, M.kernel(model))[:n]
+    iob = np.convolve(net, M.kernel(MODEL_ACTION))[:n]
+    iob_app = np.convolve(net, M.kernel(app_model))[:n]
     ncum = np.concatenate([[0.0], np.cumsum(net)])
     bcum = np.concatenate([[0.0], np.cumsum(bol)])
     tcum = np.concatenate([[0.0], np.cumsum(np.clip(tempb, 0, None))])
@@ -82,6 +95,7 @@ def analyse(subject_id: str) -> dict | None:
         action = iob[i] - iob[i + h] + (ncum[i + h] - ncum[i + 1])
         if action < min_dose:
             continue
+        action_app = iob_app[i] - iob_app[i + h] + (ncum[i + h] - ncum[i + 1])
         # Whether the system went on pushing insulin after the correcting dose.
         # Episodes where it did are ones where glucose stayed up for a reason the
         # record does not show, and they bias the estimate down; the validated
@@ -90,15 +104,27 @@ def analyse(subject_id: str) -> dict | None:
         after = ncum[i + h] - ncum[j]
         settled = after <= 0.5 * given
         rows.append((bg[i], bg[i + h], given, action,
-                     bcum[j] - bcum[i], tcum[j] - tcum[i], float(settled), after))
+                     bcum[j] - bcum[i], tcum[j] - tcum[i], float(settled), after,
+                     iob[i], action_app))
     if len(rows) < MIN_EVENTS:
         return None
     a = np.array(rows, dtype=float)
     fall = a[:, 0] - a[:, 1]
     st_m = a[:, 6] > 0.5
+    # An episode starting with a net deficit is one where delivery had been held
+    # below the programme beforehand. The arithmetic handles it, but those episodes
+    # begin with glucose already rising for that reason, so they are reported
+    # separately rather than pooled on the assumption they behave the same.
+    pos = st_m & (a[:, 8] >= 0)
+    neg = st_m & (a[:, 8] < 0)
+    med = lambda m, col=3: (float(np.median(fall[m] / a[m, col]))
+                            if m.sum() >= MIN_EVENTS else np.nan)
     return dict(subject_id=subject_id, study=study, n_events=len(a), tdd_u=tdd,
                 n_settled=int(st_m.sum()),
-                isf_settled=float(np.median((fall[st_m] / a[st_m, 3]))) if st_m.sum() >= MIN_EVENTS else np.nan,
+                n_pos=int(pos.sum()), n_neg=int(neg.sum()),
+                isf_settled=med(st_m), isf_pos=med(pos), isf_neg=med(neg),
+                isf_app=med(st_m, 9),
+                iob_start=float(np.median(a[st_m, 8])),
                 bg_end_settled=float(np.median(a[st_m, 1])) if st_m.sum() >= MIN_EVENTS else np.nan,
                 bg_start=float(np.median(a[:, 0])), bg_end=float(np.median(a[:, 1])),
                 given=float(np.median(a[:, 2])), action=float(np.median(a[:, 3])),
@@ -122,9 +148,9 @@ def main() -> int:
 
     ent = db.entered_isf().set_index("subject_id").isf
     print("Corrections counted by any route above the programmed basal\n")
-    print(f"{'cohort':<12s}{'people':>7s}{'events':>8s}{'temp basal':>11s}"
-          f"{'start':>7s}{'ISF all':>8s}{'settled n':>10s}{'ISF settled':>12s}"
-          f"{'K settled':>10s}{'entered':>8s}")
+    print(f"{'cohort':<12s}{'people':>7s}{'settled':>9s}{'temp basal':>11s}"
+          f"{'ISF':>6s}{'K':>6s}{'IOB>=0':>8s}{'K':>6s}{'IOB<0':>7s}{'K':>6s}"
+          f"{'app model':>10s}{'entered':>8s}")
     out = []
     for s, d in r.groupby("study"):
         share = d.temp_part.sum() / max(d.temp_part.sum() + d.bolus_part.sum(), 1e-9)
@@ -135,19 +161,27 @@ def main() -> int:
                    isf=float(d.isf_action.median()), entered=e,
                    k=float((d.isf_action * d.tdd_u).median()))
         out.append(row)
-        row["isf_settled"] = float(d.isf_settled.median())
-        row["k_settled"] = float((d.isf_settled * d.tdd_u).median())
+        for tag, col in (("settled", "isf_settled"), ("pos", "isf_pos"),
+                         ("neg", "isf_neg"), ("app", "isf_app")):
+            row[f"isf_{tag}"] = float(d[col].median())
+            row[f"k_{tag}"] = float((d[col] * d.tdd_u).median())
         row["n_settled"] = int(d.n_settled.sum())
-        es = f"{e:8.0f}" if np.isfinite(e) else f"{'-':>8}"
-        iss = (f"{row['isf_settled']:12.1f}" if np.isfinite(row['isf_settled'])
-               else f"{'-':>12}")
-        ks = (f"{row['k_settled']:10.0f}" if np.isfinite(row['k_settled'])
-              else f"{'-':>10}")
-        print(f"{s:<12s}{row['n_people']:7d}{row['n_events']:8,d}{100*share:10.0f}%"
-              f"{row['bg_start']:7.0f}{row['isf']:8.1f}{row['n_settled']:10,d}{iss}{ks}{es}")
+        row["n_pos"] = int(d.n_pos.sum())
+        row["n_neg"] = int(d.n_neg.sum())
+        row["iob_start"] = float(d.iob_start.median())
+        f1 = lambda v, w=6: (f"%{w}.1f" % v) if np.isfinite(v) else f"{'-':>{w}}"
+        f0 = lambda v, w=6: (f"%{w}.0f" % v) if np.isfinite(v) else f"{'-':>{w}}"
+        print(f"{s:<12s}{row['n_people']:7d}{row['n_settled']:9,d}{100*share:10.0f}%"
+              f"{f1(row['isf_settled'])}{f0(row['k_settled'])}"
+              f"{f1(row['isf_pos'], 8)}{f0(row['k_pos'])}"
+              f"{f1(row['isf_neg'], 7)}{f0(row['k_neg'])}"
+              f"{f1(row['isf_app'], 10)}{f0(e, 8)}")
     (config.RESULTS / "inv009_correction_routes.json").write_text(json.dumps(out, indent=1))
     print("\n'temp basal' is the share of the correcting dose that arrived as basal")
     print("above the programmed rate rather than as a bolus.")
+    print("'IOB>=0' and 'IOB<0' split on whether the episode opened with a net")
+    print("insulin deficit; 'app model' is the same episodes computed on the curve")
+    print("each Loop user's app displayed, which is the comparison, not the answer.")
     return 0
 
 
