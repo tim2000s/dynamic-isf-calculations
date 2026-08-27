@@ -85,3 +85,21 @@ required before any of this drives dosing. Nothing here is medical advice.
 `inv008/phase{1,2,3,5,6}_*.py` and `results/phase*_*.{json,md}` in
 `github.com/tim2000s/dynamic-isf-calculations`. Inputs device-observable; the user's profile ISF
 is used as a benchmark only.
+
+
+## Addendum, 27 August 2026: replication on independent data
+
+Phases 5 and 6 above concluded that observational sensitivity is biased low, that
+dosing to it is unsafe, and that the bias is intrinsic rather than a daytime
+artefact. Those conclusions rested on 138 users of open-source systems with
+insulin on board taken from the loop's own record.
+
+They have since been tested on 1,679 people across six Jaeb trial cohorts, ages 2
+to 82, with insulin on board reconstructed from delivery records rather than
+reported, and using four different constructions of the estimator. The ratio of
+measured to entered sensitivity ranges from 0.30 to 0.92 with a median of 0.58,
+and in fifteen estimates it does not once reach 1.0. The K = 145 against 355
+reported here corresponds to a ratio of 0.41 and sits inside that range.
+
+So the finding is not a property of this cohort, of open-source systems, or of how
+insulin on board was obtained. See Dynamic-ISF-7.
