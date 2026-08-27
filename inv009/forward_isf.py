@@ -1,32 +1,37 @@
-"""Effective sensitivity from insulin on board at T against glucose change to T+6h.
+"""Effective sensitivity from insulin action over T to T+6h, stepped every five minutes.
 
-Stepped every five minutes through every person's record, which is the direct form
-of the question a sensitivity factor answers: this much insulin is on board now,
-how far does glucose fall before it has finished acting.
+The question a sensitivity factor answers is how far glucose moves per unit of
+insulin that acts. Both halves are computable at every reading in the record.
 
-    ISF_eff(T) = [ BG(T) - BG(T+6h) ] / IOB(T)
+The glucose half is the change from T to T+6h. The insulin half is the action over
+that same interval, which follows from the delivery record and the insulin action
+curve without needing any part of the record to be quiet:
 
-Three things have to hold for that ratio to mean anything, and each is a screen
-rather than a correction.
+    action(T, T+6h) = IOB(T) - IOB(T+6h) + delivered(T, T+6h)
 
-Carbohydrate must be absent, because glucose rising from a meal is subtracted from
-the fall and biases the ratio down. No carbohydrate is allowed in the six hours
-before T, so nothing is still absorbing, nor in the six hours after.
+Everything on board at T that finishes acting inside the window, plus everything
+delivered inside it that acts before the window closes, less whatever is carried
+past the end. Boluses and temporary basals both move that quantity, and it is that
+variation which identifies the effect. An earlier version of this module screened
+out any interval where insulin arrived, which discarded the variation being
+measured and left only the tail of the basal rate.
 
-No further insulin may arrive during the window beyond the programmed basal, or
-the denominator understates what acted. Boluses inside the window are excluded
-outright, and the net basal deviation across the window is required to be small.
+Delivery is taken net of the programmed basal throughout, because basal exists to
+offset hepatic glucose output rather than to lower glucose, so counting it puts
+insulin in the denominator that is not there to do the job being measured.
 
-The insulin on board must be net of the programmed basal. Basal exists to offset
-hepatic glucose output, so counting it puts insulin in the denominator that is not
-there to lower glucose, and the ratio collapses toward zero. Bolus-only insulin on
-board is computed alongside, because that is the convention a pump's own display
-uses and it makes the two comparable.
+Insulin action uses Loop's own model for the Loop cohort, chosen per person against
+the insulin on board their app recorded, and the oref exponential elsewhere.
 
-The remaining term is the one that cannot be screened away: over six hours glucose
-also moves because basal is not exactly right. That is why the estimate is reported
-both raw and as a departure from what this person usually does at this time of day,
-the second removing any part of the movement that is routine for them at that hour.
+Carbohydrate is the one thing that must be screened rather than modelled, since
+glucose rising from a meal is subtracted from the fall. Nothing is allowed in the
+six hours before T, so nothing is still absorbing, nor inside the window.
+
+Two estimates are reported per person. The ratio is the median of the per-point
+ratio, which is the direct reading of the question. The slope is a regression of
+the glucose change on the action with an intercept, which absorbs whatever that
+person's glucose does at that time of day irrespective of insulin, and is the
+quantity a correction dose is decided with.
 """
 from __future__ import annotations
 
@@ -40,32 +45,70 @@ import pandas as pd
 from . import config, db, grid as gridmod, insulin_models as M
 
 HORIZON_MIN = 360.0            # one insulin duration
-STEP_MIN = 5.0                 # every reading
-MODEL = "oref_6h75"
-CARB_CLEAR_H = 6.0             # before T and inside the window
-MIN_IOB_U = 0.30               # below this the ratio is noise over noise
-MAX_NET_IN_U = 0.20            # net insulin arriving during the window, above schedule
+MODEL_DEFAULT = "oref_6h75"
+LOOP_FALLBACK = "loop_adult"
+CARB_CLEAR_H = 6.0
+MIN_ACTION_U = 0.50            # below this the ratio is noise over noise
 BG_LO, BG_HI = 70.0, 400.0
-MIN_POINTS = 50
+MIN_POINTS = 100
+MIN_ACTION_SD = 0.30           # a person whose action never varies identifies nothing
+# Glucose at T decides what a fall can possibly be. From 85 mg/dL there is nowhere
+# to go and counter-regulation pushes the other way, so points there return a
+# negative sensitivity that is a floor effect rather than a measurement. Pooling
+# across all levels averages those against the elevated points where a correction
+# is actually given, which halves the estimate. Bands are reported instead, and
+# the headline is taken from 200 mg/dL up, where corrections happen.
+SGV_BANDS = [(70, 100), (100, 130), (130, 160), (160, 200), (200, 250), (250, 400)]
+HEADLINE_BAND = (200, 400)
+
+_LOOP_MODELS: dict[str, str] = {}
 
 
-def iob_series(u: np.ndarray, kern: np.ndarray) -> np.ndarray:
-    """Insulin still to act at each bin, being each dose times what remains of it."""
-    return np.convolve(u, kern)[:len(u)]
+def _loop_model(subject_id: str) -> str:
+    global _LOOP_MODELS
+    if not _LOOP_MODELS:
+        p = config.RESULTS / "inv009_loop_model_choice.parquet"
+        if p.exists():
+            d = pd.read_parquet(p)
+            d = d[d.accepted] if "accepted" in d.columns else d
+            _LOOP_MODELS = dict(zip(d.subject_id, d.model))
+        else:
+            _LOOP_MODELS = {"_": LOOP_FALLBACK}
+    return _LOOP_MODELS.get(subject_id, LOOP_FALLBACK)
 
 
-def _typical_by_halfhour(v: np.ndarray, hh: np.ndarray) -> np.ndarray:
-    """What this person usually does at this half hour, as a median."""
-    out = np.full(len(v), np.nan)
-    ok = np.isfinite(v)
-    if not ok.any():
-        return out
-    s = pd.Series(v[ok]).groupby(hh[ok]).median()
-    out[ok] = s.reindex(hh[ok]).to_numpy()
-    return out
+def schedule_units(g: pd.DataFrame, subject_id: str, streams: dict) -> tuple[np.ndarray, str]:
+    """Insulin per bin the programme called for, from whichever source records it.
+
+    Three sources in descending order of directness. Loop and REPLACE-BG record a
+    scheduled rate against a timestamp, which arrives on the grid already. DCLP3,
+    DCLP5 and PEDAP ship the 48 half-hourly programmed rates on the case report
+    form, which is a profile by time of day rather than a series. The bionic
+    pancreas has no programme at all by design, so the reference is that person's
+    own median delivery at each half hour, which is what they typically receive
+    rather than what anybody set.
+
+    Getting this wrong is not subtle. With no schedule subtracted the denominator
+    becomes total insulin rather than insulin above basal, and six hours of basal
+    swamps whatever a correction contributed.
+    """
+    n = len(g)
+    if "sched_u" in g.columns and g.sched_u.notna().any():
+        return g.sched_u.fillna(0.0).to_numpy(float), "recorded"
+    hh = (g.ts.dt.hour.to_numpy() * 2 + (g.ts.dt.minute.to_numpy() >= 30)).astype(int)
+    prof = db.basal_schedule(subject_id)
+    if prof is not None and np.isfinite(prof).any():
+        rate = np.where(np.isfinite(prof[hh]), prof[hh], np.nanmedian(prof))
+        return rate * (config.GRID_MIN / 60.0), "programmed profile"
+    tot = g.total_u.to_numpy(float)
+    med = pd.Series(tot).groupby(hh).median()
+    return med.reindex(hh).to_numpy(dtype=float), "typical delivery"
 
 
 def analyse(subject_id: str) -> dict | None:
+    study = subject_id.split(":")[0]
+    model = _loop_model(subject_id) if study == "Loop" else MODEL_DEFAULT
+
     streams = db.streams(subject_id)
     g = gridmod.build_grid(streams)
     if g is None or g.empty:
@@ -75,72 +118,70 @@ def analyse(subject_id: str) -> dict | None:
     if n < 2 * h:
         return None
 
-    kern = M.kernel(MODEL)
-    sched = g.sched_u.fillna(0.0).to_numpy(float)
+    kern = M.kernel(model)
     total = g.total_u.to_numpy(float)
     bolus = g.bolus_u.to_numpy(float)
-    net = total - sched
+    sched, sched_src = schedule_units(g, subject_id, streams)
+    net = total - np.nan_to_num(sched)
 
-    iob_net = iob_series(net, kern)
-    iob_bolus = iob_series(bolus, kern)
+    # Insulin still to act at each bin, then action over the window from both the
+    # standing load and anything delivered inside it.
+    iob = np.convolve(net, kern)[:n]
+    cnet = np.concatenate([[0.0], np.cumsum(net)])
+    action = np.full(n, np.nan)
+    action[:n - h] = iob[:n - h] - iob[h:] + (cnet[h:n] - cnet[:n - h])
 
     bg = g.cgm.to_numpy(float)
-    fwd = np.full(n, np.nan)
-    fwd[:n - h] = bg[:n - h] - bg[h:]          # fall from T to T+6h, positive is a fall
+    fall = np.full(n, np.nan)
+    fall[:n - h] = bg[:n - h] - bg[h:]
 
-    # Insulin arriving during the window, above the programmed basal.
-    cnet = np.concatenate([[0.0], np.cumsum(net)])
-    net_in = np.full(n, np.nan)
-    net_in[:n - h] = cnet[h:n] - cnet[:n - h]
-    cbol = np.concatenate([[0.0], np.cumsum(bolus)])
-    bol_in = np.full(n, np.nan)
-    bol_in[:n - h] = cbol[h:n] - cbol[:n - h]
-
-    # Carbohydrate clearance either side. Studies with no carbohydrate stream get
-    # a meal proxy from bolus size, as everywhere else in this package.
+    # Carbohydrate clearance either side; a meal proxy where none is logged.
     carbs = g.carbs_g.to_numpy(float) if "carbs_g" in g.columns else np.zeros(n)
-    if not np.isfinite(carbs).any() or carbs.sum() <= 0:
-        tdd = float(np.nansum(total) / max((n * config.GRID_MIN) / 1440.0, 1e-9))
-        carbs = np.where(bolus >= config.MEAL_BOLUS_FRAC_TDD * tdd, 1.0, 0.0)
+    if not np.isfinite(carbs).any() or np.nansum(carbs) <= 0:
+        tdd_est = float(np.nansum(total) / max((n * config.GRID_MIN) / 1440.0, 1e-9))
+        carbs = np.where(bolus >= config.MEAL_BOLUS_FRAC_TDD * tdd_est, 1.0, 0.0)
     ccum = np.concatenate([[0.0], np.cumsum(np.nan_to_num(carbs))])
-    carb_before = np.full(n, np.nan)
     cb = int(CARB_CLEAR_H * 60 / config.GRID_MIN)
+    carb_before = np.full(n, np.nan)
     carb_before[cb:] = ccum[cb:n] - ccum[:n - cb]
     carb_in = np.full(n, np.nan)
     carb_in[:n - h] = ccum[h:n] - ccum[:n - h]
 
-    keep = (np.isfinite(fwd) & np.isfinite(bg) & (bg >= BG_LO) & (bg <= BG_HI)
-            & np.isfinite(carb_before) & (carb_before <= 0)
-            & np.isfinite(carb_in) & (carb_in <= 0)
-            & (bol_in <= 0) & (np.abs(net_in) <= MAX_NET_IN_U)
-            & (iob_net >= MIN_IOB_U))
-    if keep.sum() < MIN_POINTS:
+    ok = (np.isfinite(fall) & np.isfinite(action) & np.isfinite(bg)
+          & (bg >= BG_LO) & (bg <= BG_HI)
+          & np.isfinite(carb_before) & (carb_before <= 0)
+          & np.isfinite(carb_in) & (carb_in <= 0))
+    if ok.sum() < MIN_POINTS:
         return None
 
-    hh = (g.ts.dt.hour.to_numpy() * 2 + (g.ts.dt.minute.to_numpy() >= 30)).astype(int)
-    typ_bg = _typical_by_halfhour(np.where(np.isfinite(fwd), fwd, np.nan), hh)
-    typ_iob = _typical_by_halfhour(np.where(np.isfinite(iob_net), iob_net, np.nan), hh)
+    a, y = action[ok], fall[ok]
+    if np.std(a) < MIN_ACTION_SD:
+        return None
 
-    k = keep
-    raw = fwd[k] / iob_net[k]
-    d_bg, d_iob = fwd[k] - typ_bg[k], iob_net[k] - typ_iob[k]
-    ok = np.isfinite(d_bg) & np.isfinite(d_iob) & (np.abs(d_iob) >= 0.2)
-    dep = (d_bg[ok] / d_iob[ok]) if ok.sum() >= 20 else np.array([np.nan])
+    # Ratio: the direct reading, on points where enough insulin acted to divide by.
+    big = a >= MIN_ACTION_U
+    ratio = float(np.median(y[big] / a[big])) if big.sum() >= 30 else np.nan
+    bgk = bg[ok]
+    bands = {}
+    for lo, hi in SGV_BANDS:
+        m = big & (bgk >= lo) & (bgk < hi)
+        bands[f"isf_{lo}"] = float(np.median(y[m] / a[m])) if m.sum() >= 30 else np.nan
+        bands[f"n_{lo}"] = int(m.sum())
+    hm = big & (bgk >= HEADLINE_BAND[0]) & (bgk < HEADLINE_BAND[1])
+    head = float(np.median(y[hm] / a[hm])) if hm.sum() >= 30 else np.nan
+
+    # Slope: a regression with an intercept, which absorbs whatever this person's
+    # glucose does over six hours irrespective of insulin.
+    ac = a - a.mean()
+    slope = float((ac * (y - y.mean())).sum() / (ac ** 2).sum())
 
     tdd = float(np.nansum(total) / max((n * config.GRID_MIN) / 1440.0, 1e-9))
-    return dict(
-        subject_id=subject_id, study=subject_id.split(":")[0],
-        n_points=int(k.sum()), n_dep=int(ok.sum()),
-        tdd_u=tdd,
-        iob_net_median=float(np.median(iob_net[k])),
-        iob_bolus_median=float(np.median(iob_bolus[k])),
-        bg_median=float(np.median(bg[k])),
-        fall_median=float(np.median(fwd[k])),
-        isf_raw=float(np.median(raw)),
-        isf_dep=float(np.nanmedian(dep)),
-        k_raw=float(np.median(raw)) * tdd,
-        k_dep=float(np.nanmedian(dep)) * tdd,
-    )
+    return dict(subject_id=subject_id, study=study, model=model, sched_src=sched_src,
+                n_points=int(ok.sum()), n_big=int(big.sum()), tdd_u=tdd,
+                action_median=float(np.median(a)), action_sd=float(np.std(a)),
+                fall_median=float(np.median(y)), bg_median=float(np.median(bg[ok])),
+                isf_ratio=ratio, isf_slope=slope, isf_head=head, n_head=int(hm.sum()),
+                k_ratio=ratio * tdd, k_slope=slope * tdd, k_head=head * tdd, **bands)
 
 
 def main() -> int:
@@ -154,12 +195,11 @@ def main() -> int:
     studies = [args.study] if args.study else list(config.COHORTS)
     subs = []
     for s in studies:
-        t = db.subjects(s)
-        subs += t.subject_id.tolist()
+        subs += db.subjects(s).subject_id.tolist()
     if args.limit:
         subs = subs[:args.limit]
-    print(f"{len(subs)} subjects, {args.workers} workers, "
-          f"stepping every {STEP_MIN:.0f} min to T+{HORIZON_MIN / 60:.0f}h")
+    print(f"{len(subs)} subjects, {args.workers} workers, action over "
+          f"T to T+{HORIZON_MIN / 60:.0f}h, stepped every {config.GRID_MIN:.0f} min")
 
     with mp.Pool(args.workers, maxtasksperchild=8) as pool:
         rows = [r for r in pool.map(analyse, subs) if r]
@@ -170,26 +210,35 @@ def main() -> int:
     r.to_parquet(config.RESULTS / "inv009_forward_isf.parquet", index=False)
 
     print(f"\n{len(r)} people, {int(r.n_points.sum()):,} five-minute points\n")
-    print(f"{'cohort':<12s}{'people':>7s}{'points':>12s}{'IOB U':>7s}{'fall':>7s}"
-          f"{'ISF raw':>9s}{'K raw':>7s}{'ISF dep':>9s}{'K dep':>7s}")
+    print(f"{'cohort':<12s}{'people':>7s}{'points':>12s}{'action U':>9s}"
+          f"{'ISF all':>9s}{'K':>7s}{'ISF 200+':>10s}{'K 200+':>8s}{'pts 200+':>10s}")
     out = []
     for s, d in r.groupby("study"):
         row = dict(cohort=s, n_people=int(len(d)), n_points=int(d.n_points.sum()),
-                   iob=float(d.iob_net_median.median()),
-                   fall=float(d.fall_median.median()),
-                   isf_raw=float(d.isf_raw.median()), k_raw=float(d.k_raw.median()),
-                   isf_dep=float(d.isf_dep.median()), k_dep=float(d.k_dep.median()))
+                   action=float(d.action_median.median()), fall=float(d.fall_median.median()),
+                   isf_ratio=float(d.isf_ratio.median()), k_ratio=float(d.k_ratio.median()),
+                   isf_slope=float(d.isf_slope.median()), k_slope=float(d.k_slope.median()))
+        row["isf_head"] = float(d.isf_head.median())
+        row["k_head"] = float(d.k_head.median())
+        row["n_head"] = int(d.n_head.sum())
+        row["bands"] = {f"{lo}": float(d[f"isf_{lo}"].median()) for lo, _ in SGV_BANDS}
         out.append(row)
-        print(f"{s:<12s}{row['n_people']:7d}{row['n_points']:12,d}{row['iob']:7.2f}"
-              f"{row['fall']:7.1f}{row['isf_raw']:9.1f}{row['k_raw']:7.0f}"
-              f"{row['isf_dep']:9.1f}{row['k_dep']:7.0f}")
+        print(f"{s:<12s}{row['n_people']:7d}{row['n_points']:12,d}{row['action']:9.2f}"
+              f"{row['isf_ratio']:9.1f}{row['k_ratio']:7.0f}"
+              f"{row['isf_head']:10.1f}{row['k_head']:8.0f}{row['n_head']:10,d}")
     print(f"\n{'ALL':<12s}{len(r):7d}{int(r.n_points.sum()):12,d}"
-          f"{r.iob_net_median.median():7.2f}{r.fall_median.median():7.1f}"
-          f"{r.isf_raw.median():9.1f}{r.k_raw.median():7.0f}"
-          f"{r.isf_dep.median():9.1f}{r.k_dep.median():7.0f}")
+          f"{r.action_median.median():9.2f}"
+          f"{r.isf_ratio.median():9.1f}{r.k_ratio.median():7.0f}"
+          f"{r.isf_head.median():10.1f}{r.k_head.median():8.0f}{int(r.n_head.sum()):10,d}")
+    print("\nBy glucose at T (mg/dL per acting unit). Negative values below 130 are a")
+    print("floor effect: from there glucose cannot fall far and counter-regulation lifts it.\n")
+    print(f"{'cohort':<12s}" + "".join(f"{lo}-{hi}".rjust(10) for lo, hi in SGV_BANDS))
+    for s_, d in r.groupby("study"):
+        print(f"{s_:<12s}" + "".join(
+            f"{d[f'isf_{lo}'].median():10.1f}" for lo, _ in SGV_BANDS))
     (config.RESULTS / "inv009_forward_isf.json").write_text(json.dumps(
-        dict(horizon_min=HORIZON_MIN, step_min=STEP_MIN, model=MODEL,
-             min_iob_u=MIN_IOB_U, max_net_in_u=MAX_NET_IN_U,
+        dict(horizon_min=HORIZON_MIN, step_min=config.GRID_MIN,
+             model_default=MODEL_DEFAULT, min_action_u=MIN_ACTION_U,
              n_people=int(len(r)), n_points=int(r.n_points.sum()),
              by_cohort=out), indent=1))
     return 0
