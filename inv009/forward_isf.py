@@ -129,7 +129,12 @@ def analyse(subject_id: str) -> dict | None:
     iob = np.convolve(net, kern)[:n]
     cnet = np.concatenate([[0.0], np.cumsum(net)])
     action = np.full(n, np.nan)
-    action[:n - h] = iob[:n - h] - iob[h:] + (cnet[h:n] - cnet[:n - h])
+    # Insulin delivered strictly after T. A dose landing in bin T is already inside
+    # IOB(T), because the remaining-action curve starts at 1, so including bin T in
+    # the delivered term counts it twice. Left uncorrected a single 1 U bolus
+    # returns 2 U of action, which halves every sensitivity estimate at exactly the
+    # points that carry the signal, since those are the bins a correction lands in.
+    action[:n - h] = iob[:n - h] - iob[h:] + (cnet[h:n] - cnet[1:n - h + 1])
 
     bg = g.cgm.to_numpy(float)
     fall = np.full(n, np.nan)
