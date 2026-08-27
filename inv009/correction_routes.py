@@ -29,6 +29,14 @@ from .forward_isf import schedule_units, _loop_model
 HORIZON_MIN = 360.0
 DOSE_WINDOW_MIN = 30.0
 MIN_DOSE_FRAC_TDD = 0.02       # 0.8 U at a daily dose of 40, 0.27 U at 13.5
+# How much net insulin may already be on board at T, as a multiple of the
+# correcting dose. Without this the denominator is not the correction: in the
+# closed-loop cohorts the action over six hours ran 3.4 to 4.2 times the dose
+# given, the excess being meal insulin still working from before the window. The
+# fall was then divided by all of it. Requiring the slate to be nearly clean makes
+# the action and the dose the same quantity, which is the condition under which
+# this estimator was validated against a known sensitivity.
+MAX_IOB_FRAC_DOSE = 0.5
 BG_LO, BG_HI = 150.0, 350.0
 STEP_MIN = 30.0
 MIN_EVENTS = 10
@@ -96,6 +104,7 @@ def analyse(subject_id: str) -> dict | None:
         if action < min_dose:
             continue
         action_app = iob_app[i] - iob_app[i + h] + (ncum[i + h] - ncum[i + 1])
+        clean = abs(iob[i]) <= MAX_IOB_FRAC_DOSE * given
         # Whether the system went on pushing insulin after the correcting dose.
         # Episodes where it did are ones where glucose stayed up for a reason the
         # record does not show, and they bias the estimate down; the validated
@@ -105,7 +114,7 @@ def analyse(subject_id: str) -> dict | None:
         settled = after <= 0.5 * given
         rows.append((bg[i], bg[i + h], given, action,
                      bcum[j] - bcum[i], tcum[j] - tcum[i], float(settled), after,
-                     iob[i], action_app))
+                     iob[i], action_app, float(clean)))
     if len(rows) < MIN_EVENTS:
         return None
     a = np.array(rows, dtype=float)
@@ -117,13 +126,18 @@ def analyse(subject_id: str) -> dict | None:
     # separately rather than pooled on the assumption they behave the same.
     pos = st_m & (a[:, 8] >= 0)
     neg = st_m & (a[:, 8] < 0)
+    cl = st_m & (a[:, 10] > 0.5)
     med = lambda m, col=3: (float(np.median(fall[m] / a[m, col]))
                             if m.sum() >= MIN_EVENTS else np.nan)
     return dict(subject_id=subject_id, study=study, n_events=len(a), tdd_u=tdd,
                 n_settled=int(st_m.sum()),
                 n_pos=int(pos.sum()), n_neg=int(neg.sum()),
                 isf_settled=med(st_m), isf_pos=med(pos), isf_neg=med(neg),
-                isf_app=med(st_m, 9),
+                isf_app=med(st_m, 9), n_clean=int(cl.sum()),
+                isf_clean=med(cl), isf_clean_given=med(cl, 2),
+                action_over_given=float(np.median(a[st_m, 3] / a[st_m, 2])),
+                action_over_given_clean=(float(np.median(a[cl, 3] / a[cl, 2]))
+                                         if cl.sum() >= MIN_EVENTS else np.nan),
                 iob_start=float(np.median(a[st_m, 8])),
                 bg_end_settled=float(np.median(a[st_m, 1])) if st_m.sum() >= MIN_EVENTS else np.nan,
                 bg_start=float(np.median(a[:, 0])), bg_end=float(np.median(a[:, 1])),
@@ -148,9 +162,9 @@ def main() -> int:
 
     ent = db.entered_isf().set_index("subject_id").isf
     print("Corrections counted by any route above the programmed basal\n")
-    print(f"{'cohort':<12s}{'people':>7s}{'settled':>9s}{'temp basal':>11s}"
-          f"{'ISF':>6s}{'K':>6s}{'IOB>=0':>8s}{'K':>6s}{'IOB<0':>7s}{'K':>6s}"
-          f"{'app model':>10s}{'entered':>8s}")
+    print(f"{'cohort':<12s}{'settled':>9s}{'ISF':>6s}{'K':>6s}"
+          f"{'clean n':>9s}{'act/dose':>9s}{'ISF':>6s}{'K':>6s}{'K by dose':>11s}"
+          f"{'entered':>8s}")
     out = []
     for s, d in r.groupby("study"):
         share = d.temp_part.sum() / max(d.temp_part.sum() + d.bolus_part.sum(), 1e-9)
@@ -162,7 +176,8 @@ def main() -> int:
                    k=float((d.isf_action * d.tdd_u).median()))
         out.append(row)
         for tag, col in (("settled", "isf_settled"), ("pos", "isf_pos"),
-                         ("neg", "isf_neg"), ("app", "isf_app")):
+                         ("neg", "isf_neg"), ("app", "isf_app"),
+                         ("clean", "isf_clean"), ("cleang", "isf_clean_given")):
             row[f"isf_{tag}"] = float(d[col].median())
             row[f"k_{tag}"] = float((d[col] * d.tdd_u).median())
         row["n_settled"] = int(d.n_settled.sum())
@@ -171,11 +186,14 @@ def main() -> int:
         row["iob_start"] = float(d.iob_start.median())
         f1 = lambda v, w=6: (f"%{w}.1f" % v) if np.isfinite(v) else f"{'-':>{w}}"
         f0 = lambda v, w=6: (f"%{w}.0f" % v) if np.isfinite(v) else f"{'-':>{w}}"
-        print(f"{s:<12s}{row['n_people']:7d}{row['n_settled']:9,d}{100*share:10.0f}%"
+        row["n_clean"] = int(d.n_clean.sum())
+        row["aog"] = float(d.action_over_given.median())
+        row["aog_clean"] = float(d.action_over_given_clean.median())
+        print(f"{s:<12s}{row['n_settled']:9,d}"
               f"{f1(row['isf_settled'])}{f0(row['k_settled'])}"
-              f"{f1(row['isf_pos'], 8)}{f0(row['k_pos'])}"
-              f"{f1(row['isf_neg'], 7)}{f0(row['k_neg'])}"
-              f"{f1(row['isf_app'], 10)}{f0(e, 8)}")
+              f"{row['n_clean']:9,d}{f1(row['aog_clean'], 9)}"
+              f"{f1(row['isf_clean'])}{f0(row['k_clean'])}"
+              f"{f0(row['k_cleang'], 11)}{f0(e, 8)}")
     (config.RESULTS / "inv009_correction_routes.json").write_text(json.dumps(out, indent=1))
     print("\n'temp basal' is the share of the correcting dose that arrived as basal")
     print("above the programmed rate rather than as a bolus.")
