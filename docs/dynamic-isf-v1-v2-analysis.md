@@ -221,3 +221,13 @@ a √TDD level set per person from their own data — the direction the cross-va
 - Same-window outcome test: `inv008/head_to_head.py` → `results/head_to_head.{json,md}`, `results/head_to_head_windows.parquet`, `charts/inv008/fig_head_to_head.png`
 - Pipeline and candidate search: `inv008/`, `fit_best_isf.py`
 - Repository: `github.com/tim2000s/dynamic-isf-calculations`
+
+
+## Addendum, 27 August 2026
+
+The observation here that the equations sit above where observed sensitivity lies
+has been replicated across 1,679 people in six Jaeb trial cohorts, with a ratio of
+measured to entered sensitivity between 0.30 and 0.92 and no estimate reaching
+1.0. The gap is a property of observational measurement rather than of the
+entered settings, which Paper 4 had already tested against outcomes. See
+Dynamic-ISF-7.
