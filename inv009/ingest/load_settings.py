@@ -138,9 +138,9 @@ def replacebg_wizard() -> pd.DataFrame:
     df = pd.read_csv(path, sep="|", low_memory=False,
                      usecols=["PtId", "DeviceDtTmDaysFromEnroll", "DeviceTm",
                               "RecommendedCorrection", "RecommendedNet", "BgInput",
-                              "CarbInput", "InsulinCarbRatio", "InsulinSensitivity",
-                              "BgTargetLow", "BgTargetHigh", "BgTargetTarget",
-                              "ParentHDeviceBolusID"])
+                              "CarbInput", "InsulinOnBoard", "InsulinCarbRatio",
+                              "InsulinSensitivity", "BgTargetLow", "BgTargetHigh",
+                              "BgTargetTarget", "ParentHDeviceBolusID"])
     days = _num(df.DeviceDtTmDaysFromEnroll)
     df = df[days >= 0].copy()          # pre-enrolment uploads are outside the loaded record
     days = days[days >= 0]
@@ -156,7 +156,13 @@ def replacebg_wizard() -> pd.DataFrame:
         "bolus_rec_id": df.ParentHDeviceBolusID.fillna("").astype(str).str.replace(r"\.0$", "", regex=True),
         "bg_input_mgdl": _num(df.BgInput),
         "carb_input_g": _num(df.CarbInput),
-        "iob_u": np.nan,               # the column exists but this study did not populate it usefully
+        # An earlier version of this loader wrote NaN here with a comment asserting
+        # the column was not usefully populated. That assertion was never checked
+        # and is false: 138,397 of 309,507 rows are non-zero with a mean of 0.79 U.
+        # It matters because this is the open-loop cohort, and its recorded insulin
+        # on board is the only way to validate the reconstruction where no algorithm
+        # is intervening.
+        "iob_u": _num(df.InsulinOnBoard),
         "cr_g_per_u": _num(df.InsulinCarbRatio),
         "isf_mgdl_per_u": _num(df.InsulinSensitivity),
         "target_low_mgdl": lo.fillna(tgt),
@@ -170,15 +176,16 @@ def replacebg_wizard() -> pd.DataFrame:
 
 
 def _parse_settings(path: Path, study: str, pid_col: str, visit_col: str | None,
-                    tdd_col: str, basal7d_col: str, dt_col: str) -> pd.DataFrame:
-    """Shared parser for the two CRF pump-settings files.
+                    tdd_col: str, basal7d_col: str, dt_col: str,
+                    encoding: str = "utf-8") -> pd.DataFrame:
+    """Shared parser for the three CRF pump-settings files.
 
     The basal schedule is sparse by convention: a half hour is written only when
     the rate changes, and holds until the next one written. Reading the blanks as
     zero would halve everybody's basal, so they are forward filled, wrapping from
     the end of the day when midnight itself is blank.
     """
-    df = pd.read_csv(path, sep="|", low_memory=False, dtype=str)
+    df = pd.read_csv(path, sep="|", low_memory=False, dtype=str, encoding=encoding)
     hh_cols = [f"InsBasal{h:02d}{m:02d}" for h in range(24) for m in (0, 30)]
     basal = df[hh_cols].apply(_num)
     filled = basal.ffill(axis=1)
@@ -237,10 +244,58 @@ def dclp5_settings() -> pd.DataFrame:
                            basal7d_col="TotBasalPreced7Days", dt_col="InsTherapyDt")
 
 
+def dclp3_settings() -> pd.DataFrame:
+    """DCLP3's pump settings, which this loader previously missed entirely.
+
+    The file is UTF-16LE where every other Jaeb settings file is plain ASCII, so
+    reading it with the default encoding produced unusable column names and the
+    study was recorded as shipping no settings. It ships the same 119 columns as
+    DCLP5: a 48 slot basal schedule, ten correction factor segments and ten carb
+    ratio segments.
+    """
+    return _parse_settings(RAW / "DCLP3/Data Files/InsulinPumpSettings_a.txt", "DCLP3",
+                           pid_col="PtID", visit_col=None, tdd_col="CurrTotInsDaily",
+                           basal7d_col="TotBasalPreced7Days", dt_col="InsTherapyDt",
+                           encoding="utf-16")
+
+
 def pedap_settings() -> pd.DataFrame:
     return _parse_settings(RAW / "PEDAP/Data Files/PEDAPInsulinDeliveryDetails.txt", "PEDAP",
                            pid_col="PtID", visit_col="Visit", tdd_col="PumpTotInsDaily",
                            basal7d_col="PumpTotBasalPreced7Days", dt_col="PumpInsTherapyDt")
+
+
+def replacebg_basal_sched() -> pd.DataFrame:
+    """REPLACE-BG's programmed basal, which this loader previously did not read.
+
+    Loop's schedule has to be inferred from the rate each temporary basal
+    suppressed, because nothing else records it. REPLACE-BG states it directly:
+    423,696 of 504,017 rows carry BasalType 'scheduled' with the programmed rate
+    in Rate, and the remaining temporary and suspended periods carry the rate they
+    displaced in SuprRate. Combining the two gives a complete scheduled series
+    without inference.
+
+    It is needed because insulin on board net of basal cannot be computed without
+    a schedule, and this is the only cohort in the corpus where no algorithm is
+    intervening, so it carries the measured sensitivity result.
+    """
+    path = RAW / "REPLACE-BG/Data Tables/HDeviceBasal.txt"
+    df = pd.read_csv(path, sep="|", low_memory=False,
+                     usecols=["PtID", "DeviceDtTmDaysFromEnroll", "DeviceTm",
+                              "BasalType", "Rate", "SuprBasalType", "SuprRate"])
+    days = _num(df.DeviceDtTmDaysFromEnroll)
+    df = df[days >= 0].copy()
+    ts = (pd.Timestamp("2015-01-01")
+          + pd.to_timedelta(_num(df.DeviceDtTmDaysFromEnroll), unit="D")
+          + pd.to_timedelta(df.DeviceTm.astype(str), errors="coerce"))
+    rate = np.where(df.BasalType.eq("scheduled"), _num(df.Rate),
+                    np.where(df.SuprBasalType.eq("scheduled"), _num(df.SuprRate), np.nan))
+    out = pd.DataFrame({"subject_id": "ReplaceBG:" + df.PtID.astype(str),
+                        "ts_local": ts, "sched_rate_u_hr": rate})
+    out = out.dropna().sort_values(["subject_id", "ts_local"])
+    # Only the changes matter: the rate holds until the next row written.
+    keep = out.sched_rate_u_hr.ne(out.groupby("subject_id").sched_rate_u_hr.shift())
+    return out[keep].reset_index(drop=True)
 
 
 def loop_basal_sched(out_csv: Path, files: list[str] | None = None) -> int:
@@ -344,7 +399,7 @@ def main() -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--source", default="all",
                     choices=["all", "loop_wizard", "replacebg_wizard", "dclp5", "pedap",
-                             "loop_basal_sched"])
+                             "loop_basal_sched", "replacebg_basal_sched", "dclp3"])
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
     want = (lambda s: args.source in ("all", s))
@@ -367,7 +422,7 @@ def main() -> int:
             copy_into("studies.wizard", WIZARD_COLS, p, "subject_id, ts_local, bolus_rec_id",
                       force_not_null="bolus_rec_id")
 
-    if want("dclp5") or want("pedap"):
+    if want("dclp5") or want("pedap") or want("dclp3"):
         frames = []
         if want("dclp5"):
             print("  DCLP5 pump settings")
@@ -375,24 +430,45 @@ def main() -> int:
         if want("pedap"):
             print("  PEDAP pump settings")
             frames.append(pedap_settings())
+        if want("dclp3"):
+            print("  DCLP3 pump settings")
+            frames.append(dclp3_settings())
         st = pd.concat(frames, ignore_index=True)
         print(f"    {len(st):,} visit records, {st.subject_id.nunique()} subjects, "
               f"{st.isf_tw_mgdl_per_u.notna().sum():,} with a correction factor")
         if not args.dry_run:
             p = tmpdir / "settings.csv"
             write_csv(st[[c.strip() for c in SETTINGS_COLS.split(",")]], p)
+            for st_name in {r.split(":")[0] for r in st.subject_id}:
+                psql(f"DELETE FROM studies.pump_settings WHERE subject_id LIKE '{st_name}:%'")
             copy_into("studies.pump_settings", SETTINGS_COLS, p, "subject_id, visit_seq")
 
-    if want("loop_basal_sched"):
-        print("  Loop scheduled basal (this reads 6.7 GB, allow a few minutes)")
+    if want("loop_basal_sched") or want("replacebg_basal_sched"):
+        # Delete only the study being loaded. Truncating the whole table would
+        # discard Loop's schedule, which takes minutes to rebuild, every time
+        # REPLACE-BG's is loaded on its own.
+        if want("loop_basal_sched"):
+            print("  Loop scheduled basal (this reads 6.7 GB, allow a few minutes)")
+            if not args.dry_run:
+                psql("DELETE FROM studies.basal_sched WHERE subject_id LIKE 'Loop:%'")
+                p = tmpdir / "sched.csv"
+                n = loop_basal_sched(p)
+                print(f"    {n:,} rate changes")
+                subprocess.run([PSQL, "-d", DB, "-v", "ON_ERROR_STOP=1", "-q", "-c",
+                                f"\\copy studies.basal_sched ({SCHED_COLS}) FROM '{p}' (FORMAT csv)"],
+                               check=True)
+        if want("replacebg_basal_sched"):
+            print("  REPLACE-BG scheduled basal")
+            if not args.dry_run:
+                psql("DELETE FROM studies.basal_sched WHERE subject_id LIKE 'ReplaceBG:%'")
+                sch = replacebg_basal_sched()
+                print(f"    {len(sch):,} rate changes, {sch.subject_id.nunique()} subjects")
+                p = tmpdir / "sched_rbg.csv"
+                write_csv(sch[[c.strip() for c in SCHED_COLS.split(",")]], p)
+                subprocess.run([PSQL, "-d", DB, "-v", "ON_ERROR_STOP=1", "-q", "-c",
+                                f"\\copy studies.basal_sched ({SCHED_COLS}) FROM '{p}' (FORMAT csv)"],
+                               check=True)
         if not args.dry_run:
-            p = tmpdir / "sched.csv"
-            n = loop_basal_sched(p)
-            print(f"    {n:,} rate changes")
-            psql("TRUNCATE studies.basal_sched")
-            subprocess.run([PSQL, "-d", DB, "-v", "ON_ERROR_STOP=1", "-q", "-c",
-                            f"\\copy studies.basal_sched ({SCHED_COLS}) FROM '{p}' (FORMAT csv)"],
-                           check=True)
             psql("ANALYZE studies.basal_sched")
 
     if not args.dry_run and want("loop_wizard") and want("replacebg_wizard"):
