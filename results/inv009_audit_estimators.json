@@ -1,0 +1,48 @@
+{
+ "true_isf": 50.0,
+ "tdd": 40.0,
+ "n_subjects": 30,
+ "days": 200,
+ "arms": [
+  {
+   "arm": "open loop",
+   "every_point": 35.514370035917,
+   "at_200": 77.94093743725551,
+   "landing": 51.58704164572171,
+   "bg": 178.43417048704174,
+   "landing_240": 59.81447435317175,
+   "landing_360": 51.58704164572171,
+   "landing_480": 41.66410550837758
+  },
+  {
+   "arm": "reactive controller",
+   "every_point": 11.16589647036806,
+   "at_200": NaN,
+   "landing": NaN,
+   "bg": 79.03967617571865,
+   "landing_240": NaN,
+   "landing_360": NaN,
+   "landing_480": NaN
+  },
+  {
+   "arm": "open loop + action error",
+   "every_point": 40.966682257025454,
+   "at_200": 81.08918204779461,
+   "landing": 47.7676822325075,
+   "bg": 184.5253686029307,
+   "landing_240": 62.41011822233949,
+   "landing_360": 47.7676822325075,
+   "landing_480": 44.74093772691259
+  },
+  {
+   "arm": "reactive + action error",
+   "every_point": 10.086111339771325,
+   "at_200": NaN,
+   "landing": NaN,
+   "bg": 79.68888091150802,
+   "landing_240": NaN,
+   "landing_360": NaN,
+   "landing_480": NaN
+  }
+ ]
+}

@@ -26,11 +26,33 @@ def wizard_full(sid):
                  "FROM studies.wizard WHERE subject_id=%s ORDER BY ts_local", (sid,))
 
 
+_ENTERED = None
+
+
+def entered_for(sid):
+    """Entered sensitivity for a cohort with no bolus calculator.
+
+    DCLP3, DCLP5 and PEDAP record settings on the case report form rather than at
+    each dose, so there is no per-dose target either. The achieved sensitivity does
+    not need one: it is the fall divided by the units given. Only the comparison
+    against what was entered does, and 110 mg/dL is used as the target, which is
+    the median the two calculator cohorts actually recorded.
+    """
+    global _ENTERED
+    if _ENTERED is None:
+        e = db.entered_isf()
+        _ENTERED = dict(zip(e.subject_id, e.isf))
+    return _ENTERED.get(sid, np.nan)
+
+
 def one(sid):
     st = db.streams(sid)
     wiz = wizard_full(sid)
     if wiz.empty:
-        return None
+        isf0 = entered_for(sid)
+        if not np.isfinite(isf0):
+            return None
+        wiz = None
     g = gm.build_grid(st)
     if g is None or len(g) < 2 * H:
         return None
@@ -39,6 +61,20 @@ def one(sid):
     bol = g.bolus_u.to_numpy(float)
     carbs = g.carbs_g.to_numpy(float)
     ts = g.ts.values
+
+    if wiz is None:
+        # No calculator: take every CGM point above threshold as a candidate and
+        # let the dose and carbohydrate screens below do the selection.
+        step = int(30 / config.GRID_MIN)
+        cand = np.arange(H, n - H, step)
+        cand = cand[(bg[cand] > 150) & (bg[cand] < 350)]
+        if len(cand) < 5:
+            return None
+        idx = cand
+        tgt = np.full(len(idx), 110.0)
+        isf = np.full(len(idx), entered_for(sid))
+        bgin = bg[idx]
+        return _collect(sid, g, bg, bol, carbs, n, idx, tgt, isf, bgin)
 
     w = wiz.dropna(subset=["bg_input_mgdl", "isf_mgdl_per_u"]).copy()
     w = w[(w.bg_input_mgdl > 150) & (w.bg_input_mgdl < 350) & (w.isf_mgdl_per_u > 0)]
@@ -58,6 +94,10 @@ def one(sid):
     if len(idx) < 5:
         return None
 
+    return _collect(sid, g, bg, bol, carbs, n, idx, tgt, isf, bgin)
+
+
+def _collect(sid, g, bg, bol, carbs, n, idx, tgt, isf, bgin):
     ccum = np.concatenate([[0.0], np.cumsum(np.nan_to_num(carbs))])
     bcum = np.concatenate([[0.0], np.cumsum(np.nan_to_num(bol))])
     rows = []
@@ -82,7 +122,7 @@ def one(sid):
 
 if __name__ == '__main__':
     subs = []
-    for s in ['ReplaceBG', 'Loop']:
+    for s in ['ReplaceBG', 'Loop', 'DCLP3', 'DCLP5', 'PEDAP', 'IOBP2']:
         subs += db.subjects(s).subject_id.tolist()
     with mp.Pool(7, maxtasksperchild=8) as p:
         out = p.map(one, subs)

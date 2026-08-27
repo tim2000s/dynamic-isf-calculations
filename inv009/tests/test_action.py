@@ -109,3 +109,34 @@ def test_design_matrix_indices_are_named_not_positional():
     # read of index 3 would silently pick it up as the insulin term.
     assert idx_int["bg0"] != idx_plain["bg0"]
     assert np.allclose(X_int[:, idx_int["bg0"]], d.bg0 - 100.0)
+
+
+def test_forward_action_does_not_double_count_a_dose_at_T():
+    """A single unit acting over one duration is one unit of action, from any offset.
+
+    The forward estimator computes action(T, T+H) = IOB(T) - IOB(T+H) + delivered
+    after T. A dose landing in bin T is already inside IOB(T), because the
+    remaining-action curve starts at 1, so including bin T in the delivered term
+    counts it twice and a 1 U bolus returns 2 U. That fault shipped once and this
+    is the test that would have caught it.
+    """
+    import numpy as np
+    from inv009 import config, insulin_models as M
+
+    k = M.kernel("oref_6h75")
+    h = int(360 / config.GRID_MIN)
+    n = 300
+    u = np.zeros(n)
+    u[50] = 1.0
+    iob = np.convolve(u, k)[:n]
+    c = np.concatenate([[0.0], np.cumsum(u)])
+
+    def action(t):
+        return iob[t] - iob[t + h] + (c[t + h] - c[t + 1])
+
+    assert abs(action(50) - 1.0) < 1e-9, "dose landing at T must not be counted twice"
+    # 0.9979 rather than exactly 1: the dose lands 25 minutes into the window and
+    # the last sliver of its action falls outside the far end.
+    assert abs(action(45) - 1.0) < 5e-3, "dose arriving inside the window acts in full"
+    # Opening the window after the dose has begun acting captures only the remainder.
+    assert 0.7 < action(60) < 0.95
