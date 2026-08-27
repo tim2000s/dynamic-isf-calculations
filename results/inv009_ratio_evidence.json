@@ -1,0 +1,144 @@
+{
+ "n_estimates": 15,
+ "ratio_min": 0.29638197580861875,
+ "ratio_median": 0.5754368325869886,
+ "ratio_max": 0.9229373179482897,
+ "n_at_or_above_one": 0,
+ "estimates": [
+  {
+   "source": "INV-008 oref (loop-recorded IOB)",
+   "cohort": "138 users",
+   "n": 114,
+   "measured": 915.7956103847628,
+   "entered": 2245.849594251583,
+   "ratio": 0.40777245846240495,
+   "note": "K/sqrt(TDD) fits, expressed at a daily dose of 40 U"
+  },
+  {
+   "source": "JAEB landing (bolus, per unit given)",
+   "cohort": "DCLP3",
+   "n": 112,
+   "measured": 32.66295180028214,
+   "entered": 35.39021682739258,
+   "ratio": 0.9229373179482897,
+   "note": "sensitivity in mg/dL/U, not a constant"
+  },
+  {
+   "source": "JAEB landing (bolus, per unit given)",
+   "cohort": "DCLP5",
+   "n": 100,
+   "measured": 43.02973027541103,
+   "entered": 57.202919006347656,
+   "ratio": 0.7522296243420049,
+   "note": "sensitivity in mg/dL/U, not a constant"
+  },
+  {
+   "source": "JAEB landing (bolus, per unit given)",
+   "cohort": "Loop",
+   "n": 128,
+   "measured": 40.00528239564389,
+   "entered": 50.00662,
+   "ratio": 0.7999997279488974,
+   "note": "sensitivity in mg/dL/U, not a constant"
+  },
+  {
+   "source": "JAEB landing (bolus, per unit given)",
+   "cohort": "PEDAP",
+   "n": 98,
+   "measured": 76.74418604652055,
+   "entered": 155.20542907714844,
+   "ratio": 0.49446843775273536,
+   "note": "sensitivity in mg/dL/U, not a constant"
+  },
+  {
+   "source": "JAEB landing (bolus, per unit given)",
+   "cohort": "ReplaceBG",
+   "n": 180,
+   "measured": 35.00000000000057,
+   "entered": 50.09004,
+   "ratio": 0.6987417059359619,
+   "note": "sensitivity in mg/dL/U, not a constant"
+  },
+  {
+   "source": "JAEB any route, action",
+   "cohort": "DCLP3",
+   "n": 97,
+   "measured": 26.274051941781803,
+   "entered": 40.0,
+   "ratio": 0.656851298544545,
+   "note": "sensitivity in mg/dL/U"
+  },
+  {
+   "source": "JAEB any route, action, clean slate",
+   "cohort": "DCLP3",
+   "n": 97,
+   "measured": 20.674865396759124,
+   "entered": 40.0,
+   "ratio": 0.5168716349189781,
+   "note": "sensitivity in mg/dL/U"
+  },
+  {
+   "source": "JAEB any route, action",
+   "cohort": "DCLP5",
+   "n": 89,
+   "measured": 33.39331705754961,
+   "entered": 70.0,
+   "ratio": 0.477047386536423,
+   "note": "sensitivity in mg/dL/U"
+  },
+  {
+   "source": "JAEB any route, action, clean slate",
+   "cohort": "DCLP5",
+   "n": 89,
+   "measured": 45.53980566658057,
+   "entered": 70.0,
+   "ratio": 0.6505686523797224,
+   "note": "sensitivity in mg/dL/U"
+  },
+  {
+   "source": "JAEB any route, action",
+   "cohort": "Loop",
+   "n": 600,
+   "measured": 27.42815930764997,
+   "entered": 54.00715255737305,
+   "ratio": 0.5078616073771415,
+   "note": "sensitivity in mg/dL/U"
+  },
+  {
+   "source": "JAEB any route, action, clean slate",
+   "cohort": "Loop",
+   "n": 600,
+   "measured": 16.00674658275172,
+   "entered": 54.00715255737305,
+   "ratio": 0.29638197580861875,
+   "note": "sensitivity in mg/dL/U"
+  },
+  {
+   "source": "JAEB any route, action",
+   "cohort": "PEDAP",
+   "n": 85,
+   "measured": 95.78761394753866,
+   "entered": 161.25,
+   "ratio": 0.5940317144033406,
+   "note": "sensitivity in mg/dL/U"
+  },
+  {
+   "source": "JAEB any route, action",
+   "cohort": "ReplaceBG",
+   "n": 156,
+   "measured": 25.920551070224594,
+   "entered": 45.04499816894531,
+   "ratio": 0.5754368325869886,
+   "note": "sensitivity in mg/dL/U"
+  },
+  {
+   "source": "JAEB any route, action, clean slate",
+   "cohort": "ReplaceBG",
+   "n": 156,
+   "measured": 25.53231020811453,
+   "entered": 45.04499816894531,
+   "ratio": 0.5668178764788336,
+   "note": "sensitivity in mg/dL/U"
+  }
+ ]
+}
