@@ -226,8 +226,10 @@ a √TDD level set per person from their own data — the direction the cross-va
 ## Addendum, 27 August 2026
 
 The observation here that the equations sit above where observed sensitivity lies
-has been replicated across 1,679 people in six Jaeb trial cohorts, with a ratio of
-measured to entered sensitivity between 0.30 and 0.92 and no estimate reaching
-1.0. The gap is a property of observational measurement rather than of the
-entered settings, which Paper 4 had already tested against outcomes. See
+has been tested across 1,679 people in six Jaeb trial cohorts. How far below
+depends on construction more than on cohort: dividing the fall by insulin on board
+at the start gives 0.72 to 1.12, and dividing by the action of all insulin above
+the programmed basal gives 0.30 to 0.66, on the same records. The gap is therefore
+a property of the measurement as much as of the person, and a published
+observational sensitivity means little without its denominator stated. See
 Dynamic-ISF-7.
