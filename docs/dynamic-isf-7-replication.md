@@ -80,7 +80,7 @@ to open with little insulin already on board.
 | Bolus corrections, per unit given | 5 | 0.49 to 0.92 |
 | Any route, insulin action across the window | 5 | 0.48 to 0.66 |
 | Any route, action, low insulin on board at the start | 4 | 0.30 to 0.65 |
-| oref archive, loop-recorded insulin on board | 1 | 0.41 |
+| oref archive, loop-recorded insulin on board | 1 | 0.60 (reported 0.41) |
 
 The constructions bracket rather than agree, and they do so in an interpretable
 direction. Dividing by insulin on board at the start ignores anything delivered
@@ -147,11 +147,26 @@ estimate. Every construction here looks defensible in isolation and they span 0.
 to 1.12, so neither the estimate nor the ratio means anything without the
 construction attached.
 
-The remaining question is why the oref archive returns 0.41 under a construction
-that returns 0.72 to 1.12 on trial data. That is now a question about those
-records rather than about method, and one difference is not yet held fixed: the
-oref figure came from fitting a constant over the square root of daily dose across
-users, where these are medians of per-person ratios.
+The oref archive's 0.41 turns out to be mostly aggregation. Its two anchors were
+fitted on different subsets, the measured constant on 114 people and the entered
+constant on 138, and both were regression fits rather than medians. Matching person
+by person across the same 112 records and taking medians gives 207 measured against
+333 entered, a ratio of 0.62, and the median of per-person ratios agrees at 0.60
+with quartiles of 0.50 to 0.81. As a Walsh-style constant those records give 1432
+measured against 2219 entered, which sits inside the range the trial cohorts return
+rather than below it.
+
+That leaves 0.60 on the oref archive against 0.72 to 1.12 on the trial cohorts
+under the same construction, a real difference and a much smaller one. The two
+remaining candidates are the cohorts, self-selected users of open-source systems
+who have tuned their own settings over years against trial participants given
+theirs, and the provenance of insulin on board, recorded by the loop in one case
+and reconstructed in the other.
+
+The general point is worth more than either number. Moving between two defensible
+aggregations of identical records shifted the ratio by half as much as moving
+between two different datasets did. An aggregation choice can look like a finding,
+and in this series it did for over a year.
 
 ## Method
 
