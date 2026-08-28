@@ -103,6 +103,13 @@ open-loop cohort exceeds its entered settings at six hours. Constructions that
 instead divide by the action of all insulin above the programmed basal give 0.30
 to 0.66 on the same records.
 
+The 0.41 reported here does not survive re-examination on its own records either.
+Its two anchors were fitted on different subsets, 114 people for the measured
+constant and 138 for the entered one, and both were regression fits rather than
+medians. Matched person by person across the same 112 records and taken as medians,
+the constants are 207 and 333, a ratio of 0.62, and the median of per-person ratios
+is 0.60. As a Walsh-style constant that is 1432 measured against 2219 entered.
+
 So the ratio of 0.41 reported here is not reproduced at that value on trial data,
 and the spread between constructions on identical records is wider than the spread
 between cohorts. Why the oref archive sits at 0.41 where trial data sits near 1.0
