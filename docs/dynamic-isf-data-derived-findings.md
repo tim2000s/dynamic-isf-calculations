@@ -96,10 +96,17 @@ insulin on board taken from the loop's own record.
 
 They have since been tested on 1,679 people across six Jaeb trial cohorts, ages 2
 to 82, with insulin on board reconstructed from delivery records rather than
-reported, and using four different constructions of the estimator. The ratio of
-measured to entered sensitivity ranges from 0.30 to 0.92 with a median of 0.58,
-and in fifteen estimates it does not once reach 1.0. The K = 145 against 355
-reported here corresponds to a ratio of 0.41 and sits inside that range.
+reported. The result does not carry over unchanged. Running the construction used
+here, the fall over the horizon divided by insulin on board at the start, gives a
+ratio of measured to entered sensitivity of 0.72 to 1.12 on those cohorts, and the
+open-loop cohort exceeds its entered settings at six hours. Constructions that
+instead divide by the action of all insulin above the programmed basal give 0.30
+to 0.66 on the same records.
 
-So the finding is not a property of this cohort, of open-source systems, or of how
-insulin on board was obtained. See Dynamic-ISF-7.
+So the ratio of 0.41 reported here is not reproduced at that value on trial data,
+and the spread between constructions on identical records is wider than the spread
+between cohorts. Why the oref archive sits at 0.41 where trial data sits near 1.0
+under the same construction is open, and is a question about these records rather
+than about the method. The conclusions of Phases 5 and 6, that the measured level
+is unsafe to dose to and that overnight does not de-bias it, are untouched by this:
+they rest on outcomes rather than on the ratio. See Dynamic-ISF-7.

@@ -1,28 +1,32 @@
 ---
-title: "Observational insulin sensitivity sits below entered settings in every cohort tested"
-subtitle: "A replication across 1,679 people in six trials, and what it means for sensitivity derived from device data"
+title: "How far observational insulin sensitivity sits below entered settings depends on how it is measured"
+subtitle: "Six trial cohorts, 1,679 people, and a gap that ranges from 0.30 to 1.12 according to construction"
 author: "Tim Street, Diabettech"
 date: "27 August 2026"
 ---
 
 ## Summary
 
-Sensitivity estimated from what glucose did after insulin was given comes out
-below the sensitivity people have entered into their pumps. That was established
-in 2026 on 138 users of open-source closed-loop systems, where the constant
-anchored to measured sensitivity was 145 against 355 anchored to the profiles
-people had tuned, a ratio of 0.41. The same work tested whether dosing to the
-measured value would be safe and found it would not: people dosing well weaker
+Sensitivity estimated from what glucose did after insulin was given generally comes
+out below the sensitivity people have entered into their pumps. That was
+established in 2026 on 138 users of open-source closed-loop systems, where the
+constant anchored to measured sensitivity was 145 against 355 anchored to the
+profiles people had tuned, a ratio of 0.41. The same work tested whether dosing to
+the measured value would be safe and found it would not: people dosing well weaker
 than their measured sensitivity had more hypoglycaemia rather than less, and
 restricting the estimate to overnight periods left the bias unchanged.
 
-This paper asks whether that result was a property of those 138 people, of the
-open-source systems they used, or of the way insulin on board was obtained. It was
-none of them. Across 1,679 people in six trial cohorts, using four different
-constructions of the estimator and insulin on board reconstructed from delivery
-records rather than reported by the loop, the ratio of measured to entered
-sensitivity runs from 0.30 to 0.92 with a median of 0.58. In fifteen estimates it
-does not once reach 1.0.
+This paper asks whether that ratio holds on other data. Across 1,679 people in six
+trial cohorts it does not hold at a single value, and the reason is that the ratio
+depends on how the estimate is constructed more than on which cohort is measured.
+Holding the cohort fixed and varying the construction moves it from 0.30 to 1.12.
+Running the original construction unchanged on the trial cohorts gives 0.72 to
+1.12, with the open-loop cohort exceeding its entered settings at six hours.
+
+So the direction of the earlier finding is not universal and the magnitude is not
+transferable. What is transferable is the caution: an observational sensitivity
+estimate is a statement about a method as much as about a person, and two
+defensible methods on the same records differ by more than threefold.
 
 ## What was already known
 
@@ -47,23 +51,45 @@ run from 2 to 82 and daily doses from 7 to 107 U. Insulin on board is
 reconstructed from the delivery record and an insulin action curve, which is the
 weaker provenance: the earlier work had the loop's own figure.
 
-Four constructions were used, differing in the decisions that turn out to matter.
-Whether a correction is counted as a bolus alone or as anything delivered above
-the programmed basal, which matters because 56% of Loop's correcting insulin and
-43% of PEDAP's arrives as raised temporary basal. Whether the denominator is the
-units given or the insulin action across the window. And whether episodes are
-required to open with little insulin already on board.
+The original construction is the fall over four hours divided by insulin on board
+at the start, taken overnight, with carbohydrate screened by the shape of the trace
+rather than from a log. Run unchanged on these cohorts it gives:
 
-| Construction | Cohorts | Ratio, measured to entered |
+| Cohort | 4 h | 6 h | Entered | Ratio at 4 h | Ratio at 6 h |
+|---|---|---|---|---|---|
+| REPLACE-BG | 42.5 | 50.4 | 45.0 | 0.94 | 1.12 |
+| Loop | 45.9 | 50.7 | 55.0 | 0.83 | 0.92 |
+| PEDAP | 137.4 | 144.0 | 158.8 | 0.87 | 0.91 |
+| DCLP3 | 31.2 | 33.6 | 41.0 | 0.76 | 0.82 |
+| DCLP5 | 54.9 | 49.4 | 68.3 | 0.80 | 0.72 |
+
+That is 0.72 to 1.12, not 0.41, and the open-loop cohort exceeds its entered
+settings once the horizon covers the insulin duration.
+
+Three other constructions were also run, differing in decisions that turn out to
+matter as much as the cohort does. Whether a correction is counted as a bolus
+alone or as anything delivered above the programmed basal, which matters because
+56% of Loop's correcting insulin and 43% of PEDAP's arrives as raised temporary
+basal. Whether the denominator is the units given, the insulin action across the
+window, or insulin on board at the start alone. And whether episodes are required
+to open with little insulin already on board.
+
+| Construction | Cohorts | Ratio |
 |---|---|---|
-| oref archive, loop-recorded insulin on board | 1 | 0.41 |
+| Insulin on board at the start, 4 to 6 h | 5 | 0.72 to 1.12 |
 | Bolus corrections, per unit given | 5 | 0.49 to 0.92 |
-| Any route, insulin action | 5 | 0.48 to 0.66 |
+| Any route, insulin action across the window | 5 | 0.48 to 0.66 |
 | Any route, action, low insulin on board at the start | 4 | 0.30 to 0.65 |
+| oref archive, loop-recorded insulin on board | 1 | 0.41 |
 
-The spread within a construction is as wide as the spread between them, so the
-choices above move the answer by about a factor of two and the data cannot
-adjudicate between them. What survives every choice is the sign.
+The constructions bracket rather than agree, and they do so in an interpretable
+direction. Dividing by insulin on board at the start ignores anything delivered
+inside the window, which lowers glucose and enlarges the numerator without
+appearing below the line, so that construction reads high and reads highest where
+an algorithm is dosing throughout. Dividing by the action of all above-schedule
+insulin counts insulin that was covering something else, so it reads low. The
+honest statement is that the answer lies between them and this data does not place
+it.
 
 ## Why the magnitude cannot be pinned here
 
@@ -108,16 +134,24 @@ For anyone setting a pump, nothing changes. The entered constants remain the
 number to use and the earlier outcome work is the reason.
 
 For anyone deriving sensitivity from device data, which includes every dynamic
-sensitivity equation in current use, the finding is that the quantity being
-derived is not the quantity a settings file encodes, and the difference is not
-small, not confined to one cohort, one algorithm or one age group, and not removed
-by restricting to overnight. An equation calibrated against observational
-sensitivity inherits the bias.
+sensitivity equation in current use, the finding is that the quantity being derived
+is defined by the construction as much as by the person. Two defensible choices of
+denominator on the same overnight records differ by more than threefold, and the
+choice that ignores insulin delivered during the window reads highest exactly where
+an algorithm is delivering it. An equation calibrated against one construction
+inherits its bias and there is no way to read that bias off the published number.
 
 For anyone reporting such an estimate, the practical recommendation is to publish
-the ratio against entered settings alongside the estimate itself. Every
-construction here looks defensible in isolation and they differ by a factor of
-two, so the ratio is the diagnostic that makes them comparable.
+the denominator in full and the ratio against entered settings alongside the
+estimate. Every construction here looks defensible in isolation and they span 0.30
+to 1.12, so neither the estimate nor the ratio means anything without the
+construction attached.
+
+The remaining question is why the oref archive returns 0.41 under a construction
+that returns 0.72 to 1.12 on trial data. That is now a question about those
+records rather than about method, and one difference is not yet held fixed: the
+oref figure came from fitting a constant over the square root of daily dose across
+users, where these are medians of per-person ratios.
 
 ## Method
 
