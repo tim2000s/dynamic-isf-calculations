@@ -1,4 +1,4 @@
-"""Dynamic ISF equations: v1 (Chris Wilson, original) and v2 (revised maths).
+"""Dynamic ISF equations: v1 and the author-confirmed v2 equation.
 
 v1:
     sensNormalTarget = 1800 / (TDD * ln(NT/divisor + 1))            # ISF proportional to 1/TDD
@@ -8,9 +8,16 @@ v2:
     sensNormalTarget = 2300 / (ln(NT/divisor) * TDD^2 * 0.02)       # ISF proportional to 1/TDD^2
     ISF              = 115000 / (TDD^2 * ln(BG_floored/divisor))    # no +1; BG floored at div+1
 
-v1 keeps the +1 in its glucose log; v2 drops it and floors glucose at divisor+1, so the two
-glucose terms differ and the v2/v1 ratio depends on glucose as well as TDD. The optional
-velocity damping of v1's glucose response is held at its default of 1.0 (the full scaler).
+V1 keeps the +1 in its glucose log. V2 has no +1 and floors glucose at
+divisor + 1. At glucose equal to the divisor, ln(BG/divisor) is zero. The
+underlying insulin-effect term is therefore zero and the reciprocal ISF is
+undefined. The one-point floor keeps the implemented ISF finite and positive.
+For the standard rapid-acting configuration used in this investigation, the
+divisor/floor pair is 75/76 mg/dL.
+
+The historical investigation plan cited an AndroidAPS implementation that kept
+the +1 in V2. The formula author subsequently confirmed that this was not the
+intended V2 equation. This module implements the confirmed no-+1 form.
 
 Shared:
     bgAdj  = cap + (bg - cap)/3            if bg > cap

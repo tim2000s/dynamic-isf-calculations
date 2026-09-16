@@ -1,5 +1,8 @@
 # Phase 12 — cohort shadow evaluation of Tier-2 v-next (sensitivity-anchored)
 
+> Audit status: Tier 2 is withdrawn. Its anchor is a delta-IOB outcome proxy rather than measured
+> physiological sensitivity.
+
 114 people with a usable measured-sensitivity fit (r² ≥ 0.1), 6,996,143 per-tick readings. Tier-2 anchors K_user = measured_ISF · √(median TDD); the glucose curve g(BG) is unchanged.
 
 ## Headline

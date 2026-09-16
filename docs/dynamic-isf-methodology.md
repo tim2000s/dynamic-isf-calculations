@@ -2,6 +2,11 @@
 
 **2026-06-07** · Tim Street / Claude
 
+> Audit update, 16 September 2026: V2 is the author-confirmed no-`+1` equation. The Python
+> replay used that form. The delta-IOB and action-balance estimators are outcome proxies rather
+> than independent physiological ISF measurements. Conclusions relying on them as ground truth
+> are withdrawn. See `DYNAMIC-ISF-AUDIT-2026-09.md`.
+
 ---
 
 ## Abstract
@@ -9,11 +14,11 @@
 This paper describes a reproducible computational method for evaluating equations that set
 a dynamic insulin sensitivity factor (ISF) as a function of total daily dose (TDD). The
 method (1) implements each candidate equation exactly, with a unit-test contract; (2)
-reconstructs, from each person's recorded insulin-delivery history, the precise TDD signal
-the equations consume; (3) replays every glucose reading through each equation to generate
+reconstructs, from each person's available insulin-delivery history, the closest available TDD
+signal to the one the equations consume; (3) replays every glucose reading through each equation to generate
 the ISF it would produce; (4) compares the resulting ISF distributions between equations;
-(5) searches a family of candidate equations for the best fit to independently-calculated
-sensitivity using leave-one-user-out cross-validation; and (6) validates the equation
+(5) searches a family of candidate equations against a delta-IOB outcome proxy using
+leave-one-user-out cross-validation; and (6) validates the equation
 implementations against ISF values that devices themselves logged. We applied it to 171
 people using open-source automated insulin delivery (AID) systems and roughly 9 million
 glucose readings. This paper documents each step, the script that performs it, and the
@@ -35,11 +40,11 @@ the sensitivity anchor (1/TDD against 1/TDD²), and the glucose scaler, where v1
 its log and v2 does not. The questions this method answers:
 
 1. How differently do v1 and v2 dose, across a real population, as a function of TDD?
-2. Does either TDD power law match sensitivity as it is actually observed in user data?
+2. How does either TDD power law compare with entered ISF and a delta-IOB outcome proxy?
 3. Is there a better-fitting equation among a wider candidate family?
 
 The focus is the between-person sensitivity anchor as a function of TDD, since that is where
-the equations diverge most and where independent ground truth exists. The glucose-scaler
+the equations diverge most. The glucose-scaler
 difference is carried through the replay rather than assumed away. This is a retrospective,
 decision-level analysis of the equations, not a closed-loop outcome study, and it provides no
 dosing advice.
@@ -63,8 +68,9 @@ else:
 ```
 
 **Glucose scaling.** With glucose capped at 210 mg/dL (excess at one-third weight),
-divisor 75 (rapid analogue such as Lyumjev), normal target 99 mg/dL. v1 keeps the `+1` in
-the log; v2 uses `ln(BG/divisor)` (no +1) and floors glucose at `divisor+1`:
+divisor 75 (the standard rapid-acting configuration, including NovoRapid), normal target
+99 mg/dL. v1 keeps the `+1` in the log; v2 uses `ln(BG/divisor)` (no +1) and floors glucose
+at `divisor+1`:
 
 ```
 v1 scaler:           ln(target/divisor + 1) / ln(bg_capped/divisor + 1)
@@ -127,7 +133,7 @@ workstation.
 
 The v1 and v2 equations and the TDD blend are implemented as vectorised array operations,
 preserving every constant, the glucose cap, and the blend's branch logic. Correctness is
-fixed by 25 unit tests against hand-computed fixtures: the v2 glucose floor, the
+fixed by 27 unit tests against hand-computed fixtures: the v2 glucose floor, the
 glucose-dependent v1/v2 ratio, the glucose-cap compression, both branches of the TDD blend,
 and the missing-data gates. Every downstream conclusion rests on these being exactly the
 equations as defined, and the tests are the contract that guarantees it.
@@ -151,8 +157,9 @@ delivery records:
    to profile ISF) wherever a component is absent.
 
 This matters because the equations are functions of the blended TDD, not a flat daily average.
-Reconstructing the windowed signal each device would have computed is what makes the replay
-faithful rather than approximate. A flat-TDD arm runs alongside it, to measure how much the
+Reconstructing the windowed signal makes the replay substantially closer to the device calculation
+than a flat daily average. It remains approximate where temporary-basal delivery is absent from an
+export, particularly in the AAPS cohort. A flat-TDD arm runs alongside it to measure how much the
 blend itself contributes.
 
 ### 4.3 Absolute-time recovery and ISF replay
@@ -181,13 +188,12 @@ relationship with the observed points and the fitted slope.
 
 ### 4.5 Best-fit equation search
 
-To ask whether a better equation exists, candidates are scored against two independent
-targets:
+To ask whether a better equation fits these data, candidates are scored against two targets:
 
-- **calculated sensitivity** — ISF derived directly from each person's own data by a
-  regression on fasting windows (`ΔBG = a + b·ΔIOB + c·BG_trend`; sensitivity = −b, the
-  observed glucose drop per unit of insulin absorbed; n = 114 after quality gates). This
-  is the ground truth for "what insulin actually does".
+- **delta-IOB sensitivity proxy** — a regression on fasting windows
+  (`ΔBG = a + b·ΔIOB + c·BG_trend`; proxy = −b; n = 114 after quality gates). New insulin
+  delivery changes IOB during the window, and delivery responds to glucose. This target does
+  not identify the physiological effect of insulin.
 - **tuned-profile ISF** — each person's own profile setting (n = 138): "what experienced
   users converge to".
 
@@ -207,7 +213,7 @@ holding out each person in turn measures how well they generalise to someone new
 ### 4.6 Implementation validation against device-logged ISF
 
 Independently of the equation comparison, we check that the v1 implementation reproduces
-what devices actually computed. Trio logs its own per-cycle ISF, giving ground truth for
+what devices actually computed. Trio logs its own per-cycle ISF, giving a device reference for
 its dynamic-ISF users. We correlate replayed v1 ISF against the device value, expecting,
 per person, a positive log-log correlation (the curve shape tracks) and a tight, roughly
 constant multiplicative offset — the device additionally applies an adjustment factor, an
@@ -231,17 +237,16 @@ doses: the steeper TDD law and the altered glucose term each lift v2's ISF above
 target glucose the two would only meet near 194 U/day, well beyond anyone in the cohort. The
 pattern is a direct reading of the replayed data, not a modelling artefact.
 
-**Both TDD power laws are too steep.** The log-log fit of independently-calculated
+**Both TDD power laws are steeper than the fitted proxy relationship.** The log-log fit of
 sensitivity against reconstructed TDD has a slope near −0.5 (bootstrap interval excluding
-−1). v1 assumes −1; v2 assumes −2. Because the target is sensitivity *calculated from each
-person's own glucose and insulin data* — not profile settings, not the equations
-themselves — this is an independent test of the TDD exponent, and it rejects both.
+−1). v1 assumes −1 and v2 assumes −2. The proxy is calculated from the same closed-loop record,
+so this comparison does not establish a physiological TDD exponent.
 
-**A square-root law fits best.** Under cross-validation the K/√TDD form is best against
-tuned-profile ISF and tied-best against calculated sensitivity, beating both equations and
-every alternative. Added inputs (carb ratio, target, basal fraction) do not robustly
-improve it. The two natural anchors differ by a constant factor, establishing that the
-*shape* of the relationship is settled by the data while the *level* is a separate choice.
+**A square-root law fits these two targets best.** Under cross-validation the K/√TDD form is best against
+tuned-profile ISF and tied-best against the delta-IOB proxy, beating both equations and
+the other candidates tested. Added inputs (carb ratio, target, basal fraction) do not robustly
+improve it. This is a predictive ranking against two observational targets. It does not settle
+the physiological shape or level.
 
 **The implementation is faithful.** The unit tests fix the implementation to the defined
 equations, and the device-ISF validation shows the dynamic-ISF users tracking their
@@ -255,16 +260,16 @@ output.
 
 | Step | Script | Key output |
 |---|---|---|
-| Equation implementation + tests | `inv008/dynisf.py`, `inv008/tests/` | 25 passing tests |
+| Equation implementation + tests | `inv008/dynisf.py`, `inv008/tests/` | 27 passing tests |
 | TDD reconstruction | `inv008/stage1_tdd.py` (+ `tdd_windows.py`, `sources.py`) | per-person TDD tables |
 | ISF replay | `inv008/stage2_replay.py` | per-person ISF tables |
 | Orchestration | `inv008/runner.py` | run logs + manifests |
 | Figures | `inv008/stage3_plots.py` | cohort + per-person figures |
 | Equation search | `fit_best_isf.py` | candidate-comparison tables |
-| Personalisation (blended-TDD refit, variance decomposition) | `inv008/fit_personalisation.py` | universal-exponent / per-user-K finding |
+| Historical personalisation fit | `inv008/fit_personalisation.py` | proxy exponent / per-user-K description; dosing interpretation withdrawn |
 | Device validation | `inv008/validate_device_isf.py` | validation tables |
 | Delivery/basal inputs | `extract_treatments_tdd.py`, `extract_hourly_basal.py` | input data |
-| Reference cohort + calculated sensitivity | `canonical_cohort.py`, `empirical_isf_v5.py` | targets for the search |
+| Reference cohort + delta-IOB proxy | `canonical_cohort.py`, `empirical_isf_v5.py` | targets for the search |
 
 ```
 python -m pytest inv008/tests/
@@ -283,11 +288,10 @@ python -m inv008.validate_device_isf
    real histories, not closed-loop glycaemic outcomes.
 2. **Basal approximation for one platform.** Where exports lack temp-basal records, basal
    TDD uses the profile schedule.
-3. **Calculated-sensitivity level.** The regression estimator may be biased low by
-   unrecorded carbohydrate or endogenous-glucose effects; it has confidence intervals but
-   no external ground truth. The *shape* it implies is robust; its absolute *level* is
-   provisional.
+3. **Delta-IOB proxy.** The regression is affected by in-window delivery, unrecorded
+   carbohydrate, endogenous-glucose effects and closed-loop confounding. It has confidence
+   intervals but no external physiological ground truth. Its level and TDD slope are provisional.
 4. **Single cohort.** Open-source AID users, mostly 2016–2023; no commercial-system or
-   demographic data. n = 114/138 for the calculated-sensitivity analyses.
+   demographic data. n = 114/138 for the historical proxy analyses.
 5. **Anchor uncertainty.** Five reconstructed users retain time-anchor uncertainty and are
    flagged.

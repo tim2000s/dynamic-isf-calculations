@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Model-INDEPENDENT effective ISF vs glucose: remove the dependence on the loop's insulin curve.
+"""Action-balance outcome proxy versus glucose.
 
 The same-window effective ISF elsewhere uses the loop's IOB prediction (reason_IOBpredBG), so it
 inherits the loop's DIA/peak insulin-action model. Here we compute the insulin that ACTUALLY ACTED
@@ -7,11 +7,10 @@ over each window by conservation — no activity curve, no forward projection:
 
     insulin_acted = (IOB_start − IOB_end) + SMBs_delivered + ∫(temp_basal − profile_basal) dt
 
-ΔIOB is the observed change in on-board insulin (units absorbed); SMBs and the temp-basal deviation
-from the scheduled profile are the insulin delivered *during* the window (which the loop's prediction
-omits). Because by four hours ~85–93% of a fast-insulin dose has acted, IOB_end is small and the curve
-choice barely matters — the conservation identity is robust (this is the point: the 4-hour horizon
-makes it model-light). Then:
+IOB is model-derived. The database fields used for SMB and temporary basal are suggestions and are
+not proof of enacted delivery. The calculation is therefore model-dependent and cannot be described
+as a conservation identity or an independent physiological ISF estimate. It remains useful as a
+descriptive outcome ratio under the recorded loop model. Then:
 
     effective_ISF = (cgm_start − cgm_end) / insulin_acted          (mg/dL per U that acted)
 
@@ -156,7 +155,8 @@ def main():
 
     summary = {
         "n_users": int(D.user.nunique()), "n_windows": int(len(D)),
-        "method": "effective_ISF = ΔBG / (ΔIOB + SMBs + ∫(temp−profile basal)); no insulin curve.",
+        "method": "outcome proxy = ΔBG / (ΔIOB + suggested SMB + ∫(suggested temp−profile basal)); IOB is model-derived and suggestions may differ from enacted delivery.",
+        "estimator_status": "model_dependent_outcome_proxy_not_physiological_isf",
         "effective_isf_independent_ratio": dict(zip(LBL, indep)),
         "effective_isf_loopmodel_ratio": dict(zip(LBL, loopm)),
         "diabeloop_quartic_ratio": dict(zip(LBL, quart)),
@@ -166,25 +166,27 @@ def main():
     }
     ki = slope_k(indep)
     summary["verdict"] = (
-        f"Model-INDEPENDENT net effective ISF is {'flat/rising' if (ki is None or ki<=0.1) else 'falling'} "
-        f"with glucose (k={ki}); {'matches' if (ki is not None and ki<=0.1) else 'differs from'} the "
-        "loop-model version → the conclusion is robust to the insulin-action-model caveat" )
+        f"The action-balance outcome proxy is {'flat/rising' if (ki is None or ki<=0.1) else 'falling'} "
+        f"with glucose (k={ki}). Agreement with the loop-prediction proxy does not establish "
+        "physiological ISF because both depend on model-derived IOB and closed-loop delivery." )
     (OUT / "effective_isf_independent.json").write_text(json.dumps(summary, indent=1))
 
     fig, ax = plt.subplots(1, 1, figsize=(7.5, 5))
-    ax.plot(CTR, indep, "o-", color="#2ca02c", lw=2.5, label=f"independent (ΔIOB-based), k={ki}")
+    ax.plot(CTR, indep, "o-", color="#2ca02c", lw=2.5, label=f"action-balance proxy, k={ki}")
     ax.plot(CTR, loopm, "s--", color="#1f77b4", lw=2, label=f"loop-model (reason_IOBpredBG), k={slope_k(loopm)}")
     ax.plot(CTR, quart, ":", color="#d62728", lw=2, label=f"Diabeloop quartic, k={slope_k(quart)}")
     ax.axhline(1, color="k", ls="--", lw=1)
     ax.set_xlabel("glucose (mg/dL)"); ax.set_ylabel("effective ÷ profile ISF")
-    ax.set_title("Net effective ISF vs glucose: model-independent vs loop-model vs Diabeloop")
+    ax.set_title("Outcome ratios vs glucose: action balance and loop prediction")
     ax.legend(fontsize=8); ax.grid(alpha=0.3)
     fig.tight_layout(); fig.savefig(CHART / "fig_effective_isf_independent.png", dpi=150); plt.close(fig)
 
-    md = ["# Model-independent effective ISF vs glucose (no insulin-action curve)\n",
-          f"{summary['n_users']} users, {len(D):,} windows. effective ISF = ΔBG / (ΔIOB + SMBs + "
-          "∫(temp−profile basal)). Ratio = ÷ each user's profile ISF.\n",
-          "| BG band | independent (ΔIOB) | loop-model | Diabeloop quartic | n |", "|---|---|---|---|---|"]
+    md = ["# Action-balance outcome proxy versus glucose\n",
+          f"{summary['n_users']} users, {len(D):,} windows. Proxy = ΔBG / (ΔIOB + suggested SMB + "
+          "∫(suggested temp−profile basal)). IOB is model-derived and suggestion fields may differ "
+          "from enacted delivery, so this is not an independent physiological ISF. "
+          "Ratio = proxy divided by each user's profile ISF.\n",
+          "| BG band | action-balance proxy | loop-model proxy | Diabeloop quartic | n |", "|---|---|---|---|---|"]
     for i in range(len(BANDS)):
         md.append(f"| {LBL[i]} | {indep[i]} | {loopm[i]} | {quart[i]} | {npar[i]:,} |")
     md += [f"\nImplied k: independent **{ki}**, loop-model {slope_k(loopm)}, quartic {slope_k(quart)} "

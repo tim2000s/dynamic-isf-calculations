@@ -1,5 +1,7 @@
 # Phase 2 — sensitivity variance decomposition by timescale
 
+> Audit status: this decomposes variation in the delta-IOB outcome proxy, not physiological ISF.
+
 134 users with ≥150 clean windows (ΔIOB ≥ 0.3 U).
 Per-window log local-ISF, centred per user (baseline removed); variance attributed to each timescale (one-way η²); daily-series autocorrelation separates persistent (trackable) from white.
 

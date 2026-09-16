@@ -198,7 +198,7 @@ def render_cohort_figs(summary: pd.DataFrame) -> None:
         fig, ax = plt.subplots(figsize=(8, 6))
         for plat, g in e_all.groupby("platform"):
             ax.scatter(g["median_tdd"], g["empirical_isf"], s=26, alpha=0.8,
-                       color=colors[plat], label=f"{labels[plat]} empirical (n={len(g)})")
+                       color=colors[plat], label=f"{labels[plat]} delta-IOB proxy (n={len(g)})")
         tt = np.geomspace(e_all["median_tdd"].min() * 0.8,
                           e_all["median_tdd"].max() * 1.2, 100)
         ax.plot(tt, 1800.0 / (tt * log_term), color=C_V1, lw=2,
@@ -211,18 +211,18 @@ def render_cohort_figs(summary: pd.DataFrame) -> None:
         ok = np.isfinite(x) & np.isfinite(y)
         slope, intercept = np.polyfit(x[ok], y[ok], 1)
         ax.plot(tt, np.exp(intercept) * tt ** slope, "k-", lw=1.6, alpha=0.8,
-                label=f"empirical fit: slope {slope:.2f}")
+                label=f"proxy fit: slope {slope:.2f}")
         ax.set_xscale("log"); ax.set_yscale("log")
         ax.set_xlabel("median TDD (U/day)")
-        ax.set_ylabel("ISF at normal target (mg/dL per U)")
-        ax.set_title("Which TDD power law does observed sensitivity follow?\n"
+        ax.set_ylabel("delta-IOB outcome proxy (mg/dL per U)")
+        ax.set_title("Which TDD power law does the delta-IOB proxy follow?\n"
                      "V1 assumes ISF ∝ 1/TDD; V2 assumes ISF ∝ 1/TDD²")
         ax.legend(fontsize=9)
         ax.grid(alpha=0.3, which="both")
         fig.tight_layout()
         fig.savefig(CHART_DIR / "fig_tdd_loglog.png", dpi=150)
         plt.close(fig)
-        print(f"empirical ISF~TDD power-law slope: {slope:.3f} "
+        print(f"delta-IOB proxy~TDD power-law slope: {slope:.3f} "
               f"(V1 implies -1, V2 implies -2)")
 
     # --- agreement with empirical ISF ---

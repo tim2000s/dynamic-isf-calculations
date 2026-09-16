@@ -2,13 +2,13 @@
 """Is there a better ISF~TDD equation than v1 or v2?
 
 Pulls together every ISF~TDD relationship examined (the historical 1700-rule, a
-ΔIOB-based estimate of observed sensitivity, a TDD-band lookup, and the v1/v2
+ΔIOB-based observational outcome proxy, a TDD-band lookup, and the v1/v2
 equations) and evaluates candidate equations side by side with leave-one-user-out
 cross-validation, so fitted forms are scored out-of-sample and comparable with the
 fixed rules.
 
 Targets:
-  * empirical ISF (ΔIOB-derived observed sensitivity; n≈114) — "what actually happens"
+  * empirical column (ΔIOB-derived outcome proxy; n≈114)     — not physiological ground truth
   * entered ISF (user-tuned profile value; n=138)            — "what users converge to"
 
 Candidates:
@@ -34,7 +34,7 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(os.environ.get("DYNISF_ROOT", Path.cwd()))
-LOG_TERM = math.log(99.0 / 75 + 1.0)  # normal target 99, divisor 75 (Lyumjev)
+LOG_TERM = math.log(99.0 / 75 + 1.0)  # normal target 99, standard rapid-acting divisor 75
 LOG_TERM_V2U = math.log(99.0 / 75)     # updated v2: no +1
 
 # ---------------------------------------------------------------- data
@@ -231,7 +231,7 @@ def main() -> None:
           f"\nFitted power law (empirical): ISF = {power_emp['A']}·TDD^{power_emp['b']}",
           f"Fitted power law (entered):  ISF = {power_ent['A']}·TDD^{power_ent['b']}",
           f"Blend weight on entered ISF: {blend.w:.1f}",
-          "\n## Target: empirical ISF (observed sensitivity)\n",
+          "\n## Target: delta-IOB observational outcome proxy\n",
           _md_table(res_emp),
           "\n## Target: entered ISF (user-tuned profile)\n",
           _md_table(res_ent)]
@@ -239,7 +239,7 @@ def main() -> None:
 
     # figure: median log error per candidate, both targets
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
-    for ax, res, title in ((axes[0], res_emp, f"target: empirical ISF (n={len(emp)})"),
+    for ax, res, title in ((axes[0], res_emp, f"target: delta-IOB proxy (n={len(emp)})"),
                            (axes[1], res_ent, f"target: entered ISF (n={len(df)})")):
         r = res.sort_values("median_log_err", ascending=True)
         colors = ["#d62728" if "V2" in c else "#1f77b4" if "V1" in c

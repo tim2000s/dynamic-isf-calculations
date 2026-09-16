@@ -1,28 +1,33 @@
-# Executive summary — Does ISF need to change with glucose?
+# Does insulin sensitivity fall with glucose, or is it carbohydrate? The short read
 
-**Tim Street, with Claude (Anthropic) · June 2026** — *Dynamic ISF in open-source automated insulin delivery (oref0 / Trio)*
+**Tim Street, with analysis support from Claude (Anthropic) · June 2026.** *Dynamic ISF in open-source AID (oref0 / Trio)*
 
-**The question.** Dynamic-ISF algorithms (and the Diabeloop model) lower the insulin sensitivity factor — the glucose fall expected per unit of insulin — as glucose rises, assuming high glucose makes insulin less effective. In practice they rarely beat a well-set static ISF. We tested why, on real closed-loop data.
+> Audit update, 16 September 2026: the outcome analyses support a predictive comparison and
+> residual carbohydrate as a plausible explanation. They do not independently measure
+> physiological ISF. The phrase "two independent ways" in the original summary was incorrect
+> because both estimators use model-derived IOB or loop predictions. See
+> `DYNAMIC-ISF-AUDIT-2026-09.md`.
 
-## What we saw
+Dynamic ISF lowers your insulin sensitivity factor as glucose rises, on the reasonable assumption that high glucose makes insulin work less well. It's a real biological effect, and plenty of people feel Dynamic ISF helps. I wanted to check something narrower: when you measure the glucose drop we actually get per unit of insulin, the number a loop really doses against, does that fall as glucose rises? On our own looping data, the answer is more interesting than a straight yes or no.
 
-- A well-set **static ISF predicts the glucose drop as well as the loop itself**, and far better than the dynamic v1/v2 equations.
-- The **effective ISF does not fall as glucose rises**. It is *lowest near target* and flat-to-higher when high — the opposite shape to dynamic ISF. Confirmed two independent ways, including one that makes no assumption about how insulin acts over time.
-- The accuracy gain comes from **personalising each user's overall sensitivity level** (~7 mg/dL), *not* from adding a glucose curve.
-- **Two real users, tested directly:** a carb-announcing user was flat (matching the cohort); a UAM user (no carb entries) fell steeply — **but that fall mostly disappeared overnight**, when they were genuinely not eating.
+## What I found
 
-## Why we saw it
+- **A well-set static ISF already matches the loop prediction closely** and beats the dynamic equations on the selected windows. The earlier square-root TDD recommendation is withdrawn because its estimator did not identify physiological ISF.
+- **In the selected overnight windows, apparent sensitivity did not fall with glucose.** Both outcome proxies were flat-to-rising with glucose, opposite to Dynamic ISF. Neither proxy is physiologically independent: one rescales the loop prediction and the other uses model-derived IOB plus suggested delivery.
+- **The falling pattern lives around food, not high glucose itself.** For someone who doesn't announce carbs, the fall is a daytime thing that mostly vanishes overnight when they're genuinely not eating. And, more tentatively, even for a careful carb-announcer, the hour after carbs-on-board reaches zero tends to show a lower effective sensitivity that recovers over the following half hour, with glucose more likely to drift up against active insulin. Some absorption may run on a little after the loop has called the meal over. Two separate datasets show a similar shape.
+- **The real, useful individual signal is each person's overall sensitivity level** (worth about 7 mg/dL), which has to be learned from their own results, not a glucose curve, whose best-fit steepness comes out at zero.
 
-- **The "insulin works worse when high" effect is mostly carbohydrate, not physiology.** High glucose is usually carb-driven. For carb-announcing users the carb model handles it, so the fasting ISF is flat. For UAM users, *unannounced carbs leak in and look like resistance* — which is exactly why their curve falls by day and flattens overnight.
-- **A second confound inflates it:** the loop over-trusts large corrections (~2×), and corrections are bigger at high glucose — so correction *size* masquerades as a glucose effect.
-- **Real glucose physiology does appear — but near target** (the body defending against hypos), the *opposite* direction to what dynamic ISF assumes.
+## What I think it might mean (carefully)
 
-## What it means
+The effect Dynamic ISF was built for is real in the raw data, and our data show it too. What I'm questioning is the cause. One reasonable reading here is that some of what a glucose-driven ISF does may be compensating for carbohydrate the absorption model hasn't fully caught (unannounced meals, and possibly the tail of announced ones), rather than correcting a minute-to-minute loss of sensitivity. I offer it as a candidate explanation, not a settled one. It's not a knock on Dynamic ISF or on anyone's carb model. The meal tail is genuinely one of the hardest things to estimate from CGM, and some residual is expected of any such model.
 
-> **Use a per-user-adapted static ISF (√TDD starting point, refined online from the person's own outcomes) + a near-target easing clamp. Don't add a glucose curve by default.**
+Controlled studies show that insulin sensitivity varies over time. These observational data cannot
+separate that variation from glucose effectiveness, controller delivery and residual carbohydrate.
 
-A glucose-lowering ISF mainly compensates for *unannounced carbs* — genuinely useful for UAM users, but that is carb-handling, not resistance-correction. So: handle carbs as carbs, individualise the level, keep the static backbone.
+## What I'd actually do
 
-**Honesty note.** Glucose really does cause insulin resistance physiologically — but on the minute-to-hour fasting timescale of closed-loop correction it is too small to see, and the chronic part already lives in the per-user level. An earlier draft claimed a "clearance cancels resistance" resolution; it was withdrawn after audit as untestable.
+> **Get each person's sensitivity level right and keep adapting it from their own outcomes; keep a near-target easing of ISF as a hypo-safety measure; treat carbohydrate as carbohydrate. Don't reach for a steeper glucose curve by default.**
 
-**Scale.** 119 individuals · ~9.6 M loop decisions · ~62,700 overnight + 64,300 daytime carb-screened windows · >560,000 ISF evaluations · plus 2 external Nightscout users (12 and 5 months). *Full paper and code: `github.com/tim2000s/dynamic-isf-calculations`.*
+If you keep a glucose term, it's best understood as a rough proxy for carbohydrate the loop is missing, most useful for people who don't announce. It's worth remembering that when carbs are announced it can end up leaning on the same meal as the carb model.
+
+**Scale.** ~115 people · millions of loop decisions · tens of thousands of carbohydrate-free overnight and post-meal windows · plus two external individuals (12 and 5 months) who, between them, show both halves of the carbohydrate story. *Full write-up and code: `github.com/tim2000s/dynamic-isf-calculations`.*

@@ -1,12 +1,12 @@
 # Best-fit ISF equation search — LOUO-CV comparison
 
-2026-06-07 19:13 · empirical target n=114 · entered target n=138
+2026-09-16 16:59 · empirical target n=114 · entered target n=138
 
 Fitted power law (empirical): ISF = 86.0·TDD^-0.376
 Fitted power law (entered):  ISF = 285.1·TDD^-0.433
 Blend weight on entered ISF: 0.0
 
-## Target: empirical ISF (observed sensitivity)
+## Target: delta-IOB observational outcome proxy
 
 | candidate | fitted_cv | median_abs_err | p75_abs_err | median_log_err | frac_within_30pct |
 |---|---|---|---|---|---|

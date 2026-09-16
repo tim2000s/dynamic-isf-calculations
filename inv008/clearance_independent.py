@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Model-INDEPENDENT clearance decomposition: does the resistance↔clearance reconciliation survive?
+"""Exploratory clearance decomposition using the action-balance outcome proxy.
 
 Re-runs the clearance decomposition (test #1) without the loop's insulin-action curve. Insulin that
 acted is computed by conservation (inv008.effective_isf_independent): acted = ΔIOB + SMBs +
@@ -11,9 +11,10 @@ ISF, by glucose.
     net ratio        = (drop / acted) / profile_isf
     corrected ratio  = ((drop − nonInsulin(BG)) / acted) / profile_isf
 
-If — as in the loop-model version — the NET ratio is flat/rising but the CORRECTED (insulin-only)
-ratio FALLS with glucose, the reconciliation holds model-independently: resistance is real but offset
-by clearance in the net. Single-process. Output: results/clearance_independent.{json,md},
+The low-action windows remain selected closed-loop observations. They do not identify
+non-insulin clearance, and subtracting their median does not identify insulin-only ISF.
+This module is retained as an exploratory sensitivity analysis. Output:
+results/clearance_independent.{json,md},
 charts/inv008/fig_clearance_independent.png. Run: python -m inv008.clearance_independent
 """
 from __future__ import annotations
@@ -95,8 +96,8 @@ def main():
 
     summary = {
         "n_users": int(D.user.nunique()), "n_active": int(len(act)),
-        "method": "model-independent: acted = ΔIOB + SMBs + ∫(temp−profile basal); non-insulin flux "
-                  "from |acted|<0.3 U windows.",
+        "method": "exploratory action-balance proxy; low-action windows do not identify non-insulin flux.",
+        "estimator_status": "non_identifying_exploratory_decomposition",
         "nonInsulin_flux_mgdl": dict(zip(LBL, nonins_curve)),
         "nonInsulin_n": dict(zip(LBL, [nonins_n[k] for k in range(len(BANDS))])),
         "net_ratio_by_bg": dict(zip(LBL, net)),
@@ -108,28 +109,27 @@ def main():
     net_flat = (k_net is None) or (k_net <= 0.15)
     resist = (k_corr is not None) and (k_corr > 0.2)
     summary["verdict"] = (
-        "RECONCILIATION HOLDS model-independently — net effective ISF flat/rising "
-        f"(k={k_net}) while clearance-corrected insulin-only ISF falls with glucose (k={k_corr}); "
-        "resistance is real but offset by clearance in the net"
-        if (net_flat and resist) else
-        f"net k={k_net}, corrected k={k_corr} — does not cleanly reproduce the loop-model pattern; inspect")
+        f"The exploratory curves are net k={k_net} and adjusted k={k_corr}. The design does not "
+        "identify clearance or physiological insulin resistance, regardless of their difference.")
     (OUT / "clearance_independent.json").write_text(json.dumps(summary, indent=1))
 
     fig, ax = plt.subplots(1, 2, figsize=(13, 5))
     ax[0].plot(CTR, nonins_curve, "o-", color="#9467bd", lw=2)
     ax[0].axhline(0, color="k", ls="--", lw=1); ax[0].axvline(180, color="#888", ls=":", lw=1, label="renal ~180")
     ax[0].set_xlabel("glucose (mg/dL)"); ax[0].set_ylabel("non-insulin flux (mg/dL/4h)")
-    ax[0].set_title("Model-independent clearance\n(|acted|<0.3 U windows)"); ax[0].legend(fontsize=8); ax[0].grid(alpha=0.3)
+    ax[0].set_title("Low-action-window glucose change\n(|proxy action|<0.3 U)"); ax[0].legend(fontsize=8); ax[0].grid(alpha=0.3)
     ax[1].plot(CTR, net, "o-", color="#1f77b4", lw=2, label=f"net (k={k_net})")
     ax[1].plot(CTR, corr, "s-", color="#d62728", lw=2.5, label=f"clearance-corrected insulin-only (k={k_corr})")
     ax[1].axhline(1, color="k", ls="--", lw=1)
     ax[1].set_xlabel("glucose (mg/dL)"); ax[1].set_ylabel("effective ÷ profile ISF")
-    ax[1].set_title("Resistance↔clearance, model-independent"); ax[1].legend(fontsize=8); ax[1].grid(alpha=0.3)
+    ax[1].set_title("Exploratory subtraction, non-identifying"); ax[1].legend(fontsize=8); ax[1].grid(alpha=0.3)
     fig.tight_layout(); fig.savefig(CHART / "fig_clearance_independent.png", dpi=150); plt.close(fig)
 
-    md = ["# Model-independent clearance decomposition (no insulin-action curve)\n",
+    md = ["# Exploratory clearance decomposition using an action-balance proxy\n",
           f"{summary['n_users']} users, {len(act):,} insulin-active windows. acted = ΔIOB + SMBs + "
-          "∫(temp−profile basal); non-insulin flux from |acted|<0.3 U windows.\n",
+          "∫(suggested temp−profile basal). IOB is model-derived and suggested delivery may not "
+          "equal enacted delivery. Low-action closed-loop windows do not identify non-insulin "
+          "clearance, so the adjusted curve is descriptive rather than causal.\n",
           "## Non-insulin flux (mg/dL/4h)\n", "| BG band | flux | n |", "|---|---|---|"]
     for k in range(len(BANDS)):
         md.append(f"| {LBL[k]} | {nonins_curve[k]} | {nonins_n[k]:,} |")

@@ -2,6 +2,12 @@
 
 **2026-06-07** (same-window outcome test §3.6 added 2026-06-09) · Tim Street / Claude · Data: 171 people using open-source AID systems
 
+> Audit update, 16 September 2026: the V2 replay used the intended no-`+1` equation with
+> divisor/floor 75/76. The delta-IOB estimator is not independent physiological ground truth,
+> so the claimed physiological TDD exponent and square-root recommendation are withdrawn. The
+> equation replay and within-model prediction comparison remain valid. See
+> `DYNAMIC-ISF-AUDIT-2026-09.md`.
+
 ---
 
 ## Summary
@@ -20,16 +26,17 @@ everywhere, giving a weaker correction than v1 on 92% of readings (a median of 3
 roughly 53× below 80 mg/dL and easing to about 1.5× above 200). That low-glucose behaviour is
 sensible hypo protection.
 
-The TDD exponent is the problem. Sensitivity calculated independently from each person's own
-data scales as roughly TDD^−0.5, or shallower; v2 assumes TDD^−2. As a between-person predictor
-of sensitivity, v2 is the worst of every form we tested (median error around 171 mg/dL per unit
-against measured sensitivity), and its overall level sits well above where observed sensitivity
-lies. So v2's glucose behaviour points the right way while its TDD scaling and level are off.
+The TDD exponent is the problem within the tested proxy. The delta-IOB sensitivity proxy scales
+as roughly TDD^−0.5, or shallower; v2 assumes TDD^−2. As a between-person predictor
+of the delta-IOB proxy, v2 is the worst of every form we tested (median error around 171 mg/dL
+per unit). Its overall level sits well above the proxy. This comparison does not establish which
+TDD exponent describes physiological insulin sensitivity.
 
-A separate, outcome-anchored test backs this up: rescaling the loop's own glucose prediction to
-each candidate ISF on 62,751 identical overnight windows, a person's tuned static ISF predicts
-the realised drop about as well as the loop itself and better than either dynamic equation,
-v2 worst — the same ranking, reached from outcomes rather than from the equations (§3.6).
+A separate within-loop prediction test gives the same ranking. Rescaling the loop's own glucose
+prediction to each candidate ISF on 62,751 selected overnight windows, a person's tuned static ISF
+predicts the realised drop about as well as the loop itself and better than either dynamic
+equation, with v2 worst. Because this reuses the loop's prediction model and selects windows using
+future glucose, it is predictive evidence rather than an independent physiological measurement.
 
 ---
 
@@ -66,14 +73,14 @@ device would have computed: device-logged TDD for Trio, and for AAPS and OpenAPS
 reconstructed from raw delivery records (boluses plus temp-basal segments over the profile
 basal, on a 5-minute grid) through the same five-window blend. Relative timestamps were
 re-anchored to absolute time and checked against recorded hour-of-day, with median join
-coverage of 99.4%. The equation implementations carry 25 unit tests against hand-computed
+coverage of 99.4%. The equation implementations carry 27 unit tests against hand-computed
 fixtures, covering the v2 glucose floor, the glucose-dependent v1/v2 ratio, both branches of
 the TDD blend, and the missing-data gates. The companion methodology paper has the full
 pipeline.
 
-For 114 people we also have sensitivity calculated directly from their own data, by regressing
-glucose change on insulin absorbed over fasting windows. That serves as the ground truth for
-the TDD law.
+For 114 people the repository also fits glucose change against delta IOB over fasting windows.
+This provides an observational comparison target. It does not serve as physiological ground truth
+because in-window delivery changes IOB and is selected by the closed-loop controller.
 
 ---
 
@@ -98,32 +105,35 @@ v2 gives a higher ISF, meaning a weaker correction, on 92% of readings, a median
 very high ISF below about 100 mg/dL (close to no correction at all) comes from the
 `ln(BG/divisor)` term and the glucose floor, and amounts to strong hypo protection.
 
-### 3.2 Which TDD law does observed sensitivity follow?
+### 3.2 Which TDD law does the delta-IOB proxy follow?
 
-![Log-log ISF vs TDD: observed points, v1 slope −1, v2 slope −2, fitted slope −0.56](charts/inv008/fig_tdd_loglog.png)
+![Log-log delta-IOB proxy vs TDD: proxy points, v1 slope −1, v2 slope −2, fitted slope −0.56](charts/inv008/fig_tdd_loglog.png)
 
-On a log-log plot v1 has slope −1 and v2 slope −2, while the calculated sensitivities follow a
-fitted slope near −0.56: shallower than v1 and far from v2. Both equations over-steepen the
-TDD dependence, and v2, with twice the log-space slope, does so twice as hard. The choice of
-glucose term has no bearing on this; the TDD exponent is still −2.
+On a log-log plot v1 has slope −1 and v2 slope −2, while the delta-IOB outcome proxy follows a
+fitted slope near −0.56. This is shallower than v1 and far from v2. It shows how the equations
+compare with that proxy. It does not show which TDD law physiological insulin sensitivity follows,
+because new delivery changes IOB during the interval and the controller selects delivery in
+response to glucose.
 
-### 3.3 Agreement with calculated sensitivity (and tuned profiles)
+### 3.3 Agreement with the delta-IOB proxy and tuned profiles
 
 Scoring each form as a between-person ISF predictor under leave-one-user-out cross-validation,
-against measured sensitivity (n=114) and tuned-profile ISF (n=138):
+against the delta-IOB proxy (n=114) and tuned-profile ISF (n=138):
 
-| candidate | median \|err\| vs measured | log-err | within ±30% |
+| candidate | median \|err\| vs proxy | log-err | within ±30% |
 |---|---|---|---|
 | K/√TDD (v-next) | 6.2 | 0.30 | 45% |
 | 1700-rule | 16.2 | 0.61 | 15% |
 | v1 (TDD⁻¹) | 26.0 | 0.81 | 7% |
 | v2 (TDD⁻²) | 171 | 2.32 | 2% |
 
-v2 is the worst between-person predictor by a wide margin. On top of the over-steep TDD
-exponent, its level sits far above observed sensitivity. The ranking holds against tuned
-profiles too (v2 median error around 124 against 12.8 for √TDD).
+v2 is the worst between-person predictor of the delta-IOB proxy by a wide margin. Its level sits
+far above that proxy. The ranking holds against tuned profiles too (v2 median error around 124
+against 12.8 for √TDD).
 
-### 3.4 Implementation validation against device-calculated ISF
+The next check concerns software implementation, not physiological validity.
+
+### 3.4 Device-log implementation validation
 
 The v1 implementation reproduces what devices actually computed. For the nine Trio users on the
 logarithmic form, replayed v1 tracks the device's logged ISF with stable per-person offsets
@@ -140,8 +150,9 @@ two-week sample of dynamic-ISF traces over real glucose, and the per-reading rat
 
 ### 3.6 Same-window outcome test: which ISF predicts the realised drop?
 
-The results above compare the ISF each equation *would have computed*. A separate test asks
-which ISF best predicts the glucose drop that *actually happened*. The loop's IOB-based glucose
+The results above compare the ISF each equation *would have computed*. A separate within-loop
+prediction test asks which rescaled ISF best predicts the glucose drop that *actually happened*.
+The loop's IOB-based glucose
 prediction is linear in ISF — predicted drop = ISF × an activity integral that does not depend
 on ISF — so on any window we can take the loop's own prediction (made with the ISF it ran) and
 rescale it to any candidate ISF, then compare to the observed end glucose. Every ISF form is
@@ -149,7 +160,7 @@ tested on the *same* window, which removes the between-person confound that the 
 in §3.3 cannot: each person's outcomes only ever score their own equation there, whereas here
 all four forms are scored on one shared set of windows.
 
-Over 62,751 overnight, carbohydrate-screened, four-hour windows from 89 people (v1's `+1` makes
+Over 62,751 overnight, future-rise-screened, four-hour windows from 89 people (v1's `+1` makes
 its prediction well defined throughout; AAPS users excluded for the same TDD-reconciliation
 reason as elsewhere), scoring error as observed end glucose minus predicted end glucose:
 
@@ -167,34 +178,35 @@ either dynamic equation; v2 is more than twice as far off as static. Counting wh
 single best predictor per person (80 people with enough windows), the loop wins for 35, static
 for 24, v1 for 17 and v2 for only 4.
 
-The bias-by-glucose panel shows *why* the dynamic forms lose. v1's error is strongly
-glucose-dependent — it over-predicts the drop at low glucose (+14.9 mg/dL in the 80–100 band)
-and badly under-predicts it when high (−33.2 in the 175–230 band) — which is the 1/TDD curve
-coupling sensitivity too tightly to glucose. v2 over-predicts the drop almost everywhere (its
-correction is too weak), worst at low glucose. A near-constant static ISF carries no such
-glucose-linked error.
+The bias-by-glucose panel shows *why* the dynamic forms lose within this model. V1's error is
+strongly glucose-dependent. With error defined as observed end glucose minus predicted end
+glucose, its positive error at low glucose means it predicts too large a drop, while its negative
+error at high glucose means it predicts too small a drop. V2 has positive error almost
+everywhere, so it predicts too large a drop. A
+near-constant static ISF carries less glucose-linked error in these selected windows.
 
-This is the outcome-anchored counterpart to §3.2–3.3 and reaches the same conclusion from the
-other direction: a well-tuned static level is hard to beat, both dynamic equations are worse,
-and v2 is worst.
+This is a predictive comparison inside the loop's own linear IOB model, not an independent
+measurement of insulin action. Within that scope, a well-tuned static level is hard to beat,
+both dynamic equations are worse, and v2 is worst.
 
 ---
 
 ## 4. Reading the result
 
-v2's glucose behaviour is defensible. More ISF, and so less insulin, at low glucose is the hypo
-protection a correction curve should provide, and it lines up with the glucose-dependent ISF
-seen in the Diabeloop and power-law work. Two problems remain.
+V2 provides strong low-glucose protection. More ISF produces less insulin near the configured
+floor. The observational analysis does not establish that its glucose curve represents
+physiological sensitivity.
 
-The TDD exponent is too steep, −2 against an observed −0.5, which makes v2 the worst-fitting
-between-person predictor of any form tested. And the overall level is about 3× too high, so
+The TDD exponent is steep relative to the fitted proxy, −2 against about −0.5, which makes v2
+the worst-fitting between-person predictor of that proxy among the forms tested. Its overall
+level is about 3× the proxy level, so
 corrections come out weak across the board: not only for the lighter-dosing majority but at
 high glucose too, where v2 is still around 1.5× gentler than v1 above 200 mg/dL and more
 aggression is usually wanted.
 
-So v2 offers good hypo protection but its TDD scaling and level are wrong. The better TDD law is
-a √TDD level set per person from their own data — the direction the cross-validation supports
-(§3.3) — keeping v2's useful low-glucose protection without its steep TDD exponent or high level.
+V2 offers strong low-glucose protection, but its TDD scaling and level performed poorly against
+the tested outcomes. The square-root form fitted the observational targets better. This does not
+establish a physiological TDD law or support a dosing recommendation.
 
 ---
 
@@ -207,10 +219,11 @@ a √TDD level set per person from their own data — the direction the cross-va
    insulin delivery feeding back into later IOB and glucose) are not captured.
 2. Basal approximation: AAPS exports lack temp-basal records, so basal TDD for those 39 users
    uses the profile schedule.
-3. The calculated-sensitivity benchmark is per-person and may be biased low by unrecorded
-   carbohydrate or endogenous-glucose effects; it tests the between-person TDD law.
+3. The delta-IOB benchmark is a per-person outcome proxy affected by in-window delivery,
+   unrecorded carbohydrate, endogenous-glucose effects and controller feedback. It does not
+   identify a physiological TDD law.
 4. Single cohort: open-source AID users, mostly 2016–2023, with n = 114/138 for the
-   calculated-sensitivity analyses.
+   proxy/profile analyses.
 
 ---
 
@@ -221,15 +234,3 @@ a √TDD level set per person from their own data — the direction the cross-va
 - Same-window outcome test: `inv008/head_to_head.py` → `results/head_to_head.{json,md}`, `results/head_to_head_windows.parquet`, `charts/inv008/fig_head_to_head.png`
 - Pipeline and candidate search: `inv008/`, `fit_best_isf.py`
 - Repository: `github.com/tim2000s/dynamic-isf-calculations`
-
-
-## Addendum, 27 August 2026
-
-The observation here that the equations sit above where observed sensitivity lies
-has been tested across 1,679 people in six Jaeb trial cohorts. How far below
-depends on construction more than on cohort: dividing the fall by insulin on board
-at the start gives 0.72 to 1.12, and dividing by the action of all insulin above
-the programmed basal gives 0.30 to 0.66, on the same records. The gap is therefore
-a property of the measurement as much as of the person, and a published
-observational sensitivity means little without its denominator stated. See
-Dynamic-ISF-7.

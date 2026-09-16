@@ -1,5 +1,8 @@
 # Phase 5 — does the derived (sensitivity-anchored) ISF beat tuned ISF?
 
+> Audit status: the delta-IOB coefficient does not identify physiological ISF. Associations with
+> outcomes are descriptive and confounded by the controller and existing settings.
+
 112 users with realised CGM outcomes + valid empirical ISF.
 Median R = entered/empirical = **2.38** (users dose, on average, well weaker than their measured sensitivity).
 

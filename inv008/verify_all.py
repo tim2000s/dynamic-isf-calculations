@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Independent end-to-end verification of the dynamic-ISF analysis.
+"""End-to-end arithmetic and output-consistency checks for the Dynamic ISF analysis.
 
-Re-derives every headline number from scratch (an "oracle" that does not import the
-package's equation code where it can avoid it) and cross-checks against (a) the package
-functions, (b) the replayed parquet outputs, and (c) the numbers quoted in the documents.
-Also quantifies the temp-basal bin-edge convention flagged in review.
+The equation oracle is implemented separately from the package functions. Other sections
+reproduce stored results from the same observational assumptions and are consistency checks,
+not independent physiological validation. Also quantifies the temp-basal bin-edge convention
+flagged in review.
 
 Run: python -m inv008.verify_all
 Exit 0 only if every check passes.
@@ -86,7 +86,7 @@ for tdd, (e1, e2, en) in expect.items():
         print(f"      TDD {tdd}: v1={v1:.1f}(doc {e1}) v2={v2:.1f}(doc {e2}) vnext={vn:.1f}(doc {en})")
 check("documented table matches recomputation", tbl_ok)
 
-print("\n5. Fit constants reproduced from canonical_cohort + empirical_isf_v5")
+print("\n5. Historical fitted proxy constants reproduce from stored inputs (not physiological validation)")
 coh = pd.DataFrame(json.loads((ROOT / "canonical_cohort.json").read_text()))
 emp = pd.DataFrame(json.loads((ROOT / "empirical_isf_v5.json").read_text()))[
     ["user_id", "empirical_isf", "r2"]]
@@ -102,7 +102,7 @@ check("anchor ratio 355/145 ~ 2.45", abs(K_ent / K_emp - 2.45) < 0.2, f"{K_ent/K
 for tgt, col, lo, hi in [("entered", "isf", -0.6, -0.3), ("empirical", "empirical_isf", -0.6, -0.3)]:
     d = (ev if tgt == "empirical" else df).dropna(subset=[col])
     b = np.polyfit(np.log(d.tdd), np.log(d[col]), 1)[0]
-    check(f"power-law slope ({tgt}) in [-0.6,-0.3]", lo < b < hi, f"slope {b:.3f}")
+    check(f"stored power-law slope ({tgt}) reproduces in [-0.6,-0.3]", lo < b < hi, f"slope {b:.3f}")
 check("n_empirical = 114", len(ev) == 114, f"{len(ev)}")
 check("n_cohort = 138", len(df) == 138, f"{len(df)}")
 
@@ -183,4 +183,4 @@ print("\n" + "=" * 60)
 if fails:
     print(f"VERIFICATION FAILED: {len(fails)} check(s) — {fails}")
     raise SystemExit(1)
-print("ALL CHECKS PASSED")
+print("ALL ARITHMETIC AND OUTPUT-CONSISTENCY CHECKS PASSED")
