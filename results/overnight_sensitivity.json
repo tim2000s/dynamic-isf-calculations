@@ -1,7 +1,8 @@
 {
  "n_patients": 112,
  "total_windows": 81814,
- "method": "overnight 11pm-3am start, drop over T+4h / IOB(T), carb-screened",
+ "method": "overnight 11pm-3am start, drop over T+4h / model-derived IOB(T), future-rise-selected outcome proxy",
+ "estimator_status": "descriptive_outcome_ratio_not_physiological_isf",
  "population_median_sensitivity": 30.5,
  "population_p25_p75": [
   18.8,

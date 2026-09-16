@@ -1,0 +1,147 @@
+{
+ "n_users": 89,
+ "n_windows": 62751,
+ "overall_mae_bias": {
+  "static": {
+   "mae": 20.3,
+   "bias": 6.6,
+   "n": 62751
+  },
+  "v1": {
+   "mae": 24.6,
+   "bias": -10.4,
+   "n": 57078
+  },
+  "v2": {
+   "mae": 49.7,
+   "bias": 25.2,
+   "n": 57078
+  },
+  "loop": {
+   "mae": 18.6,
+   "bias": 7.4,
+   "n": 62751
+  }
+ },
+ "by_bg_band": {
+  "80-100": {
+   "static": {
+    "mae": 16.0,
+    "bias": 14.7,
+    "n": 1898
+   },
+   "v1": {
+    "mae": 18.0,
+    "bias": 14.9,
+    "n": 1793
+   },
+   "v2": {
+    "mae": 64.2,
+    "bias": 64.2,
+    "n": 1793
+   },
+   "loop": {
+    "mae": 16.0,
+    "bias": 15.0,
+    "n": 1898
+   }
+  },
+  "100-120": {
+   "static": {
+    "mae": 13.0,
+    "bias": 6.5,
+    "n": 8294
+   },
+   "v1": {
+    "mae": 15.6,
+    "bias": 3.7,
+    "n": 7786
+   },
+   "v2": {
+    "mae": 44.1,
+    "bias": 43.4,
+    "n": 7786
+   },
+   "loop": {
+    "mae": 12.0,
+    "bias": 5.4,
+    "n": 8294
+   }
+  },
+  "120-145": {
+   "static": {
+    "mae": 16.0,
+    "bias": 6.0,
+    "n": 17249
+   },
+   "v1": {
+    "mae": 19.1,
+    "bias": -1.8,
+    "n": 15446
+   },
+   "v2": {
+    "mae": 47.5,
+    "bias": 43.2,
+    "n": 15446
+   },
+   "loop": {
+    "mae": 14.6,
+    "bias": 5.8,
+    "n": 17249
+   }
+  },
+  "145-175": {
+   "static": {
+    "mae": 21.0,
+    "bias": 5.0,
+    "n": 16770
+   },
+   "v1": {
+    "mae": 24.6,
+    "bias": -12.2,
+    "n": 14966
+   },
+   "v2": {
+    "mae": 48.6,
+    "bias": 29.9,
+    "n": 14966
+   },
+   "loop": {
+    "mae": 19.6,
+    "bias": 8.0,
+    "n": 16770
+   }
+  },
+  "175-230": {
+   "static": {
+    "mae": 31.1,
+    "bias": 7.8,
+    "n": 14665
+   },
+   "v1": {
+    "mae": 38.7,
+    "bias": -33.2,
+    "n": 13463
+   },
+   "v2": {
+    "mae": 50.7,
+    "bias": 1.4,
+    "n": 13463
+   },
+   "loop": {
+    "mae": 27.8,
+    "bias": 10.6,
+    "n": 14665
+   }
+  }
+ },
+ "per_user_best_form_counts": {
+  "static": 24,
+  "v1": 17,
+  "v2": 4,
+  "loop": 35
+ },
+ "n_users_scored": 80,
+ "note": "error = actual_end minus predicted_end(ISF); lower MAE is better on the same future-rise-selected windows. The activity proxy is inherited from the loop prediction and is not physiological ground truth.",
+ "selection_status": "future_outcome_rise_filter; descriptive_same_model_comparison"
+}

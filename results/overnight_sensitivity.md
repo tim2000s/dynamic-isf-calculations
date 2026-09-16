@@ -1,6 +1,6 @@
-# Overnight insulin sensitivity at a 4-hour horizon
+# Overnight glucose-drop per starting IOB at a 4-hour horizon
 
-112 people, 81,814 carb-screened overnight windows (11pm–3am start). Sensitivity = (BG(T) − BG(T+4h)) / IOB(T), mg/dL per U.
+112 people, 81,814 future-rise-selected overnight windows (11pm–3am start). Outcome ratio = (BG(T) − BG(T+4h)) / IOB(T), mg/dL per U. The denominator omits insulin delivered during the window, including algorithmic temporary basal and boluses. This is not an identified physiological ISF.
 
 ## Population
 

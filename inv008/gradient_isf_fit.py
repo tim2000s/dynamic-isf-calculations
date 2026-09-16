@@ -15,8 +15,10 @@ search the shared shape steepness k — a separable nonlinear least squares / "g
   the curve, the Diabeloop multiplicative factor), k = SHARED glucose steepness (the scientific
   question). k=0 reduces to the affine magnitude model; k>0 adds glucose shape.
 
-Honesty: (a_u, s_u) are fit by WITHIN-USER 5-fold CV at every k, so a per-user level fit cannot
-overfit; the shared k is the only thing read across users (1 dof / cohort). We compare:
+Each person's rows remain in time order and are evaluated with contiguous five-fold CV. This
+reduces direct leakage between overlapping four-hour windows compared with shuffled folds, although
+the saved dataset has no timestamps and cannot support a full temporal purge around fold boundaries.
+We compare:
     static        pred_drop − actual           (no fit)
     magnitude     k=0 (a_u,s_u fit)             (the strong baseline to beat)
     best-fit k*   argmin over k                 (does a glucose shape help BEYOND magnitude?)
@@ -56,7 +58,7 @@ def hybrid_shape(bg):
 def user_cv_err(y, z, seed=0):
     """Within-user 5-fold OOF error for actual ≈ a + s·z (z = pred_drop·shape)."""
     err = np.full(len(y), np.nan)
-    kf = KFold(5, shuffle=True, random_state=seed)
+    kf = KFold(5, shuffle=False)
     for tr, te in kf.split(z):
         X = np.column_stack([np.ones(len(tr)), z[tr]])
         beta, *_ = np.linalg.lstsq(X, y[tr], rcond=None)
@@ -157,7 +159,7 @@ def main():
     ax[0].plot(ks, [cold[k] for k in ks], "s--", color="#d62728", label="cold-start (no adaptation)")
     ax[0].axhline(static_mae, color="#999", ls=":", label=f"static {static_mae:.1f}")
     ax[0].axvline(k_star, color="#1f77b4", ls=":", lw=1)
-    ax[0].set_xlabel("glucose steepness k  (0 = flat)"); ax[0].set_ylabel("out-of-user MAE (mg/dL)")
+    ax[0].set_xlabel("glucose steepness k  (0 = flat)"); ax[0].set_ylabel("within-user OOF MAE (mg/dL)")
     ax[0].set_title(f"Best-fit glucose-dependence\nk*={k_star} (adaptive)"); ax[0].legend(fontsize=8)
     ax[1].hist(opt_k, bins=np.arange(-0.125, 4.2, 0.25), color="#9ecae1", edgecolor="#3182bd")
     ax[1].axvline(float(np.median(opt_k)), color="#d62728", lw=2, label=f"median {np.median(opt_k):.2f}")
@@ -172,9 +174,9 @@ def main():
     # ---- markdown ----
     md = ["# Best-fit individualised glucose-ISF (gradient/separable-NLLS over a shared shape)\n",
           f"{summary['n_users']} users, {len(d):,} windows. Model: actual_drop ≈ a_u + s_u·(pred_drop·"
-          "(100/BG)^k). Per-user (a_u,s_u) fit by within-user 5-fold CV; shared k searched. **k=0 = "
+          "(100/BG)^k). Per-user (a_u,s_u) fit by contiguous within-user 5-fold CV; shared k searched. **k=0 = "
           "flat magnitude model; does k>0 help?**\n",
-          "## Headline\n", "| model | out-of-user MAE |", "|---|---|",
+          "## Headline\n", "| model | within-user out-of-fold MAE |", "|---|---|",
           f"| static (no fit) | {static_mae:.2f} |",
           f"| magnitude (k=0, per-user scale) | {mag_mae} |",
           f"| **best-fit glucose k*={k_star} (per-user scale)** | **{curve[k_star]}** |",

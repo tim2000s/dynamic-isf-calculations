@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Overnight insulin sensitivity at a full 4-hour horizon (per spec).
+"""Overnight glucose-drop per starting IOB at a four-hour horizon.
 
 For each 5-minute CGM reading whose hour-of-day is in 23:00–02:55 (so the 4-hour measurement
 ends by 07:00, before the dawn rise), in a period we are confident is fasting:
@@ -9,10 +9,12 @@ ends by 07:00, before the dawn rise), in a period we are confident is fasting:
      carbs on board and discard the window.
   2. IOB(T): insulin on board at T (require ≥ IOB_MIN so the ratio is meaningful).
   3. Glucose drop over the next 4 h: ΔBG = BG(T) − BG(T+4h).
-  4. Observed sensitivity at T = ΔBG / IOB(T)   (mg/dL per unit).
+  4. Outcome ratio at T = ΔBG / IOB(T)   (mg/dL per unit).
 
-This lets the insulin on board fully act (4 h ≈ insulin duration) instead of the 30-min
-ΔIOB window, which is why it is far less exposed to short-horizon glucose mean-reversion.
+Insulin continues to be delivered during the window through boluses and temporary basal.
+Scheduled basal, endogenous glucose production, glucose effectiveness and counter-regulation
+also contribute to the endpoint. The ratio is therefore not an identified ISF measurement.
+The future-rise carbohydrate screen additionally selects on the observed outcome.
 
 We report the distribution of observed sensitivity per person and across the population, and
 sensitivity binned by the starting glucose BG(T) — overlaid with what each equation calculates
@@ -168,7 +170,8 @@ def main():
 
     summary = {
         "n_patients": n, "total_windows": int(sum(r["n_windows"] for r in res)),
-        "method": "overnight 11pm-3am start, drop over T+4h / IOB(T), carb-screened",
+        "method": "overnight 11pm-3am start, drop over T+4h / model-derived IOB(T), future-rise-selected outcome proxy",
+        "estimator_status": "descriptive_outcome_ratio_not_physiological_isf",
         "population_median_sensitivity": round(float(np.median(all_sens)), 1),
         "population_p25_p75": [round(float(np.percentile(all_sens, 25)), 1),
                                round(float(np.percentile(all_sens, 75)), 1)],
@@ -217,8 +220,10 @@ def main():
     fig.tight_layout(); fig.savefig(CHART / "fig_overnight_sensitivity.png", dpi=150); plt.close(fig)
 
     md = ["# Overnight insulin sensitivity at a 4-hour horizon\n",
-          f"{n} people, {summary['total_windows']:,} carb-screened overnight windows "
-          "(11pm–3am start). Sensitivity = (BG(T) − BG(T+4h)) / IOB(T), mg/dL per U.\n",
+          f"{n} people, {summary['total_windows']:,} future-rise-selected overnight windows "
+          "(11pm–3am start). Outcome ratio = (BG(T) − BG(T+4h)) / IOB(T), mg/dL per U. "
+          "It is not an identified physiological ISF because insulin delivery and non-insulin "
+          "glucose flux continue during the four-hour interval.\n",
           "## Population\n",
           f"- Per-person median sensitivity: median **{summary['per_person_median_sensitivity']['median']}** "
           f"mg/dL/U [IQR {summary['per_person_median_sensitivity']['p25']}–"
@@ -242,9 +247,9 @@ def main():
         md.append(f"| {r['user']} | {r['n_windows']} | {r['median_bg_start']:.0f} | "
                   f"{r['median_iob']:.2f} | {r['median_drop']:.0f} | {r['median_sens']:.0f} | "
                   f"{r['sens_p25']:.0f}–{r['sens_p75']:.0f} |")
-    md.append("\n*Caveat: basal continues over the 4 h and roughly offsets endogenous glucose in "
-              "a fasting state, so drop/IOB(T) is an approximation of sensitivity; residual dawn "
-              "effect, basal mis-set, and counter-regulation still bias the tails.*")
+    md.append("\n*Caveat: the denominator omits insulin delivered during the four-hour window, "
+              "including algorithmic temporary basal and boluses. The future-rise filter uses "
+              "the endpoint trajectory for selection. Treat the result as a descriptive ratio.*")
     (OUT / "overnight_sensitivity.md").write_text("\n".join(md))
     print("\n".join(md[:10]))
     print("observed k =", summary["observed_powerlaw_exponent"])

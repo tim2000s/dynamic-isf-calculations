@@ -1,0 +1,40 @@
+{
+ "n_users": 73,
+ "n_windows": 57771,
+ "method": "outcome proxy = delta BG / (delta IOB + suggested SMB + suggested temporary-basal deviation); IOB is model-derived and suggestions may differ from enacted delivery.",
+ "estimator_status": "model_dependent_outcome_proxy_not_physiological_isf",
+ "effective_isf_independent_ratio": {
+  "100-120": 0.2,
+  "120-145": 0.37,
+  "145-175": 0.47,
+  "175-205": 0.52,
+  "205-260": 0.45
+ },
+ "effective_isf_loopmodel_ratio": {
+  "100-120": 0.63,
+  "120-145": 0.78,
+  "145-175": 0.86,
+  "175-205": 0.84,
+  "205-260": 0.87
+ },
+ "diabeloop_quartic_ratio": {
+  "100-120": 0.89,
+  "120-145": 0.68,
+  "145-175": 0.52,
+  "175-205": 0.41,
+  "205-260": 0.33
+ },
+ "n_by_band": {
+  "100-120": 7594,
+  "120-145": 15184,
+  "145-175": 14830,
+  "175-205": 8536,
+  "205-260": 8472
+ },
+ "implied_k": {
+  "independent": -0.36,
+  "loopmodel": -0.16,
+  "quartic": 1.29
+ },
+ "verdict": "The action-balance outcome proxy is flat-to-rising with glucose (k=-0.36). Agreement with the loop-prediction proxy does not establish physiological ISF."
+}

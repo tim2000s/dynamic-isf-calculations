@@ -1,5 +1,8 @@
 # Does the clean overnight sensitivity level follow √TDD?
 
+> Audit status: drop over four hours divided by starting IOB omits insulin delivered during the
+> window, including algorithmic temporary basal and boluses. This result does not identify ISF.
+
 112 people. Level = per-person median overnight sensitivity (4-hour horizon, BG ≥ target, carb-screened); TDD = total daily dose. Fit log–log across people.
 
 ## Result

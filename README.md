@@ -1,48 +1,57 @@
 # dynamic-isf-calculations
 
 Analysis of equations that set a dynamic insulin sensitivity factor (ISF) from total daily
-dose (TDD) and current glucose, evaluated against real-world data from 171 people using
-open-source automated insulin delivery (AID) systems.
+dose (TDD) and current glucose, first evaluated in 171 people using open-source automated
+insulin delivery (AID) systems and subsequently tested in public JAEB cohorts.
 
-Dynamic ISF makes correction sensitivity a function of TDD. The original equation
-(**v1**, Chris Wilson) makes the sensitivity anchor inversely proportional to TDD; a later
-revision of the maths (**v2**) makes it inversely proportional to TDD squared. This work
-generates each person's dynamic ISF under both equations from their own glucose and
-insulin history, tests both against sensitivity calculated directly from the data, and
-proposes a next version.
+Dynamic ISF makes correction sensitivity a function of TDD and current glucose. The original
+equation (**v1**, Chris Wilson) makes the sensitivity anchor inversely proportional to TDD; a
+later revision (**v2**) makes it inversely proportional to TDD squared. The repository replays
+both equations over recorded histories and compares their predictions with static and
+loop-calibrated alternatives.
 
-ISF factorises as **f(TDD) × g(BG)**. The root of this repo covers **f(TDD)** (the √TDD law);
-**[`glucose-isf/`](glucose-isf/)** covers **g(BG)** — the prior Diabeloop / power-law work
-establishing glucose-dependent ISF and that a power-law glucose term beats the log scaler.
-`results/phase8_glucose_tdd.md` reconciles the two axes on the cohort.
+An audit completed on 16 September 2026 found that the historical change-in-IOB and
+action-balance estimators are observational outcome proxies, not independent physiological
+ISF measurements. Claims that physiological ISF follows `1/√TDD`, and the associated live
+v-next dosing proposal, are therefore withdrawn. The equation replay and within-model
+prediction comparisons remain reproducible. See
+[`docs/DYNAMIC-ISF-AUDIT-2026-09.md`](docs/DYNAMIC-ISF-AUDIT-2026-09.md).
 
 ## The equations
 
-Both share the same TDD-blending step (five windows → a weighted TDD) and the same
-glucose scaler. They differ only in the TDD term:
+Both use the same TDD-blending step (five windows → a weighted TDD), but they differ in both
+the TDD term and the glucose logarithm:
 
 | | sensitivity anchor at normal target | implied law |
 |---|---|---|
 | **v1** | `1800 / (TDD · ln(target/divisor + 1))` | ISF ∝ 1/TDD |
 | **v2** | `2300 / (ln(target/divisor) · TDD² · 0.02)` | ISF ∝ 1/TDD² |
 
-v1 keeps a `+1` in its glucose log and v2 does not, so the ratio between the two equations
-depends on glucose as well as TDD: v2 gives a far higher ISF (a weaker correction) at low
-glucose, easing to a modest margin when high.
+v1 keeps a `+1` in its glucose log and v2 does not. V2 floors glucose at `divisor+1` so the
+log remains positive. For the standard rapid-acting configuration, including NovoRapid, the
+divisor/floor is 75/76 mg/dL. The alternative configuration uses 55/56. The ratio between the
+equations depends on glucose as well as TDD.
 
-## Headline results
+## Audited headline results
 
 - v2 computes a weaker correction than v1 for almost everyone — on 92% of readings, a median
   of 3× weaker, most markedly at low glucose. At target glucose the two equations would only
   meet near 194 U/day, beyond anyone in the cohort.
-- Sensitivity calculated from each person's own data follows **ISF ∝ TDD^−0.4…−0.56** —
-  shallower than v1's −1 and far from v2's −2. v2 is the worst-fitting of every equation
-  tested against calculated sensitivity.
-- Best simple equation across all candidates (leave-one-user-out cross-validation):
-  **ISF ≈ K/√TDD** — K=355 anchored to tuned-profile ISF, K=145 anchored to calculated
-  sensitivity (the anchor choice is a safety decision).
+- The historical change-in-IOB proxy scales as approximately **TDD^−0.4…−0.56**. That is a
+  reproducible description of the proxy, not evidence that physiological ISF follows the same
+  law.
+- In selected overnight windows, a tuned static ISF and the loop's own calibrated prediction
+  have lower error than v1 or v2. This comparison remains inside the loop's linear IOB model.
+- With contiguous time-fold validation, the best glucose-shape exponent is `k=0`; adding a
+  glucose-dependent sensitivity multiplier does not improve median prediction error.
+- Post-COB analyses are consistent with carbohydrate absorption sometimes continuing after the
+  controller's recorded COB reaches zero. This is a credible explanation for part of the
+  apparent benefit attributed to glucose-dependent ISF, but it is not proof of a universal
+  mechanism.
 - The v1 implementation reproduces device-logged ISF for all dynamic-ISF users, to within
   unmodelled per-person adjustment factor / divisor / autosensitivity.
+- The historical `K/√TDD` candidate and its constants remain available for research comparison,
+  but are not physiological constants or dosing recommendations.
 
 ## Documents (`docs/`)
 
@@ -51,6 +60,8 @@ glucose, easing to a modest margin when high.
 | `dynamic-isf-methodology.md` | step-by-step methodology and reasoning (start here) |
 | `dynamic-isf-v1-v2-analysis.md` | the v1-vs-v2 comparison results |
 | `dynamic-isf-data-derived-findings.md` | can sensitivity be derived from data? feasibility findings |
+| `dynamic-isf-vnext-proposal.md` | withdrawn v-next proposal and current evidence status |
+| `DYNAMIC-ISF-AUDIT-2026-09.md` | code, estimator and physiological-evidence audit |
 
 Figures in `charts/inv008/`; candidate-equation and device-validation results in `results/`.
 
@@ -64,7 +75,7 @@ python -m inv008.runner --stage 2 --platforms v5 v6 v7 # glucose readings → IS
 python -m inv008.stage3_plots                          # per-person pages + cohort figures
 python fit_best_isf.py                                 # cross-validated equation comparison
 python -m inv008.validate_device_isf                   # implementation vs device-logged ISF
-python -m pytest inv008/tests/                         # 18 unit tests
+python -m pytest inv008/tests/                         # 27 unit tests
 ```
 
 | module | role |
@@ -107,9 +118,11 @@ identifiers.
 
 ## Caveats
 
-This is a retrospective, decision-level analysis of equations — not a closed-loop outcome
-study, and nothing here is dosing advice. See the caveats sections in the analysis and
-methodology documents.
+This is a retrospective, decision-level analysis of equations, not a prospective closed-loop
+outcome study. Closed-loop delivery is chosen in response to glucose, while carbohydrate,
+basal need and endogenous glucose are incompletely observed. The fitted observational
+coefficients must therefore not be treated as measured physiological ISF or used as dosing
+defaults. Nothing here is dosing advice.
 
 ## Licence
 

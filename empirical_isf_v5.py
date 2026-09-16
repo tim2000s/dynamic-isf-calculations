@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
-"""Empirical-ISF v5 — uses ΔIOB (unambiguous: U absorbed in window) instead of
-the unit-uncertain `iob_activity`.
+"""Delta-IOB outcome proxy, retained under its historical empirical-ISF filename.
+
+Delta IOB is model-derived and is not equal to insulin absorbed when insulin is
+delivered during the window. In closed-loop records, that delivery also responds
+to glucose. The fitted coefficient is therefore an observational proxy rather
+than an identified physiological ISF.
 
 Per 30-min fasting window:
   • ΔIOB = iob_iob[start] − iob_iob[end]
   • ΔBG  = cgm[end] − cgm[start]
   • Pre-window BG trend (mg/dL/min over the preceding 30 min)
   • Regression: ΔBG = a + b · ΔIOB + c · pre_trend
-  • Empirical ISF = b   (mg/dL per U absorbed; positive because we expect
-    BG drop when ΔIOB > 0, i.e. insulin absorbed → BG falls)
+  • Historical "empirical ISF" = -b, an outcome-per-delta-IOB proxy
 
   Fasting window definition (same as v3/v4):
     sug_COB == 0 throughout, rolling 90-min preceding COB max ≤ 1g, pre-window
@@ -43,7 +46,7 @@ sys.path.insert(0, str(ROOT))
 OUT_JSON = ROOT / "empirical_isf_v5.json"
 OUT_MD   = ROOT / "empirical_isf_v5.md"
 DSN = "dbname=oref"
-N_WORKERS = min(12, mp.cpu_count())
+N_WORKERS = min(7, mp.cpu_count())
 
 COL_MAP = {
     "oref_v5": {"cob": '"sug_COB"', "tgt": "sug_current_target",
@@ -167,8 +170,9 @@ def fit_user(args):
     XtX_inv = np.linalg.pinv(X.T @ X)
     se_diob = float(np.sqrt(sigma2 * XtX_inv[1, 1]))
 
-    # Empirical ISF = -slope_on_diob.  ΔBG is positive when BG rose, negative when it fell.
-    # If ΔIOB > 0 (insulin absorbed) ⇒ BG should fall (ΔBG < 0) ⇒ slope is negative ⇒ ISF > 0.
+    # Historical proxy = -slope_on_diob. ΔBG is positive when BG rose and negative when it fell.
+    # This coefficient is not identified as physiological ISF because in-window delivery changes
+    # IOB and the controller selects that delivery from the same glucose trajectory.
     empirical_isf = float(-beta[1])
     se_isf = se_diob
 
@@ -188,6 +192,7 @@ def fit_user(args):
         "r2": float(r2),
         "dynisf_frac": dyn_frac,
         "mean_sens_when_dyn_on": sens_when_on,
+        "estimator_status": "observational_delta_iob_proxy_not_physiological_isf",
     }
 
 
@@ -214,11 +219,13 @@ def main():
                & df["entered_isf"].notna()]
 
     md = []
-    md.append("# Empirical-ISF v5 — ΔIOB-based regression on canonical cohort\n")
-    md.append("Replaces `iob_activity` (unit ambiguous) with `ΔIOB` (unambiguous: U "
-              "absorbed in 30-min window).  Same fasting filter as v4. Per-user "
-              "OLS: `ΔBG = a + b·ΔIOB + c·BG_pre_trend`. Empirical ISF = -b "
-              "(mg/dL per U absorbed). Per-user 95 % CI from regression SE.\n")
+    md.append("# Delta-IOB outcome proxy on the canonical cohort\n")
+    md.append("Historical filename: `empirical_isf_v5`. Per-user OLS: "
+              "`ΔBG = a + b·ΔIOB + c·BG_pre_trend`; the reported proxy is `-b`. "
+              "Delta IOB is model-derived and is changed by insulin delivered during the "
+              "30-minute window. Closed-loop delivery also responds to glucose. The coefficient "
+              "does not identify physiological ISF. Per-user intervals describe regression "
+              "uncertainty conditional on that model.\n")
     md.append(f"## Coverage\n")
     md.append(f"- Canonical cohort users in the analysis: {len(work)}")
     md.append(f"- Users with valid empirical_isf in [5,500] AND R² ≥ 0.10: **{len(valid)}**")

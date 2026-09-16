@@ -4,9 +4,11 @@
 The loop's IOB-based BG prediction is linear in ISF (predicted drop = ISF × activity-integral),
 so on any window we can take the loop's own prediction (made with the ISF it ran, sug_isf) and
 rescale it to any candidate ISF, then compare to the actual outcome — on the identical window.
-This removes the between-user confound: every ISF form is tested on every window.
+This removes the between-user comparison from the candidate ranking because every ISF form is
+tested on every retained window. It does not remove closed-loop endogeneity or dependence on the
+loop's insulin-action model.
 
-Per overnight carb-screened window (full-action 4h horizon), candidate ISFs (all in mg/dL/U):
+Per overnight future-rise-selected window (4h horizon), candidate ISFs (all in mg/dL/U):
     static    = the user's tuned profile ISF (units-cleaned, constant)
     v1        = dynamic 1800/(TDD·ln(BG/75+1))           (from the replay cache)
     v2        = dynamic 115000/(TDD²·ln(BG_floored/75))
@@ -19,6 +21,11 @@ Also derive the per-window realised ISF (the ISF that would have made the predic
 saved with features (bg, tdd, iob, hour, start_slope, bg_end) as the dataset for the
 pattern/error-curve step. start_slope = the 15-min glucose slope entering the window
 (mg/dL per 5 min) — a confound control for dawn/rising windows; bg_end = realised 4h-end glucose.
+
+The historical carbohydrate screen rejects a window when glucose rises later in the outcome
+period. This is outcome selection, not an independent carbohydrate measurement. The comparison
+therefore describes candidate rescaling performance on selected falling or flat trajectories and
+must not be interpreted as a physiological ISF estimate.
 
 Units: per user, if median sug_isf < 20 it is mmol/L per U → ×18.018 to mg/dL (same for profile).
 v6 is excluded (its iob/isf accounting did not reconcile). Output:
@@ -181,7 +188,9 @@ def main():
         "by_bg_band": by_bg,
         "per_user_best_form_counts": win, "n_users_scored": nuser,
         "note": "error = actual_end − predicted_end(ISF); MAE & bias in mg/dL. Lower MAE = better "
-                "predictor of the realised outcome on the same windows.",
+                "predictor of the realised outcome on the same future-rise-selected windows. The "
+                "activity proxy is inherited from the loop prediction and is not physiological ground truth.",
+        "selection_status": "future_outcome_rise_filter; descriptive_same_model_comparison",
     }
     (OUT / "head_to_head.json").write_text(json.dumps(summary, indent=1))
 
@@ -202,9 +211,10 @@ def main():
     fig.tight_layout(); fig.savefig(CHART / "fig_head_to_head.png", dpi=150); plt.close(fig)
 
     md = ["# Same-window head-to-head: static vs dynamic ISF as a drop predictor\n",
-          f"{summary['n_users']} v5/v7 users, {len(D):,} overnight carb-screened windows. Each "
+          f"{summary['n_users']} v5/v7 users, {len(D):,} overnight future-rise-selected windows. Each "
           "ISF form is tested on the *same* windows by rescaling the loop's IOB prediction. "
-          "error = actual end BG − predicted end BG; lower MAE = better.\n",
+          "error = actual end BG − predicted end BG; lower MAE = better. The activity proxy comes "
+          "from the loop's own prediction, and the historical rise filter selects on the later outcome.\n",
           "## Overall (median |error|, mg/dL)\n",
           "| form | MAE | bias | n |", "|---|---|---|---|"]
     for f in fl:

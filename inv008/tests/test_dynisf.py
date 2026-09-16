@@ -1,4 +1,4 @@
-"""Hand-computed fixtures for the V1/V2 ISF formulas (master @ 2c3e3276)."""
+"""Hand-computed fixtures for V1 and the author-confirmed no-+1 V2."""
 import math
 
 import numpy as np
@@ -95,6 +95,24 @@ def test_v2_collapse_and_floor():
     assert float(isf_v2(140.0, 50.0)) == pytest.approx(115000.0 / (2500 * math.log(140.0 / DIV)))
     # BG floored at divisor+1: BG<=76 clamps to 76
     assert float(isf_v2(70.0, 50.0)) == pytest.approx(float(isf_v2(76.0, 50.0)))
+
+
+def test_v2_floor_tracks_configured_divisor():
+    # Standard rapid-acting insulin uses divisor/floor 75/76 in this analysis.
+    assert float(isf_v2(75.0, 50.0, divisor=75.0)) == pytest.approx(
+        float(isf_v2(76.0, 50.0, divisor=75.0)))
+    # The singular point follows the configured divisor; it is not a universal
+    # glucose threshold baked into the equation.
+    assert float(isf_v2(55.0, 50.0, divisor=55.0)) == pytest.approx(
+        float(isf_v2(56.0, 50.0, divisor=55.0)))
+
+
+def test_v2_has_no_plus_one():
+    actual = float(isf_v2(140.0, 50.0, divisor=75.0))
+    no_plus_one = 115000.0 / (50.0**2 * math.log(140.0 / 75.0))
+    obsolete_plus_one = 115000.0 / (50.0**2 * math.log(140.0 / 75.0 + 1.0))
+    assert actual == pytest.approx(no_plus_one)
+    assert actual != pytest.approx(obsolete_plus_one)
 
 
 # --- v-next: (K_user/√TDD) · g(BG) -----------------------------------------
