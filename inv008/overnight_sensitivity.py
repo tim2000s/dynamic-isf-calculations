@@ -201,18 +201,19 @@ def main():
     ax[0].hist(per_med, bins=24, color="#2ca02c", alpha=0.85)
     ax[0].axvline(np.median(per_med), color="k", ls="--", lw=1.5,
                   label=f"median {np.median(per_med):.0f}")
-    ax[0].set_xlabel("per-person median overnight sensitivity (mg/dL per U)")
-    ax[0].set_ylabel("people"); ax[0].set_title(f"Observed overnight sensitivity ({n} people)")
+    ax[0].set_xlabel("per-person median glucose fall / starting IOB (mg/dL per U)")
+    ax[0].set_ylabel("people"); ax[0].set_title(f"Overnight outcome ratio ({n} people)")
     ax[0].legend(fontsize=9); ax[0].grid(alpha=0.3)
     xc = BG_CENTRES
     yv = np.array([v if v is not None else np.nan for v in obs_norm])
-    ax[1].plot(xc, yv, "o-", color="#111", ms=7, lw=1.6, label="observed (overnight, normalised)", zorder=10)
+    ax[1].plot(xc, yv, "o-", color="#111", ms=7, lw=1.6,
+               label="outcome ratio (overnight, normalised)", zorder=10)
     ax[1].plot(xc, gq, "-", color="#1f77b4", lw=2.2, label="v-next g(BG) quartic")
     ax[1].plot(xc, g1, "--", color="#888", lw=1.6, label="v1 log")
     ax[1].plot(xc, g2, ":", color="#d62728", lw=1.6, label="v2 log")
     ax[1].axhline(1, color="k", lw=0.6, alpha=0.4); ax[1].axvline(TARGET, color="k", lw=0.6, alpha=0.4)
-    ax[1].set_xlabel("starting glucose BG(T) (mg/dL)"); ax[1].set_ylabel("sensitivity relative to target")
-    ttl = f"Sensitivity vs glucose (overnight, 4 h horizon)"
+    ax[1].set_xlabel("starting glucose BG(T) (mg/dL)"); ax[1].set_ylabel("outcome ratio relative to target")
+    ttl = f"Glucose fall / starting IOB vs glucose (overnight, 4 h)"
     if k_obs is not None:
         ttl += f"\nobserved exponent k≈{k_obs:.1f}  (quartic +1.3)"
     ax[1].set_title(ttl); ax[1].legend(fontsize=8); ax[1].grid(alpha=0.3)
