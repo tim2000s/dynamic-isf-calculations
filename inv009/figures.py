@@ -379,7 +379,7 @@ def fig_surface(out):
 
 
 def fig_pointwise(out):
-    """Sensitivity at each reading against what both equations say at the same reading."""
+    """Action-balance outcome proxy against both equations at the same reading."""
     r = json.loads((config.RESULTS / "inv009_pointwise.json").read_text())
     rows = r["by_bg"]
     bands = [x["band"] for x in rows]
@@ -387,7 +387,7 @@ def fig_pointwise(out):
     fig, ax = plt.subplots(figsize=(7.0, 4.4))
     series = (("isf_v2", "v2 calculates", C3, "^", 8),
               ("isf_v1", "v1 calculates", C2, "s", -2),
-              ("isf_eff", "measured", C1, "o", -16))
+              ("isf_eff", "action-balance proxy", C1, "o", -16))
     for key, label, col, mk, dy in series:
         vals = [v[key] for v in rows]
         # Values at or below zero cannot be drawn on a log axis and must not be
@@ -402,7 +402,7 @@ def fig_pointwise(out):
                     va="center", fontweight="semibold")
         first = min((i for i, v in enumerate(yy) if np.isfinite(v)), default=0)
         if first > 0:
-            ax.annotate("measured is at or below zero here,\nso it cannot be drawn on a log axis",
+            ax.annotate("proxy is at or below zero here,\nso it cannot be drawn on a log axis",
                         xy=(x[first] - 0.15, yy[first]), xytext=(6, 14),
                         textcoords="offset points", color=col, fontsize=7.5,
                         ha="left", va="bottom")
@@ -410,8 +410,8 @@ def fig_pointwise(out):
     ax.set_xticks(x); ax.set_xticklabels(bands, fontsize=8.5)
     ax.set_xlim(-0.3, len(bands) - 0.3 + 1.7)
     ax.set_xlabel("glucose at the start of the six hour lookback (mg/dL)")
-    ax.set_ylabel("sensitivity (mg/dL per unit, log scale)")
-    ax.set_title("What a unit did, against what each equation said it would do", pad=10)
+    ax.set_ylabel("outcome proxy or calculated ISF (mg/dL per unit, log scale)")
+    ax.set_title("Six-hour outcome proxy against each equation at the same starting point", pad=10)
     _despine(ax)
     fig.tight_layout(); fig.savefig(out, bbox_inches="tight"); plt.close(fig)
 

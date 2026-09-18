@@ -1,4 +1,4 @@
-"""Effective sensitivity at every reading, against what the two equations say there.
+"""Six-hour action-balance outcome proxy against what the two equations say there.
 
 Everything else in this package fits a slope across a person's windows. This does
 the direct thing instead: at each reading, look back over one insulin duration,
@@ -33,8 +33,9 @@ import pandas as pd
 from inv008 import dynisf
 
 from . import action, config, db, grid as gridmod, insulin_models as M, tdd as tddmod
+from .forward_isf import _loop_model, schedule_units
 
-MODEL = "oref_6h75"
+MODEL_DEFAULT = "oref_6h75"
 LOOKBACK_MIN = 360           # one insulin duration
 STRIDE_MIN = 30              # readings are 5 min apart and lookbacks overlap heavily
 MIN_EXCESS_U = 0.30          # below this the denominator is noise
@@ -63,7 +64,8 @@ def analyse(job):
 
         n = len(g)
         back = int(LOOKBACK_MIN / config.GRID_MIN)
-        kern = M.kernel(MODEL)
+        model = _loop_model(subject_id) if study == "Loop" else MODEL_DEFAULT
+        kern = M.kernel(model)
         total = g.total_u.to_numpy(float)
         cgm = g.cgm.to_numpy(float)
         carbs = g.carbs_g.to_numpy(float)
@@ -74,9 +76,12 @@ def analyse(job):
         a_pre, a_in = action.window_action(total, kern, back)
         acted = a_pre + a_in
 
-        # The same quantity for this person's routine delivery, which is what
-        # cancels their hepatic output.
-        ref = action.reference_profile(g.ts, total)
+        # Use programmed basal as the reference where it exists. Temporary-basal
+        # changes and microboluses are algorithmic decisions, so they must remain
+        # in the excess-action term rather than being absorbed into "usual" basal.
+        # Only systems without a recoverable programme fall back to typical
+        # half-hourly delivery.
+        ref, baseline_source = schedule_units(g, subject_id, streams)
         r_pre, r_in = action.window_action(ref, kern, back)
         acted_ref = r_pre + r_in
 
@@ -132,6 +137,7 @@ def analyse(job):
         isf_eff = -(dg[sel] - typical_dg[sel]) / excess[sel]
         return pd.DataFrame({
             "subject_id": subject_id, "study": study,
+            "action_model": model, "baseline_source": baseline_source,
             "bg": bg, "tdd_blend": td, "tdd_u": subj["tdd_u"],
             "excess_u": excess[sel], "acted_u": acted_end[sel],
             "isf_eff": isf_eff,
@@ -173,12 +179,12 @@ def main() -> int:
                                       isf_v2=("isf_v2", "median"),
                                       tdd_u=("tdd_u", "first"))
     res["overall"] = {k: float(per[k].median()) for k in ("isf_eff", "isf_v1", "isf_v2")}
-    print("\nPer-person median sensitivity, mg/dL per unit")
-    print(f"  measured {res['overall']['isf_eff']:7.1f}    "
+    print("\nPer-person median outcome proxy, mg/dL per unit")
+    print(f"  proxy {res['overall']['isf_eff']:7.1f}    "
           f"v1 {res['overall']['isf_v1']:7.1f}    v2 {res['overall']['isf_v2']:7.1f}")
 
     print("\nBy glucose at the start of the lookback")
-    print(f"  {'glucose':>12s} {'people':>7s} {'measured':>9s} {'v1':>8s} {'v2':>8s}")
+    print(f"  {'glucose':>12s} {'people':>7s} {'proxy':>9s} {'v1':>8s} {'v2':>8s}")
     res["by_bg"] = []
     for lo, hi in BG_BANDS:
         d = D[(D.bg >= lo) & (D.bg < hi)]
@@ -191,8 +197,25 @@ def main() -> int:
         print(f"  {row['band']:>12s} {row['n']:7d} {row['isf_eff']:9.1f} "
               f"{row['isf_v1']:8.1f} {row['isf_v2']:8.1f}")
 
+    # Check the expected sign explicitly. If programmed basal balances endogenous
+    # glucose production, action above it should usually lower glucose and action
+    # below it should usually allow glucose to rise. The same signed proxy is
+    # positive in either case when that expectation is met.
+    for label, sign_mask in (("positive_excess", D.excess_u > 0),
+                             ("negative_excess", D.excess_u < 0)):
+        rows = []
+        for lo, hi in BG_BANDS:
+            d = D[sign_mask & (D.bg >= lo) & (D.bg < hi)]
+            pp = d.groupby("subject_id").isf_eff.median()
+            if len(pp) < 20:
+                continue
+            rows.append({"band": f"{lo}-{hi}", "n": int(len(pp)),
+                         "median_proxy": float(pp.median()),
+                         "fraction_people_positive": float((pp > 0).mean())})
+        res[f"by_bg_{label}"] = rows
+
     print("\nBy total daily dose")
-    print(f"  {'dose':>12s} {'people':>7s} {'measured':>9s} {'v1':>8s} {'v2':>8s}")
+    print(f"  {'TDD':>12s} {'people':>7s} {'proxy':>9s} {'v1':>8s} {'v2':>8s}")
     res["by_tdd"] = []
     for lo, hi in config.TDD_BANDS:
         d = D[(D.tdd_u >= lo) & (D.tdd_u < hi)]
@@ -211,9 +234,9 @@ def main() -> int:
         ratio = ratio[(ratio > 0) & (ratio < 100)]
         res[f"{name}_ratio_median"] = float(ratio.median())
         res[f"{name}_within_30pct"] = float(((ratio > 0.7) & (ratio < 1.3)).mean())
-    print(f"\n  v1 sits at {res['isf_v1_ratio_median']:.2f} times the measured value, "
+    print(f"\n  v1 sits at {res['isf_v1_ratio_median']:.2f} times the outcome proxy, "
           f"within 30% of it {100 * res['isf_v1_within_30pct']:.0f}% of the time")
-    print(f"  v2 sits at {res['isf_v2_ratio_median']:.2f} times the measured value, "
+    print(f"  v2 sits at {res['isf_v2_ratio_median']:.2f} times the outcome proxy, "
           f"within 30% of it {100 * res['isf_v2_within_30pct']:.0f}% of the time")
     (config.RESULTS / "inv009_pointwise.json").write_text(json.dumps(res, indent=2, default=float))
     return 0
