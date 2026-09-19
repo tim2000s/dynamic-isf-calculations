@@ -36,15 +36,15 @@ TDD_POINTS = (20.0, 40.0, 60.0, 80.0)
 REPORT_TIMES = (15.0, 30.0, 45.0, 60.0, 70.0, 90.0, 120.0, 180.0, 240.0, 300.0)
 
 
-def _cell(job: tuple[str, float, float, Scenario, float]) -> dict:
-    equation, bg, tdd, scenario, dia_min = job
+def _cell(job: tuple[float, float, Scenario, float]) -> dict:
+    bg, tdd, scenario, dia_min = job
     time = np.arange(0.0, dia_min + 0.001, 1.0)
     ref_remaining = remaining_exponential(time, dia_min, REFERENCE.peak_min)
     arm_remaining = remaining_exponential(time, dia_min, scenario.peak_min)
     ref_activity = activity_exponential(time, dia_min, REFERENCE.peak_min)
     arm_activity = activity_exponential(time, dia_min, scenario.peak_min)
-    ref_isf = float(dynamic_isf(equation, bg, tdd, REFERENCE.divisor))
-    arm_isf = float(dynamic_isf(equation, bg, tdd, scenario.divisor))
+    ref_isf = float(dynamic_isf(bg, tdd, REFERENCE.divisor))
+    arm_isf = float(dynamic_isf(bg, tdd, scenario.divisor))
 
     with np.errstate(divide="ignore", invalid="ignore"):
         remaining_ratio = arm_remaining * arm_isf / (ref_remaining * ref_isf)
@@ -68,7 +68,6 @@ def _cell(job: tuple[str, float, float, Scenario, float]) -> dict:
         }
 
     return {
-        "equation": equation,
         "bg_mgdl": bg,
         "tdd_u_day": tdd,
         "scenario": scenario.name,
@@ -86,8 +85,7 @@ def _cell(job: tuple[str, float, float, Scenario, float]) -> dict:
 
 def principal_run(workers: int = 7) -> list[dict]:
     jobs = [
-        (equation, bg, tdd, scenario, DIA_MIN)
-        for equation in ("v1", "v2")
+        (bg, tdd, scenario, DIA_MIN)
         for bg in BG_POINTS
         for tdd in TDD_POINTS
         for scenario in SCENARIOS
@@ -97,14 +95,13 @@ def principal_run(workers: int = 7) -> list[dict]:
         return list(pool.map(_cell, jobs, chunksize=4))
 
 
-def _sensitivity_cell(job: tuple[str, float, float, float, float, float]) -> dict:
-    equation, bg, dia, reference_peak, assumed_peak, minute = job
-    ref_isf = float(dynamic_isf(equation, bg, 40.0, 75.0))
-    wrong_isf = float(dynamic_isf(equation, bg, 40.0, 55.0))
+def _sensitivity_cell(job: tuple[float, float, float, float, float]) -> dict:
+    bg, dia, reference_peak, assumed_peak, minute = job
+    ref_isf = float(dynamic_isf(bg, 40.0, 75.0))
+    wrong_isf = float(dynamic_isf(bg, 40.0, 55.0))
     ref_r = float(remaining_exponential(minute, dia, reference_peak))
     wrong_r = float(remaining_exponential(minute, dia, assumed_peak))
     return {
-        "equation": equation,
         "bg_mgdl": bg,
         "dia_min": dia,
         "reference_peak_min": reference_peak,
@@ -117,8 +114,7 @@ def _sensitivity_cell(job: tuple[str, float, float, float, float, float]) -> dic
 
 def sensitivity_run(workers: int = 7) -> list[dict]:
     jobs = [
-        (equation, bg, dia, reference_peak, assumed_peak, minute)
-        for equation in ("v1", "v2")
+        (bg, dia, reference_peak, assumed_peak, minute)
         for bg in BG_POINTS
         for dia in (300.0, 360.0, 420.0)
         for reference_peak in (35.0, 40.0, 45.0, 50.0)
@@ -133,10 +129,9 @@ def sensitivity_run(workers: int = 7) -> list[dict]:
 def summarise_sensitivity(rows: list[dict]) -> list[dict]:
     d = pd.DataFrame(rows)
     out = []
-    for (equation, bg, minute), g in d.groupby(["equation", "bg_mgdl", "time_min"]):
+    for (bg, minute), g in d.groupby(["bg_mgdl", "time_min"]):
         x = g.remaining_effect_ratio.to_numpy(float)
         out.append({
-            "equation": equation,
             "bg_mgdl": float(bg),
             "time_min": float(minute),
             "n_parameter_combinations": int(len(x)),
@@ -167,28 +162,26 @@ def temp_basal_example() -> dict:
         "delivery_u": delivery.tolist(),
         "reference_iob_u": ref_iob.tolist(),
         "assumed_iob_u": wrong_iob.tolist(),
-        "by_equation": {},
     }
-    for equation in ("v1", "v2"):
-        ref_isf = float(dynamic_isf(equation, 150.0, 40.0, 75.0))
-        wrong_isf = float(dynamic_isf(equation, 150.0, 40.0, 55.0))
-        ref_effect = ref_iob * ref_isf
-        wrong_effect = wrong_iob * wrong_isf
-        with np.errstate(divide="ignore", invalid="ignore"):
-            ratio = wrong_effect / ref_effect
-        out["by_equation"][equation] = {
-            "reference_effect_to_come_mgdl": ref_effect.tolist(),
-            "assumed_effect_to_come_mgdl": wrong_effect.tolist(),
-            "ratio": [float(x) if np.isfinite(x) else None for x in ratio],
-            "selected_times": {
-                str(minute): {
-                    "reference_iob_u": float(ref_iob[int(minute / step)]),
-                    "assumed_iob_u": float(wrong_iob[int(minute / step)]),
-                    "remaining_effect_ratio": float(ratio[int(minute / step)]),
-                }
-                for minute in (60, 120, 180, 240, 300, 360)
-            },
-        }
+    ref_isf = float(dynamic_isf(150.0, 40.0, 75.0))
+    wrong_isf = float(dynamic_isf(150.0, 40.0, 55.0))
+    ref_effect = ref_iob * ref_isf
+    wrong_effect = wrong_iob * wrong_isf
+    with np.errstate(divide="ignore", invalid="ignore"):
+        ratio = wrong_effect / ref_effect
+    out.update({
+        "reference_effect_to_come_mgdl": ref_effect.tolist(),
+        "assumed_effect_to_come_mgdl": wrong_effect.tolist(),
+        "ratio": [float(x) if np.isfinite(x) else None for x in ratio],
+        "selected_times": {
+            str(minute): {
+                "reference_iob_u": float(ref_iob[int(minute / step)]),
+                "assumed_iob_u": float(wrong_iob[int(minute / step)]),
+                "remaining_effect_ratio": float(ratio[int(minute / step)]),
+            }
+            for minute in (60, 120, 180, 240, 300, 360)
+        },
+    })
     return out
 
 
@@ -219,23 +212,20 @@ def make_figures(rows: list[dict], temp_basal: dict, outdir: Path) -> None:
     d = pd.DataFrame(rows)
     combined = d[(d.scenario == "combined_70_55") & (d.tdd_u_day == 40.0)]
     fig, ax = plt.subplots(1, 2, figsize=(11.8, 4.7))
-    for equation, colour in (("v1", "#e66101"), ("v2", "#1b9e77")):
-        g = combined[combined.equation == equation].sort_values("bg_mgdl")
-        ax[0].plot(g.bg_mgdl, g.correction_requirement_ratio, marker="o", lw=2.3,
-                   color=colour, label=equation.upper())
+    g = combined.sort_values("bg_mgdl")
+    ax[0].plot(g.bg_mgdl, g.correction_requirement_ratio, marker="o", lw=2.3,
+               color="#e66101", label="V1")
     ax[0].axhline(1.0, color="#555", lw=1)
     ax[0].set(xlabel="glucose (mg/dL)", ylabel="inverse-ISF multiplier",
               title="Divisor 55 assigns more insulin per mg/dL of modelled effect")
     ax[0].grid(alpha=0.25)
     ax[0].legend()
 
-    for equation, ls in (("v1", "-"), ("v2", "--")):
-        row = next(r for r in rows if r["scenario"] == "combined_70_55"
-                   and r["equation"] == equation and r["bg_mgdl"] == 99.0
-                   and r["tdd_u_day"] == 40.0)
-        vals = [row["at_times"][str(int(t))]["remaining_effect_ratio"] for t in REPORT_TIMES]
-        ax[1].plot(REPORT_TIMES, vals, marker="o", lw=2.3, ls=ls,
-                   label=f"{equation.upper()}, glucose 99")
+    row = next(r for r in rows if r["scenario"] == "combined_70_55"
+               and r["bg_mgdl"] == 99.0 and r["tdd_u_day"] == 40.0)
+    vals = [row["at_times"][str(int(t))]["remaining_effect_ratio"] for t in REPORT_TIMES]
+    ax[1].plot(REPORT_TIMES, vals, marker="o", lw=2.3,
+               color="#e66101", label="V1, glucose 99")
     ax[1].axhline(1.0, color="#555", lw=1)
     ax[1].set(xlabel="minutes after delivery",
               ylabel="modelled effect still to come, wrong / reference",
@@ -246,23 +236,21 @@ def make_figures(rows: list[dict], temp_basal: dict, outdir: Path) -> None:
     fig.savefig(outdir / "fig_inv011_combined_mismatch.png", dpi=180, bbox_inches="tight")
     plt.close(fig)
 
-    fig, ax = plt.subplots(1, 2, figsize=(11.8, 4.7), sharey=True)
+    fig, ax = plt.subplots(figsize=(7.2, 4.7))
     scenarios = [s.name for s in SCENARIOS]
     labels = ["45 / 75\nmatched", "45 / 55\ndivisor", "70 / 75\npeak", "70 / 55\nboth"]
-    for j, equation in enumerate(("v1", "v2")):
-        vals = []
-        for scenario in scenarios:
-            row = next(r for r in rows if r["scenario"] == scenario
-                       and r["equation"] == equation and r["bg_mgdl"] == 99.0
-                       and r["tdd_u_day"] == 40.0)
-            vals.append(row["at_times"]["60"]["remaining_effect_ratio"])
-        ax[j].bar(np.arange(4), vals, color=("#4c78a8", "#f58518", "#72b7b2", "#e45756"))
-        ax[j].axhline(1.0, color="#333", ls="--")
-        ax[j].set_xticks(np.arange(4), labels)
-        ax[j].set_title(f"{equation.upper()} at glucose 99 mg/dL")
-        ax[j].set_xlabel("peak (minutes) / divisor")
-        ax[j].grid(alpha=0.2, axis="y")
-    ax[0].set_ylabel("modelled effect still to come at 60 minutes\nrelative to 45 / 75")
+    vals = []
+    for scenario in scenarios:
+        row = next(r for r in rows if r["scenario"] == scenario
+                   and r["bg_mgdl"] == 99.0 and r["tdd_u_day"] == 40.0)
+        vals.append(row["at_times"]["60"]["remaining_effect_ratio"])
+    ax.bar(np.arange(4), vals, color=("#4c78a8", "#f58518", "#72b7b2", "#e45756"))
+    ax.axhline(1.0, color="#333", ls="--")
+    ax.set_xticks(np.arange(4), labels)
+    ax.set_title("V1 at glucose 99 mg/dL")
+    ax.set_xlabel("peak (minutes) / divisor")
+    ax.set_ylabel("modelled effect still to come at 60 minutes\nrelative to 45 / 75")
+    ax.grid(alpha=0.2, axis="y")
     fig.tight_layout()
     fig.savefig(outdir / "fig_inv011_four_arms.png", dpi=180, bbox_inches="tight")
     plt.close(fig)
@@ -276,9 +264,8 @@ def make_figures(rows: list[dict], temp_basal: dict, outdir: Path) -> None:
               title="A temporary-basal increase compounds the timing difference")
     ax[0].grid(alpha=0.25)
     ax[0].legend()
-    for equation, colour in (("v1", "#e66101"), ("v2", "#1b9e77")):
-        ratio = np.asarray(temp_basal["by_equation"][equation]["ratio"], dtype=float)
-        ax[1].plot(t, ratio, lw=2.3, color=colour, label=equation.upper())
+    ratio = np.asarray(temp_basal["ratio"], dtype=float)
+    ax[1].plot(t, ratio, lw=2.3, color="#e66101", label="V1")
     ax[1].axhline(1.0, color="#333", ls="--")
     ax[1].set(xlabel="minutes from start",
               ylabel="modelled effect still to come, wrong / reference",
@@ -300,17 +287,13 @@ def result_markdown(result: dict) -> str:
         "",
         "## Inverse-ISF effect of divisor 55",
         "",
-        "| Glucose | V1, 55 versus 75 | V2, 55 versus 75 |",
-        "|---:|---:|---:|",
+        "| Glucose | V1, 55 versus 75 |",
+        "|---:|---:|",
     ]
     for bg in BG_POINTS:
-        vals = {}
-        for equation in ("v1", "v2"):
-            row = next(r for r in rows if r["scenario"] == "combined_70_55"
-                       and r["equation"] == equation and r["bg_mgdl"] == bg
-                       and r["tdd_u_day"] == 40.0)
-            vals[equation] = row["correction_requirement_ratio"]
-        lines.append(f"| {bg:.0f} mg/dL | {vals['v1']:.2f} times | {vals['v2']:.2f} times |")
+        row = next(r for r in rows if r["scenario"] == "combined_70_55"
+                   and r["bg_mgdl"] == bg and r["tdd_u_day"] == 40.0)
+        lines.append(f"| {bg:.0f} mg/dL | {row['correction_requirement_ratio']:.2f} times |")
 
     lines += [
         "",
@@ -319,26 +302,22 @@ def result_markdown(result: dict) -> str:
         "",
         "## Effect still attributed to one unit at glucose 99 mg/dL",
         "",
-        "| Time | Reference 45-minute IOB | Assumed 70-minute IOB | V1 combined ratio | V2 combined ratio |",
-        "|---:|---:|---:|---:|---:|",
+        "| Time | Reference 45-minute IOB | Assumed 70-minute IOB | Combined ratio |",
+        "|---:|---:|---:|---:|",
     ]
-    v1 = next(r for r in rows if r["scenario"] == "combined_70_55" and r["equation"] == "v1"
-              and r["bg_mgdl"] == 99.0 and r["tdd_u_day"] == 40.0)
-    v2 = next(r for r in rows if r["scenario"] == "combined_70_55" and r["equation"] == "v2"
+    v1 = next(r for r in rows if r["scenario"] == "combined_70_55"
               and r["bg_mgdl"] == 99.0 and r["tdd_u_day"] == 40.0)
     for minute in REPORT_TIMES:
         key = str(int(minute))
         x = v1["at_times"][key]
         lines.append(
             f"| {minute:.0f} min | {x['reference_fraction_remaining']:.3f} | "
-            f"{x['scenario_fraction_remaining']:.3f} | {x['remaining_effect_ratio']:.2f} | "
-            f"{v2['at_times'][key]['remaining_effect_ratio']:.2f} |"
+            f"{x['scenario_fraction_remaining']:.3f} | {x['remaining_effect_ratio']:.2f} |"
         )
     lines += [
         "",
         f"V1 crosses from underestimating to overestimating effect still to come at "
-        f"{v1['remaining_effect_crossing_min']:.0f} minutes. V2 crosses at "
-        f"{v2['remaining_effect_crossing_min']:.0f} minutes in this reference case.",
+        f"{v1['remaining_effect_crossing_min']:.0f} minutes in this reference case.",
         "",
         "The mismatch increases calculated correction at delivery, understates early action, "
         "and retains too much modelled effect later. A full controller can moderate or amplify "

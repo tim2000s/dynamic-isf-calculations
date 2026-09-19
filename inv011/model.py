@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from inv008.dynisf import isf_v1, isf_v2
+from inv008.dynisf import isf_v1
 
 
 @dataclass(frozen=True)
@@ -63,13 +63,9 @@ def activity_exponential(t_min, dia_min: float, peak_min: float):
     return np.maximum(activity, 0.0)
 
 
-def dynamic_isf(equation: str, bg, tdd, divisor: float):
-    """Evaluate V1 or the author-confirmed no-plus-one V2 equation."""
-    if equation == "v1":
-        return isf_v1(bg, tdd, divisor=divisor)
-    if equation == "v2":
-        return isf_v2(bg, tdd, divisor=divisor)
-    raise ValueError(f"unknown equation: {equation!r}")
+def dynamic_isf(bg, tdd, divisor: float):
+    """Evaluate the V1 Dynamic ISF equation."""
+    return isf_v1(bg, tdd, divisor=divisor)
 
 
 def first_crossing_minutes(time_min, values, level: float = 1.0) -> float | None:
@@ -84,4 +80,3 @@ def first_crossing_minutes(time_min, values, level: float = 1.0) -> float | None
             frac = (level - y[i - 1]) / (y[i] - y[i - 1])
             return float(t[i - 1] + frac * (t[i] - t[i - 1]))
     return None
-
