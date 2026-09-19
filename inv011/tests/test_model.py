@@ -29,20 +29,15 @@ def test_activity_peak_matches_parameter():
 
 
 def test_divisor_55_requires_more_insulin_than_75():
-    for equation in ("v1", "v2"):
-        correct = float(dynamic_isf(equation, 150.0, 40.0, 75.0))
-        wrong = float(dynamic_isf(equation, 150.0, 40.0, 55.0))
-        assert correct / wrong > 1.0
+    correct = float(dynamic_isf(150.0, 40.0, 75.0))
+    wrong = float(dynamic_isf(150.0, 40.0, 55.0))
+    assert correct / wrong > 1.0
 
 
-def test_v2_divisor_error_is_larger_than_v1_near_target():
-    v1 = float(dynamic_isf("v1", 99.0, 40.0, 75.0) /
-               dynamic_isf("v1", 99.0, 40.0, 55.0))
-    v2 = float(dynamic_isf("v2", 99.0, 40.0, 75.0) /
-               dynamic_isf("v2", 99.0, 40.0, 55.0))
-    assert v1 == pytest.approx(1.2234548052)
-    assert v2 == pytest.approx(2.1171450790)
-    assert v2 > v1
+def test_v1_divisor_ratio_near_target():
+    ratio = float(dynamic_isf(99.0, 40.0, 75.0) /
+                  dynamic_isf(99.0, 40.0, 55.0))
+    assert ratio == pytest.approx(1.2234548052)
 
 
 def test_crossing_interpolates():
@@ -53,6 +48,6 @@ def test_crossing_interpolates():
 def test_temp_basal_example_conserves_delivery_and_separates_curves():
     result = temp_basal_example()
     assert sum(result["delivery_u"]) == pytest.approx(2.0)
-    v1 = result["by_equation"]["v1"]["selected_times"]
-    assert v1["120"]["assumed_iob_u"] > v1["120"]["reference_iob_u"]
-    assert v1["300"]["remaining_effect_ratio"] > 1.0
+    selected = result["selected_times"]
+    assert selected["120"]["assumed_iob_u"] > selected["120"]["reference_iob_u"]
+    assert selected["300"]["remaining_effect_ratio"] > 1.0
