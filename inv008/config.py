@@ -28,9 +28,9 @@ NORMAL_TARGET = 99.0      # normal target (mg/dL)
 BG_CAP = 210.0            # glucose cap (mg/dL); excess above cap at 1/3 weight
 VELOCITY = 1.0            # v1 glucose-response damping, held at default (full scaler)
 ADJUST_FACTOR = 1.0       # TDD adjustment factor (100%)
-# Standard rapid-acting analogue configuration, including NovoRapid. V2 floors
-# glucose at divisor + 1, so this configuration becomes 75/76. Other insulin
-# configurations must pass their own divisor explicitly.
+# Analysis default retained for reproducibility. Current AndroidAPS maps a
+# 75-minute rapid-acting peak to divisor 55, a 55-minute ultra-rapid peak to 65,
+# and a 45-minute Lyumjev peak to 75. V2 floors glucose at divisor + 1.
 INSULIN_DIVISOR = 75
 
 # ---- TDD reconstruction ----

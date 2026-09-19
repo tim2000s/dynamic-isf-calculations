@@ -12,8 +12,8 @@ V1 keeps the +1 in its glucose log. V2 has no +1 and floors glucose at
 divisor + 1. At glucose equal to the divisor, ln(BG/divisor) is zero. The
 underlying insulin-effect term is therefore zero and the reciprocal ISF is
 undefined. The one-point floor keeps the implemented ISF finite and positive.
-For the standard rapid-acting configuration used in this investigation, the
-divisor/floor pair is 75/76 mg/dL.
+The investigation default is the divisor/floor pair 75/76 mg/dL. This is an
+analysis scenario rather than a universal rapid-acting-insulin configuration.
 
 The historical investigation plan cited an AndroidAPS implementation that kept
 the +1 in V2. The formula author subsequently confirmed that this was not the
