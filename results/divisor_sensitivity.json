@@ -1,0 +1,210 @@
+{
+  "aaps_peak_to_divisor": {
+    "rapid_acting_peak_75": 55,
+    "ultra_rapid_peak_55": 65,
+    "lyumjev_style_peak_45": 75
+  },
+  "equation_effects": [
+    {
+      "bg": 80.0,
+      "v1_isf_ratio_d55_vs_d75": 0.8084456816295731,
+      "v1_correction_ratio_d55_vs_d75": 1.2369414825549112,
+      "v2_isf_ratio_d55_vs_d75": 0.17224352663166265,
+      "v2_correction_ratio_d55_vs_d75": 5.805733426130252,
+      "v1_isf_ratio_d65_vs_d75": 0.9047674891602064,
+      "v1_correction_ratio_d65_vs_d75": 1.1052563359987517,
+      "v2_isf_ratio_d65_vs_d75": 0.3108202589932658,
+      "v2_correction_ratio_d65_vs_d75": 3.217293503451028,
+      "v1_isf_ratio_d75_vs_d75": 1.0,
+      "v1_correction_ratio_d75_vs_d75": 1.0,
+      "v2_isf_ratio_d75_vs_d75": 1.0,
+      "v2_correction_ratio_d75_vs_d75": 1.0
+    },
+    {
+      "bg": 99.0,
+      "v1_isf_ratio_d55_vs_d75": 0.817357531953137,
+      "v1_correction_ratio_d55_vs_d75": 1.2234548051578178,
+      "v2_isf_ratio_d55_vs_d75": 0.47233418717403547,
+      "v2_correction_ratio_d55_vs_d75": 2.117145078959829,
+      "v1_isf_ratio_d65_vs_d75": 0.9093313214765884,
+      "v1_correction_ratio_d65_vs_d75": 1.0997091779222805,
+      "v2_isf_ratio_d65_vs_d75": 0.6598769613719958,
+      "v2_correction_ratio_d65_vs_d75": 1.515434025641433,
+      "v1_isf_ratio_d75_vs_d75": 1.0,
+      "v1_correction_ratio_d75_vs_d75": 1.0,
+      "v2_isf_ratio_d75_vs_d75": 1.0,
+      "v2_correction_ratio_d75_vs_d75": 1.0
+    },
+    {
+      "bg": 120.0,
+      "v1_isf_ratio_d55_vs_d75": 0.825529519962554,
+      "v1_correction_ratio_d55_vs_d75": 1.2113437203861106,
+      "v2_isf_ratio_d55_vs_d75": 0.6024462908180935,
+      "v2_correction_ratio_d55_vs_d75": 1.659899007166344,
+      "v1_isf_ratio_d65_vs_d75": 0.9135183273846581,
+      "v1_correction_ratio_d65_vs_d75": 1.0946687877220078,
+      "v2_isf_ratio_d65_vs_d75": 0.76659631438183,
+      "v2_correction_ratio_d65_vs_d75": 1.3044675290493444,
+      "v1_isf_ratio_d75_vs_d75": 1.0,
+      "v1_correction_ratio_d75_vs_d75": 1.0,
+      "v2_isf_ratio_d75_vs_d75": 1.0,
+      "v2_correction_ratio_d75_vs_d75": 1.0
+    },
+    {
+      "bg": 150.0,
+      "v1_isf_ratio_d55_vs_d75": 0.8350168474178116,
+      "v1_correction_ratio_d55_vs_d75": 1.1975806273758174,
+      "v2_isf_ratio_d55_vs_d75": 0.6908658662592841,
+      "v2_correction_ratio_d55_vs_d75": 1.4474589769712214,
+      "v1_isf_ratio_d65_vs_d75": 0.9183795965084958,
+      "v1_correction_ratio_d65_vs_d75": 1.0888743650248867,
+      "v2_isf_ratio_d65_vs_d75": 0.8288775106195732,
+      "v2_correction_ratio_d65_vs_d75": 1.2064508774674263,
+      "v1_isf_ratio_d75_vs_d75": 1.0,
+      "v1_correction_ratio_d75_vs_d75": 1.0,
+      "v2_isf_ratio_d75_vs_d75": 1.0,
+      "v2_correction_ratio_d75_vs_d75": 1.0
+    },
+    {
+      "bg": 180.0,
+      "v1_isf_ratio_d55_vs_d75": 0.842674105084209,
+      "v1_correction_ratio_d55_vs_d75": 1.186698385492775,
+      "v2_isf_ratio_d55_vs_d75": 0.7384035615282888,
+      "v2_correction_ratio_d55_vs_d75": 1.3542729912221438,
+      "v1_isf_ratio_d65_vs_d75": 0.9223017809278865,
+      "v1_correction_ratio_d65_vs_d75": 1.084243813336178,
+      "v2_isf_ratio_d65_vs_d75": 0.8595080333137931,
+      "v2_correction_ratio_d65_vs_d75": 1.1634562578136085,
+      "v1_isf_ratio_d75_vs_d75": 1.0,
+      "v1_correction_ratio_d75_vs_d75": 1.0,
+      "v2_isf_ratio_d75_vs_d75": 1.0,
+      "v2_correction_ratio_d75_vs_d75": 1.0
+    },
+    {
+      "bg": 210.0,
+      "v1_isf_ratio_d55_vs_d75": 0.8490230976914246,
+      "v1_correction_ratio_d55_vs_d75": 1.1778242579254865,
+      "v2_isf_ratio_d55_vs_d75": 0.7685021142933114,
+      "v2_correction_ratio_d55_vs_d75": 1.3012325944211178,
+      "v1_isf_ratio_d65_vs_d75": 0.9255518822583141,
+      "v1_correction_ratio_d65_vs_d75": 1.080436460849753,
+      "v2_isf_ratio_d65_vs_d75": 0.8779752951992236,
+      "v2_correction_ratio_d65_vs_d75": 1.1389842122756852,
+      "v1_isf_ratio_d75_vs_d75": 1.0,
+      "v1_correction_ratio_d75_vs_d75": 1.0,
+      "v2_isf_ratio_d75_vs_d75": 1.0,
+      "v2_correction_ratio_d75_vs_d75": 1.0
+    }
+  ],
+  "same_window": {
+    "n_windows": 62751,
+    "n_people": 89,
+    "static": {
+      "mae": 20.290709290709287,
+      "bias": 6.5862068965517295
+    },
+    "loop": {
+      "mae": 18.60000000000001,
+      "bias": 7.3999999999999915
+    },
+    "by_divisor": {
+      "55": {
+        "v1": {
+          "mae": 25.121958041916976,
+          "bias": -15.55630360468049
+        },
+        "v2": {
+          "mae": 38.19977649527977,
+          "bias": 3.879665985651111
+        },
+        "fraction_v2_isf_above_v1": 0.758139312520916,
+        "per_person_best": {
+          "static": 22,
+          "loop": 36,
+          "v1": 15,
+          "v2": 7
+        },
+        "n_people_scored": 80
+      },
+      "65": {
+        "v1": {
+          "mae": 24.731364639955448,
+          "bias": -12.938285246320094
+        },
+        "v2": {
+          "mae": 42.846230322492865,
+          "bias": 13.1325502335755
+        },
+        "fraction_v2_isf_above_v1": 0.7850392822425141,
+        "per_person_best": {
+          "static": 24,
+          "loop": 35,
+          "v1": 14,
+          "v2": 7
+        },
+        "n_people_scored": 80
+      },
+      "75": {
+        "v1": {
+          "mae": 24.57001062349611,
+          "bias": -10.432087747378922
+        },
+        "v2": {
+          "mae": 49.74445054589351,
+          "bias": 25.205754026291466
+        },
+        "fraction_v2_isf_above_v1": 0.8128316680212267,
+        "per_person_best": {
+          "static": 24,
+          "loop": 35,
+          "v1": 17,
+          "v2": 4
+        },
+        "n_people_scored": 80
+      }
+    }
+  },
+  "pointwise": {
+    "n_points": 1439968,
+    "n_people": 1011,
+    "by_divisor": {
+      "55": {
+        "v1": {
+          "per_person_median_calculated_isf": 39.835552547242145,
+          "median_positive_ratio_to_proxy": 2.245506170538613,
+          "fraction_within_30_percent": 0.17374313195143548
+        },
+        "v2": {
+          "per_person_median_calculated_isf": 100.07952831142846,
+          "median_positive_ratio_to_proxy": 4.367263460185283,
+          "fraction_within_30_percent": 0.10283751000241328
+        }
+      },
+      "65": {
+        "v1": {
+          "per_person_median_calculated_isf": 43.80694326551247,
+          "median_positive_ratio_to_proxy": 2.460913209886435,
+          "fraction_within_30_percent": 0.16369047257384992
+        },
+        "v2": {
+          "per_person_median_calculated_isf": 125.621122866522,
+          "median_positive_ratio_to_proxy": 5.159461516992128,
+          "fraction_within_30_percent": 0.0880544058303809
+        }
+      },
+      "75": {
+        "v1": {
+          "per_person_median_calculated_isf": 47.96953613512441,
+          "median_positive_ratio_to_proxy": 2.669146979765932,
+          "fraction_within_30_percent": 0.15450986025922292
+        },
+        "v2": {
+          "per_person_median_calculated_isf": 158.7350485950191,
+          "median_positive_ratio_to_proxy": 5.928982284710486,
+          "fraction_within_30_percent": 0.07550746770475932
+        }
+      }
+    }
+  },
+  "interpretation": "Divisor mismatch materially changes absolute ISF, especially V2 near its floor. Across divisors 55, 65 and 75, neither equation beats static ISF on the selected same windows; V2 remains the least accurate dynamic candidate."
+}
