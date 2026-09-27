@@ -83,9 +83,14 @@ carbohydrate-affected periods. Results using this screen are sensitivity analyse
 unbiased estimates of insulin action.
 
 Closed-loop insulin delivery is confounded by indication. Higher or rising glucose causes more
-bolus insulin or temporary basal, while the same high starting value tends to fall through glucose
-effectiveness, renal loss and regression to the mean. A regression cannot reliably assign the fall
-between insulin and these non-insulin processes when their predictors move together. The repository's
+bolus insulin or temporary basal. In type 1 diabetes a raised glucose does not fall without
+insulin: with insulin absent, endogenous production is unopposed and glucose rises. Any fall is
+therefore insulin acting, including basal and boluses delivered before the window. What the
+records do not capture is glucose appearance, from unrecorded carbohydrate and from variation in
+endogenous production, and it drives both the delivery and the later glucose. A regression cannot
+reliably separate the insulin effect from that appearance when their predictors move together.
+(Corrected 27 September 2026. An earlier version attributed the fall to glucose effectiveness,
+renal loss and regression to the mean.) The repository's
 own `decompose_sensitivity.py` detects this failure: IOB and starting glucose are collinear, and the
 fitted ISF collapses to a clinically implausible value.
 

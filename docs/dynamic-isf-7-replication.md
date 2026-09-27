@@ -95,11 +95,15 @@ it.
 
 Three mechanisms produce a low estimate and this design separates none of them.
 
-Glucose falls on its own from a raised level. Overnight and carbohydrate-free,
-between 150 and 250 mg/dL, it drops a median 21 to 30 mg/dL over four hours with
-no correction given, so any estimator that removes that fall is measuring
-something smaller than a settings file encodes, and any estimator that leaves it
-in is measuring mean reversion.
+Insulin given before the window keeps acting inside it. Overnight and
+carbohydrate-free, between 150 and 250 mg/dL, glucose drops a median 21 to 30
+mg/dL over four hours with no correction given. In type 1 diabetes that fall is
+insulin, mostly the basal tail and earlier boluses, since glucose rises when no
+insulin is acting. An estimator that removes it with a per-person intercept is
+measuring something smaller than a settings file encodes, and one that leaves it
+in without counting the earlier insulin credits it to the wrong dose.
+(Corrected 27 September 2026. An earlier version said glucose falls on its own
+from a raised level.)
 
 Insulin is given when glucose is expected to stay up. Within an identical glucose
 trace the correlation between insulin committed before a window and insulin
