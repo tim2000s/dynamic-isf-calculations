@@ -392,8 +392,8 @@ mg/dL per unit with person and hour alone, to 4.3 adding glucose to 50 mg/dL, to
 hour earlier, 2.6 tightening that further. A plateau argues against measurement
 error in the reconstructed exposure, which would continue to drive the slope
 toward zero as conditioning removed genuine variation. The large first step is
-consistent with removal of mean reversion, since glucose that is high both
-attracts insulin and falls without it.
+consistent with removal of insulin delivered before the window, since glucose
+that is high has usually already attracted insulin that is still acting.
 
 What remains is that the algorithm's dose is tied to need the CGM trace does not
 carry. Within an identical stratum, the correlation between insulin committed
