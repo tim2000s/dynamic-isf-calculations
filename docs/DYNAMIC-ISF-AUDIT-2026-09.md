@@ -142,9 +142,9 @@ effects differ between people and studies:
 Current glucose is a poor substitute for those mechanisms. At fixed insulin, absolute glucose
 disposal rises as glucose rises. This glucose mass-action effect was measured directly by Fink and
 colleagues ([Metabolism, 1992](https://pubmed.ncbi.nlm.nih.gov/1640870/)).
-Mitrakou and colleagues found that an apparent increase in a glucose-based sensitivity index during
-hyperglycaemia disappeared after correcting for mass action
-([Diabetes, 1992](https://pubmed.ncbi.nlm.nih.gov/1639939/)). The minimal-model literature separates
+Mitrakou and colleagues found, in 42 people without diabetes, that an apparent increase in a
+glucose-based sensitivity index during hyperglycaemia disappeared after correcting for mass action
+([Journal of Clinical Endocrinology and Metabolism, 1992](https://pubmed.ncbi.nlm.nih.gov/1639939/)). The minimal-model literature separates
 insulin sensitivity from glucose effectiveness for the same reason
 ([Bergman and colleagues, 1989](https://diabetesjournals.org/diabetes/article/38/12/1512/9005/Toward-Physiological-Understanding-of-Glucose)).
 

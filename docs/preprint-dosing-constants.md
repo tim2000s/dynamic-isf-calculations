@@ -42,8 +42,8 @@ abstract: |
 Initial insulin pump settings are conventionally derived from total daily dose
 using constants that long predate continuous glucose monitoring. The sensitivity
 factor, the fall in glucose expected from one unit of rapid-acting insulin, is
-taken as 1700 divided by the daily dose in the formulation attributed to Walsh,
-or 1800 in the variant attributed to Davidson [1,2]. The carbohydrate ratio is
+taken as a constant divided by the daily dose [1]: 1700 in the fit Davidson and
+colleagues made to pump users with HbA1c at or below 7 per cent [2]. The carbohydrate ratio is
 taken as 500 divided by the daily dose, and basal insulin is taken as half of it.
 
 These rules remain in wide use. They are the starting point in pump initiation

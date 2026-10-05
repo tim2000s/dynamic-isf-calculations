@@ -28,7 +28,7 @@ The rest of this is how I got there, with the caveats, because the caveats matte
 
 The insulin sensitivity factor, how far your glucose falls per unit of correction insulin, sits underneath every correction a loop makes. A static profile uses fixed values by time of day. Dynamic ISF varies it, lowering the ISF (so the loop expects less drop and gives more insulin) as glucose climbs and as total daily dose rises.
 
-The reasoning behind the glucose part is sound. Sustained high glucose does blunt insulin's effect, through mechanisms that are well characterised in the cell biology: glucotoxicity, the knock-on effects on the insulin signalling cascade, oxidative stress and the rest [1–7]. Nobody sensible disputes that high glucose and insulin resistance travel together over the long run.
+The reasoning behind the glucose part is sound. Sustained high glucose does blunt insulin's effect. Reviews describe glucotoxicity among the mechanisms, with its effects on the insulin signalling cascade and oxidative stress [1,2], and in people with type 1 diabetes, 24 hours of high glucose lowered insulin-stimulated glucose uptake by about 18 and 26 per cent in two clamp studies of 10 and 8 people [3,4]. Nobody sensible disputes that high glucose and insulin resistance travel together over the long run.
 
 The question is whether that long-run, chronic relationship is the right thing to bake into a correction decision that plays out over the next hour or two, and whether what the loop sees as "insulin working less well when I'm high" is actually that, or something else wearing the same costume.
 
@@ -168,11 +168,12 @@ I'd welcome people poking holes in this. The code's there to do it with.
 
 1. Rabbani N, Thornalley P (2024). *Front Endocrinol.* doi:10.3389/fendo.2023.1268308
 2. Khalid M, Alkaabi J, Khan M, et al. (2021). *Int J Mol Sci.* doi:10.3390/ijms22168590
-3. Zhao X, An X, Yang C, et al. (2023). *Front Endocrinol.* doi:10.3389/fendo.2023.1149239
-4. Simon-Szabó L, Lizák B, Sturm G, et al. (2024). *Int J Mol Sci.* doi:10.3390/ijms25169113
-5. Galicia-Garcia U, Benito-Vicente A, Jebari S, et al. (2020). *Int J Mol Sci.* doi:10.3390/ijms21176275
-6. Beaupere C, Liboz A, Fève B, et al. (2021). *Int J Mol Sci.* doi:10.3390/ijms22020623
-7. Młynarska E, Czarnik W, Dzięca N, et al. (2025). *Int J Mol Sci.* doi:10.3390/ijms26031094
+3. Yki-Järvinen H, Helve E, Koivisto VA (1987). Hyperglycemia decreases glucose uptake in type I diabetes. *Diabetes.* doi:10.2337/diab.36.8.892
+4. Vuorinen-Markkola H, Koivisto VA, Yki-Järvinen H (1992). Mechanisms of hyperglycemia-induced insulin resistance in whole body and skeletal muscle of type I diabetic patients. *Diabetes.* doi:10.2337/diab.41.5.571
+
+Five references cited here before 4 October 2026 (Zhao 2023, Simon-Szabó 2024, Galicia-Garcia 2020,
+Beaupere 2021, Młynarska 2025) were removed: their abstracts do not name glucotoxicity, and one
+concerns glucocorticoids. See `tim2000s/diabetes-knowledge-base`, `kb/not_verified.jsonl`.
 
 ## Reproducibility
 
