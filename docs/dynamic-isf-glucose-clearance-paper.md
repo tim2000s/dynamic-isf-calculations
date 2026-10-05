@@ -171,7 +171,7 @@ I'd welcome people poking holes in this. The code's there to do it with.
 3. Yki-Järvinen H, Helve E, Koivisto VA (1987). Hyperglycemia decreases glucose uptake in type I diabetes. *Diabetes.* doi:10.2337/diab.36.8.892
 4. Vuorinen-Markkola H, Koivisto VA, Yki-Järvinen H (1992). Mechanisms of hyperglycemia-induced insulin resistance in whole body and skeletal muscle of type I diabetic patients. *Diabetes.* doi:10.2337/diab.41.5.571
 
-Five references cited here before 4 October 2026 (Zhao 2023, Simon-Szabó 2024, Galicia-Garcia 2020,
+Five references cited here before 5 October 2026 (Zhao 2023, Simon-Szabó 2024, Galicia-Garcia 2020,
 Beaupere 2021, Młynarska 2025) were removed: their abstracts do not name glucotoxicity, and one
 concerns glucocorticoids. See `tim2000s/diabetes-knowledge-base`, `kb/not_verified.jsonl`.
 
