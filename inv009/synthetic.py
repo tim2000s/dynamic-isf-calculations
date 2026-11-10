@@ -88,8 +88,8 @@ def simulate_subject(rng, tdd: float, isf: float, days: int = 200,
             if i >= n:
                 continue
             g = float(np.clip(rng.lognormal(np.log(size), 0.42), 8, 190))
-            carbs[i] += g
             if rng.random() >= unannounced:
+                carbs[i] += g
                 bolus[i] += g / cr * rng.normal(1.0, 0.18)   # dosed for, imperfectly
             else:
                 carbs_hidden[i] += g                          # eaten, never recorded

@@ -58,6 +58,21 @@ slope and none is corrected: error in the insulin estimate pulls it toward zero,
 dosing that reacts to a stubborn glucose does the same, and a longer event has
 both more fall and more insulin acted.
 
+The simulated arms, corrected later the same day. Until then the simulator
+wrote every unlogged meal into the carbohydrate record and absorbed it at twice
+its size (inv009/tests/test_synthetic.py now holds this), so the meal rule
+removed every excursion and the arms reached no bin above 130 mg/dL. With
+unlogged meals out of the record the arms reach 250 mg/dL. Two gentler
+controllers were added, at a tenth and a fifth of the original gain, because
+the original spends a tenth of its time at the 40 mg/dL floor. The two gains
+were chosen after looking at 0.002, 0.004 and 0.008 on 30 simulated people:
+they bracket the insulin used per event at 200 mg/dL in the real cohorts. The
+250:200 ratio was added because no simulated arm fills the 300 bin. Expected
+before these arms were run through the full script: a ratio above 2000 that
+falls with glucose, and a slope x TDD near 2000 at 150 to 250 mg/dL. A slope
+that falls from 200 to 250 under this constant sensitivity would mean the
+decline seen in REPLACE-BG and Loop needs no change in sensitivity to explain it.
+
     python3 -m inv012.peak_trough            # from the repository root
 
 DYNISF_ROOT is left unset. It moves the INV-009 results directory as well, and
@@ -93,9 +108,12 @@ OREF = {"v5_trio": "oref_v5", "v7_oref0": "oref_v7"}
 SYN_ISF, SYN_TDD, SYN_N, SYN_DAYS = 50.0, 40.0, 30, 200
 SYN_ARMS = [("open loop, meals logged", dict()),
             ("open loop, 45% unlogged", dict(unannounced=0.45)),
-            ("reactive, 45% unlogged", dict(unannounced=0.45, reactive=0.02))]
+            ("reactive, 45% unlogged", dict(unannounced=0.45, reactive=0.02)),
+            ("reactive at a tenth the gain, 45% unlogged", dict(unannounced=0.45, reactive=0.002)),
+            ("reactive at a fifth the gain, 45% unlogged", dict(unannounced=0.45, reactive=0.004))]
 VALUES = ("med_all", "med_pos", "pooled", "slope_tdd")
-RATIOS = ((100, 150), (100, 200), (300, 200))            # 100:150 because few oref people reach 200
+# 100:150 because few oref people reach 200, 250:200 because no simulated arm reaches 300
+RATIOS = ((100, 150), (100, 200), (250, 200), (300, 200))
 
 
 def acted_cum(net: np.ndarray, kern: np.ndarray) -> np.ndarray:
@@ -288,8 +306,8 @@ def write_md(summary: list[dict], path) -> None:
                                    "Slope of fall on insulin used within a bin, x TDD")):
         L += [f"## {title}", "",
               "| Cohort | People | Meal by bolus | 100 | 150 | 200 | 250 | 300 "
-              "| 100:150 within person | 100:200 within person | 300:200 within person |",
-              "|---|---|---|---|---|---|---|---|---|---|---|"]
+              "| " + " | ".join(f"{a}:{b} within person" for a, b in RATIOS) + " |",
+              "|" + "---|" * (8 + len(RATIOS))]
         for s in summary:
             L.append(f"| {s['cohort']} | {s['n_people']} | {100 * s['meal_proxy']:.0f}% | "
                      + " | ".join(f(s["bins"].get(m), col) for m in (100, 150, 200, 250, 300))
