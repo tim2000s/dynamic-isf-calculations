@@ -444,14 +444,21 @@ the same machinery, answers that.
 
 | Built in | Came back |
 |---|---|
-| -0.50 | -0.50 |
+| -0.50 | -0.67 |
 | -1.00 | -1.02 |
 | -2.00 | -1.57 |
 
-Shallow relationships return almost exactly. Steep ones flatten slightly. The
-bottom row decides it: a squared law returns between -1.56 and -1.85 under every
-condition I tried, including one where nearly half of all meals went unrecorded.
-The measurements ran between -0.65 and -0.88. A squared law cannot look like that.
+The middle row returns almost exactly. The shallow one comes back a little steep,
+at -0.67 [-0.75, -0.58], and the squared one flattens. The bottom row decides it:
+a squared law returns between -1.49 and -1.85 under every condition I tried,
+including one where nearly half of all meals went unrecorded. The measurements
+ran between -0.65 and -0.88. A squared law cannot look like that.
+
+(Corrected 10 November 2026. The simulator had been writing its unrecorded meals
+into the carbohydrate record, so that condition hid none of them. With the meals
+hidden, the squared law returns -1.49 [-1.60, -1.38] where this section said
+-1.56. The first row of the table said -0.50; the committed run has always
+returned -0.67.)
 
 ## What this does not settle
 

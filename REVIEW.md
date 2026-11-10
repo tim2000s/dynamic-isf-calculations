@@ -20,6 +20,11 @@ nit (optional) or pre-existing (record it, do not let it block).
 4. Known truth first. A new sensitivity estimator is run on `inv009/synthetic.py` records
    before its real-data number is read, and the write-up says which glucose range the
    simulation covered.
+   The simulator's own arms are checked too: until 10 November 2026 its unlogged meals
+   were written into `carbs_g` and absorbed at twice their size, so every arm described
+   as hiding meals hid none and no arm reached 150 mg/dL away from a meal.
+   `inv009/tests/test_synthetic.py` now catches this. A simulated arm's glucose
+   percentiles are looked at before its result is read.
 5. Selection on the outcome. A window that starts at a high reading, or ends where glucose
    stopped falling, selects episodes by what glucose did. Its ratio is an outcome ratio
    and is described as one (audit of 16 September 2026).

@@ -120,13 +120,22 @@ good but not exact.
 
 The obvious way to choose between constructions is to run them against records
 whose true sensitivity is known. That was done and it does not resolve the
-question. Simulated open-loop records with unlogged carbohydrate return 51.6
-against a true 50 for the bolus-and-units-given construction, but only about 22
-qualifying episodes per person, and the simulated controller cannot be made to
-correct through temporary basal at a realistic rate: at any gain that leaves
-glucose in a plausible range it never delivers half a unit above schedule in
-thirty minutes. So the constructions that matter for the closed-loop cohorts
-cannot be tested against a known answer at all.
+question. Simulated open-loop records with unlogged carbohydrate return 64.9
+against a true 50 for the bolus-and-units-given construction at six hours, and
+62.3 and 63.0 at four and eight, so it reads about 30% high where nothing is
+correcting. With a controller added at a gain that holds the median between 118
+and 131 mg/dL, it returns 41.9 to 44.6 on a median of 18 qualifying readings per
+person, and those are the person's own bedtime boluses. The simulated controller
+is proportional, and at those gains the most it can deliver above schedule in
+thirty minutes is 0.56 U with glucose at 400 mg/dL, against the half unit the
+construction asks for. So the constructions that count temporary basal, which are
+the ones that matter for the closed-loop cohorts, were not tested against a known
+answer.
+
+(Corrected 10 November 2026. The simulator had been writing its unlogged meals
+into the carbohydrate record and absorbing them twice, so the open-loop arm hid
+no meals. On that arm this section reported 51.6 on about 22 episodes per
+person.)
 
 Reporting that limitation is the point of this section. An estimator validated on
 the one case that can be simulated should not be presented as validated for the
