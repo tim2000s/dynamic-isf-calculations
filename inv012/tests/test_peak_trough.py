@@ -2,10 +2,11 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 import pytest
 
 from inv009 import insulin_models as M
-from inv012.peak_trough import acted_cum, find_events
+from inv012.peak_trough import acted_cum, find_events, person_bins
 
 
 def _trace():
@@ -40,3 +41,14 @@ def test_a_gap_in_the_fall_removes_the_event():
     t, bg, acted, carb, p = _trace()
     bg[p + 10] = np.nan
     assert find_events(t, bg, acted, carb).empty
+
+
+def test_a_fall_at_no_insulin_goes_to_the_intercept():
+    # Fall = 20 + 50 x used at a midpoint of 200, so the ratio overstates 50 and the line does not.
+    used = np.linspace(0.1, 2.0, 20)
+    half = 10.0 + 25.0 * used
+    b = person_bins(pd.DataFrame(dict(dur=60.0, g_max=200 + half, g_min=200 - half, used=used)),
+                    tdd=40.0).iloc[0]
+    assert b.icpt == pytest.approx(20.0, abs=1e-6)
+    assert b.slope_tdd == pytest.approx(2000.0, abs=1e-6)
+    assert b.med_pos > 2400.0
