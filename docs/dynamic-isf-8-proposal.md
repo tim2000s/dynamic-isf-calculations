@@ -8,9 +8,18 @@ date: "11 November 2026"
 ## Summary
 
 The dynamic ISF models in AndroidAPS and Trio have two origins. The logarithmic
-model is Chris Wilson's. It was built from a volunteer survey group of 50 people
-using multiple daily injections, who supplied the manual corrections they gave and
-the outcomes, with glucose from fingerpricks and CGM.
+model began with Chris Wilson, who described the work in a talk to Loop and Learn
+in February 2022 [2]. Through an online form he asked volunteers from the diabetes
+online community what correction dose they would give at a stated glucose, with
+glucose steady and no insulin on board. About 50 people answered, from a
+two-year-old using 8 U a day to people in their seventies using more than 100 U,
+and the usable answers gave about 300 data points. The doses were reported from
+experience and none was measured. He trained a neural network on those points and
+gave the surface it found across glucose and TDD as roughly 277,700 ÷ (glucose ×
+TDD). AndroidAPS first carried that equation, from February 2022, and the glucose
+term was replaced by a logarithm in June 2022, which is the form in use now [3].
+The talk predates that change and does not describe it.
+
 The sigmoid model offered in Trio came from its author's observation of glucose
 response, and no analysis of data has been published in support of it.
 
@@ -578,9 +587,16 @@ the profile-anchored, flat form now kept as an arm. The
 second (commit b324528) opened on the comparison with AndroidAPS and described both
 systems for a general reader.
 
-## Reference
+## References
 
 1. Romero-Ugalde HM, Adenis A, Cartier-Michaud T, Gauthier P, Desir C, Le
    Roux-Mallouf T, Huneker E, Benhamou PY. 920-P: The Relationship between
    Glycemia and Insulin Sensitivity Factor. Diabetes 2025;74(Supplement 1):920-P.
    doi:10.2337/db25-920-P
+2. Wilson C. Chris Wilson on Insulin Sensitivity (Correction Factor) with Loop and
+   Learn, 2/6/2022. Loop and Learn, YouTube.
+   https://www.youtube.com/watch?v=oL49FhOts3c. The survey is described from 10 to
+   16 minutes and the equation is given at 28 minutes.
+3. AndroidAPS source history, github.com/nightscout/AndroidAPS. Commit f98175755e
+   (12 February 2022) introduced 277700 / (TDD * bg), and commit c233f9ba12 (13
+   June 2022) replaced it with 1800 / (TDD * ln(bg / divisor + 1)).
