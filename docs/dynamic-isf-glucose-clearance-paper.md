@@ -10,6 +10,7 @@
 >
 > Update, 10 November 2026: section 7 is new. It applies a published peak-to-trough method to
 > eight groups and to simulated people with a fixed sensitivity. Later sections are renumbered.
+> Section 9 no longer suggests a 1/√TDD starting point, since the square-root law is withdrawn.
 
 ---
 
@@ -175,7 +176,7 @@ A word on the absorption model, because this is the part I most want to get righ
 
 Modestly, and in this order:
 
-- **Get each person's overall sensitivity level right, and keep adapting it from their own results.** This is where the real, recoverable gain sits (about 7 mg/dL), it isn't predictable from TDD, and it dwarfs anything a glucose curve adds. A 1/√TDD starting point for a cold start, refined online, is a sensible default.
+- **Get each person's overall sensitivity level right, and keep adapting it from their own results.** This is where the real, recoverable gain sits (about 7 mg/dL), it isn't predictable from TDD, and it dwarfs anything a glucose curve adds.
 - **Keep a near-target easing of ISF as a one-sided safety measure.** Not because the data is fitted to it, but because counterregulation near target is real and the cost of a hypo is asymmetric. This is the one place real physiology pokes through, and it argues for being more cautious near target, not less.
 - **Treat carbohydrate as carbohydrate.** For people who don't announce, better catching of unannounced meals does the job a glucose-ISF is standing in for. For people who do, any residual is most likely to sit in the meal tail. Both feel like more honest levers than a glucose-indexed sensitivity.
 - **If you keep a glucose term, understand what it's for.** It's a reasonable, crude proxy for carbohydrate the loop is missing, and it's most valuable for non-announcers. It's worth remembering that when carbs are announced, a glucose-driven ISF and the carb model can end up leaning on the same meal from two directions, so it shouldn't be left to run hot by default.
