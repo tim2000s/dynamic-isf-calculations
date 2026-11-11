@@ -43,28 +43,33 @@ no single scale fits. Refitting the equation's five coefficients to each cohort
 agreed with both results, and returned a flatter curve than the published one
 above 200 mg/dL.
 
-The measurement was also run on simulated people whose true sensitivity was known.
-Where that sensitivity was constant, the curve fell from 150 to 250 mg/dL under a
-loop. In a second simulator a unit of insulin did about half as much at 100 mg/dL
-as at 200, and the measurement still returned a value at 100 mg/dL that was 2.0 to
-4.9 times its value at 200 in every regime that gave corrections. The measured
-fall from 100 to 250 mg/dL is therefore no evidence that a unit of insulin does
-less at higher glucose. The case for dosing to the equation rests on an evaluation
-of outcomes, which has not been run.
+The measurement was also run on simulated people whose true sensitivity was
+known, and those runs are reported in full below. They describe how the
+measurement behaves. This document takes the published equation as given and asks
+how it should be scaled to a person and offered in the two systems.
 
 The published equation has no term for the person, and it needs one before it can
-dose. Two are described here: total daily dose (TDD), as the logarithmic model
-uses, and the profile ISF. For an adult on 40 U a day with a profile ISF of 50
-mg/dL per unit, the equation scaled by TDD gives 109.4 mg/dL per unit at 100 mg/dL
-and 41.9 at 200. AndroidAPS at an adjustment factor of 100% gives that person 43.4
-and 29.3. Both scalings are modelling choices made in this document and appear
-nowhere in the publication.
+dose. Two are described here: the profile ISF, and total daily dose (TDD) as the
+logarithmic model uses. They were compared on 3,433 corrections given by 150
+adults in a trial where no algorithm was dosing. The fall in glucose per unit
+followed the person's entered ISF, with a coefficient of 0.95 (95% interval 0.55
+to 1.32) where the profile link predicts 1. Daily dose added nothing once the
+entered ISF was known, at -0.07 (-0.43 to 0.26) where the TDD link predicts -1.
+The link to the profile is therefore the candidate, and the link to TDD is kept
+as an arm of the evaluation.
 
-Two parts of the model are unsettled. The first is its level, since the
-publication reports no daily dose and the candidates in this series differ by
-more than a factor of four. The second is where on the curve a correction is read, which moves
-the dose by 31 to 49%. Whether a loop dosing to this equation does better than one
-dosing to either existing model has not been tested.
+For an adult on 40 U a day with a profile ISF of 50 mg/dL per unit, the candidate
+gives 114.3 mg/dL per unit at 100 mg/dL and 43.7 at 200. AndroidAPS at an
+adjustment factor of 100% gives that person 43.4 and 29.3. Both links are
+modelling choices made in this document and appear nowhere in the publication.
+
+Two things are unsettled. The first is how far that comparison reaches. It covers
+adults on a pump who gave their own corrections, and it compares people with each
+other, so it does not show whether one person's value should also move with their
+recent insulin use, as the TDD link does. People using a loop were not tested,
+and nor were children. The second is where on the curve a correction is read,
+which moves the dose by 31 to 49%. Whether a loop dosing to this equation does
+better than one dosing to either existing model has not been tested.
 
 This is a draft for discussion. The equation has not run on a device or in a
 closed-loop simulator, and the candidate uses the published coefficients
@@ -378,18 +383,20 @@ at 180.
 
 ### Where that leaves the equation
 
-All of this is observational, and the publication is a conference abstract from
-the system's manufacturer. As a description of net fall per net unit in events
-chosen from peak to minimum, the equation is reproducible on other people's data
-between 100 and 200 mg/dL. As a statement that a unit of insulin does less at
-higher glucose, it is unsupported from 100 to 250 mg/dL, because the method
-returned the same falling shape from a simulator in which a unit does more at
-higher glucose. Above 250 mg/dL it is open.
+The publication is a conference abstract from the system's manufacturer, drawn
+from the records of 11,201 adults, and this document takes its equation as given.
+The same measurement on other people's records reproduces it between 100 and 200
+mg/dL. Above 200 mg/dL the records here are flatter than the published fit by one
+measure and agree with it by the other.
 
-The measurement therefore cannot justify dosing to the equation. Whether a loop
-that doses to it does better than one dosing to either existing model or to a flat
-profile is a separate question, and it is the only route left by which the
-equation could be justified. No evidence in this series bears on it directly.
+The simulations describe how the measurement behaves on constructed records. They
+say nothing about what the truth is in people, and they are reported so that a
+reader can weigh them.
+
+Two questions remain for this series. One is the scale for each person, taken up
+in the next section. The other is whether a loop that doses to the equation does
+better than one dosing to either existing model or to a flat profile. That has
+not been tested, and the evaluation proposed below is designed to answer it.
 
 A proposal from June 2026 that used this shape (document 3) was withdrawn for live
 dosing on 16 September 2026. The audit of that date left the way open for such
@@ -425,7 +432,7 @@ Trio's sigmoid mode returns the profile ISF at the profile target and moves it
 within the same limits. oref0 as published has autosens and no dynamic ISF based
 on daily dose. Loop and iAPS were not read.
 
-### Linked to TDD, or to the profile ISF?
+### Linked to the profile ISF, or to TDD?
 
 The published values need a scale for each person. At 180 mg/dL the equation gives
 35.3 mg/dL per unit to a person on 20 U a day and to a person on 80 U a day. Among
@@ -436,6 +443,16 @@ those people near 96 mg/dL per unit and the second near 24.
 The publication's own reference point is 180 mg/dL, the glucose against which it
 states its halving and doubling of doses. Both links below hold a value at that
 glucose and keep the published shape on either side of it.
+
+Linked to the profile, the entered ISF is taken to hold at 180 mg/dL:
+
+sensitivity = profile ISF × (published value at this glucose ÷ published value at 180 mg/dL)
+
+This fits Trio's structure, which already expresses dynamic ISF as a ratio of the
+profile. The schedule through the day is kept and no level has to be chosen. The
+value does not respond to recent dosing. It is also only as good as the entered
+number. It suits a profile ISF the person has evaluated, and it carries the whole
+of any error in one they have not.
 
 Linked to TDD, a person's sensitivity at 180 mg/dL is taken to be 1915 ÷ TDD:
 
@@ -451,20 +468,82 @@ and its schedule through the day play no part, as in AndroidAPS now. The adult
 figure of 1915 is a modelling choice. The figure pooled across all ages in the
 same analysis is higher, and 51% of that group are children, so it was not used.
 
-Linked to the profile, the entered ISF is taken to hold at 180 mg/dL:
-
-sensitivity = profile ISF × (published value at this glucose ÷ published value at 180 mg/dL)
-
-This fits Trio's structure, which already expresses dynamic ISF as a ratio of the
-profile. The schedule through the day is kept and no level has to be chosen. The
-value stops responding to recent dosing. It is also only as good as the entered
-number. It suits a profile ISF the person has
-evaluated, and it carries the whole of any error in one they have not.
-
 The two links agree for anyone whose profile ISF multiplied by daily dose is 1915.
+They differ for everyone else, and that difference was used to test them.
+
+### Which link corrections followed
+
+The test (INV-015) used REPLACE-BG, the one cohort here in which a correction was
+the person's own dose and no algorithm added to it. A correction counted when it
+was given at 150 to 350 mg/dL and was at least 0.5 U, with no carbohydrate entered
+for six hours either side and no further bolus for six hours. That left 3,433
+corrections from 150 adults who each had five or more. Among them the entered ISF
+multiplied by daily dose had a median of 1929. A tenth of people sat below 1345
+and a tenth above 2997, and that spread is what separates the links.
+
+For each person the fall in glucose over six hours, per unit given, was divided
+by the published shape at the starting glucose, and the median was taken. That
+figure is a ratio of outcomes and only its ordering of people was used. It was
+related to daily dose and to the entered ISF together, in logarithms. The
+expectation written before the run was that the result would lean towards the
+profile.
+
+| | Coefficient on daily dose | Coefficient on entered ISF |
+|---|---:|---:|
+| The link to TDD predicts | -1 | 0 |
+| The link to the profile predicts | 0 | 1 |
+| Measured (95% interval) | -0.07 (-0.43 to 0.26) | 0.95 (0.55 to 1.32) |
+
+Both measured intervals include what the link to the profile predicts and exclude
+what the link to TDD predicts.
+
+The second table puts the same people in four groups of equal size by their
+entered ISF multiplied by daily dose. The first group entered an ISF well below
+what their daily dose would suggest, and the last group one well above it. The
+last column is the fall achieved per unit as a multiple of the entered ISF.
+
+| Entered ISF × daily dose | People | Start, mg/dL | Target | At six hours | Achieved ÷ entered ISF (95% interval) |
+|---|---:|---:|---:|---:|---:|
+| 900–1665 | 38 | 209 | 106 | 135 | 0.96 (0.85 to 1.22) |
+| 1665–1929 | 37 | 240 | 110 | 130 | 1.22 (1.11 to 1.33) |
+| 1929–2322 | 37 | 234 | 110 | 142 | 1.04 (0.89 to 1.17) |
+| 2322–5211 | 38 | 229 | 107 | 138 | 1.02 (0.97 to 1.13) |
+
+All four groups stood at 130 to 142 mg/dL six hours after a correction. The last
+column is 0.96 in the first group and 1.02 in the last, with the second group
+highest. Under the link to TDD it would fall as the product rises.
+
+The test has a known lean. A correction is sized from the entered ISF, so any part
+of the fall that does not depend on the dose makes the entered ISF look like the
+better scale. Falls were therefore constructed for the same people and doses with
+each link as the truth, and the test was run on them. The two cases in which the
+fall follows the distance from target were added after the first run had returned
+a coefficient near 1 on the entered ISF. With the link to TDD as the
+truth and nothing else acting it returned -0.97 on daily dose and -0.05 on the
+entered ISF, close to that link's prediction. With 46% of the fall following the
+distance from target whatever the dose, it returned -0.54 (-0.68 to -0.42) and
+0.37 (0.22 to 0.51), and both values lie outside the measured intervals. The 46%
+is the fall on nights with no bolus as a share of the fall per unit on correction
+nights in this cohort (INV-009). At 75%, which is a modelling choice with no
+measurement behind it, the constructed values came inside the measured intervals.
+With the link to the profile as the truth, the test returned 0.88 to 0.97 on the
+entered ISF in every case. The link to TDD is therefore excluded as the scale
+between people unless about three quarters of the six-hour fall was independent
+of the dose.
+
+The result has limits. It comes from 150 adults in one trial. It compares people
+with each other, so it does not test whether one person's sensitivity moves with
+their recent dosing, which is what the link to TDD adds within a person. Document
+6 measured that movement at an exponent of -0.645 (standard error 0.033) across
+1,313 people. People using a loop were not tested, because in their records the
+algorithm doses alongside the correction, and children were not tested. The 46%
+was measured overnight and the corrections were given at any hour.
+
+### One person under each model
+
 The worked person has a profile ISF of 50 mg/dL per unit, a daily dose of 40 U,
 rapid-acting insulin and recent dosing equal to their average. Their product is
-2,000, which is why their two sets of values sit about 4% apart. The table gives
+2,000, which is why the two links give them values about 4% apart. The table gives
 the sensitivity each method assigns them, in mg/dL per unit, with both systems at
 their defaults.
 
@@ -480,12 +559,15 @@ their defaults.
 | 300 | 24.1 | 41.7 | 41.7 | 28.7 | 30.0 |
 | 380 | 21.8 | 41.7 | 41.7 | 20.7 | 21.7 |
 
-Against AndroidAPS at 100% the equation linked to TDD gives less insulin at every
-glucose up to 362 mg/dL with a divisor of 55, and up to 313 mg/dL with a divisor
-of 75. The ratio between the two is 2.52 at 100 mg/dL, 1.82 at 150, 1.43 at 200
-and 1.19 at 300. Against Trio at its defaults, in either mode, the equation gives
-less insulin below about 200 mg/dL and more above. Against this person's own
-profile it gives less insulin below 174 mg/dL and more above.
+Against AndroidAPS at 100% the equation linked to the profile gives this person
+less insulin at every glucose up to 378 mg/dL with a divisor of 55, and up to 330
+mg/dL with a divisor of 75. The ratio between the two is 2.63 at 100 mg/dL, 1.90
+at 150, 1.49 at 200 and 1.24 at 300. Against Trio at its defaults it gives less
+insulin below 209 mg/dL in logarithmic mode and below 206 in sigmoid mode, and
+more above. Against the person's own profile it gives less insulin below 180
+mg/dL and more above, which holds for everyone. The comparison with AndroidAPS
+holds for this person only, since AndroidAPS scales by daily dose and the
+candidate by the profile.
 
 The published fit stops at both ends, and the reference implementation
 (`inv013/candidate.py`) makes a choice at each. Below 100 mg/dL it holds the value
@@ -494,20 +576,19 @@ reached at 100. The published quadratic falls there, towards 65 mg/dL per unit a
 Work in this series in March 2026 declined the quadratic for dosing on that
 ground. Above 380 mg/dL, where the fit ends, the value at 380 is held.
 
-This document carries the link to TDD as the candidate, because the logarithmic
-model is defined that way, and the link to the profile as an arm of the
-evaluation.
+This document carries the link to the profile as the candidate, on the result
+above, and the link to TDD as an arm of the evaluation.
 
-### The level
+### The level of the TDD arm
 
-The link to TDD needs a level, and it is the least settled part of the model
-because the publication gives nothing to set it from. One way to compare the
-candidates is the daily dose at which the published values would apply unchanged,
-called the reference dose here.
+The link to the profile needs no level, because the entered ISF supplies it. The
+link to TDD needs one, and the publication gives nothing to set it from. One way
+to compare the possible levels is the daily dose at which the published values
+would apply unchanged, called the reference dose here.
 
 | Basis for the level | People | Sensitivity × daily dose at 200 mg/dL (95% interval) | Reference dose, U |
 |---|---:|---:|---:|
-| Adult entered settings, taken to hold at 180 mg/dL (this draft) | 422 | 1,674 (1,598 to 1,736) | 54.3 |
+| Adult entered settings, taken to hold at 180 mg/dL (the TDD arm) | 422 | 1,674 (1,598 to 1,736) | 54.3 |
 | The 1800 rule, taken to hold at 105 mg/dL (this series, March 2026) | | 731 | 23.7 |
 | Measured under Loop | 842 | 2,182 (2,065 to 2,266) | 70.8 |
 | Measured under Trio | 22 | 2,273 (1,569 to 3,218) | 73.7 |
@@ -518,7 +599,7 @@ The first row takes a person's entered sensitivity to be right at 180 mg/dL. The
 second takes the conventional rule to be right near target, and it puts the whole
 curve at less than half the height of the first. The last four rows are the
 measured values from the previous section, read at 200 mg/dL. Trio's interval,
-from 22 people, includes this draft's 1,674. The other three intervals lie above
+from 22 people, includes the arm's 1,674. The other three intervals lie above
 it. How far the measured rows sit from a true level is not known. At 200 mg/dL
 the same measurement on simulated people read between 0.62 and 2.4 times the
 truth across the seven regimes that dosed in response to glucose, and daily dose
@@ -527,10 +608,11 @@ defined the same way in each source.
 
 No default can be chosen from these figures. The reference doses run from 24 to
 107 U. The measurement cannot narrow that range alone, given how far it sat from
-the truth in simulation, so the level is left to the fourth stage of the
-evaluation, which gives each person a starting adjustment factor. For any one person the adjustment factor moves the level in either
-direction, as it does now. Its guidance has to be worked out again, because at
-100% the new value at 100 mg/dL is 2.52 times the existing one.
+the truth in simulation, so the arm's level is left to the fourth stage of the
+evaluation, which gives each person a starting adjustment factor. For any one
+person the adjustment factor moves the level in either direction, as it does now.
+Its guidance has to be worked out again for this arm, because at 100% the arm's
+value at 100 mg/dL is 2.52 times the existing one.
 
 ### Where on the curve a correction is read
 
@@ -542,21 +624,21 @@ filed each event under its midpoint glucose, and that assumption has not been
 confirmed.
 
 The table gives the units needed to bring the worked person to 100 mg/dL under
-each reading. It is the arithmetic of the sensitivity alone, before insulin on
+each reading, with the equation linked to the profile. It is the arithmetic of the sensitivity alone, before insulin on
 board and the loop's predictions change it.
 
 | Starting glucose, mg/dL | AndroidAPS, divisor 55 | Trio logarithmic | Profile | Equation, read at the start | Equation, read at the midpoint | Equation, summed along the path |
 |---:|---:|---:|---:|---:|---:|---:|
-| 150 | 1.46 | 1.17 | 1.00 | 0.80 | 0.61 | 0.62 |
-| 200 | 3.41 | 2.40 | 2.00 | 2.39 | 1.61 | 1.62 |
-| 250 | 5.71 | 3.60 | 3.00 | 4.46 | 3.01 | 2.97 |
-| 300 | 8.29 | 4.80 | 4.00 | 6.97 | 4.78 | 4.58 |
+| 150 | 1.46 | 1.17 | 1.00 | 0.77 | 0.59 | 0.59 |
+| 200 | 3.41 | 2.40 | 2.00 | 2.29 | 1.54 | 1.55 |
+| 250 | 5.71 | 3.60 | 3.00 | 4.27 | 2.89 | 2.85 |
+| 300 | 8.29 | 4.80 | 4.00 | 6.67 | 4.58 | 4.39 |
 
 Reading the equation at the starting glucose asks for 31 to 49% more insulin than
-reading it at the midpoint. From 200 mg/dL the two readings give 2.39 and 1.61 U,
+reading it at the midpoint. From 200 mg/dL the two readings give 2.29 and 1.54 U,
 on either side of the 2.00 U the flat profile gives. Adding up the equation along
-the whole path gives 1.62 U. The midpoint reading stays within 0.04 U of that sum
-up to a starting glucose of 250 mg/dL and is 0.20 U above it at 300.
+the whole path gives 1.55 U. The midpoint reading stays within 0.04 U of that sum
+up to a starting glucose of 250 mg/dL and is 0.19 U above it at 300.
 
 The default proposed is the midpoint between the glucose being corrected and the
 target, which is a modelling choice. Reading at the starting glucose is kept as an
@@ -569,9 +651,9 @@ published quartic divided by its value at 180 mg/dL, with test vectors shared
 between the two codebases so that both return the same values.
 
 Trio's limits need a decision from its maintainers. For the worked person the
-equation runs from 20.7 to 109.4 mg/dL per unit, and Trio's default limits would
-hold it between 41.7 and 71.4. That leaves it free to move only between 137 and
-201 mg/dL, so with the limits unchanged most of the curve would never reach the
+equation runs from 21.7 to 114.3 mg/dL per unit, and Trio's default limits would
+hold it between 41.7 and 71.4. That leaves it free to move only between 141 and
+208 mg/dL, so with the limits unchanged most of the curve would never reach the
 dose.
 
 The forecasts are affected as well as the dose. Both systems calculate a
@@ -594,15 +676,16 @@ is unchanged.
 In AndroidAPS the code touched is `calculateRawDynIsf` and the preference screen,
 together with the per-prediction lines and the dose-sensitivity branches in
 `DetermineBasalSMB.kt`. In Trio it is `DynamicISF.swift` and the forecast
-adjustment used in logarithmic mode.
+adjustment used in logarithmic mode. The link to the profile brings the profile
+ISF into the AndroidAPS calculation, which does not use it now.
 
 ## Evaluation
 
 Eight arms are compared throughout. Three are references. The logarithmic model
 as shipped and Trio's sigmoid are the two existing models, and the profile alone
-is the baseline for both. Four arms are forms of the equation: linked to TDD and read at the midpoint, the same read at the
-starting glucose, the same on a plain average daily dose, and linked to the
-profile. The eighth is the first draft of this document, a sensitivity anchored to
+is the baseline for both. Four arms are forms of the equation: linked to the profile and read at the
+midpoint, the same read at the starting glucose, linked to TDD, and linked to a
+plain average daily dose. The eighth is the first draft of this document, a sensitivity anchored to
 the profile and flat above 100 mg/dL. It is the arm the equation has to beat for
 its shape to matter.
 
@@ -614,20 +697,22 @@ pass rule.
 
 The second stage runs the publication's measurement (`inv012/peak_trough.py`) on
 AndroidAPS and Trio records under the published event rules. An earlier draft had
-this stage decide the default level. The simulation with a measured truth has
+this stage decide the default level of the link to TDD. The simulation with a measured truth has
 since covered 100 to 250 mg/dL, and the measurement sat too far from the truth
 there to set one. What remains for the simulation is 300 mg/dL and a truth
 measured inside the free-living runs.
 
-The third stage is simulation in TimSim, with runs paired by seed and arms for
-unannounced meals and for a mis-set adjustment factor. A harm rule is written
+The third stage is simulation in TimSim, with runs paired by seed and an arm for
+unannounced meals. The candidate is also run with a mis-set profile ISF, and the
+TDD arm with a mis-set adjustment factor. A harm rule is written
 before the runs and has two sides, time below 54 mg/dL and time above 250 mg/dL.
-The second side is there because this model gives less insulin than AndroidAPS at
-100% over most of the range.
+The second side is there because, for the worked person, this model gives less
+insulin than AndroidAPS at 100% up to 378 mg/dL.
 
 The fourth stage is shadow running. Both values are calculated on the device each
 cycle and stored, and the existing one doses. That gives the distribution of the
-ratio between them for each person, and from it a starting adjustment factor.
+ratio between them for each person, and for the TDD arm a starting adjustment
+factor.
 
 The fifth stage is use, on the developer's own device first and on released lines
 after that. It follows only when the third and fourth stages have passed, and it
@@ -644,21 +729,28 @@ that includes the new mode names the build before it.
 
 ## What is not settled
 
-Some of what is missing can only come from the authors. The level depends on four
-things the publication does not give: which glucose an event is filed under, how
+Some of what is missing can only come from the authors. How the curve is read
+and the level of the TDD arm depend on four things the publication does not give: which glucose an event is filed under, how
 the reference basal was defined, which insulin action model gave the insulin on
 board, and what daily doses the people measured were using. The authors have not
 been asked. They have also not been asked whether an equation derived by a
 manufacturer from its own users' records may be built into open-source code.
 
-The level is open, as described above. A level set from entered settings at 180
-mg/dL may not apply to open-source systems, since the measurement on Loop and
-oref0 records read higher at 200 mg/dL and only Trio's wide interval includes it.
+The link is settled only as far as INV-015 reaches, which is between adults who
+gave their own corrections with no algorithm dosing. Whether the profile ISF is
+as good a scale for a person whose loop does most of the correcting has not been
+tested. The same test on loop records would need the algorithm's insulin counted
+with the correction. Whether the candidate should also carry a multiplier for
+recent dose against the person's own average, which is what the link to TDD adds
+within a person, is open as well.
+
+The level of the TDD arm is open, as described above. A level set from entered
+settings at 180 mg/dL may not apply to open-source systems, since the measurement
+on Loop and oref0 records read higher at 200 mg/dL and only Trio's wide interval
+includes it.
 
 It is an open question whether the steep part between 100 and 150 mg/dL should be
-used for dosing at all, given how many events there involved no net insulin, and given that the
-simulation returned the same steepness from a sensitivity that ran the other way.
-The
+used for dosing at all, given how many events there involved no net insulin. The
 question of whether to use the published quadratic below 100 mg/dL belongs with
 it.
 
@@ -692,7 +784,10 @@ against the committed INV-012 table before fitting. `python -m
 inv014.known_truth --timsim <TimSim checkout>` writes
 `results/inv014_known_truth.md`, the simulation with a measured truth. It needs an
 interpreter with simglucose and took about three hours on seven workers. Its
-per-person tables stay out of git.
+per-person tables stay out of git. `python3 -m inv015.link` writes
+`results/inv015_link.md`, the comparison of the two links on REPLACE-BG
+corrections, and `inv015/tests/test_link.py` checks that the regression returns a
+link it was given.
 `inv013/tests/test_candidate.py` checks the logarithmic equation against the
 replay code of INV-008, Trio's form against AndroidAPS's, and the published fit
 against the values in the abstract and on the poster's figure. It also checks the
@@ -706,7 +801,8 @@ and the overnight test is in `oref-investigations/results/bridge_diabeloop.md`.
 Earlier drafts of this document are in git. The first (commit fd3662e) proposed
 the profile-anchored, flat form now kept as an arm. The
 second (commit b324528) opened on the comparison with AndroidAPS and described both
-systems for a general reader.
+systems for a general reader. The third (commit 1667e8f) carried the link to TDD
+as the candidate and judged the equation against the simulations.
 
 ## References
 

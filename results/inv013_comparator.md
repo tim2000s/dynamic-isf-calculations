@@ -79,27 +79,29 @@ Values are mg/dL per unit.
 | 300 | 24.1 | 41.7 | 41.7 | 28.7 | 30.0 | 50.0 |
 | 380 | 21.8 | 41.7 | 41.7 | 20.7 | 21.7 | 50.0 |
 
+The profile link over AndroidAPS at 100% for this person: 2.63 at 100, 1.90 at 150, 1.49 at 200, 1.24 at 300 mg/dL. The two are equal at 378 mg/dL with a divisor of 55 and at 330 with 75. The profile link equals Trio's logarithmic mode at 209 mg/dL and its sigmoid at 206.
+
 Trio's logarithmic mode is the AndroidAPS equation divided by its adjustment factor, held inside
 its limits. At the default factor of 0.8 it is 25% above AndroidAPS at 100% until the upper limit
 binds, which for this person is from 157 mg/dL. With the factor at 1.0 and the limits wide it
 returns the AndroidAPS value: 29.3 against 29.3 mg/dL per unit at 200 mg/dL.
 
-Inside Trio's default limits (41.7 to 71.4) the curve runs only from 137 to 201 mg/dL for this person.
+Inside Trio's default limits (41.7 to 71.4) the curve on the profile link runs only from 141 to 208 mg/dL for this person.
 
 ## Units to bring that person to 100 mg/dL
 
-Distance from 100 mg/dL over the sensitivity. This is the arithmetic of the sensitivity
-alone and leaves out insulin on board, predictions and delivery limits. An event is
-taken to be filed under the glucose halfway down its fall, which the abstract does not
-state. On that reading, using the curve at the starting glucose asks for more insulin
+Distance from 100 mg/dL over the sensitivity, with the curve on the profile link. This is
+the arithmetic of the sensitivity alone and leaves out insulin on board, predictions and
+delivery limits. An event is taken to be filed under the glucose halfway down its fall,
+which the abstract does not state. On that reading, using the curve at the starting glucose asks for more insulin
 than its construction implies.
 
 | Starting glucose, mg/dL | AndroidAPS, divisor 55 | Trio logarithmic | Profile | Curve, read at start | Curve, read at midpoint | Curve, along the path |
 |---:|---:|---:|---:|---:|---:|---:|
-| 150 | 1.46 | 1.17 | 1.00 | 0.80 | 0.61 | 0.62 |
-| 200 | 3.41 | 2.40 | 2.00 | 2.39 | 1.61 | 1.62 |
-| 250 | 5.71 | 3.60 | 3.00 | 4.46 | 3.01 | 2.97 |
-| 300 | 8.29 | 4.80 | 4.00 | 6.97 | 4.78 | 4.58 |
+| 150 | 1.46 | 1.17 | 1.00 | 0.77 | 0.59 | 0.59 |
+| 200 | 3.41 | 2.40 | 2.00 | 2.29 | 1.54 | 1.55 |
+| 250 | 5.71 | 3.60 | 3.00 | 4.27 | 2.89 | 2.85 |
+| 300 | 8.29 | 4.80 | 4.00 | 6.67 | 4.58 | 4.39 |
 
 Reading at the start asks for 31 to 49% more than reading at the midpoint.
 For this person the TDD link equals the profile value at 174 mg/dL; the profile link does so at 180.

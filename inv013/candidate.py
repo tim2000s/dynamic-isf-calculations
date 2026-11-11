@@ -246,27 +246,38 @@ def main() -> None:
     for i, g in enumerate(bg):
         lines.append(f"| {g:.0f} | " + " | ".join(f"{v[i]:.1f}" for v in cols.values()) + " |")
 
-    inside = fine[(curve_isf(fine, TDD) <= PROFILE_ISF / 0.7) & (curve_isf(fine, TDD) >= PROFILE_ISF / 1.2)]
+    # the worked comparisons below use the profile link, the candidate since INV-015
+    link = lambda g: curve_profile(g, PROFILE_ISF)
+    meets = lambda other: fine[np.argmin(np.abs(link(fine) - other))]
+    for other in (stock_v1(fine, TDD, 55.0), stock_v1(fine, TDD, 75.0),
+                  trio_log(fine, TDD, PROFILE_ISF), trio_sigmoid(fine, PROFILE_ISF)):
+        assert np.min(np.abs(link(fine) - other)) < 0.05, "no crossing from 100 to 380 mg/dL"
+    lines += ["", "The profile link over AndroidAPS at 100% for this person: "
+              + ", ".join(f"{float(link(g) / stock_v1(g, TDD, 55.0)):.2f} at {g:.0f}" for g in (100.0, 150.0, 200.0, 300.0))
+              + f" mg/dL. The two are equal at {meets(stock_v1(fine, TDD, 55.0)):.0f} mg/dL with a divisor of 55 and at "
+              f"{meets(stock_v1(fine, TDD, 75.0)):.0f} with 75. The profile link equals Trio's logarithmic mode at "
+              f"{meets(trio_log(fine, TDD, PROFILE_ISF)):.0f} mg/dL and its sigmoid at {meets(trio_sigmoid(fine, PROFILE_ISF)):.0f}."]
+    inside = fine[(link(fine) <= PROFILE_ISF / 0.7) & (link(fine) >= PROFILE_ISF / 1.2)]
     pinned = fine[np.isclose(trio_log(fine, TDD, PROFILE_ISF), PROFILE_ISF / 1.2)].min()
     lines += ["", "Trio's logarithmic mode is the AndroidAPS equation divided by its adjustment factor, held inside",
               f"its limits. At the default factor of 0.8 it is {100 * (1 / 0.8 - 1):.0f}% above AndroidAPS at 100% until the upper limit",
               f"binds, which for this person is from {pinned:.0f} mg/dL. With the factor at 1.0 and the limits wide it",
               f"returns the AndroidAPS value: {float(trio_log(200.0, TDD, PROFILE_ISF, factor=1.0, lo=0.01, hi=100.0)):.1f} "
               f"against {float(stock_v1(200.0, TDD, 55.0)):.1f} mg/dL per unit at 200 mg/dL."]
-    lines += ["", f"Inside Trio's default limits ({PROFILE_ISF / 1.2:.1f} to {PROFILE_ISF / 0.7:.1f}) the curve "
+    lines += ["", f"Inside Trio's default limits ({PROFILE_ISF / 1.2:.1f} to {PROFILE_ISF / 0.7:.1f}) the curve on the profile link "
               f"runs only from {inside.min():.0f} to {inside.max():.0f} mg/dL for this person."]
 
     lines += ["", "## Units to bring that person to 100 mg/dL", "",
-              "Distance from 100 mg/dL over the sensitivity. This is the arithmetic of the sensitivity",
-              "alone and leaves out insulin on board, predictions and delivery limits. An event is",
-              "taken to be filed under the glucose halfway down its fall, which the abstract does not",
-              "state. On that reading, using the curve at the starting glucose asks for more insulin",
+              "Distance from 100 mg/dL over the sensitivity, with the curve on the profile link. This is",
+              "the arithmetic of the sensitivity alone and leaves out insulin on board, predictions and",
+              "delivery limits. An event is taken to be filed under the glucose halfway down its fall,",
+              "which the abstract does not state. On that reading, using the curve at the starting glucose asks for more insulin",
               "than its construction implies.", "",
               "| Starting glucose, mg/dL | AndroidAPS, divisor 55 | Trio logarithmic | Profile | Curve, read at start | Curve, read at midpoint | Curve, along the path |",
               "|---:|---:|---:|---:|---:|---:|---:|"]
     stock = lambda g: stock_v1(g, TDD, 55.0)
     trio = lambda g: trio_log(g, TDD, PROFILE_ISF)
-    curve = lambda g: curve_isf(g, TDD)
+    curve = link
     for g in (150.0, 200.0, 250.0, 300.0):
         lines.append(f"| {g:.0f} | {units_to_target(stock, g):.2f} | {units_to_target(trio, g):.2f} | "
                      f"{(g - TARGET) / PROFILE_ISF:.2f} | {units_to_target(curve, g):.2f} | "
