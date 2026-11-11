@@ -5,8 +5,9 @@ INV-012 ran the peak-to-trough ratio on a small simulator with a constant sensit
 (inv009/synthetic.py). Its closed-loop arms returned a ratio that fell from 150 to 250
 mg/dL. Its open-loop arm did not fall (250:200 of 1.31, 1.00 to 1.94), and no arm reached
 100 or 300 mg/dL. This script repeats the check on TimSim, which runs the UVA/Padova
-S2008 model through simglucose with layers for behaviour, sensor and infusion site, and
-which has been compared with real cohorts (TimSim docs/VALIDATION.md).
+S2008 model through simglucose with layers for behaviour, sensor and infusion site.
+TimSim's own audit (docs/SPEC_VS_OUTPUT.md) records that its validation figures predate
+a rebuild, so none is quoted here and the simulator is not described as validated.
 
 UVA/Padova has no single sensitivity: utilisation saturates in glucose and production
 responds to both glucose and insulin. The true sensitivity at each glucose is therefore
@@ -224,7 +225,9 @@ def arm_job(job):
     tdd = float(r.insulin_units / (n * step / 1440.0))
     ev = find_events(r.minutes, bg, acted_cum(r.insulin_series - sched, M.kernel(MODEL_DEFAULT)), carbs)
     pct = np.percentile(cgm, [5, 25, 50, 75, 95])
-    row.update(termination=r.termination or "", completed=bool(r.completed), controller=r.controller,
+    end = r.termination or {}      # a dict when the run ended early, which parquet will not take
+    row.update(termination=str(end.get("direction", "")) + (", site not absorbing" if end.get("site_failing_at_end") else ""),
+               completed=bool(r.completed), controller=r.controller,
                layers=",".join(r.layers), tdd=tdd, n_events=len(ev), days=n * step / 1440.0,
                announced=int((carbs > 0).sum()), unannounced=int(r.meals_unannounced),
                rescues=int(r.rescue_events),
@@ -342,6 +345,7 @@ def main() -> None:
     if a.stage in ("arms", "all"):
         jobs = [(timsim, n, arm, drv, site, a.days, seed) for arm, drv, site in ARMS for n in names]
         out = _pool(arm_job, jobs, a.workers)
+        pd.to_pickle(out, RESULTS / f"inv014_arms_raw{a.tag}.pkl")     # before anything that can fail
         pd.DataFrame([r for r, _ in out]).to_parquet(f("runs"))
         pd.concat([b for _, b in out if b is not None], ignore_index=True).to_parquet(f("person_bins"))
     if a.stage in ("report", "all"):
