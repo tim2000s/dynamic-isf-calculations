@@ -54,6 +54,13 @@ nit (optional) or pre-existing (record it, do not let it block).
     worker before a cohort run. A stage that finishes far faster than expected, or two
     arms that agree to every decimal, is a fault until shown otherwise.
 
+16. A long run writes its raw output to disk before any reduction or formatting, and the
+    whole script is run end to end on two people and two days before the cohort run. On
+    11 November 2026 the INV-014 arms ran for 2 h 47 min and were lost when the final
+    parquet write met a run that had ended early, whose reason TimSim records as a dict.
+    The one-person pilot had no such run. `inv014/known_truth.py` now pickles the pool's
+    output first.
+
 ## Writing
 
 14. Person-first language. In type 1 diabetes a raised glucose does not fall without
