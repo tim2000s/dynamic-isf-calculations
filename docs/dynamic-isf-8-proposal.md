@@ -13,8 +13,8 @@ in February 2022 [2]. Through an online form he asked volunteers from the diabet
 online community what correction dose they would give at a stated glucose, with
 glucose steady and no insulin on board. About 50 people answered, from a
 two-year-old using 8 U a day to people in their seventies using more than 100 U,
-and the usable answers gave about 300 data points. The doses were reported from
-experience and none was measured. He trained a neural network on those points and
+and the usable answers gave about 300 data points. The doses and their effects were
+reported by the respondents from experience, and neither was measured. He trained a neural network on those points and
 gave the surface it found across glucose and TDD as roughly 277,700 ÷ (glucose ×
 TDD). AndroidAPS first carried that equation, from February 2022, and the glucose
 term was replaced by a logarithm in June 2022, which is the form in use now [3].
