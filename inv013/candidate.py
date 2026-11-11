@@ -24,7 +24,11 @@ modelling choices. Nothing here was fitted.
 
 The comparators are written from the stock sources read on 10 November 2026:
 AndroidAPS upstream master f77abd9b82 (OpenAPSSMBPlugin.calculateRawDynIsf) and
-Trio upstream main 0b29cd534 (DynamicISF.calculate). `inv008.dynisf.isf_v1` is
+Trio upstream main 0b29cd534 (DynamicISF.calculate). Both were read again on 11
+November 2026 at the dev heads (AndroidAPS 0c593a4b09, Trio 902be75e8) and neither
+calculation had changed. Trio's logarithmic mode is the AndroidAPS equation with the
+profile value cancelling; its defaults (factor 0.8, limits 0.7 and 1.2) are what
+separate the two columns. `inv008.dynisf.isf_v1` is
 the Boost form with a glucose cap and a velocity term, so the stock equation is
 restated here and tested against it with both switched off.
 
@@ -34,6 +38,15 @@ The reference dose implied by 1915 at 180 mg/dL is expected near 54 U, about twi
 24 U implied by the 1800 rule at 105 mg/dL used in the March 2026 work, and below the
 dose implied by this repository's own peak-to-trough levels. The run agreed.
 
+Added 11 November 2026: the measured level in each glucose bin of INV-012 divided by
+the published value there, which is the daily dose at which the published curve would
+return that measurement. A row that stays level means the published shape fits the
+cohort. Expected from the within-person ratios already in results/inv012_peak_trough.md:
+level from 100 to 200 mg/dL where no algorithm doses (2.55 against the published 2.61),
+a dip at 150 mg/dL under Loop, Trio and oref0 (their 100:150 ratios are 2.6 to 3.1
+against the published 1.76), and rising above 200 mg/dL in every cohort that reaches
+it (250:200 of 0.84 and 0.90 against 0.80). The run agreed.
+
 `candidate` is the profile-anchored form of this document's first draft (commit
 fd3662e), kept as the flat arm of the evaluation.
 
@@ -41,6 +54,7 @@ Run as `python3 -m inv013.candidate` to write results/inv013_comparator.md.
 """
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import numpy as np
@@ -57,12 +71,31 @@ TDD_SWING = (0.72, 1.14)
 REF_GLUCOSE, CURVE_RANGE = 180.0, (100.0, 380.0)
 # The poster's fit for glucose in [0, 100] mg/dL: constant, linear and squared terms.
 _QUADRATIC = (98.03, -1.077, 0.008868)
-# Peak-to-trough level at 200 mg/dL on this repository's records, positive-insulin
-# median (results/inv012_peak_trough.md).
-OWN_K200 = {"Loop": 2182.0, "Trio": 2273.0, "oref0": 2398.0, "no algorithm (REPLACE-BG)": 3283.0}
+RESULTS = Path(__file__).resolve().parents[1] / "results"
+# The INV-012 cohorts that hold carbohydrate records, by their name in its results file.
+OWN_COHORTS = {"Loop": "Loop", "v5_trio": "Trio", "v7_oref0": "oref0", "ReplaceBG": "no algorithm (REPLACE-BG)"}
+OWN_BINS = (100, 150, 200, 250, 300)
 TARGET = 100.0
 # Sensitivity x daily dose in entered settings: adults, and the pooled trial record.
 ENTERED = {"adults": 1915.0, "pooled, 51% children": 2067.0}
+
+
+def published(g: float) -> float:
+    """The poster's fit in mg/dL per unit: the quadratic up to 100 mg/dL, the quartic above."""
+    return float(quartic_isf(g)) if g > 100.0 else float(np.polyval(_QUADRATIC[::-1], g))
+
+
+def own_levels(path: Path = RESULTS / "inv012_peak_trough.md") -> dict:
+    """Peak-to-trough sensitivity x daily dose on this repository's records: people, then
+    (median, lower, upper) by glucose bin, from the positive-insulin table of INV-012."""
+    block = path.read_text().split("## Median over events with positive insulin used")[1].split("\n## ")[0]
+    out = {}
+    for row in block.splitlines():
+        cells = [c.strip() for c in row.split("|")]
+        if len(cells) > 8 and cells[1] in OWN_COHORTS:
+            out[OWN_COHORTS[cells[1]]] = (int(cells[2]), {
+                g: tuple(float(x) for x in re.findall(r"-?\d+", c)) for g, c in zip(OWN_BINS, cells[4:9]) if c != "-"})
+    return {n: out[n] for n in OWN_COHORTS.values()}
 
 
 def curve_shape(bg):
@@ -147,7 +180,7 @@ def main() -> None:
     for g in bg:
         st = [float(stock_v1(g, 1.0, d)) for d in DIVISORS.values()]
         k = float(curve_k(g))
-        q = f"{float(quartic_isf(g)) if g > 100.0 else float(np.polyval(_QUADRATIC[::-1], g)):.1f}"
+        q = f"{published(g):.1f}"
         lines.append(f"| {g:.0f} | {st[0]:.0f} | {st[1]:.0f} | {st[2]:.0f} | {q} | {k:.0f} | "
                      f"{k / st[0]:.2f} | {k / st[2]:.2f} |")
     lines += ["", "Ratio of the value at 100 to the value at 200 mg/dL: curve "
@@ -174,7 +207,8 @@ def main() -> None:
     levels = {"Adult entered product 1915 at 180 mg/dL (this draft)": (ENTERED["adults"], REF_GLUCOSE),
               "Pooled entered product 2067 at 180 mg/dL": (ENTERED["pooled, 51% children"], REF_GLUCOSE),
               "1800 rule at 105 mg/dL (March 2026 work)": (1800.0, 105.0)}
-    levels |= {f"Own peak-to-trough level under {n} at 200 mg/dL": (v, 200.0) for n, v in OWN_K200.items()}
+    own = own_levels()
+    levels |= {f"Own peak-to-trough level under {n} at 200 mg/dL": (v[200][0], 200.0) for n, (_, v) in own.items()}
     for name, (level, at) in levels.items():
         lines.append(f"| {name} | {level / q(at):.1f} | {level / q(at) * q(200.0):.0f} |")
     lines += ["", "The adult product carries a 95% interval of 1828 to 1986, which at 200 mg/dL is "
@@ -183,6 +217,17 @@ def main() -> None:
               f"{float(curve_isf(180.0, 80.0)):.1f} on 80 U a day. The published value there is {q(180.0):.1f} for both."]
     lines += ["", f"Dose multiple against the reference glucose: {1.0 / float(curve_shape(120.0)):.2f} at 120 mg/dL "
               f"and {1.0 / float(curve_shape(340.0)):.2f} at 340 mg/dL. The abstract gives about a half and about double."]
+
+    lines += ["", "## The published curve against the measured levels", "",
+              "Measured sensitivity x daily dose in each glucose bin (INV-012, median over events with",
+              "positive insulin used, 95% interval over people) divided by the published value at that",
+              "glucose. The result is the daily dose, in U, at which the published curve returns the",
+              "measurement. A row that stays level means the published shape fits that cohort.", "",
+              "| Cohort | People | " + " | ".join(str(g) for g in OWN_BINS) + " |", "|---|---:|" + "---:|" * len(OWN_BINS)]
+    for name, (people, v) in own.items():
+        lines.append(f"| {name} | {people} | " + " | ".join(
+            "{:.0f} ({:.0f} to {:.0f})".format(*(x / published(g) for x in v[g])) if g in v else "-"
+            for g in OWN_BINS) + " |")
 
     cols = {
         "AndroidAPS, divisor 55": stock_v1(bg, TDD, 55.0),
@@ -202,6 +247,12 @@ def main() -> None:
         lines.append(f"| {g:.0f} | " + " | ".join(f"{v[i]:.1f}" for v in cols.values()) + " |")
 
     inside = fine[(curve_isf(fine, TDD) <= PROFILE_ISF / 0.7) & (curve_isf(fine, TDD) >= PROFILE_ISF / 1.2)]
+    pinned = fine[np.isclose(trio_log(fine, TDD, PROFILE_ISF), PROFILE_ISF / 1.2)].min()
+    lines += ["", "Trio's logarithmic mode is the AndroidAPS equation divided by its adjustment factor, held inside",
+              f"its limits. At the default factor of 0.8 it is {100 * (1 / 0.8 - 1):.0f}% above AndroidAPS at 100% until the upper limit",
+              f"binds, which for this person is from {pinned:.0f} mg/dL. With the factor at 1.0 and the limits wide it",
+              f"returns the AndroidAPS value: {float(trio_log(200.0, TDD, PROFILE_ISF, factor=1.0, lo=0.01, hi=100.0)):.1f} "
+              f"against {float(stock_v1(200.0, TDD, 55.0)):.1f} mg/dL per unit at 200 mg/dL."]
     lines += ["", f"Inside Trio's default limits ({PROFILE_ISF / 1.2:.1f} to {PROFILE_ISF / 0.7:.1f}) the curve "
               f"runs only from {inside.min():.0f} to {inside.max():.0f} mg/dL for this person."]
 
@@ -230,7 +281,7 @@ def main() -> None:
               "the existing blend moves the value by the same multiplier as the stock equation:",
               ", ".join(f"{1.0 / r:.2f} at a blend of {r:.2f} of the person's average" for r in TDD_SWING) + "."]
 
-    out = Path(__file__).resolve().parents[1] / "results" / "inv013_comparator.md"
+    out = RESULTS / "inv013_comparator.md"
     out.write_text("\n".join(lines) + "\n")
     print(out.read_text())
 

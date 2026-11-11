@@ -6,7 +6,7 @@ import pytest
 
 from inv008.dynisf import isf_v1
 from inv013.candidate import (_QUADRATIC, candidate, curve_isf, curve_k, curve_profile, curve_shape,
-                              stock_v1, trio_log, trio_sigmoid, units_to_target)
+                              own_levels, published, stock_v1, trio_log, trio_sigmoid, units_to_target)
 
 BG = np.array([60.0, 80.0, 100.0, 150.0, 200.0, 300.0])
 
@@ -63,3 +63,11 @@ def test_units_to_target_orders_the_three_readings_of_a_falling_curve():
     # A flat sensitivity gives the same answer however it is read.
     flat = lambda g: np.full_like(np.asarray(g, dtype=float), 50.0)
     assert units_to_target(flat, 200.0, "path") == pytest.approx(units_to_target(flat, 200.0))
+
+
+def test_own_levels_reads_the_positive_insulin_table_and_not_the_one_above_it():
+    own = own_levels()
+    # Loop at 100 mg/dL is 2132 over every event and 6974 over events with positive insulin used.
+    assert own["Loop"] == (842, own["Loop"][1]) and own["Loop"][1][100] == (6974.0, 6659.0, 7194.0)
+    assert 250 not in own["Trio"][1] and own["no algorithm (REPLACE-BG)"][1][200][0] == 3283.0
+    assert published(100.0) == pytest.approx(79.0, abs=0.1) and published(180.0) == pytest.approx(35.3, abs=0.05)
