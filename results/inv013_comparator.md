@@ -45,6 +45,20 @@ At 180 mg/dL the TDD link gives 95.8 mg/dL per unit on 20 U a day and 23.9 on 80
 
 Dose multiple against the reference glucose: 0.56 at 120 mg/dL and 1.95 at 340 mg/dL. The abstract gives about a half and about double.
 
+## The published curve against the measured levels
+
+Measured sensitivity x daily dose in each glucose bin (INV-012, median over events with
+positive insulin used, 95% interval over people) divided by the published value at that
+glucose. The result is the daily dose, in U, at which the published curve returns the
+measurement. A row that stays level means the published shape fits that cohort.
+
+| Cohort | People | 100 | 150 | 200 | 250 | 300 |
+|---|---:|---:|---:|---:|---:|---:|
+| Loop | 842 | 88 (84 to 91) | 58 (56 to 60) | 71 (67 to 73) | 82 (77 to 89) | 108 (95 to 119) |
+| Trio | 22 | 90 (63 to 111) | 52 (40 to 64) | 74 (51 to 104) | - | - |
+| oref0 | 86 | 109 (90 to 136) | 70 (59 to 86) | 78 (58 to 188) | - | - |
+| no algorithm (REPLACE-BG) | 196 | 103 (89 to 115) | 100 (94 to 108) | 106 (94 to 125) | 120 (103 to 137) | 174 (132 to 233) |
+
 ## One person
 
 Profile sensitivity 50 mg/dL per unit, total daily dose 40 U, recent dose
@@ -64,6 +78,11 @@ Values are mg/dL per unit.
 | 250 | 26.3 | 41.7 | 41.8 | 33.7 | 35.1 | 50.0 |
 | 300 | 24.1 | 41.7 | 41.7 | 28.7 | 30.0 | 50.0 |
 | 380 | 21.8 | 41.7 | 41.7 | 20.7 | 21.7 | 50.0 |
+
+Trio's logarithmic mode is the AndroidAPS equation divided by its adjustment factor, held inside
+its limits. At the default factor of 0.8 it is 25% above AndroidAPS at 100% until the upper limit
+binds, which for this person is from 157 mg/dL. With the factor at 1.0 and the limits wide it
+returns the AndroidAPS value: 29.3 against 29.3 mg/dL per unit at 200 mg/dL.
 
 Inside Trio's default limits (41.7 to 71.4) the curve runs only from 137 to 201 mg/dL for this person.
 
