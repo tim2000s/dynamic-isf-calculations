@@ -5,7 +5,8 @@ import numpy as np
 import pytest
 
 from inv008.dynisf import isf_v1
-from inv013.candidate import candidate, stock_v1, trio_log, trio_sigmoid
+from inv013.candidate import (candidate, curve_isf, curve_k, curve_profile, curve_shape,
+                              stock_v1, trio_log, trio_sigmoid, units_to_target)
 
 BG = np.array([60.0, 80.0, 100.0, 150.0, 200.0, 300.0])
 
@@ -35,3 +36,28 @@ def test_dose_ratio_is_clamped_and_the_high_option_takes_the_stock_shape():
     high = candidate(BG, 50.0, 40.0, 40.0, high_from=200.0)
     assert high[4] == pytest.approx(50.0)
     assert high[5] / high[4] == pytest.approx(float(stock_v1(300.0, 1.0, 55.0) / stock_v1(200.0, 1.0, 55.0)))
+
+
+def test_curve_is_the_published_quartic_carrying_the_entered_product_at_180():
+    assert float(curve_k(180.0)) == pytest.approx(1915.0)
+    assert float(curve_isf(180.0, 1915.0 / 35.0)) == pytest.approx(35.0)  # the abstract's reference
+    assert float(curve_isf(100.0, 1915.0 / 35.0)) == pytest.approx(79.0, rel=0.03)
+    # The abstract: doses about halved at 120 mg/dL and about doubled above 340.
+    assert 1.0 / float(curve_shape(120.0)) == pytest.approx(0.5, abs=0.07)
+    assert 1.0 / float(curve_shape(340.0)) == pytest.approx(2.0, abs=0.1)
+    assert float(curve_k(60.0)) == float(curve_k(100.0)) and float(curve_k(450.0)) == float(curve_k(400.0))
+    assert np.all(np.diff(curve_k(np.linspace(100.0, 400.0, 100))) < 0)
+    assert float(curve_isf(200.0, 40.0, factor=0.5)) == pytest.approx(2 * float(curve_isf(200.0, 40.0)))
+    # The two links agree for a person whose profile x daily dose is the entered product.
+    assert float(curve_profile(250.0, 1915.0 / 40.0)) == pytest.approx(float(curve_isf(250.0, 40.0)))
+
+
+def test_units_to_target_orders_the_three_readings_of_a_falling_curve():
+    isf = lambda g: curve_isf(g, 40.0)
+    start, mid, path = (units_to_target(isf, 200.0, r) for r in ("start", "midpoint", "path"))
+    assert start == pytest.approx(100.0 / float(isf(200.0)))
+    assert mid == pytest.approx(100.0 / float(isf(150.0)))
+    assert max(mid, path) < start and path == pytest.approx(mid, rel=0.05)
+    # A flat sensitivity gives the same answer however it is read.
+    flat = lambda g: np.full_like(np.asarray(g, dtype=float), 50.0)
+    assert units_to_target(flat, 200.0, "path") == pytest.approx(units_to_target(flat, 200.0))

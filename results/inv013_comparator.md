@@ -1,90 +1,87 @@
-# INV-013: what each equation calculates for one person
+# INV-013: the curve against the stock dynamic ISF
+
+## Sensitivity x daily dose by glucose
+
+The stock equation is 1800 / ln(glucose / divisor + 1). The curve is
+1915 x quartic(glucose) / quartic(180), held below 100 and above 400 mg/dL.
+The published column is the quartic itself, in mg/dL per unit.
+
+| Glucose, mg/dL | Stock, divisor 55 | Stock, divisor 65 | Stock, divisor 75 | Published | Curve | Curve over stock 55 | Curve over stock 75 |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 70 | 2193 | 2463 | 2730 | - | 4378 | 2.00 | 1.60 |
+| 80 | 2005 | 2243 | 2480 | - | 4378 | 2.18 | 1.77 |
+| 100 | 1737 | 1932 | 2124 | 80.6 | 4378 | 2.52 | 2.06 |
+| 120 | 1555 | 1721 | 1884 | 63.5 | 3449 | 2.22 | 1.83 |
+| 150 | 1368 | 1505 | 1638 | 45.9 | 2492 | 1.82 | 1.52 |
+| 180 | 1239 | 1357 | 1471 | 35.3 | 1915 | 1.55 | 1.30 |
+| 200 | 1173 | 1281 | 1385 | 30.8 | 1674 | 1.43 | 1.21 |
+| 250 | 1051 | 1141 | 1228 | 24.8 | 1346 | 1.28 | 1.10 |
+| 300 | 965 | 1043 | 1118 | 21.1 | 1148 | 1.19 | 1.03 |
+| 400 | 852 | 915 | 975 | 14.6 | 795 | 0.93 | 0.82 |
+
+Ratio of the value at 100 to the value at 200 mg/dL: curve 2.61, stock 1.48. At 300 over 200: curve 0.69, stock 0.82.
+Stock level at 100 mg/dL, divisor 75 over divisor 55: 1.22.
+
+Glucose at which the curve equals the stock equation: 362 mg/dL (divisor 55), 339 mg/dL (divisor 65), 313 mg/dL (divisor 75).
+
+## Reference dose
+
+The published curve carries no daily dose. Linking it to one needs the dose at
+which the published values apply, which is a level divided by the quartic.
+
+| Level taken | Reference dose, U | Curve x daily dose at 200 mg/dL |
+|---|---:|---:|
+| Adult entered product 1915 at 180 mg/dL (this draft) | 54.3 | 1674 |
+| Pooled entered product 2067 at 180 mg/dL | 58.6 | 1807 |
+| 1800 rule at 105 mg/dL (March 2026 work) | 23.7 | 731 |
+| Own peak-to-trough level under Loop at 200 mg/dL | 70.8 | 2182 |
+| Own peak-to-trough level under Trio at 200 mg/dL | 73.7 | 2273 |
+| Own peak-to-trough level under oref0 at 200 mg/dL | 77.8 | 2398 |
+
+Dose multiple against the reference glucose: 0.56 at 120 mg/dL and 1.95 at 340 mg/dL. The abstract gives about a half and about double.
+
+## One person
 
 Profile sensitivity 50 mg/dL per unit, total daily dose 40 U, recent dose
 equal to the person's own average. AndroidAPS at an adjustment factor of 100%, Trio at
 its defaults (0.8 logarithmic, 0.5 sigmoid, limits 0.7 and 1.2, insulin factor 55).
 Values are mg/dL per unit.
 
-| Glucose, mg/dL | AndroidAPS, divisor 55 | AndroidAPS, divisor 65 | AndroidAPS, divisor 75 | Trio logarithmic | Trio sigmoid | Candidate | Candidate, option above 200 |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| 70 | 54.8 | 61.6 | 68.3 | 68.5 | 55.7 | 63.1 | 63.1 |
-| 80 | 50.1 | 56.1 | 62.0 | 62.6 | 53.7 | 57.7 | 57.7 |
-| 100 | 43.4 | 48.3 | 53.1 | 54.3 | 50.0 | 50.0 | 50.0 |
-| 120 | 38.9 | 43.0 | 47.1 | 48.6 | 47.1 | 50.0 | 50.0 |
-| 150 | 34.2 | 37.6 | 41.0 | 42.8 | 44.3 | 50.0 | 50.0 |
-| 200 | 29.3 | 32.0 | 34.6 | 41.7 | 42.4 | 50.0 | 50.0 |
-| 250 | 26.3 | 28.5 | 30.7 | 41.7 | 41.8 | 50.0 | 44.8 |
-| 300 | 24.1 | 26.1 | 28.0 | 41.7 | 41.7 | 50.0 | 41.1 |
+| Glucose, mg/dL | AndroidAPS, divisor 55 | Trio logarithmic | Trio sigmoid | Curve, TDD link | Curve, profile link | Profile, eased below 100 |
+|---:|---:|---:|---:|---:|---:|---:|
+| 70 | 54.8 | 68.5 | 55.7 | 109.4 | 114.3 | 63.1 |
+| 80 | 50.1 | 62.6 | 53.7 | 109.4 | 114.3 | 57.7 |
+| 100 | 43.4 | 54.3 | 50.0 | 109.4 | 114.3 | 50.0 |
+| 120 | 38.9 | 48.6 | 47.1 | 86.2 | 90.1 | 50.0 |
+| 150 | 34.2 | 42.8 | 44.3 | 62.3 | 65.1 | 50.0 |
+| 180 | 31.0 | 41.7 | 42.9 | 47.9 | 50.0 | 50.0 |
+| 200 | 29.3 | 41.7 | 42.4 | 41.9 | 43.7 | 50.0 |
+| 250 | 26.3 | 41.7 | 41.8 | 33.7 | 35.1 | 50.0 |
+| 300 | 24.1 | 41.7 | 41.7 | 28.7 | 30.0 | 50.0 |
+| 400 | 21.3 | 41.7 | 41.7 | 19.9 | 20.8 | 50.0 |
 
-## Level the stock equation implies at 100 mg/dL
+Inside Trio's default limits (41.7 to 71.4) the curve runs only from 137 to 201 mg/dL for this person.
 
-| Insulin setting | Divisor | Sensitivity x daily dose |
-|---|---:|---:|
-| rapid, 75 min peak | 55 | 1737 |
-| ultra-rapid, 55 min peak | 65 | 1932 |
-| 45 min peak | 75 | 2124 |
+## Units to bring that person to 100 mg/dL
 
-## Correction size against the stock equation
+Distance from 100 mg/dL over the sensitivity. This is the arithmetic of the sensitivity
+alone and leaves out insulin on board, predictions and delivery limits. An event is
+taken to be filed under the glucose halfway down its fall, which the abstract does not
+state. On that reading, using the curve at the starting glucose asks for more insulin
+than its construction implies.
 
-Stock AndroidAPS value at divisor 55 divided into the candidate's: above 1 the
-candidate asks for less insulin for the same distance from target.
+| Starting glucose, mg/dL | AndroidAPS, divisor 55 | Trio logarithmic | Profile | Curve, read at start | Curve, read at midpoint | Curve, along the path |
+|---:|---:|---:|---:|---:|---:|---:|
+| 150 | 1.46 | 1.17 | 1.00 | 0.80 | 0.61 | 0.62 |
+| 200 | 3.41 | 2.40 | 2.00 | 2.39 | 1.61 | 1.62 |
+| 250 | 5.71 | 3.60 | 3.00 | 4.46 | 3.01 | 2.97 |
+| 300 | 8.29 | 4.80 | 4.00 | 6.97 | 4.78 | 4.58 |
 
-| Glucose, mg/dL | Candidate | Candidate, option above 200 |
-|---|---:|---:|
-| 70 | 1.15 | 1.15 |
-| 80 | 1.15 | 1.15 |
-| 100 | 1.15 | 1.15 |
-| 120 | 1.29 | 1.29 |
-| 150 | 1.46 | 1.46 |
-| 200 | 1.70 | 1.70 |
-| 250 | 1.90 | 1.70 |
-| 300 | 2.07 | 1.70 |
-
-Stock ratio of the value at 300 to the value at 200 mg/dL: 0.82 (divisor 55), 0.81 (divisor 65), 0.81 (divisor 75).
+Reading at the start asks for 31 to 49% more than reading at the midpoint.
+For this person the TDD link equals the profile value at 174 mg/dL; the profile link does so at 180.
 
 ## Movement with recent dose
 
-Multiplier on the sensitivity when the blended dose sits at the tenth and ninetieth
-percentile of its ratio to the person's own average.
-
-| Blended over average | Stock | Candidate, exponent 1 | Candidate, exponent 0.65 |
-|---:|---:|---:|---:|
-| 0.72 | 1.39 | 1.39 | 1.24 |
-| 1.14 | 0.88 | 0.88 | 0.92 |
-
-## Units to bring the worked person to 100 mg/dL
-
-Distance from 100 mg/dL divided by the sensitivity at the starting glucose. This is
-the arithmetic of the sensitivity alone and leaves out insulin on board, predictions
-and delivery limits.
-
-| Starting glucose, mg/dL | AndroidAPS, divisor 55 | Trio logarithmic | Candidate |
-|---:|---:|---:|---:|
-| 120 | 0.51 | 0.41 | 0.40 |
-| 150 | 1.46 | 1.17 | 1.00 |
-| 200 | 3.41 | 2.40 | 2.00 |
-| 250 | 5.71 | 3.60 | 3.00 |
-| 300 | 8.29 | 4.80 | 4.00 |
-
-## Shape alone
-
-Each value divided by the same equation's value at 100 mg/dL, divisor 55. The last two
-columns are the candidate at the other two divisors.
-
-| Glucose, mg/dL | Stock | Candidate | Candidate, divisor 65 | Candidate, divisor 75 |
-|---:|---:|---:|---:|---:|
-| 70 | 1.26 | 1.26 | 1.27 | 1.29 |
-| 80 | 1.15 | 1.15 | 1.16 | 1.17 |
-| 100 | 1.00 | 1.00 | 1.00 | 1.00 |
-| 120 | 0.90 | 1.00 | 1.00 | 1.00 |
-| 150 | 0.79 | 1.00 | 1.00 | 1.00 |
-| 200 | 0.68 | 1.00 | 1.00 | 1.00 |
-| 250 | 0.60 | 1.00 | 1.00 | 1.00 |
-| 300 | 0.56 | 1.00 | 1.00 | 1.00 |
-
-## Figures quoted in the proposal
-
-- Level at 100 mg/dL, divisor 75 over divisor 55: 1.22.
-- Trio logarithmic over AndroidAPS (divisor 55) at 200 mg/dL: 1.42.
-- Candidate at 80 mg/dL with recent dose 1.10 of average: 52.4; from 100 mg/dL upward: 45.5.
-- Spread of the easing at 70 mg/dL across divisors 55 to 75: 0.023.
+The daily dose in the link is this draft's to define. Dividing by
+the existing blend moves the value by the same multiplier as the stock equation:
+1.39 at a blend of 0.72 of the person's average, 0.88 at a blend of 1.14 of the person's average.
