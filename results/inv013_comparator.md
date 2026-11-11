@@ -38,6 +38,10 @@ which the published values apply, which is a level divided by the quartic.
 | Own peak-to-trough level under Loop at 200 mg/dL | 70.8 | 2182 |
 | Own peak-to-trough level under Trio at 200 mg/dL | 73.7 | 2273 |
 | Own peak-to-trough level under oref0 at 200 mg/dL | 77.8 | 2398 |
+| Own peak-to-trough level under no algorithm (REPLACE-BG) at 200 mg/dL | 106.5 | 3283 |
+
+The adult product carries a 95% interval of 1828 to 1986, which at 200 mg/dL is 1598 to 1736.
+At 180 mg/dL the TDD link gives 95.8 mg/dL per unit on 20 U a day and 23.9 on 80 U a day. The published value there is 35.3 for both.
 
 Dose multiple against the reference glucose: 0.56 at 120 mg/dL and 1.95 at 340 mg/dL. The abstract gives about a half and about double.
 

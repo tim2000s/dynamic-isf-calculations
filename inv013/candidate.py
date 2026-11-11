@@ -59,7 +59,7 @@ REF_GLUCOSE, CURVE_RANGE = 180.0, (100.0, 380.0)
 _QUADRATIC = (98.03, -1.077, 0.008868)
 # Peak-to-trough level at 200 mg/dL on this repository's records, positive-insulin
 # median (results/inv012_peak_trough.md).
-OWN_K200 = {"Loop": 2182.0, "Trio": 2273.0, "oref0": 2398.0}
+OWN_K200 = {"Loop": 2182.0, "Trio": 2273.0, "oref0": 2398.0, "no algorithm (REPLACE-BG)": 3283.0}
 TARGET = 100.0
 # Sensitivity x daily dose in entered settings: adults, and the pooled trial record.
 ENTERED = {"adults": 1915.0, "pooled, 51% children": 2067.0}
@@ -177,6 +177,10 @@ def main() -> None:
     levels |= {f"Own peak-to-trough level under {n} at 200 mg/dL": (v, 200.0) for n, v in OWN_K200.items()}
     for name, (level, at) in levels.items():
         lines.append(f"| {name} | {level / q(at):.1f} | {level / q(at) * q(200.0):.0f} |")
+    lines += ["", "The adult product carries a 95% interval of 1828 to 1986, which at 200 mg/dL is "
+              f"{float(curve_k(200.0, 1828.0)):.0f} to {float(curve_k(200.0, 1986.0)):.0f}.",
+              f"At 180 mg/dL the TDD link gives {float(curve_isf(180.0, 20.0)):.1f} mg/dL per unit on 20 U a day and "
+              f"{float(curve_isf(180.0, 80.0)):.1f} on 80 U a day. The published value there is {q(180.0):.1f} for both."]
     lines += ["", f"Dose multiple against the reference glucose: {1.0 / float(curve_shape(120.0)):.2f} at 120 mg/dL "
               f"and {1.0 / float(curve_shape(340.0)):.2f} at 340 mg/dL. The abstract gives about a half and about double."]
 
