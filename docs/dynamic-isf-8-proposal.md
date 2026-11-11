@@ -8,8 +8,9 @@ date: "11 November 2026"
 ## Summary
 
 The dynamic ISF models in AndroidAPS and Trio have two origins. The logarithmic
-model is Chris Wilson's. It was built from data he gathered from a number of
-people using multiple daily injections, with glucose from fingerpricks and CGM.
+model is Chris Wilson's. It was built from a volunteer survey group of 50 people
+using multiple daily injections, who supplied the manual corrections they gave and
+the outcomes, with glucose from fingerpricks and CGM.
 The sigmoid model offered in Trio came from its author's observation of glucose
 response, and no analysis of data has been published in support of it.
 
@@ -29,7 +30,9 @@ Within person, the value at 100 mg/dL was 2.2 to 4.0 times the value at 200,
 against 2.61 in the published equation, so the steep fall towards 200 mg/dL is
 reproducible. On records where no algorithm was dosing, the published equation
 fits the measured values from 100 to 200 mg/dL at a single scale. On Loop records
-no single scale fits. Simulated people whose sensitivity was constant also
+no single scale fits. Refitting the equation's five coefficients to each cohort
+agreed with both results, and returned a flatter curve than the published one
+above 200 mg/dL. Simulated people whose sensitivity was constant also
 returned a falling curve by this method, so the decline between 150 and 250 mg/dL
 is not evidence that a unit of insulin does less at higher glucose.
 
@@ -48,7 +51,8 @@ the dose by 31 to 49%. Whether a loop dosing to this equation does better than o
 dosing to either existing model has not been tested.
 
 This is a draft for discussion. The equation has not run on a device or in a
-closed-loop simulator, and no parameter was fitted to data. Readers are assumed to
+closed-loop simulator, and the candidate uses the published coefficients
+unchanged. Readers are assumed to
 know how dynamic ISF works in both systems. Glucose is in mg/dL throughout because
 the code is.
 
@@ -158,6 +162,60 @@ it does not state.
 
 The scale itself is not a daily dose anyone was using. It is about 100 U in
 REPLACE-BG because the measurement reads high, as the simulation below shows.
+
+### Refitting the equation
+
+The equation was also refitted. The quartic, with all five coefficients free, was
+fitted to each cohort's values in 10 mg/dL bins, from 100 mg/dL to the highest bin
+holding ten people. Each bin was weighted by the square root of the people in it,
+which is a modelling choice, since the poster does not state its weighting. For
+comparison the published fit was laid over the same bins with one free number, its
+scale in U. The miss is the typical distance between a fit and the bin values, as
+a percentage of each value.
+
+| Cohort | People | Bins fitted, mg/dL | Best scale of the published fit, U | Miss, published fit | Miss, refit |
+|---|---:|---|---:|---:|---:|
+| No algorithm (REPLACE-BG) | 196 | 100 to 370 | 103 (96 to 113) | 14% | 7% |
+| Loop | 842 | 100 to 380 | 71 (69 to 74) | 17% | 6% |
+| Trio | 22 | 100 to 200 | 65 (48 to 80) | 18% | 7% |
+| oref0 | 86 | 100 to 240 | 82 (71 to 99) | 23% | 14% |
+
+The refit misses by less in every cohort, as a fit with four more free numbers
+must. The second table shows where the two differ. It gives each fit relative to
+its own value at 180 mg/dL.
+
+| Fit | People | 100 mg/dL | 150 | 200 | 250 | 300 |
+|---|---:|---:|---:|---:|---:|---:|
+| Published | | 2.29 | 1.30 | 0.87 | 0.70 | 0.60 |
+| Refit, no algorithm (REPLACE-BG) | 196 | 2.17 (1.91 to 2.40) | 1.28 (1.21 to 1.33) | 0.89 (0.86 to 0.92) | 0.81 (0.72 to 0.87) | 0.90 (0.77 to 1.02) |
+| Refit, Loop | 842 | 3.19 (3.02 to 3.34) | 1.25 (1.22 to 1.27) | 1.00 (0.98 to 1.01) | 1.07 (1.03 to 1.11) | 0.94 (0.88 to 1.01) |
+| Refit, Trio | 22 | 3.29 (2.15 to 4.76) | 1.19 (0.85 to 1.53) | 1.12 (0.66 to 1.61) | | |
+| Refit, oref0 | 86 | 2.96 (2.22 to 3.83) | 1.00 (0.78 to 1.24) | 1.02 (0.82 to 1.38) | | |
+
+With no algorithm dosing, the refit returns the published shape from 100 to 200
+mg/dL, and all three intervals there include the published figure. At 250 and 300
+mg/dL the refit sits at 0.81 and 0.90 of its value at 180, where the published fit
+is at 0.70 and 0.60. Both of those intervals exclude the published figure. Under
+Loop the refit differs from the published fit at every glucose in the table. It is
+higher at 100 mg/dL, 3.19 against 2.29, and from 200 mg/dL upward it stays close
+to its value at 180. Trio's intervals, from 22 people, include the published
+figure at each of its three points. The oref0 values resemble Loop's, with an
+interval that excludes the published figure only at 150 mg/dL.
+
+Two limits apply. A quartic suits these records poorly, because the values fall
+steeply to about 150 mg/dL and then level off. Under Loop the refit rises from
+1.00 to 1.07 between 200 and 250 mg/dL, while the bin values themselves go from
+2,182 to 2,025. Above 200 mg/dL the bins and the within-person ratios reported
+below are the better guide. The second limit is that the refit describes the same
+outcome ratio as the published curve, so the simulation in the next subsection
+bears on it equally.
+
+The refit gives no single equation to offer in place of the published one. Its
+coefficients differ between cohorts, and its value at 180 mg/dL is 3,657 (3,431 to
+4,055) with no algorithm dosing and 2,123 (2,048 to 2,214) under Loop. It confirms
+the published shape between 100 and 200 mg/dL on records that no loop shaped. It
+also agrees with the within-person ratios that, by this measure, the published
+fall above 200 mg/dL is not reproduced here.
 
 ### What a constant sensitivity returns
 
@@ -483,6 +541,10 @@ used for dosing at all, given how many events there involved no net insulin. The
 question of whether to use the published quadratic below 100 mg/dL belongs with
 it.
 
+The fall above 200 mg/dL is open in the same way. By the ratio of fall to insulin
+used, neither REPLACE-BG nor Loop reproduces it, whichever way that ratio is
+summarised. By the extra fall per extra unit, both do.
+
 Parts of the existing systems were not read. The bolus calculator's sensitivity in
 dynamic mode is one, and the behaviour of autosens in that mode is another.
 TimSim's oref adapter has not been checked for whether it runs the logarithmic
@@ -496,11 +558,15 @@ reference implementation with shared test vectors would be new to both.
 ## Reproducing the numbers
 
 `python3 -m inv013.candidate` writes `results/inv013_comparator.md`, which holds
-every number in this document's tables and worked examples.
+the numbers in this document's worked examples and in every table except the
+refit. `python3 -m inv013.refit` writes `results/inv013_refit.md`, with the refit
+tables and the refitted coefficients. It reads the per-person bins that `python3
+-m inv012.peak_trough` writes, a file too large to keep in git, and checks them
+against the committed INV-012 table before fitting.
 `inv013/tests/test_candidate.py` checks the logarithmic equation against the
 replay code of INV-008, Trio's form against AndroidAPS's, and the published fit
 against the values in the abstract and on the poster's figure. It also checks the
-ways of reading the curve.
+ways of reading the curve, and that the refit returns a quartic it was given.
 
 Figures from other analyses are quoted from where they were produced. The
 measurement on other cohorts is in `results/inv012_peak_trough.md` and section 7
