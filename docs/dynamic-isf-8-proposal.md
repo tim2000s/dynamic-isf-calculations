@@ -41,9 +41,16 @@ reproducible. On records where no algorithm was dosing, the published equation
 fits the measured values from 100 to 200 mg/dL at a single scale. On Loop records
 no single scale fits. Refitting the equation's five coefficients to each cohort
 agreed with both results, and returned a flatter curve than the published one
-above 200 mg/dL. Simulated people whose sensitivity was constant also
-returned a falling curve by this method, so the decline between 150 and 250 mg/dL
-is not evidence that a unit of insulin does less at higher glucose.
+above 200 mg/dL.
+
+The measurement was also run on simulated people whose true sensitivity was known.
+Where that sensitivity was constant, the curve fell from 150 to 250 mg/dL under a
+loop. In a second simulator a unit of insulin did about half as much at 100 mg/dL
+as at 200, and the measurement still returned a value at 100 mg/dL that was 2.0 to
+4.9 times its value at 200 in every regime that gave corrections. The measured
+fall from 100 to 250 mg/dL is therefore no evidence that a unit of insulin does
+less at higher glucose. The case for dosing to the equation rests on an evaluation
+of outcomes, which has not been run.
 
 The published equation has no term for the person, and it needs one before it can
 dose. Two are described here: total daily dose (TDD), as the logarithmic model
@@ -170,7 +177,8 @@ assumption that the publication files an event under its midpoint glucose, which
 it does not state.
 
 The scale itself is not a daily dose anyone was using. It is about 100 U in
-REPLACE-BG because the measurement reads high, as the simulation below shows.
+REPLACE-BG because the measurement reads high where no algorithm doses, as the
+simulations below show.
 
 ### Refitting the equation
 
@@ -216,8 +224,8 @@ steeply to about 150 mg/dL and then level off. Under Loop the refit rises from
 1.00 to 1.07 between 200 and 250 mg/dL, while the bin values themselves go from
 2,182 to 2,025. Above 200 mg/dL the bins and the within-person ratios reported
 below are the better guide. The second limit is that the refit describes the same
-outcome ratio as the published curve, so the simulation in the next subsection
-bears on it equally.
+outcome ratio as the published curve, so the simulations in the next subsection
+bear on it equally.
 
 The refit gives no single equation to offer in place of the published one. Its
 coefficients differ between cohorts, and its value at 180 mg/dL is 3,657 (3,431 to
@@ -226,18 +234,110 @@ the published shape between 100 and 200 mg/dL on records that no loop shaped. It
 also agrees with the within-person ratios that, by this measure, the published
 fall above 200 mg/dL is not reproduced here.
 
-### What a constant sensitivity returns
+### What the method returns when the truth is known
 
-A constant sensitivity produces a falling curve by the same method. Simulated
-people with a true value of 2,000 at every glucose returned values 1.4 to 3.4
-times too high, declining as glucose rose. Their ratio of the value at 250 to the
-value at 200 mg/dL was 0.87 (0.83 to 0.90) in one arm and 0.92 (0.89 to 0.95) in
-the other. The six Jaeb cohorts gave 0.84 to 1.05, a range that contains both
-simulated arms, so the decline in those cohorts between 150 and 250 mg/dL needs no
-change in what a unit of insulin does to explain it. The published equation gives
-0.80, which is steeper than either simulated arm by an amount this series cannot
-account for. The simulation produced no usable events at 100 or at 300 mg/dL and
-says nothing about either end.
+The method has been run twice on simulated people whose true sensitivity was
+known.
+
+In the first run (INV-012) the sensitivity was constant at every glucose, 2,000
+when multiplied by daily dose, and 45% of meals went unlogged. Two arms were dosed
+by a simple reactive loop, at a tenth and at a fifth of its gain. They returned
+values 1.4 to 3.4 times too high, declining as glucose rose. Their ratio of the
+value at 250 to the value at 200 mg/dL was 0.87 (0.83 to 0.90) in one arm and 0.92
+(0.89 to 0.95) in the other. The same loop at full gain returned 1,816 and 1,520
+at 150 and 200 mg/dL, below the true value, and reached no higher bin. An arm with
+no loop returned 4,560, 4,509 and 6,091 at 150, 200 and 250 mg/dL. Its ratio was
+1.31 (1.00 to 1.94), from 25 people, so it read high and did not fall. A constant
+sensitivity therefore returned a falling curve in the arms where a loop was
+dosing, and in the arm with none it did not.
+
+The six Jaeb cohorts gave 0.84 to 1.05 for the same ratio, a range that contains
+both reduced-gain arms, so the decline in those cohorts between 150 and 250 mg/dL
+needs no change in what a unit of insulin does to explain it. The published
+equation gives 0.80, which is steeper than either arm by an amount this series
+cannot account for. At 100 mg/dL between 59 and 93% of the simulated events had no
+net insulin used, and no arm gave a value at 300 mg/dL, so the first run says
+nothing about either end.
+
+The second run (INV-014) was made to cover those ends. It used TimSim, which runs
+the UVA/Padova model of glucose and insulin [4, 5] with added layers for
+day-to-day physiology, behaviour, the sensor and the infusion site. That model has no single sensitivity,
+so the truth was measured before the method was read. Each of 40 simulated adults
+was held fasting at twelve steady glucose levels, and at each a small bolus was
+given in one of two otherwise identical runs. The true sensitivity at that glucose
+is the largest gap that opened between the two, per unit given. A unit lowered
+glucose by 11.1 mg/dL (10.1 to 13.7) at 100 mg/dL, from 39 people, by 23.0 (16.8
+to 25.9) at 200, from 39, and by 34.6 (32.0 to 51.0) at 300, from 24. Within
+person the value at 100 mg/dL was 0.52 (0.49 to 0.54) of the value at 200, and the
+value at 300 was 1.30 (1.25 to 1.34) of it. In this simulator a unit of insulin
+does more at higher glucose. That is a property of the model in a fasting steady
+state and is no evidence about people.
+
+The same people then lived 56 simulated days under each of five dosing regimes.
+Two ran oref0 with SMB, one with the simulator's infusion-site faults and one
+without them. Two had no algorithm and gave corrections by hand: scheduled basal
+and a bolus for each announced meal, with a full correction towards 140 mg/dL
+whenever the sensor read above 180 mg/dL, at most once in three hours. Those two
+differed over site faults in the same way. The fifth had scheduled basal and meal
+boluses, with no corrections between meals. The correction rule is a modelling
+choice and was not fitted to anything.
+
+The method was run on what a real record would hold, so unannounced meals and
+rescue carbohydrate were absent from it. Events were filed in bins 50 mg/dL wide,
+where the cohorts above used 10, because 56 days gave too few events for narrower
+ones. Of the 40 people, 31 completed every regime, and the table uses those 31. It
+gives the method's value divided by the truth, within person, and then the ratio
+of the value at 100 mg/dL to the value at 200 by the method and in truth.
+
+| Regime | Method ÷ truth at 100 mg/dL | At 150 | At 200 | 100:200 by the method | 100:200 in truth | People with both bins |
+|---|---:|---:|---:|---:|---:|---:|
+| oref0 with SMB | 4.29 (3.83 to 4.50) | 1.28 (1.19 to 1.40) | 0.62 (0.53 to 0.73) | 3.62 (3.06 to 4.30) | 0.53 (0.49 to 0.55) | 28 |
+| oref0 with SMB, no site faults | 4.27 (4.02 to 4.61) | 1.40 (1.27 to 1.51) | 1.15 (0.84 to 1.24) | 1.98 (1.61 to 3.02) | 0.50 (0.47 to 0.61) | 11 |
+| Corrections by hand | 15.55 (13.47 to 20.00) | 4.71 (4.00 to 5.21) | 1.69 (1.35 to 1.85) | 4.85 (3.92 to 6.67) | 0.52 (0.49 to 0.54) | 29 |
+| Corrections by hand, no site faults | 17.94 (16.67 to 20.06) | 5.00 (4.26 to 5.76) | 1.88 (1.72 to 2.28) | 4.64 (4.33 to 5.70) | 0.52 (0.49 to 0.54) | 29 |
+| Meal boluses only | 14.90 (11.62 to 16.70) | 16.00 (12.72 to 19.59) | 28.18 (17.33 to 70.38) | 0.24 (0.10 to 0.45) | 0.52 (0.49 to 0.54) | 29 |
+
+In the four regimes that gave corrections, the method's value at 100 mg/dL was 2.0
+to 4.9 times its value at 200, and every interval lies above 1. The truth ran the
+other way, at about half. The real cohorts gave 2.2 to 4.0 and the published
+equation gives 2.61, so the simulator returned the published shape between 100 and
+200 mg/dL from a sensitivity that rose with glucose. The arithmetic behind it is
+the same as in the real records, described under "Near target" below. Under oref0
+the median fall was 32 mg/dL for events at 100 mg/dL and 41 for events at 200,
+while the median insulin used rose from 0.63 to 3.88 U.
+
+The table's values are medians over events with positive insulin used, as on the
+cohorts. Under oref0, 6 to 7% of events at 100 mg/dL had no net insulin used and
+none did at 150 or 200. With corrections by hand the share was 32 to 40% at 100
+and 150 mg/dL and nil at 200.
+
+With meal boluses only, the method's curve rose with glucose. From 150 mg/dL
+upward the median event in that regime had no net insulin used, and 66 to 77% of
+events had none. Its values rest on the remaining events, whose doses were near
+zero, and they ran from 15 times the truth at 100 mg/dL to several thousand times
+it at 300. The arm with no loop in the first run behaved in the same way. Across
+both runs the curve fell where insulin was given in response to high glucose and
+did not fall where it was not, whatever the true sensitivity did.
+
+The level was wrong in both directions. Under oref0 the method read 4.29 times the
+truth at 100 mg/dL and 0.62 of it at 200.
+
+Above 200 mg/dL the check is thin. In the regimes with corrections the middle
+90% of a typical person's sensor readings lay between 78 and 241 mg/dL. One of them, corrections by hand
+with site faults, held ten people at 250 mg/dL. There the method's value was 0.83
+(0.75 to 1.07) of its value at 200, from 17 people, where the truth was 1.16 (1.13
+to 1.22) of it. No regime with corrections filled a bin at 300 mg/dL.
+
+Four limits apply to the second run. TimSim's own audit records that its
+validation figures predate a rebuild, so it is not described here as validated.
+The run shows what the method returns from a known truth and says nothing about
+what the truth is in people. The truth was measured fasting with the added layers
+off, and a free-living high usually has carbohydrate still absorbing and more
+insulin on board. A truth measured inside the free-living runs was not attempted.
+The bins are five times wider than those used on the cohorts. The nine people left
+out each had a run that ended early, so the 31 are selected on having completed.
+Nine runs ended through hypoglycaemia, eight of them under oref0, and four through
+hyperglycaemia, all with meal boluses only.
 
 ### Near target
 
@@ -250,8 +350,8 @@ all, and a line fitted through each person's events put the fall at zero net
 insulin at 27 to 44 mg/dL. In type 1 diabetes a raised glucose does not fall
 without insulin, so that fall is basal and earlier doses acting, together with the
 selection of events that end at a minimum. The steep part of the curve below 150
-mg/dL therefore rests on very small net doses, and it has not been tested against
-a known truth.
+mg/dL therefore rests on very small net doses. The second simulation showed the
+same pattern, and there the value at 100 mg/dL was 4.3 to 17.9 times the truth.
 
 ### Above 200 mg/dL
 
@@ -260,8 +360,10 @@ The two measures disagree here. By the ratio of fall to insulin used, the value 
 people, and 0.96 (0.84 to 1.08) under Loop, from 137 people. Both intervals
 exclude the published 0.69. Measured as the extra fall per extra unit, the same
 comparison gave 0.66 (0.49 to 0.73) in REPLACE-BG, from 24 people, and 0.73 (0.64
-to 0.93) under Loop, from 49 people, and both of those include 0.69. No simulated
-arm reached 300 mg/dL, so neither measure has a known-truth check there.
+to 0.93) under Loop, from 49 people, and both of those include 0.69. No
+simulated regime with corrections reached 300 mg/dL, so neither measure has a
+known-truth check there. The extra fall per extra unit was not computed in the
+second simulation.
 
 ### As a predictor
 
@@ -280,10 +382,14 @@ All of this is observational, and the publication is a conference abstract from
 the system's manufacturer. As a description of net fall per net unit in events
 chosen from peak to minimum, the equation is reproducible on other people's data
 between 100 and 200 mg/dL. As a statement that a unit of insulin does less at
-higher glucose, it is unsupported between 150 and 250 mg/dL and open on either
-side of that range. Whether a loop that doses to it does better than
-one dosing to either existing model or to a flat profile is a separate question. No
-evidence in this series bears on it directly.
+higher glucose, it is unsupported from 100 to 250 mg/dL, because the method
+returned the same falling shape from a simulator in which a unit does more at
+higher glucose. Above 250 mg/dL it is open.
+
+The measurement therefore cannot justify dosing to the equation. Whether a loop
+that doses to it does better than one dosing to either existing model or to a flat
+profile is a separate question, and it is the only route left by which the
+equation could be justified. No evidence in this series bears on it directly.
 
 A proposal from June 2026 that used this shape (document 3) was withdrawn for live
 dosing on 16 September 2026. The audit of that date left the way open for such
@@ -413,13 +519,16 @@ second takes the conventional rule to be right near target, and it puts the whol
 curve at less than half the height of the first. The last four rows are the
 measured values from the previous section, read at 200 mg/dL. Trio's interval,
 from 22 people, includes this draft's 1,674. The other three intervals lie above
-it. The measured rows probably sit too high, since the same measurement on
-simulated people with a true value of 2,000 read 1.4 to 3.4 times above it, and
-daily dose was not defined the same way in each source.
+it. How far the measured rows sit from a true level is not known. At 200 mg/dL
+the same measurement on simulated people read between 0.62 and 2.4 times the
+truth across the seven regimes that dosed in response to glucose, and daily dose
+was not
+defined the same way in each source.
 
 No default can be chosen from these figures. The reference doses run from 24 to
-107 U, and narrowing that range is the purpose of the second stage of the
-evaluation. For any one person the adjustment factor moves the level in either
+107 U. The measurement cannot narrow that range alone, given how far it sat from
+the truth in simulation, so the level is left to the fourth stage of the
+evaluation, which gives each person a starting adjustment factor. For any one person the adjustment factor moves the level in either
 direction, as it does now. Its guidance has to be worked out again, because at
 100% the new value at 100 mg/dL is 2.52 times the existing one.
 
@@ -504,10 +613,11 @@ shows how much insulin each arm asks for and in whom. It is descriptive and has 
 pass rule.
 
 The second stage runs the publication's measurement (`inv012/peak_trough.py`) on
-AndroidAPS and Trio records under the published event rules, and extends the
-simulated constant-sensitivity arms to reach 100 and 300 mg/dL. It decides the
-default level. It also shows whether the decline near target and above 250 mg/dL
-appears with no real effect behind it, as it does in between.
+AndroidAPS and Trio records under the published event rules. An earlier draft had
+this stage decide the default level. The simulation with a measured truth has
+since covered 100 to 250 mg/dL, and the measurement sat too far from the truth
+there to set one. What remains for the simulation is 300 mg/dL and a truth
+measured inside the free-living runs.
 
 The third stage is simulation in TimSim, with runs paired by seed and arms for
 unannounced meals and for a mis-set adjustment factor. A harm rule is written
@@ -546,7 +656,9 @@ mg/dL may not apply to open-source systems, since the measurement on Loop and
 oref0 records read higher at 200 mg/dL and only Trio's wide interval includes it.
 
 It is an open question whether the steep part between 100 and 150 mg/dL should be
-used for dosing at all, given how many events there involved no net insulin. The
+used for dosing at all, given how many events there involved no net insulin, and given that the
+simulation returned the same steepness from a sensitivity that ran the other way.
+The
 question of whether to use the published quadratic below 100 mg/dL belongs with
 it.
 
@@ -558,6 +670,11 @@ Parts of the existing systems were not read. The bolus calculator's sensitivity 
 dynamic mode is one, and the behaviour of autosens in that mode is another.
 TimSim's oref adapter has not been checked for whether it runs the logarithmic
 model closely enough to act as the comparator in the third stage.
+
+The third stage has a further limit. In TimSim a unit of insulin does more at
+higher glucose, and the equation assumes it does less. A result from that stage
+describes the equation in a body built the other way, and whether people resemble
+the simulator in this respect is not known.
 
 The last question is for the maintainers of AndroidAPS and Trio, and it is whether
 they want one shared definition. The two systems run the same equation and, at
@@ -571,7 +688,11 @@ the numbers in this document's worked examples and in every table except the
 refit. `python3 -m inv013.refit` writes `results/inv013_refit.md`, with the refit
 tables and the refitted coefficients. It reads the per-person bins that `python3
 -m inv012.peak_trough` writes, a file too large to keep in git, and checks them
-against the committed INV-012 table before fitting.
+against the committed INV-012 table before fitting. `python -m
+inv014.known_truth --timsim <TimSim checkout>` writes
+`results/inv014_known_truth.md`, the simulation with a measured truth. It needs an
+interpreter with simglucose and took about three hours on seven workers. Its
+per-person tables stay out of git.
 `inv013/tests/test_candidate.py` checks the logarithmic equation against the
 replay code of INV-008, Trio's form against AndroidAPS's, and the published fit
 against the values in the abstract and on the poster's figure. It also checks the
@@ -600,3 +721,7 @@ systems for a general reader.
 3. AndroidAPS source history, github.com/nightscout/AndroidAPS. Commit f98175755e
    (12 February 2022) introduced 277700 / (TDD * bg), and commit c233f9ba12 (13
    June 2022) replaced it with 1800 / (TDD * ln(bg / divisor + 1)).
+4. Kovatchev BP, Breton M, Dalla Man C, Cobelli C. In silico preclinical trials: a
+   proof of concept in closed-loop control of type 1 diabetes. J Diabetes Sci
+   Technol 2009;3(1):44-55.
+5. Xie J. Simglucose v0.2.1. 2018. github.com/jxx123/simglucose

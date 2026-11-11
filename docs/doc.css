@@ -9,6 +9,7 @@ p { margin: 0 0 8pt 0; }
 ul { margin: 0 0 10pt 0; padding-left: 16pt; }
 li { margin-bottom: 4pt; }
 table { border-collapse: collapse; width: 100%; margin: 10pt 0 12pt 0; font-size: 9.5pt; }
+tr { break-inside: avoid; }  /* a row split over a page leaves its centred cells on the wrong page */
 th { text-align: left; border-bottom: 1.2px solid #52514e; padding: 4pt 6pt; font-weight: 600; }
 td { border-bottom: 1px solid #e3e2dc; padding: 4pt 6pt; }
 img { max-width: 100%; height: auto; margin: 8pt 0 4pt 0; }
