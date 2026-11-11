@@ -26,7 +26,7 @@ algorithm (TimSim's "basal-bolus": scheduled basal, a bolus for announced carboh
 a correction only with a meal) and oref0 with SMB. Each regime is run with the infusion
 site layer on and off. `inv012.peak_trough.find_events` and `person_bins` are used
 unchanged, and the comparison is on the median over events with positive insulin used,
-as in INV-012.
+as in INV-012. (Four things in this paragraph changed after a pilot and are listed below.)
 
 Modelling choices, fixed before the run:
   TimSim at the commit recorded in the results file, its 40 adults with titrated
@@ -61,6 +61,28 @@ stay level or fall while the truth rises. A method ratio that follows the truth'
 within its interval at every pair of bins would count against the claim that the
 method's shape is produced by the method.
 
+Changed on 11 November 2026 after the four arms were piloted on one person, and before
+any cohort run:
+  Bins are 50 mg/dL wide and centred on 100, 150, 200, 250 and 300 mg/dL, where INV-012
+  and the published method round the midpoint to 10 mg/dL. The pilot found about 120
+  events in 28 days. The 10 mg/dL bins at 250 and 300 mg/dL held fewer than 5 of them
+  under both regimes, and the bin at 200 mg/dL held none under oref0. The truth is read
+  at the centre of each bin. Runs are 56 days.
+  A regime of corrections by hand was added, with the site layer on and off: scheduled
+  basal, the same meal bolus, and a full correction towards 140 mg/dL net of insulin on
+  board whenever the sensor reads above 180 mg/dL, at most once in 3 h. The built-in
+  therapy corrects only with a meal, so in the pilot more than half of its events had
+  no net insulin used in nine of eleven bins, and the remaining ratios rested on doses
+  near zero. The
+  threshold, the target and the interval are choices and were not fitted to anything.
+  The built-in therapy is kept with the site layer on, as the arm in which nobody doses
+  between meals, and its site-off arm was dropped.
+  Scheduled basal is rounded to the pump's increment before it is subtracted. The
+  pilot person's schedule of 1.111 U/h is delivered as 1.10 U/h, which had put a
+  standing negative dose into the record.
+The expectations above were not changed, and they apply to the corrections-by-hand arms
+as written.
+
     python -m inv014.known_truth --timsim ~/StudioProjects/TimSim
 
 from the repository root, with an interpreter that has simglucose, and DYNISF_ROOT
@@ -91,9 +113,12 @@ RATES = (0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.15, 1.3, 1.5, 1.75)   # of sc
 HOLD_H, WATCH_H, SETTLE_H = 40, 8, 6
 BOLUS_MIN_OF_BASAL = 30.0
 MAX_DRIFT = 5.0            # mg/dL over SETTLE_H
-PANEL, DAYS, WORKERS = 40, 28, 7
+PANEL, DAYS, WORKERS = 40, 56, 7
+BIN_WIDTH = 50.0
+HAND = dict(target=140.0, correct_above=180.0, min_interval_min=180.0)
 ARMS = (("oref0 SMB", "oref", True), ("oref0 SMB, site off", "oref", False),
-        ("no algorithm", "basal-bolus", True), ("no algorithm, site off", "basal-bolus", False))
+        ("corrections by hand", "hand", True), ("corrections by hand, site off", "hand", False),
+        ("meal boluses only", "basal-bolus", True))
 
 
 def _sim(timsim: str):
@@ -169,6 +194,13 @@ def arm_job(job):
     if driver == "oref":
         from timsim.controller import oref
         ctrl = oref.OrefController(name, profile=prof)
+    if driver == "hand":       # the built-in therapy with a correction rule and basal left at schedule
+        from timsim.controller.loop import LoopSettings
+        inf = float("inf")
+        ctrl = LoopSettings(**HAND, correction_fraction=1.0, max_correction_u=prof.limits.max_bolus_u,
+                            max_iob_u=prof.limits.max_iob_u, predict_min=0.0, trend_window_min=0.0,
+                            suspend_below=-inf, reduce_below=-inf, boost_above=inf,
+                            max_basal_above=inf, max_basal_scale=1.0)
     row = dict(subject=name, arm=arm, error="", termination="")
     try:
         r = simulate(name, days=days, seed=seed, layers=layers, controller=ctrl, profile=prof)
@@ -181,7 +213,9 @@ def arm_job(job):
     cgm = np.asarray(r.cgm, float)
     bg = cgm.copy()
     bg[(bg < BG_LO) | (bg > BG_HI)] = np.nan
-    sched = np.array([prof.basal_at(m - step) for m in r.minutes]) * step
+    from timsim.therapy.limits import _to_nearest
+    inc = prof.limits.basal_increment_u_per_hour
+    sched = np.array([_to_nearest(prof.basal_at(m - step) * 60.0, inc) for m in r.minutes]) / 60.0 * step
     carbs = np.zeros(n)
     for minute, _, announced in r.announced_log:
         i = int(np.searchsorted(r.minutes, minute))
@@ -193,10 +227,12 @@ def arm_job(job):
     row.update(termination=r.termination or "", completed=bool(r.completed), controller=r.controller,
                layers=",".join(r.layers), tdd=tdd, n_events=len(ev), days=n * step / 1440.0,
                announced=int((carbs > 0).sum()), unannounced=int(r.meals_unannounced),
-               rescues=int(r.rescue_events), tar180=float(100 * np.mean(cgm > 180)),
+               rescues=int(r.rescue_events),
+               basal_net=float((r.insulin_series - sched - r.bolus_series).sum() / (n * step / 1440.0)),
+               bolus=float(r.bolus_series.sum() / (n * step / 1440.0)), tar180=float(100 * np.mean(cgm > 180)),
                tar250=float(100 * np.mean(cgm > 250)), tbr70=float(100 * np.mean(cgm < 70)),
                **{f"p{q}": float(v) for q, v in zip((5, 25, 50, 75, 95), pct)})
-    return row, person_bins(ev, tdd).assign(subject=name, arm=arm, tdd=tdd)
+    return row, person_bins(ev, tdd, BIN_WIDTH).assign(subject=name, arm=arm, tdd=tdd)
 
 
 def _pool(fn, jobs, workers):
@@ -217,7 +253,7 @@ def report(truth: pd.DataFrame, runs: pd.DataFrame, pb: pd.DataFrame, stamp: str
     L = ["# INV-014: the peak-to-trough method against a measured truth in TimSim", "",
          f"Generated by `inv014/known_truth.py`. {stamp}", "",
          "Medians over people with a 95% interval from resampling people. A dash marks fewer "
-         f"than {MIN_PEOPLE} people.", "", "## The true sensitivity by glucose", ""]
+         f"than {MIN_PEOPLE} people. Bins are {BIN_WIDTH:.0f} mg/dL wide.", "", "## The true sensitivity by glucose", ""]
     bad = truth[(truth.error != "") | (truth.termination.fillna("") != "")]
     good = truth.drop(bad.index)
     settled = good[good.drift.abs() <= MAX_DRIFT]
@@ -242,16 +278,17 @@ def report(truth: pd.DataFrame, runs: pd.DataFrame, pb: pd.DataFrame, stamp: str
     per = ok.groupby("subject").arm.nunique()
     panel = per[per == len(ARMS)].index
     L += [f"{len(panel)} people completed all {len(ARMS)} arms and are the panel for every table below.", "",
-          "| Arm | Runs | Raised | Ended early | Controller and layers as run | Daily dose, U | Events | "
+          "| Arm | Runs | Raised | Ended early | Controller and layers as run | Daily dose, U | "
+          "Bolus, U/day | Basal away from schedule, U/day | Events | "
           "Sensor glucose 5th, 50th, 95th percentile, mg/dL | Above 180 | Above 250 | Below 70 |",
-          "|---|---:|---:|---:|---|---:|---:|---|---:|---:|---:|"]
+          "|---|---:|---:|---:|---|---:|---:|---:|---:|---|---:|---:|---:|"]
     for arm, d in runs.groupby("arm", sort=False):
         p = d[d.subject.isin(panel)]
         ends = d[d.termination != ""].termination.value_counts()
         L.append(f"| {arm} | {len(d)} | {int((d.error != '').sum())} | "
                  f"{', '.join(f'{k} {v}' for k, v in ends.items()) or 0} | "
                  f"{', '.join(sorted(set(p.controller)))}: {', '.join(sorted(set(p.layers)))} | "
-                 f"{p.tdd.median():.1f} | {int(p.n_events.sum())} | "
+                 f"{p.tdd.median():.1f} | {p.bolus.median():.1f} | {p.basal_net.median():.2f} | {int(p.n_events.sum())} | "
                  f"{p.p5.median():.0f}, {p.p50.median():.0f}, {p.p95.median():.0f} | "
                  f"{p.tar180.median():.1f}% | {p.tar250.median():.1f}% | {p.tbr70.median():.1f}% |")
     L.append("")

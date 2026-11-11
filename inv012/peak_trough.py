@@ -160,11 +160,11 @@ def _line(d: pd.DataFrame) -> pd.Series:
     return pd.Series({"icpt": icpt, "slope": slope})
 
 
-def person_bins(ev: pd.DataFrame, tdd: float) -> pd.DataFrame:
+def person_bins(ev: pd.DataFrame, tdd: float, width: float = 10.0) -> pd.DataFrame:
     """One person's ISF x TDD by midpoint glucose, as three ratios and a fitted line."""
     if ev.empty:
         return ev
-    ev = ev.assign(mid=(np.round((ev.g_max + ev.g_min) / 20.0) * 10).astype(int),
+    ev = ev.assign(mid=(np.round((ev.g_max + ev.g_min) / (2 * width)) * width).astype(int),
                    dg=ev.g_max - ev.g_min)
     with np.errstate(divide="ignore"):
         ev["isf_tdd"] = ev.dg / ev.used * tdd
