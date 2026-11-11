@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from inv008.dynisf import isf_v1
+from inv008.dynisf import isf_v1, quartic_isf
 from inv013.candidate import (_QUADRATIC, candidate, curve_isf, curve_k, curve_profile, curve_shape,
                               own_levels, published, stock_v1, trio_log, trio_sigmoid, units_to_target)
 
@@ -71,3 +71,19 @@ def test_own_levels_reads_the_positive_insulin_table_and_not_the_one_above_it():
     assert own["Loop"] == (842, own["Loop"][1]) and own["Loop"][1][100] == (6974.0, 6659.0, 7194.0)
     assert 250 not in own["Trio"][1] and own["no algorithm (REPLACE-BG)"][1][200][0] == 3283.0
     assert published(100.0) == pytest.approx(79.0, abs=0.1) and published(180.0) == pytest.approx(35.3, abs=0.05)
+
+
+def test_refit_returns_a_known_quartic_and_the_scale_of_a_scaled_published_curve():
+    import pandas as pd
+    from inv013.refit import refit
+    g = np.arange(100, 310, 10)
+    truth = lambda x: 9000 - 60 * x + 0.2 * x ** 2 - 3e-4 * x ** 3 + 2e-7 * x ** 4
+    wide = pd.DataFrame(np.tile(truth(g.astype(float)), (12, 1)), columns=g)
+    r = refit(wide, n_boot=5)
+    assert r["level"][200][0] == pytest.approx(truth(200.0)) and r["miss_refit"] < 1e-6
+    assert r["shape"][100][0] == pytest.approx(truth(100.0) / truth(180.0))
+    np.testing.assert_allclose(r["coef"][::-1], [9000, -60, 0.2, -3e-4, 2e-7], rtol=1e-4)
+    # People who follow the published curve at 60 U a day give that scale back and no miss.
+    same = pd.DataFrame(np.tile(60.0 * quartic_isf(g.astype(float)), (12, 1)), columns=g)
+    r = refit(same, n_boot=5)
+    assert r["scale"][0] == pytest.approx(60.0) and r["miss_published"] < 1e-9
