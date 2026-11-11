@@ -4,8 +4,10 @@
 The candidate is the glucose curve published by Romero-Ugalde et al. (Diabetes 2025;
 74 Suppl 1: 920-P, doi:10.2337/db25-920-P), linked to total daily dose. The published
 curve is a sensitivity in mg/dL per unit with no daily dose in it: 79 at 100 mg/dL,
-35 at 180, below 20 above 300. Its quartic for glucose above 100 mg/dL is
-`inv008.dynisf.quartic_isf`, taken from the poster in March 2026.
+35 at 180, below 20 above 300. The poster's figure fits it in two pieces, a quartic
+for glucose in (100, 380] (`inv008.dynisf.quartic_isf`) and a quadratic for [0, 100]
+(`_QUADRATIC` below). Both sets of coefficients were checked against the figure on
+11 November 2026.
 
 The link to daily dose is this repository's and is a modelling choice. The entered
 settings' product for adults (sensitivity x daily dose = 1915, document 6) is taken to
@@ -14,8 +16,10 @@ hold at 180 mg/dL, the reference glucose the abstract uses, which gives
     sensitivity = 1915 x quartic(glucose) / quartic(180) / TDD
 
 `curve_profile` is the alternative link, the same shape scaled by the profile value.
-Below 100 mg/dL the curve is held at its value at 100 (the published curve falls there)
-and above 400 mg/dL at its value at 400 (the published range ends there). Both are
+Below 100 mg/dL the curve is held at its value at 100 where the published quadratic
+falls to 65 near 60 mg/dL, so it gives less insulin there than the published curve;
+the March 2026 work declined the quadratic for dosing on the same ground. Above 380
+mg/dL it is held at its value at 380, where the published fit ends. Both are
 modelling choices. Nothing here was fitted.
 
 The comparators are written from the stock sources read on 10 November 2026:
@@ -44,13 +48,15 @@ import numpy as np
 from inv008.dynisf import quartic_isf
 
 DIVISORS = {"rapid, 75 min peak": 55.0, "ultra-rapid, 55 min peak": 65.0, "45 min peak": 75.0}
-BG_POINTS = (70.0, 80.0, 100.0, 120.0, 150.0, 180.0, 200.0, 250.0, 300.0, 400.0)
+BG_POINTS = (70.0, 80.0, 100.0, 120.0, 150.0, 180.0, 200.0, 250.0, 300.0, 380.0)
 # The worked person: the simulator's, close to the adult entered median of 1915.
 PROFILE_ISF, TDD = 50.0, 40.0
 # Tenth and ninetieth percentile of blended over own average dose, 960 people (document 6).
 TDD_SWING = (0.72, 1.14)
 # The abstract's reference glucose, and the range over which the quartic is used.
-REF_GLUCOSE, CURVE_RANGE = 180.0, (100.0, 400.0)
+REF_GLUCOSE, CURVE_RANGE = 180.0, (100.0, 380.0)
+# The poster's fit for glucose in [0, 100] mg/dL: constant, linear and squared terms.
+_QUADRATIC = (98.03, -1.077, 0.008868)
 # Peak-to-trough level at 200 mg/dL on this repository's records, positive-insulin
 # median (results/inv012_peak_trough.md).
 OWN_K200 = {"Loop": 2182.0, "Trio": 2273.0, "oref0": 2398.0}
@@ -131,8 +137,9 @@ def main() -> None:
         "## Sensitivity x daily dose by glucose",
         "",
         "The stock equation is 1800 / ln(glucose / divisor + 1). The curve is",
-        "1915 x quartic(glucose) / quartic(180), held below 100 and above 400 mg/dL.",
-        "The published column is the quartic itself, in mg/dL per unit.",
+        "1915 x quartic(glucose) / quartic(180), held below 100 and above 380 mg/dL.",
+        "The published column is the poster's fit in mg/dL per unit: the quadratic up to",
+        "100 mg/dL and the quartic above. The curve uses the quartic's value at 100 (80.6).",
         "",
         "| Glucose, mg/dL | Stock, divisor 55 | Stock, divisor 65 | Stock, divisor 75 | Published | Curve | Curve over stock 55 | Curve over stock 75 |",
         "|---:|---:|---:|---:|---:|---:|---:|---:|",
@@ -140,7 +147,7 @@ def main() -> None:
     for g in bg:
         st = [float(stock_v1(g, 1.0, d)) for d in DIVISORS.values()]
         k = float(curve_k(g))
-        q = f"{float(quartic_isf(g)):.1f}" if g >= 100.0 else "-"
+        q = f"{float(quartic_isf(g)) if g > 100.0 else float(np.polyval(_QUADRATIC[::-1], g)):.1f}"
         lines.append(f"| {g:.0f} | {st[0]:.0f} | {st[1]:.0f} | {st[2]:.0f} | {q} | {k:.0f} | "
                      f"{k / st[0]:.2f} | {k / st[2]:.2f} |")
     lines += ["", "Ratio of the value at 100 to the value at 200 mg/dL: curve "
@@ -151,12 +158,12 @@ def main() -> None:
               f"Stock level at 100 mg/dL, divisor 75 over divisor 55: "
               f"{float(stock_v1(100.0, 1.0, 75.0) / stock_v1(100.0, 1.0, 55.0)):.2f}."]
 
-    fine = np.linspace(100.0, 400.0, 3001)
+    fine = np.linspace(100.0, 380.0, 2801)
     cross = lambda other: fine[np.argmin(np.abs(curve_k(fine) - other))]
     lines += ["", "Glucose at which the curve equals the stock equation: "
               + ", ".join(f"{cross(stock_v1(fine, 1.0, d)):.0f} mg/dL (divisor {d:.0f})"
                           if np.min(np.abs(curve_k(fine) - stock_v1(fine, 1.0, d))) < 1.0
-                          else f"none from 100 to 400 mg/dL (divisor {d:.0f})"
+                          else f"none from 100 to 380 mg/dL (divisor {d:.0f})"
                           for d in DIVISORS.values()) + "."]
 
     q = lambda g: float(quartic_isf(g))

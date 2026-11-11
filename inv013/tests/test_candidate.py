@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from inv008.dynisf import isf_v1
-from inv013.candidate import (candidate, curve_isf, curve_k, curve_profile, curve_shape,
+from inv013.candidate import (_QUADRATIC, candidate, curve_isf, curve_k, curve_profile, curve_shape,
                               stock_v1, trio_log, trio_sigmoid, units_to_target)
 
 BG = np.array([60.0, 80.0, 100.0, 150.0, 200.0, 300.0])
@@ -45,8 +45,10 @@ def test_curve_is_the_published_quartic_carrying_the_entered_product_at_180():
     # The abstract: doses about halved at 120 mg/dL and about doubled above 340.
     assert 1.0 / float(curve_shape(120.0)) == pytest.approx(0.5, abs=0.07)
     assert 1.0 / float(curve_shape(340.0)) == pytest.approx(2.0, abs=0.1)
-    assert float(curve_k(60.0)) == float(curve_k(100.0)) and float(curve_k(450.0)) == float(curve_k(400.0))
-    assert np.all(np.diff(curve_k(np.linspace(100.0, 400.0, 100))) < 0)
+    assert float(curve_k(60.0)) == float(curve_k(100.0)) and float(curve_k(450.0)) == float(curve_k(380.0))
+    assert np.all(np.diff(curve_k(np.linspace(100.0, 380.0, 100))) < 0)
+    # The poster's quadratic gives the abstract's 79 at 100 mg/dL and 65 near 60.
+    assert np.polyval(_QUADRATIC[::-1], [60.0, 100.0]) == pytest.approx([65.0, 79.0], abs=0.5)
     assert float(curve_isf(200.0, 40.0, factor=0.5)) == pytest.approx(2 * float(curve_isf(200.0, 40.0)))
     # The two links agree for a person whose profile x daily dose is the entered product.
     assert float(curve_profile(250.0, 1915.0 / 40.0)) == pytest.approx(float(curve_isf(250.0, 40.0)))
