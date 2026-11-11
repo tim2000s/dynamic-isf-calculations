@@ -79,11 +79,13 @@ between 50 and 100 mg/dL, falls to 35 at 180 and is below 20 above 300. Against 
 dose sized at 180 mg/dL, the authors put the dose at about half for glucose up to
 120 mg/dL and about double above 340.
 
-For glucose above 100 mg/dL the curve is carried here as a quartic, recorded in
-this series in March 2026 from the conference poster (`inv008.dynisf.quartic_isf`).
-It gives 80.6 at 100 mg/dL, 35.3 at 180 and 21.1 at 300, and dose multiples of
-0.56 at 120 and 1.95 at 340, in line with the abstract. The poster's separate
-curve for glucose below 100 mg/dL was not recorded.
+The poster's figure fits the curve in two pieces, and the coefficients used here
+were checked against that figure on 11 November 2026. For glucose above 100 and
+up to 380 mg/dL it is a quartic (`inv008.dynisf.quartic_isf`), which gives 80.6 at
+100 mg/dL, 35.3 at 180 and 21.1 at 300, and dose multiples of 0.56 at 120 and 1.95
+at 340, in line with the abstract. For glucose up to 100 mg/dL it is a quadratic,
+which gives 79.0 at 100 and 65.3 at 60. The two pieces differ by 2% where they
+meet.
 
 ### Linking it to daily dose
 
@@ -115,8 +117,9 @@ The reference implementation (`inv013/candidate.py`) anchors both links at 180
 mg/dL, a modelling choice made because that is the publication's own reference
 point. Its treatment of the ends is a modelling choice as well. Below 100 mg/dL
 the curve is held at its value at 100, which gives less insulin there than the
-published curve, since the published one falls towards 65. Above 400 mg/dL it is
-held at its value at 400, where the published range ends.
+published quadratic, which falls towards 65. Work in this series in March 2026
+declined the quadratic for dosing on the same ground. Above 380 mg/dL the curve is
+held at its value at 380, where the published fit ends.
 
 ### The level
 
@@ -187,7 +190,7 @@ insulin, recent dosing equal to their average. Values in mg/dL per unit, from
 | 200 | 29.3 | 41.7 | 42.4 | 41.9 | 43.7 | 50.0 |
 | 250 | 26.3 | 41.7 | 41.8 | 33.7 | 35.1 | 50.0 |
 | 300 | 24.1 | 41.7 | 41.7 | 28.7 | 30.0 | 50.0 |
-| 400 | 21.3 | 41.7 | 41.7 | 19.9 | 20.8 | 50.0 |
+| 380 | 21.8 | 41.7 | 41.7 | 20.7 | 21.7 | 50.0 |
 
 Against each comparator the TDD link moves dosing differently:
 
@@ -200,8 +203,10 @@ Against each comparator the TDD link moves dosing differently:
 
 ## Reading the curve for a dose
 
-The abstract does not say which glucose an event is filed under. This draft takes
-it to be the glucose halfway between the peak and the minimum, which is an
+The poster's figure plots sensitivity against a glucose labelled G(t), in bands of
+20 mg/dL from 60 to 380. Neither the abstract nor the figure says which glucose of
+an event that is, and the rest of the poster could not be retrieved. This draft
+takes it to be the glucose halfway between the peak and the minimum, which is an
 assumption. The existing code reads its equation at the current glucose, or at a
 glucose chosen by one of the three branches. For a flat sensitivity the two are
 the same. For a curve that falls this steeply they differ.
@@ -230,15 +235,15 @@ arm.
 
 | Component | Existing | Curve model | To add |
 |---|---|---|---|
-| Glucose function | 1800 / ln(glucose / divisor + 1) | The published quartic over its value at 180 mg/dL | One function per system with shared test vectors. The published curve below 100 mg/dL, from its authors |
+| Glucose function | 1800 / ln(glucose / divisor + 1) | The published quartic over its value at 180 mg/dL | One function per system with shared test vectors |
 | Insulin-type divisor | 55, 65 or 75 | None | Removed in this mode |
 | Level | 1800 | 1915 at 180 mg/dL | A default, chosen after stage 2 below. The three candidates span a factor of three |
 | Daily dose | AndroidAPS blend of five totals. Trio weighted two hour and ten day averages | Not defined by the publication | Default: the existing blend, so that this half of the behaviour is unchanged. Arm: the plain average |
 | Level for one person | Adjustment factor | The same | The factor stays. Its guidance has to be worked out again, since at 100% the value at 100 mg/dL is 2.5 times the existing one |
 | Profile link | AndroidAPS none. Trio a ratio of the profile | Profile × Q(glucose) / Q(180) | A second mode, or the Trio form of the first. A decision for the maintainers |
 | Where the curve is read | Current glucose and three branches | Not stated in the publication | A reading rule, tested in replay |
-| Below 100 and above 400 mg/dL | The equation continues | Published curve falls below 100. No data above 400 | Held at the end values. Arm: the existing logarithm's rise below 100 mg/dL |
-| Limits | AndroidAPS none. Trio 0.7 to 1.2 around the profile | Runs from 0.40 to 2.19 of the worked person's profile | A decision for Trio. Inside its default limits the curve runs only from 137 to 201 mg/dL for the worked person |
+| Below 100 and above 380 mg/dL | The equation continues | Published quadratic falls below 100. No fit above 380 | Held at the end values. Arms below 100 mg/dL: the published quadratic, and the existing logarithm's rise |
+| Limits | AndroidAPS none. Trio 0.7 to 1.2 around the profile | Runs from 0.41 to 2.19 of the worked person's profile | A decision for Trio. Inside its default limits the curve runs only from 137 to 201 mg/dL for the worked person |
 | Predictions | Sensitivity at each predicted glucose | Rises 2.61 times as predicted glucose falls from 200 to 100 mg/dL | The same call sites. Replay of the effect on minimum predicted glucose and on time at zero basal |
 | Stored value | `variableSens` in the loop result | | Both values stored while the existing one doses |
 | Settings | Adjustment factor and mode options | | A mode selector. No new number shown to the person in the first version |
@@ -317,9 +322,10 @@ that includes the new mode names the previous build.
 - Which daily dose the curve is divided by, and over how many days.
 - How the reference basal is defined, and which insulin action model gives the
   insulin on board. The abstract states neither and the level depends on both.
-- Which glucose an event is filed under. This draft assumes the midpoint.
-- The curve below 100 mg/dL, which the publication describes and this repository
-  does not hold.
+- Which glucose an event is filed under. The poster's axis is labelled G(t) without
+  a definition, and this draft assumes the midpoint.
+- Whether the published quadratic is used below 100 mg/dL. This draft holds the
+  value at 100 instead.
 
 ## Open questions
 

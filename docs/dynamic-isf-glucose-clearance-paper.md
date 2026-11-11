@@ -11,6 +11,7 @@
 > Update, 10 November 2026: section 7 is new. It applies a published peak-to-trough method to
 > eight groups and to simulated people with a fixed sensitivity. Later sections are renumbered.
 > Section 9 no longer suggests a 1/√TDD starting point, since the square-root law is withdrawn.
+> On 11 November 2026 the sentence reporting that scaling was removed from section 3 for the same reason.
 
 ---
 
@@ -65,7 +66,7 @@ Before anything subtle, the blunt result. On identical correction windows, the t
 |---|---|---|---|---|
 | typical error | 18.6 | 20.3 | 24.6 | 49.7 |
 
-A well-set static ISF essentially matches the loop and comfortably beats both dynamic forms. The v2 form, with the steepest dependence, is far and away the worst. And when you fit the relationship between ISF and total daily dose directly, it scales roughly as 1/√TDD, much gentler than either the 1/TDD or 1/TDD² the equations assume.
+A well-set static ISF essentially matches the loop and comfortably beats both dynamic forms. The v2 form, with the steepest dependence, is far and away the worst.
 
 That on its own doesn't tell you why. It just says the steep equations are reaching for something that isn't paying off on average. The rest is about what that something is.
 

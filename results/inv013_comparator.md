@@ -3,21 +3,22 @@
 ## Sensitivity x daily dose by glucose
 
 The stock equation is 1800 / ln(glucose / divisor + 1). The curve is
-1915 x quartic(glucose) / quartic(180), held below 100 and above 400 mg/dL.
-The published column is the quartic itself, in mg/dL per unit.
+1915 x quartic(glucose) / quartic(180), held below 100 and above 380 mg/dL.
+The published column is the poster's fit in mg/dL per unit: the quadratic up to
+100 mg/dL and the quartic above. The curve uses the quartic's value at 100 (80.6).
 
 | Glucose, mg/dL | Stock, divisor 55 | Stock, divisor 65 | Stock, divisor 75 | Published | Curve | Curve over stock 55 | Curve over stock 75 |
 |---:|---:|---:|---:|---:|---:|---:|---:|
-| 70 | 2193 | 2463 | 2730 | - | 4378 | 2.00 | 1.60 |
-| 80 | 2005 | 2243 | 2480 | - | 4378 | 2.18 | 1.77 |
-| 100 | 1737 | 1932 | 2124 | 80.6 | 4378 | 2.52 | 2.06 |
+| 70 | 2193 | 2463 | 2730 | 66.1 | 4378 | 2.00 | 1.60 |
+| 80 | 2005 | 2243 | 2480 | 68.6 | 4378 | 2.18 | 1.77 |
+| 100 | 1737 | 1932 | 2124 | 79.0 | 4378 | 2.52 | 2.06 |
 | 120 | 1555 | 1721 | 1884 | 63.5 | 3449 | 2.22 | 1.83 |
 | 150 | 1368 | 1505 | 1638 | 45.9 | 2492 | 1.82 | 1.52 |
 | 180 | 1239 | 1357 | 1471 | 35.3 | 1915 | 1.55 | 1.30 |
 | 200 | 1173 | 1281 | 1385 | 30.8 | 1674 | 1.43 | 1.21 |
 | 250 | 1051 | 1141 | 1228 | 24.8 | 1346 | 1.28 | 1.10 |
 | 300 | 965 | 1043 | 1118 | 21.1 | 1148 | 1.19 | 1.03 |
-| 400 | 852 | 915 | 975 | 14.6 | 795 | 0.93 | 0.82 |
+| 380 | 870 | 936 | 998 | 15.3 | 830 | 0.95 | 0.83 |
 
 Ratio of the value at 100 to the value at 200 mg/dL: curve 2.61, stock 1.48. At 300 over 200: curve 0.69, stock 0.82.
 Stock level at 100 mg/dL, divisor 75 over divisor 55: 1.22.
@@ -58,7 +59,7 @@ Values are mg/dL per unit.
 | 200 | 29.3 | 41.7 | 42.4 | 41.9 | 43.7 | 50.0 |
 | 250 | 26.3 | 41.7 | 41.8 | 33.7 | 35.1 | 50.0 |
 | 300 | 24.1 | 41.7 | 41.7 | 28.7 | 30.0 | 50.0 |
-| 400 | 21.3 | 41.7 | 41.7 | 19.9 | 20.8 | 50.0 |
+| 380 | 21.8 | 41.7 | 41.7 | 20.7 | 21.7 | 50.0 |
 
 Inside Trio's default limits (41.7 to 71.4) the curve runs only from 137 to 201 mg/dL for this person.
 
