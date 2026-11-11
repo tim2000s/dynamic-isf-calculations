@@ -49,7 +49,7 @@ Modelling choices, fixed before the run:
   The site-off arms were declared in advance because a failed site puts insulin into
   the record that never acted, and that lowers a fall-per-unit ratio at high glucose
   for a reason that is separate from the method.
-  Arms are compared on the people who completed all four. Intervals are 95%, from
+  Arms are compared on the people who completed every arm. Intervals are 95%, from
   resampling people 2,000 times. A bin needs 5 events in a person and 10 people.
 
 Expected before the run. The probe was piloted on one person on 11 November 2026 and
@@ -83,6 +83,25 @@ any cohort run:
   standing negative dose into the record.
 The expectations above were not changed, and they apply to the corrections-by-hand arms
 as written.
+
+The run, 11 November 2026 (results/inv014_known_truth.md). 443 of 480 probes were used,
+and the truth rose with glucose as expected: 0.52 (0.49 to 0.54) of a person's own 200
+mg/dL value at 100 mg/dL and 1.30 (1.25 to 1.34) at 300. 31 of the 40 people completed
+all five arms. In the four arms with corrections the method returned 4.3 to 17.9 times
+the truth x daily dose at 100 mg/dL and 1.3 to 5.0 times at 150, and its 100:200 ratio
+within person was 1.98 to 4.85 where the truth's was 0.50 to 0.53. That is as expected.
+One of those arms held 10 people at 250 mg/dL, corrections by hand with the site layer
+on. Its 250:200 ratio was 0.83 (0.75 to 1.07) by the method and 1.16 (1.13 to 1.22) in
+truth, on 17 people, also as expected. No arm with corrections reached 300 mg/dL, so
+the expectation there is untested.
+Meal boluses only went against the second and third expectations. Its ratio rose with
+glucose faster than the truth did: 0.24 (0.10 to 0.45) for 100:200 and 6.93 (1.85 to
+24.13) for 250:200. From 150 mg/dL upward the median event in that arm had no net
+insulin used and 66 to 77% of events had none, so those figures rest on a minority of
+events with doses near zero. No arm followed the truth at every pair of bins.
+The truth was measured fasting with every layer off, and the method was read on
+free-living runs with them on. A truth measured inside the free-living runs was not
+attempted.
 
     python -m inv014.known_truth --timsim ~/StudioProjects/TimSim
 
@@ -290,7 +309,9 @@ def report(truth: pd.DataFrame, runs: pd.DataFrame, pb: pd.DataFrame, stamp: str
         ends = d[d.termination != ""].termination.value_counts()
         L.append(f"| {arm} | {len(d)} | {int((d.error != '').sum())} | "
                  f"{', '.join(f'{k} {v}' for k, v in ends.items()) or 0} | "
-                 f"{', '.join(sorted(set(p.controller)))}: {', '.join(sorted(set(p.layers)))} | "
+                 # oref runs are labelled by person, which says nothing about the controller
+                 f"{p.controller.iloc[0] if p.controller.nunique() == 1 else dict((a, c) for a, c, _ in ARMS)[arm]}"
+                 f": {', '.join(sorted(set(p.layers)))} | "
                  f"{p.tdd.median():.1f} | {p.bolus.median():.1f} | {p.basal_net.median():.2f} | {int(p.n_events.sum())} | "
                  f"{p.p5.median():.0f}, {p.p50.median():.0f}, {p.p95.median():.0f} | "
                  f"{p.tar180.median():.1f}% | {p.tar250.median():.1f}% | {p.tbr70.median():.1f}% |")
