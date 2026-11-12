@@ -39,6 +39,9 @@ nit (optional) or pre-existing (record it, do not let it block).
    (user, timestamp) pairs. Collapse before counting or integrating.
 9. Units. `sug_ISF` in `oref_v5` switches between mmol/L and mg/dL within some users.
    Bolus durations are in milliseconds for three JAEB studies.
+   The profile sensitivity in `canonical_cohort.json` is already mg/dL per U. A rule that
+   converts values below 20 is checked against the person's daily dose before it is applied
+   (INV-016, 12 November 2026: three values of 10 to 14 at 62 to 115 U a day were mg/dL).
 10. Cohorts are reported separately and never pooled in absolute units: each JAEB study,
     Trio, oref0 and AndroidAPS. A constant is stated with its population, since the pooled
     JAEB record is 51% children.
