@@ -61,10 +61,15 @@ and `profile, autosens`, which is what a person has with dynamic sensitivity swi
   The rule is used only where the placebo reads cleared. Where it does not, the margin sits
   inside the drift of the design, the side is reported as undecidable at this panel size,
   and the margins are left where they are.
-  What follows from a verdict. Harm on either side against either comparator stops the
-  candidate before any code that doses from it. Code that calculates the value in shadow
-  and doses nothing is unaffected. Unresolved leads to a larger panel or a second seed.
-  Cleared on both sides against both comparators lets the fourth stage start.
+  What follows from a verdict. A harm reading on either side is reported with the arm's
+  glucose percentiles and looked into, and it does not by itself stop the candidate. Tim
+  decided this on 12 November 2026, after the two-person pilot and before the full run,
+  because the simulated body departs from the people the rule is written for in the ways
+  the next paragraph sets out. The first version of this paragraph, committed with the
+  plan, made harm a stop before any code that doses. Cleared on both sides against both
+  comparators supports starting the fourth stage. Unresolved leads to a larger panel or a
+  second seed. Code that calculates the value in shadow and doses nothing is unaffected
+  by any reading.
   `logarithmic, AndroidAPS` is reported beside these and is outside the rule, for the reason
   in the next paragraph.
 

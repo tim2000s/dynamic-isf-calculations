@@ -860,14 +860,19 @@ is written before the runs and has two sides, time below 54 mg/dL and time above
 than AndroidAPS at 100% below 211 mg/dL and more above it, and at 380 mg/dL it
 asks for 3.33 times the profile's insulin.
 
+A harm reading in the simulation is reported and looked into, and it does not by
+itself stop the candidate. The simulated body differs from the equation's premise,
+since its true sensitivity rises with glucose between 100 and 300 mg/dL, and its
+titrated profiles sit well below the level that adults enter.
+
 The fourth stage is shadow running. Both values are calculated on the device each
 cycle and stored, and the existing one doses. That gives the distribution of the
 ratio between them for each person, and for the TDD arm a starting adjustment
 factor.
 
 The fifth stage is use, on the developer's own device first and on released lines
-after that. It follows only when the third and fourth stages have passed, and it
-stops on the harm rule.
+after that. It follows only when the third stage has been reported and the fourth
+has passed, and it stops on the harm rule.
 
 The first two stages are analysis and carry the analysis checklist. The last two
 change code that can change a dose. They carry unit and guard tests, the
