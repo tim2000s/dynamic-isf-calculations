@@ -68,6 +68,12 @@ per unit, the candidate gives 79.3 mg/dL per unit at 100 mg/dL, 50.0 at 140 and
 35.6 and 29.3. Both links are modelling choices made in this document and appear
 nowhere in the publication.
 
+Multiplying gives every person the published shape, and two checks reported below
+support doing so. Attaching the curve by adding a constant in place of multiplying
+gave a sensitivity of zero or below at 299 of the 3,433 corrections. A curve
+measured separately for each person had a shape that predicted that person's
+other events no better than the shape shared by everyone, in each of six cohorts.
+
 The ends of the curve sit outside Trio's default limits. Trio holds a dynamic ISF
 between the profile ISF divided by 1.2 and the profile ISF divided by 0.7. The
 candidate stays inside that band only between 109 and 158 mg/dL. Below 109 mg/dL
@@ -575,6 +581,58 @@ their recent dosing, which is what the link to TDD adds within a person. Documen
 algorithm doses alongside the correction, and children were not tested. The 46%
 was measured overnight and the corrections were given at any hour.
 
+### Why the curve is multiplied, and why one shape is used for everyone
+
+The curve could be attached to the profile ISF by addition. Every published value
+would then be raised or lowered by the difference between the profile ISF and the
+published 50.9 mg/dL per unit at 140 mg/dL. Adding keeps the published drop in
+mg/dL per unit between any two glucose levels, where multiplying keeps the
+published ratio. The two forms were compared on the 3,433 REPLACE-BG corrections
+of the previous test (INV-017). The added form gave a sensitivity of zero or below
+at 299 of them, in 32 of the 150 people, and it reaches zero inside the published
+range for any profile ISF below 35.6 mg/dL per unit. People were then put in four
+groups by entered ISF, and the fall achieved per unit was divided by what each
+form predicted. A form that attaches the curve correctly gives the same figure in
+every group. Between the lowest and the highest group the figure differed by a
+factor of 1.53 (95% interval 0.81 to 2.89) for the multiplied form and 6.88 (3.05
+to 17.78) for the added one. The first interval includes 1 and the second lies
+above it. Falls constructed with the added form as the truth came inside the
+measured intervals only when three quarters of the six-hour fall was taken to be
+independent of the dose, which is the same reservation as in the test of the
+links.
+
+A further possibility is a curve measured for each person from their own events.
+The publication's measurement was run person by person (INV-018), first on the
+196 adults of REPLACE-BG, who had a median of 448 events each. In thirds of
+entered ISF, their curves kept 0.58, 0.56 and 0.61 of the reading at 140 mg/dL by
+250 mg/dL, and the share in the highest third was 1.06 (0.70 to 1.45) times the
+share in the lowest. The drop in mg/dL per unit over the same span was 2.32 (1.23
+to 5.51) times as large in the highest third as in the lowest, where curves that
+differ by an added constant give 1. People with different entered settings
+therefore had curves of one shape at different heights.
+
+Each person's events were then divided into two halves and a curve was built from
+each half. The height repeated: in REPLACE-BG the reading at 140 mg/dL had a rank
+correlation of 0.74 (0.66 to 0.82) between the halves, and in the seven other
+cohorts it was 0.78 to 0.95. The shape was tested by prediction. A person's share
+kept at 190 and at 250 mg/dL in one half was predicted from their own other half
+and from the median person's, and the second miss was divided by the first, so
+that a figure above 1 favours the person's own shape. Across the six cohorts with enough people
+it was 0.87 to 1.01 at 190 mg/dL and 0.96 to 1.03 at 250, and no interval lay
+above 1. Longer records did not change that. Among 38 people using Loop with at
+least 1,600 events each, the figure was 1.06 (0.93 to 1.20) at 190 mg/dL, the
+highest in the run. Trio and oref0 had too few people for the comparison of
+shapes.
+
+The height of a person's measured curve is not used either. Its reading at 140
+mg/dL was 2.5 to 2.9 times the entered ISF in every third, because the
+measurement credits the whole fall to insulin above scheduled basal and leaves
+out the events with no net insulin used, which were 30% of the median person's
+events at that glucose. The third of people with the lowest settings entered a
+median of 30 mg/dL per unit and read 69 by the measurement. A correction from 200
+to 100 mg/dL sized on 69 would be 1.4 U, against 3.3 U on the entered setting. The candidate therefore takes its height
+from the profile ISF and its shape from the publication.
+
 ### One person under each model
 
 The worked person has a profile ISF of 50 mg/dL per unit, a daily dose of 40 U,
@@ -753,7 +811,10 @@ part of the replay.
 The remaining additions are smaller. The loop result already stores the
 sensitivity it used (`variableSens` in AndroidAPS), and during evaluation both the
 existing and the new value are stored while the existing one doses. Settings gain
-a mode selector and, in a first version, no new number for the person to set. Each
+a mode selector and, in a first version, no new number for the person to set.
+The first version also leaves out any adjustment for recent dosing. The code is
+written against the standard AndroidAPS and Trio repositories, so that builds
+derived from them inherit it. Each
 system gets unit tests on the shared reference vectors and replay assets for the
 new mode, alongside its existing tests (`ReplayApsResultsTest` in AndroidAPS,
 `DynamicISFTests` in Trio). A guard test confirms that the existing modes' output
@@ -830,9 +891,9 @@ The link is settled only as far as INV-015 reaches, which is between adults who
 gave their own corrections with no algorithm dosing. Whether the profile ISF is
 as good a scale for a person whose loop does most of the correcting has not been
 tested. The same test on loop records would need the algorithm's insulin counted
-with the correction. Whether the candidate should also carry a multiplier for
-recent dose against the person's own average, which is what the link to TDD adds
-within a person, is open as well.
+with the correction. The first version of the candidate carries no multiplier
+for recent dose against the person's own average, which is what the link to TDD
+adds within a person. Whether a later version should carry one is open.
 
 The anchor is open. The 140 mg/dL used here is an initial proposal, and the
 publication's reference is 180 mg/dL. The two differ by a factor of 1.44 in every
@@ -882,7 +943,12 @@ per-person tables stay out of git. `python3 -m inv015.link` writes
 corrections, and `inv015/tests/test_link.py` checks that the regression returns a
 link it was given. `python3 -m inv016.replay --replay <INV-008 replay cache>
 --cohort <canonical_cohort.json>` writes `results/inv016_replay.md`, the replay
-on recorded histories.
+on recorded histories. `python3 -m inv017.shift_or_scale` writes
+`results/inv017_shift_or_scale.md`, the comparison of multiplying with adding.
+`python3 -m inv018.person_curves` writes `results/inv018_person_curves.md`, the
+curve of each person in REPLACE-BG. `python3 -m inv018.split_half` and `python3 -m
+inv018.split_half_cohorts` write the comparison of halves, on REPLACE-BG and on
+all eight cohorts.
 `inv013/tests/test_candidate.py` checks the logarithmic equation against the
 replay code of INV-008, Trio's form against AndroidAPS's, and the published fit
 against the values in the abstract and on the poster's figure. It also checks that
@@ -900,8 +966,9 @@ systems for a general reader. The third (commit 1667e8f) carried the link to TDD
 as the candidate and judged the equation against the simulations. The fourth
 (commit b19e3f1) anchored both links at 180 mg/dL. The fifth (commit e856095)
 moved the anchor to 140 mg/dL and set a reading of the curve at the midpoint of a
-correction beside the reading at the current glucose. This version applies the
-equation at the current glucose only.
+correction beside the reading at the current glucose. The sixth (commit
+1468fc2) applied the equation at the current glucose only. This version adds the
+evidence for multiplying the curve and for one shape shared by everyone.
 
 ## References
 
