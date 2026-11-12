@@ -59,6 +59,15 @@ value at 180 mg/dL, at 100, 150, 200, 250 and 300 mg/dL):
   Time since a meal enters no arm. Within a glucose band it should change nothing, and
   the totals should be highest in the two hours after an entry, where glucose is highest.
 
+Changed on 12 November 2026: the anchor in `inv013.candidate` moved from 180 to 140
+mg/dL, so a person's entered setting is taken to hold at 140. Expected before the rerun:
+the published value at 140 is 1.44 times its value at 180, so every cell of the two
+profile-link arms and the two arms linked to the daily dose is 1.44 times its earlier
+value, and the other three arms are unchanged. The midpoint reading now passes 1 at a
+reading of 180 mg/dL and the start reading at 140. The expectations above are kept as
+written for the earlier anchor. The rerun agreed: the three other arms did not change in
+any cell, and the four that did changed by 1.44 to within the rounding of the report.
+
 The run agreed with each expectation but one: the totals were as high from two to four
 hours after an entry as in the first two. Only 0, 2 and 5 people in the three cohorts fell
 below one entry a day, so the stage describes people who announce meals.
