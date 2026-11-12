@@ -2,7 +2,7 @@
 title: "An alternative proposal for dynamic ISF in open-source AID systems"
 subtitle: "The Diabeloop glucose curve, tested on other cohorts and set against the logarithmic and sigmoid models"
 author: "Tim Street, Diabettech"
-date: "11 November 2026"
+date: "12 November 2026"
 ---
 
 ## Summary
@@ -62,6 +62,17 @@ For an adult on 40 U a day with a profile ISF of 50 mg/dL per unit, the candidat
 gives 114.3 mg/dL per unit at 100 mg/dL and 43.7 at 200. AndroidAPS at an
 adjustment factor of 100% gives that person 43.4 and 29.3. Both links are
 modelling choices made in this document and appear nowhere in the publication.
+
+The ends of the curve sit outside Trio's default limits. Trio holds a dynamic ISF
+between the profile ISF divided by 1.2 and the profile ISF divided by 0.7. The
+candidate stays inside that band only between 141 and 208 mg/dL. Below 141 mg/dL
+it gives a higher sensitivity than Trio allows, reaching 2.29 times the profile
+ISF at 100 mg/dL against a ceiling of 1.43. Above 208 mg/dL it gives a lower one,
+reaching 0.43 times the profile ISF at 380 mg/dL against a floor of 0.83. With the
+limits unchanged, Trio would dose from the curve over 67 of the 280 mg/dL it
+covers. The limits need a decision from Trio's maintainers before the model can
+run there as published. AndroidAPS applies no such limit in its dynamic ISF
+calculation.
 
 Two things are unsettled. The first is how far that comparison reaches. It covers
 adults on a pump who gave their own corrections, and it compares people with each
@@ -579,6 +590,48 @@ ground. Above 380 mg/dL, where the fit ends, the value at 380 is held.
 This document carries the link to the profile as the candidate, on the result
 above, and the link to TDD as an arm of the evaluation.
 
+### The ends of the curve and Trio's limits
+
+Trio holds the ratio of the profile ISF to the dynamic value inside the autosens
+limits, 0.7 and 1.2 by default. The candidate is the profile ISF multiplied by the
+curve's shape, so the limits act on the shape itself: it may run from 0.83 to 1.43
+of its value at 180 mg/dL. The published shape runs from 0.43 to 2.29. It lies
+inside the limits between 141 and 208 mg/dL and outside them over the rest of its
+range. Those two glucose values are the same for every person on the profile
+link, whatever their profile ISF.
+
+The table gives the worked person's sensitivity from the curve, and the value
+Trio's default limits would pass on to the dose, in mg/dL per unit.
+
+| Glucose, mg/dL | Curve linked to profile | With Trio's default limits | Held by |
+|---:|---:|---:|---|
+| 100 | 114.3 | 71.4 | Lower limit, 0.7 |
+| 120 | 90.1 | 71.4 | Lower limit, 0.7 |
+| 150 | 65.1 | 65.1 | |
+| 180 | 50.0 | 50.0 | |
+| 200 | 43.7 | 43.7 | |
+| 250 | 35.1 | 41.7 | Upper limit, 1.2 |
+| 300 | 30.0 | 41.7 | Upper limit, 1.2 |
+| 380 | 21.7 | 41.7 | Upper limit, 1.2 |
+
+Both ends are affected. Near target the curve withholds more insulin than the
+limits allow: at 100 mg/dL it asks for 0.44 of what the profile would, and the
+lower limit holds that at 0.7. At high glucose it asks for more: 1.67 times the
+profile's insulin at 300 mg/dL and 2.30 times at 380, where the upper limit holds
+1.2. A correction from 300 mg/dL to 100, read at the starting glucose, is 6.67 U
+from the curve and 4.80 U inside the limits.
+
+With the limits as they are, the model in Trio would be the profile ISF with a
+narrow adjustment between 141 and 208 mg/dL, and the published curve would not be
+what doses. Running the curve as published needs limits for this mode of about
+0.44 and 2.30, or no limits on it, and the upper figure is the one that carries
+risk, since it more than doubles a correction at the top of the range. Which of
+these Trio should do is a question for its maintainers. The third stage of the
+evaluation runs the candidate with and without the default limits so that the
+decision has figures behind it. `calculateRawDynIsf` in AndroidAPS applies no
+limit, so the whole curve would reach the dose there, and the same question about
+the top of the range applies to it.
+
 ### The level of the TDD arm
 
 The link to the profile needs no level, because the entered ISF supplies it. The
@@ -650,11 +703,8 @@ The glucose function is the smallest part. One function per system returns the
 published quartic divided by its value at 180 mg/dL, with test vectors shared
 between the two codebases so that both return the same values.
 
-Trio's limits need a decision from its maintainers. For the worked person the
-equation runs from 21.7 to 114.3 mg/dL per unit, and Trio's default limits would
-hold it between 41.7 and 71.4. That leaves it free to move only between 141 and
-208 mg/dL, so with the limits unchanged most of the curve would never reach the
-dose.
+Trio's limits need a decision from its maintainers, as set out above: with the
+defaults unchanged the curve reaches the dose only between 141 and 208 mg/dL.
 
 The forecasts are affected as well as the dose. Both systems calculate a
 sensitivity at each predicted glucose, and the call sites can stay as they are.
@@ -704,7 +754,8 @@ measured inside the free-living runs.
 
 The third stage is simulation in TimSim, with runs paired by seed and an arm for
 unannounced meals. The candidate is also run with a mis-set profile ISF, and the
-TDD arm with a mis-set adjustment factor. A harm rule is written
+TDD arm with a mis-set adjustment factor. The candidate is run with Trio's default
+limits and without them. A harm rule is written
 before the runs and has two sides, time below 54 mg/dL and time above 250 mg/dL.
 The second side is there because, for the worked person, this model gives less
 insulin than AndroidAPS at 100% up to 378 mg/dL.
