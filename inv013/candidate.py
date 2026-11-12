@@ -60,6 +60,13 @@ worked person the curve no longer sits above AndroidAPS at 100% over the whole r
 the two should meet between 200 and 220 mg/dL with a divisor of 55. The run agreed on
 each point: 37.7 U, 109 to 158 mg/dL, and a meeting at 211 mg/dL.
 
+Also on 12 November 2026 the units table was reduced to one reading of the curve, at the
+current glucose. The earlier table set that beside a reading at the midpoint of the fall
+and a sum along it. The midpoint belongs to how the publication measured the variation of
+sensitivity with glucose, and the equation derived from it is applied at the glucose of
+the reading. No other figure in the report depends on this, so the rerun should change
+that table and nothing else.
+
 `candidate` is the profile-anchored form of this document's first draft (commit
 fd3662e), kept as the flat arm of the evaluation.
 
@@ -133,15 +140,9 @@ def curve_isf(bg, tdd, factor: float = 1.0):
     return curve_k(bg) / (factor * tdd)
 
 
-def units_to_target(isf_at, bg: float, read: str = "start", target: float = TARGET) -> float:
-    """Units for the distance to target, with the sensitivity read at the starting glucose,
-    at the midpoint (how the curve files its events) or along the whole path."""
-    if read == "start":
-        return (bg - target) / float(isf_at(bg))
-    if read == "midpoint":
-        return (bg - target) / float(isf_at((bg + target) / 2.0))
-    path = np.linspace(target, bg, 2001)
-    return float(np.trapezoid(1.0 / isf_at(path), path))
+def units_to_target(isf_at, bg: float, target: float = TARGET) -> float:
+    """Units for the distance to target, with the sensitivity read at the current glucose."""
+    return (bg - target) / float(isf_at(bg))
 
 
 def stock_v1(bg, tdd, divisor: float, factor: float = 1.0):
@@ -288,28 +289,23 @@ def main() -> None:
               f"runs only from {inside.min():.0f} to {inside.max():.0f} mg/dL for this person. As a multiple of the profile value it is "
               f"{float(curve_shape(100.0)):.2f} at 100 mg/dL, {float(curve_shape(300.0)):.2f} at 300 and {float(curve_shape(380.0)):.2f} at 380, "
               f"so the insulin it asks for per mg/dL is {1 / float(curve_shape(100.0)):.2f}, {1 / float(curve_shape(300.0)):.2f} and "
-              f"{1 / float(curve_shape(380.0)):.2f} times the profile's. A correction from 300 to 100 mg/dL read at the start is "
+              f"{1 / float(curve_shape(380.0)):.2f} times the profile's. A correction from 300 to 100 mg/dL is "
               f"{units_to_target(link, 300.0):.2f} U from the curve and {200.0 / (PROFILE_ISF / 1.2):.2f} U with the upper limit."]
 
     lines += ["", "## Units to bring that person to 100 mg/dL", "",
-              "Distance from 100 mg/dL over the sensitivity, with the curve on the profile link. This is",
-              "the arithmetic of the sensitivity alone and leaves out insulin on board, predictions and",
-              "delivery limits. An event is taken to be filed under the glucose halfway down its fall,",
-              "which the abstract does not state. On that reading, using the curve at the starting glucose asks for more insulin",
-              "than its construction implies.", "",
-              "| Starting glucose, mg/dL | AndroidAPS, divisor 55 | Trio logarithmic | Profile | Curve, read at start | Curve, read at midpoint | Curve, along the path |",
-              "|---:|---:|---:|---:|---:|---:|---:|"]
+              "Distance from 100 mg/dL over the sensitivity at the current glucose, with the curve on the",
+              "profile link. This is the arithmetic of the sensitivity alone and leaves out insulin on",
+              "board, predictions and delivery limits.", "",
+              "| Current glucose, mg/dL | AndroidAPS, divisor 55 | Trio logarithmic | Profile | Curve, profile link |",
+              "|---:|---:|---:|---:|---:|"]
     stock = lambda g: stock_v1(g, TDD, 55.0)
     trio = lambda g: trio_log(g, TDD, PROFILE_ISF)
     curve = link
     for g in (150.0, 200.0, 250.0, 300.0):
         lines.append(f"| {g:.0f} | {units_to_target(stock, g):.2f} | {units_to_target(trio, g):.2f} | "
-                     f"{(g - TARGET) / PROFILE_ISF:.2f} | {units_to_target(curve, g):.2f} | "
-                     f"{units_to_target(curve, g, 'midpoint'):.2f} | {units_to_target(curve, g, 'path'):.2f} |")
-    extra = [units_to_target(curve, g) / units_to_target(curve, g, "midpoint") - 1.0 for g in (150.0, 200.0, 250.0, 300.0)]
-    lines += ["", f"Reading at the start asks for {100 * min(extra):.0f} to {100 * max(extra):.0f}% more than reading at the midpoint."]
+                     f"{(g - TARGET) / PROFILE_ISF:.2f} | {units_to_target(curve, g):.2f} |")
     same = fine[np.argmin(np.abs(curve_isf(fine, TDD) - PROFILE_ISF))]
-    lines += [f"For this person the TDD link equals the profile value at {same:.0f} mg/dL; the profile link does so at {ANCHOR_GLUCOSE:.0f}."]
+    lines += ["", f"For this person the TDD link equals the profile value at {same:.0f} mg/dL; the profile link does so at {ANCHOR_GLUCOSE:.0f}."]
 
     lines += ["", "## Movement with recent dose", "",
               "The daily dose in the link is this draft's to define. Dividing by",

@@ -54,15 +54,9 @@ def test_curve_is_the_published_quartic_carrying_the_entered_product_at_the_anch
     assert float(curve_profile(250.0, 1915.0 / 40.0)) == pytest.approx(float(curve_isf(250.0, 40.0)))
 
 
-def test_units_to_target_orders_the_three_readings_of_a_falling_curve():
+def test_units_to_target_reads_the_sensitivity_at_the_current_glucose():
     isf = lambda g: curve_isf(g, 40.0)
-    start, mid, path = (units_to_target(isf, 200.0, r) for r in ("start", "midpoint", "path"))
-    assert start == pytest.approx(100.0 / float(isf(200.0)))
-    assert mid == pytest.approx(100.0 / float(isf(150.0)))
-    assert max(mid, path) < start and path == pytest.approx(mid, rel=0.05)
-    # A flat sensitivity gives the same answer however it is read.
-    flat = lambda g: np.full_like(np.asarray(g, dtype=float), 50.0)
-    assert units_to_target(flat, 200.0, "path") == pytest.approx(units_to_target(flat, 200.0))
+    assert units_to_target(isf, 200.0) == pytest.approx(100.0 / float(isf(200.0)))
 
 
 def test_own_levels_reads_the_positive_insulin_table_and_not_the_one_above_it():

@@ -2,7 +2,7 @@
 """Stage one of the proposal's evaluation: each arm replayed on recorded histories.
 
 Every recorded loop decision of a person (a glucose reading and the daily dose the device
-held at that moment) is given to each of the eight arms of
+held at that moment) is given to each arm of
 docs/dynamic-isf-8-proposal.md, and the insulin each arm asks for is set against the
 person's profile sensitivity alone. Nothing is simulated. The histories were produced
 under whatever each person ran at the time, so the stage shows what each arm would have
@@ -26,9 +26,9 @@ repeated. Carbohydrate on board is read from the decision tables to time meals.
 
 Modelling choices, fixed before the run:
   Target 100 mg/dL for every person, the target of the proposal's worked tables.
-  The reference arms read the sensitivity at the current glucose, as the systems do. The
-  forms of the equation read it at the midpoint between the reading and target, except
-  the arm named as read at the start.
+  Every arm reads its sensitivity at the current glucose, as the systems do. (Until 12
+  November 2026 the forms of the equation were read at the midpoint between the reading
+  and target, with one arm read at the reading. See the dated paragraph below.)
   The logarithmic model as shipped is the AndroidAPS equation with divisor 55 for the
   AndroidAPS and oref0 cohorts (the insulin each person used is not recorded) and Trio's
   form at its defaults (factor 0.8, limits 0.7 and 1.2) for the Trio cohort. The sigmoid
@@ -68,6 +68,23 @@ reading of 180 mg/dL and the start reading at 140. The expectations above are ke
 written for the earlier anchor. The rerun agreed: the three other arms did not change in
 any cell, and the four that did changed by 1.44 to within the rounding of the report.
 
+Changed again on 12 November 2026: every form of the equation is read at the current
+glucose. The publication's interval, filed under a glucose within the fall, is how the
+variation of sensitivity with glucose was measured. The equation derived from it is
+applied at the glucose of the reading, which is how the existing systems apply theirs.
+Reading at the midpoint mixed the measurement with the use, so the arm "Profile link,
+midpoint" was removed, "Profile link, start" became "Profile link", and the two arms
+linked to the daily dose moved from the midpoint to the reading. Expected before the
+rerun: the profile-link arm keeps the medians of the former start arm in every cell
+(totals 1.39, 1.38 and 1.44). The two daily-dose arms do not change below 100 mg/dL, where
+the curve is held flat, and rise above it by the ratio of the curve at the midpoint to the
+curve at the reading, 1.31 to 1.49 between 150 and 300 mg/dL, so their totals should come
+out near 2.0, 2.4 and 2.2 (TDD link) and 1.9, 2.2 and 1.9 (average dose). The three other
+arms keep their medians. The arms share one resampling stream, so interval endpoints can
+move in the second decimal without a median moving. The rerun agreed: the profile-link
+arm gave 1.39, 1.38 and 1.44, the TDD link 2.03, 2.49 and 2.19, the average-dose link 1.91,
+2.24 and 1.96, and no other median moved.
+
 The run agreed with each expectation but one: the totals were as high from two to four
 hours after an entry as in the first two. Only 0, 2 and 5 people in the three cohorts fell
 below one entry a day, so the stage describes people who announce meals.
@@ -101,7 +118,7 @@ from inv008.config import DB
 from inv013.candidate import (RESULTS, TARGET, candidate, curve_isf, curve_shape,
                               stock_v1, trio_log, trio_sigmoid)
 
-ARMS = ("Profile link, midpoint", "Profile link, start", "TDD link", "Average-dose link",
+ARMS = ("Profile link", "TDD link", "Average-dose link",
         "Logarithmic as shipped", "Sigmoid", "First draft")
 G_EDGES = (40, 80, 100, 150, 200, 260, 401)
 G_LABELS = ("below 80", "80 to 100", "100 to 150", "150 to 200", "200 to 260", "above 260")
@@ -116,11 +133,9 @@ COHORTS = {"v5_trio": "Trio", "v6_aaps_classic": "AndroidAPS", "v7_oref0": "oref
 
 def arms(bg, tdd, pisf: float, mean_tdd: float, trio: bool) -> dict:
     """Insulin asked for per mg/dL from target under each arm, over the profile's."""
-    mid = (bg + TARGET) / 2.0
     log = trio_log(bg, tdd, pisf) if trio else stock_v1(bg, tdd, 55.0)
     return dict(zip(ARMS, (
-        1.0 / curve_shape(mid), 1.0 / curve_shape(bg),
-        pisf / curve_isf(mid, tdd), pisf / curve_isf(mid, mean_tdd),
+        1.0 / curve_shape(bg), pisf / curve_isf(bg, tdd), pisf / curve_isf(bg, mean_tdd),
         pisf / log, pisf / trio_sigmoid(bg, pisf), pisf / candidate(bg, pisf, tdd, mean_tdd))))
 
 

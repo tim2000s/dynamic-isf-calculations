@@ -90,24 +90,21 @@ its limits. At the default factor of 0.8 it is 25% above AndroidAPS at 100% unti
 binds, which for this person is from 157 mg/dL. With the factor at 1.0 and the limits wide it
 returns the AndroidAPS value: 29.3 against 29.3 mg/dL per unit at 200 mg/dL.
 
-Inside Trio's default limits (41.7 to 71.4) the curve on the profile link runs only from 109 to 158 mg/dL for this person. As a multiple of the profile value it is 1.59 at 100 mg/dL, 0.42 at 300 and 0.30 at 380, so the insulin it asks for per mg/dL is 0.63, 2.41 and 3.33 times the profile's. A correction from 300 to 100 mg/dL read at the start is 9.62 U from the curve and 4.80 U with the upper limit.
+Inside Trio's default limits (41.7 to 71.4) the curve on the profile link runs only from 109 to 158 mg/dL for this person. As a multiple of the profile value it is 1.59 at 100 mg/dL, 0.42 at 300 and 0.30 at 380, so the insulin it asks for per mg/dL is 0.63, 2.41 and 3.33 times the profile's. A correction from 300 to 100 mg/dL is 9.62 U from the curve and 4.80 U with the upper limit.
 
 ## Units to bring that person to 100 mg/dL
 
-Distance from 100 mg/dL over the sensitivity, with the curve on the profile link. This is
-the arithmetic of the sensitivity alone and leaves out insulin on board, predictions and
-delivery limits. An event is taken to be filed under the glucose halfway down its fall,
-which the abstract does not state. On that reading, using the curve at the starting glucose asks for more insulin
-than its construction implies.
+Distance from 100 mg/dL over the sensitivity at the current glucose, with the curve on the
+profile link. This is the arithmetic of the sensitivity alone and leaves out insulin on
+board, predictions and delivery limits.
 
-| Starting glucose, mg/dL | AndroidAPS, divisor 55 | Trio logarithmic | Profile | Curve, read at start | Curve, read at midpoint | Curve, along the path |
-|---:|---:|---:|---:|---:|---:|---:|
-| 150 | 1.46 | 1.17 | 1.00 | 1.11 | 0.85 | 0.86 |
-| 200 | 3.41 | 2.40 | 2.00 | 3.30 | 2.22 | 2.24 |
-| 250 | 5.71 | 3.60 | 3.00 | 6.15 | 4.16 | 4.10 |
-| 300 | 8.29 | 4.80 | 4.00 | 9.62 | 6.60 | 6.32 |
+| Current glucose, mg/dL | AndroidAPS, divisor 55 | Trio logarithmic | Profile | Curve, profile link |
+|---:|---:|---:|---:|---:|
+| 150 | 1.46 | 1.17 | 1.00 | 1.11 |
+| 200 | 3.41 | 2.40 | 2.00 | 3.30 |
+| 250 | 5.71 | 3.60 | 3.00 | 6.15 |
+| 300 | 8.29 | 4.80 | 4.00 | 9.62 |
 
-Reading at the start asks for 31 to 49% more than reading at the midpoint.
 For this person the TDD link equals the profile value at 136 mg/dL; the profile link does so at 140.
 
 ## Movement with recent dose
