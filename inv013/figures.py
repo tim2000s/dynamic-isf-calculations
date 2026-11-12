@@ -19,6 +19,11 @@ new: the models come from `inv013.candidate`, and every measured number is read 
 committed results file of the investigation that produced it (INV-015, INV-017), with an
 assertion that the row is there.
 
+Figure 5 draws the outcome test in simulation (INV-019) from results/inv019_outcome_test.md:
+each rule's mean paired difference from the same simulated people on their unchanged
+profile ISF, with its 95% interval. The harm-rule readings in its heading are read from the
+same file. TimSim's results are relative, and the figure says so in its source line.
+
 Modelling choices shown, each made in the proposal and none in the publication: the
 profile ISF taken to hold at 140 mg/dL, the worked person (profile ISF 50 mg/dL per unit,
 40 U a day), AndroidAPS at an adjustment factor of 100% with a divisor of 55, and Trio's
@@ -280,6 +285,92 @@ def fig_multiply_or_shift() -> Path:
         "fig4_multiply_or_shift.png")
 
 
+def outcome_rows(path: Path = RESULTS / "inv019_outcome_test.md") -> dict:
+    """INV-019, each arm against `profile, pinned`: arm -> {column: (mean, low, high)}."""
+    lines = path.read_text().splitlines()
+    head = next(i for i, row in enumerate(lines) if row.startswith("| Arm | Reference |"))
+    cols = [c.strip() for c in lines[head].split("|")][4:-1]
+    out = {}
+    for row in lines[head + 2:]:
+        c = [x.strip() for x in row.split("|")]
+        if len(c) != len(cols) + 5:
+            break
+        if c[2] == "profile, pinned":                           # the mis-set candidates have their own reference
+            out[c[1]] = {k: _pair(v) for k, v in zip(cols, c[4:-1])}
+    assert len(out) == 13 and "candidate" in out, list(out)
+    return out
+
+
+def harm_rows(path: Path = RESULTS / "inv019_outcome_test.md") -> dict:
+    """INV-019's harm rule: (arm, against, side) -> (difference with interval, reading)."""
+    out = {}
+    for row in path.read_text().splitlines():
+        c = [x.strip() for x in row.split("|")]
+        if len(c) == 10 and c[3] in ("below 54", "above 250"):
+            out[(c[1], c[2], c[3])] = (_pair(c[5]), c[8])
+    assert len(out) == 8 and all(r in ("harm", "cleared", "unresolved") for _, r in out.values()), out
+    return out
+
+
+OUTCOME_ARMS = [   # (arm in the report, label, group), drawn top to bottom
+    ("candidate", "Proposed rule (profile ISF at 140 mg/dL)", 0),
+    ("candidate, Trio limits", "Proposed rule inside Trio's limits, 0.7 to 1.2", 0),
+    ("candidate, anchor 180", "Proposed rule, profile ISF at 180 mg/dL", 0),
+    ("equation on TDD", "Published curve scaled by daily dose", 0),
+    ("flat above 100", "Profile ISF above 100 mg/dL, curve below", 0),
+    ("profile, autosens", "oref0 with autosens, no dynamic rule", 1),
+    ("logarithmic, AndroidAPS", "Logarithmic, AndroidAPS at 100%", 1),
+    ("logarithmic, matched", "Logarithmic, matched to the profile at 140", 1),
+    ("logarithmic, Trio", "Logarithmic, Trio (factor 0.8, limits)", 1),
+    ("Trio sigmoid", "Trio sigmoid, defaults", 1),
+    ("placebo", "Placebo: profile ISF x 1.01", 2),
+    ("profile x 0.7", "Profile ISF entered 30% too low", 2),
+    ("profile x 1.4", "Profile ISF entered 40% too high", 2),
+]
+OUTCOME_GROUPS = [("The published curve, in the forms tested", BLUE), ("Models in use today", ORANGE),
+                  ("Checks: a null arm and a mis-set profile", MUTED)]
+
+
+def fig_outcomes() -> Path:
+    rows, harm = outcome_rows(), harm_rows()
+    text = (RESULTS / "inv019_outcome_test.md").read_text()
+    people, days = re.search(r"(\d+) adults, (\d+) days", text).groups()
+    panels = [("tbr54", "Time below 54 mg/dL"), ("tar250", "Time above 250 mg/dL"), ("tir", "Time in range, 70 to 180 mg/dL")]
+    fig, axes = plt.subplots(1, 3, figsize=(13, 6.9), facecolor=SURFACE, sharey=True)
+    fig.subplots_adjust(left=0.255, right=0.985, top=0.79, bottom=0.2, wspace=0.13)
+    at = [-(i + 0.8 * group) for i, (_, _, group) in enumerate(OUTCOME_ARMS)]   # a gap between the groups
+    for ax, (col, title) in zip(axes, panels):
+        for y, (arm, _, group) in zip(at, OUTCOME_ARMS):
+            mean, low, high = rows[arm][col]
+            colour = OUTCOME_GROUPS[group][1]
+            ax.plot([low, high], [y, y], color=colour, lw=2, solid_capstyle="round")
+            ax.plot([mean], [y], "o", ms=8, color=colour, mec=SURFACE, mew=2)
+            if arm == "candidate":
+                ax.annotate(f"{mean:+.2f}", (mean, y), xytext=(0, 9), textcoords="offset points", ha="center", fontsize=9, color=INK)
+        ax.axvline(0, color=MUTED, lw=0.8)
+        ax.set_title(title, loc="left", fontsize=10.5, color=INK)
+        _style(ax, "Change, percentage points of time", "")
+        ax.grid(axis="y", visible=False)
+    axes[0].set_yticks(at, [label for _, label, _ in OUTCOME_ARMS])
+    axes[0].tick_params(axis="y", labelcolor=INK, labelsize=9)
+    axes[0].set_ylim(min(at) - 0.7, 0.9)
+    fig.legend([plt.Line2D([], [], marker="o", color=c, lw=2, ms=8, mec=SURFACE, mew=2) for _, c in OUTCOME_GROUPS],
+               [name for name, _ in OUTCOME_GROUPS], frameon=False, fontsize=9, labelcolor=MUTED, ncol=3,
+               loc="lower right", bbox_to_anchor=(0.985, 0.075))
+    (auto, auto_reading), (matched, matched_reading) = (harm[("candidate", who, "below 54")] for who in ("profile, autosens", "logarithmic, matched"))
+    high = {harm[("candidate", who, "above 250")][1] for who in ("profile, autosens", "logarithmic, matched")}
+    assert len(high) == 1, high                                 # the heading says one reading for both comparators
+    return _finish(
+        fig, "Glucose outcomes under each sensitivity rule, in simulation",
+        f"{people} simulated adults for {days} days on oref0, with only the sensitivity rule changed. Points are the mean difference from the same people on their\n"
+        "unchanged profile ISF (days 8 to 35), lines the 95% interval over people. Harm rule for the proposed rule, time below 54 mg/dL: "
+        f"{auto_reading} against\noref0 with autosens ({auto[0]:+.2f} points, {auto[1]:.2f} to {auto[2]:.2f}), {matched_reading} against the matched logarithmic model "
+        f"({matched[0]:+.2f}, {matched[1]:.2f} to {matched[2]:.2f}). Time above 250 mg/dL: {high.pop()} against both.",
+        "Source: results/inv019_outcome_test.md (inv019/outcome_test.py), TimSim on simglucose, one seed. Results are relative. In this simulator the true sensitivity\n"
+        "rises with glucose where the published curve's falls, and the titrated profile ISF x daily dose is about half of what adults enter.",
+        "fig5_outcomes_in_simulation.png")
+
+
 def main() -> None:
     d = digitise_poster()
     miss = (d["median"] - d.published_fit).abs()
@@ -292,7 +383,7 @@ def main() -> None:
     L += [f"| {r.glucose} | {r.median:.1f} | {f(r.q25)} | {f(r.q75)} | {r.published_fit:.1f} |" for r in d.itertuples()]
     (RESULTS / "inv013_poster_figure.md").write_text("\n".join(L) + "\n")
     print("\n".join(L))
-    for path in (fig_published(d), fig_scaled(), fig_link(), fig_multiply_or_shift()):
+    for path in (fig_published(d), fig_scaled(), fig_link(), fig_multiply_or_shift(), fig_outcomes()):
         print(path)
 
 

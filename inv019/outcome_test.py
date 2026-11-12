@@ -120,7 +120,44 @@ every per-person table stay out of git, since TimSim does not redistribute anyth
 from the published parameter tables. Writes results/inv019_outcome_test.md.
 
 Results
-(none yet)
+The full run of 12 November 2026: 640 runs, none raised, about seven hours on seven workers
+(results/inv019_outcome_test.md). Differences below are means over people who completed
+both runs, with 95% intervals, and those in time are percentage points.
+
+Checks. Week one differed from the reference by 0.000 mg/dL in every pinned arm on the
+unscaled profile. Each rule reached its runs: the median applied sensitivity was 1.12
+times the profile ISF under the candidate, 1.62 under `logarithmic, AndroidAPS` and 2.26
+under `equation on TDD`. Median glucose across the arms ran from 123 to 138 mg/dL with 5th
+percentiles of 75 to 91. Every interval of the placebo included zero and it read cleared
+on both sides, so both sides were decidable.
+
+The harm rule. Low side: the candidate's time below 54 mg/dL was 0.41 points above
+`profile, autosens` (0.26 to 0.59), which reads harm, and 0.25 points above
+`logarithmic, matched` (0.09 to 0.42), which reads unresolved. High side: cleared against
+both, at -0.36 (-0.80 to +0.04) and +0.03 (-0.24 to +0.31). No early-ends criterion was
+met. The largest rise in one person's time below 54 mg/dL was 1.97 points.
+
+Against `profile, pinned` the candidate raised time below 54 mg/dL by 0.43 points (0.24
+to 0.61), about what `profile x 0.7` did (0.39, 0.22 to 0.56), and lowered mean glucose by
+1.77 mg/dL (0.70 to 2.86). `flat above 100` changed time below 54 by +0.03 (-0.04 to
++0.11), so the easing below 100 mg/dL was not the source. `candidate, Trio limits` changed
+it by +0.13 (-0.02 to +0.27) and `candidate, anchor 180` by -0.01 (-0.13 to +0.12), so
+the rise went with how much more insulin than the profile the rule asked for above target. That reading rests on the arms, and the cycles before each
+low were not traced. `logarithmic, matched` raised it by 0.23 (0.09 to 0.37) and
+`Trio sigmoid` by 0.16 (0.05 to 0.27). `candidate on x 0.7` had four runs end early
+through hypoglycaemia against one for `profile x 0.7`.
+
+Expectations. Two signs did not hold. Time above 250 mg/dL under the candidate against
+`logarithmic, matched` was expected lower and was +0.03 (-0.24 to +0.31). Under
+`logarithmic, AndroidAPS` against the profile it was expected higher and was -0.31 (-0.62
+to +0.02), with mean glucose higher as expected (+4.85 mg/dL, 2.78 to 6.89). The second is
+unexplained. The other signs held, several with intervals that include zero.
+
+What follows, by the paragraph committed before the run. The harm reading is reported and
+does not stop the candidate. Two departures of the simulator could produce it, the rising
+true sensitivity and the level of the titrated profiles, and neither was shown to be the
+cause. The unresolved reading calls for a larger panel or a second seed. Shadow code is
+unaffected.
 """
 from __future__ import annotations
 
