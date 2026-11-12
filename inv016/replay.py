@@ -59,34 +59,6 @@ value at 180 mg/dL, at 100, 150, 200, 250 and 300 mg/dL):
   Time since a meal enters no arm. Within a glucose band it should change nothing, and
   the totals should be highest in the two hours after an entry, where glucose is highest.
 
-Added on 12 November 2026, after the first run: a ninth arm, the profile link read at the
-start with the shape held at its value at 200 mg/dL (0.87) for every reading above 200.
-On the REPLACE-BG records the refitted shape follows the published one from 100 to 200
-mg/dL and stops falling above (results/inv013_refit.md: 0.81 at 250 and 0.90 at 300
-against the published 0.70 and 0.60). Expected before its run: equal to the start-read
-arm up to 200 mg/dL, 1.15 in the two rows above, and a total between the midpoint arm's
-0.70 and the start-read arm's 0.97 to 1.00, nearer the second. It returned 1.14 in those rows and
-totals of 0.90, 0.90 and 0.93 in the three cohorts.
-
-Added on 12 November 2026, after the ninth arm: two arms that take the shape from the
-REPLACE-BG records over the whole range they cover, in place of the published shape cut at
-200 mg/dL. The shape is the refit of results/inv013_refit.md (the published form with its
-five coefficients free, fitted to the bins from 100 to 370 mg/dL), relative to its value at
-180 mg/dL and read at the current glucose. The refit is lowest at 244 mg/dL, at 0.81, and
-rises to 1.15 at 370. The bin medians tabulated in that file do not show the rise: they sit
-between 0.81 and 0.88 from 210 to 290 mg/dL and scatter above 300, where 60 people or fewer
-remain. The first arm therefore holds the shape at its lowest value for every reading above
-244 mg/dL, which is a modelling choice. The second uses the refit as fitted up to 370 mg/dL.
-Below 100 mg/dL both hold the value at 100 (2.16). Expected before the run: both within
-0.05 of the start-read arm up to 200 mg/dL and about 1.2 from 200 to 260. Above 260 the
-first should give 1.24 and the second less, near 1.1. The totals should lie between the
-ninth arm's 0.90 to 0.93 and the start-read arm's 0.96 to 1.00, within 0.02 of each other.
-The refitted quantity is an outcome ratio (inv013/refit.py), so only its shape is used and
-its level is not read. The run agreed. From 100 to 150 mg/dL both gave 0.59 to 0.60 against
-the start-read arm's 0.57 to 0.58, from 150 to 200 they gave 0.93 against 0.92, and from
-200 to 260 they gave 1.19. Above 260 the first gave 1.24 and the second 1.13 to 1.15.
-Totals were 0.93, 0.92 and 0.95 for the first and 0.92, 0.92 and 0.95 for the second.
-
 The run agreed with each expectation but one: the totals were as high from two to four
 hours after an entry as in the first two. Only 0, 2 and 5 people in the three cohorts fell
 below one entry a day, so the stage describes people who announce meals.
@@ -120,10 +92,8 @@ from inv008.config import DB
 from inv013.candidate import (RESULTS, TARGET, candidate, curve_isf, curve_shape,
                               stock_v1, trio_log, trio_sigmoid)
 
-ARMS = ("Profile link, midpoint", "Profile link, start", "Profile link, start, flat above 200",
-        "Profile link, start, REPLACE-BG shape, level above 244",
-        "Profile link, start, REPLACE-BG shape as fitted",
-        "TDD link", "Average-dose link", "Logarithmic as shipped", "Sigmoid", "First draft")
+ARMS = ("Profile link, midpoint", "Profile link, start", "TDD link", "Average-dose link",
+        "Logarithmic as shipped", "Sigmoid", "First draft")
 G_EDGES = (40, 80, 100, 150, 200, 260, 401)
 G_LABELS = ("below 80", "80 to 100", "100 to 150", "150 to 200", "200 to 260", "above 260")
 M_EDGES = (0, 2, 4, 6, np.inf)
@@ -133,14 +103,6 @@ MIN_READINGS = 20
 N_BOOT = 2000
 WORKERS = 7
 COHORTS = {"v5_trio": "Trio", "v6_aaps_classic": "AndroidAPS", "v7_oref0": "oref0"}
-# the REPLACE-BG refit of results/inv013_refit.md, highest power first, as printed there
-RBG_COEF = (1.161e-06, -0.001719, 0.9756, -236.4, 2.341e4)
-RBG_MIN, RBG_TOP = 244.0, 370.0     # where the refit is lowest, and its last fitted bin
-
-
-def rbg_shape(bg, top: float = RBG_MIN):
-    """REPLACE-BG refit over its value at 180 mg/dL, held at its ends outside 100 to `top`."""
-    return np.polyval(RBG_COEF, np.clip(bg, 100.0, top)) / np.polyval(RBG_COEF, 180.0)
 
 
 def arms(bg, tdd, pisf: float, mean_tdd: float, trio: bool) -> dict:
@@ -148,8 +110,7 @@ def arms(bg, tdd, pisf: float, mean_tdd: float, trio: bool) -> dict:
     mid = (bg + TARGET) / 2.0
     log = trio_log(bg, tdd, pisf) if trio else stock_v1(bg, tdd, 55.0)
     return dict(zip(ARMS, (
-        1.0 / curve_shape(mid), 1.0 / curve_shape(bg), 1.0 / curve_shape(np.minimum(bg, 200.0)),
-        1.0 / rbg_shape(bg), 1.0 / rbg_shape(bg, RBG_TOP),
+        1.0 / curve_shape(mid), 1.0 / curve_shape(bg),
         pisf / curve_isf(mid, tdd), pisf / curve_isf(mid, mean_tdd),
         pisf / log, pisf / trio_sigmoid(bg, pisf), pisf / candidate(bg, pisf, tdd, mean_tdd))))
 
