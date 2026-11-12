@@ -18,91 +18,91 @@ The stage is descriptive and has no pass rule.
 
 By glucose at the reading, mg/dL.
 
-| Glucose | People | Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| below 80 | 22 | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.60 (0.53 to 0.66) | 0.61 (0.53 to 0.68) | 0.94 (0.85 to 0.99) | 0.89 (0.89 to 0.90) | 0.74 (0.74 to 0.75) |
-| 80 to 100 | 22 | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.59 (0.51 to 0.65) | 0.61 (0.53 to 0.68) | 1.05 (0.95 to 1.10) | 0.97 (0.97 to 0.97) | 0.89 (0.88 to 0.90) |
-| 100 to 150 | 22 | 0.50 (0.49 to 0.50) | 0.57 (0.56 to 0.57) | 0.57 (0.56 to 0.57) | 0.69 (0.58 to 0.77) | 0.69 (0.60 to 0.77) | 1.14 (1.08 to 1.17) | 1.06 (1.06 to 1.06) | 0.98 (0.97 to 0.99) |
-| 150 to 200 | 22 | 0.66 (0.65 to 0.66) | 0.92 (0.91 to 0.93) | 0.92 (0.91 to 0.93) | 0.96 (0.82 to 1.07) | 0.92 (0.78 to 1.03) | 1.19 (1.17 to 1.20) | 1.15 (1.15 to 1.15) | 1.01 (1.00 to 1.02) |
-| 200 to 260 | 22 | 0.85 (0.85 to 0.86) | 1.27 (1.27 to 1.28) | 1.14 (1.14 to 1.14) | 1.31 (1.16 to 1.45) | 1.19 (1.00 to 1.33) | 1.20 (1.19 to 1.20) | 1.19 (1.19 to 1.19) | 1.05 (1.04 to 1.06) |
-| above 260 | 22 | 1.09 (1.08 to 1.12) | 1.60 (1.59 to 1.65) | 1.14 (1.14 to 1.14) | 1.95 (1.53 to 2.02) | 1.52 (1.33 to 1.75) | 1.20 (1.20 to 1.20) | 1.20 (1.20 to 1.20) | 1.10 (1.08 to 1.12) |
+| Glucose | People | Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | Profile link, start, REPLACE-BG shape, level above 244 | Profile link, start, REPLACE-BG shape as fitted | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| below 80 | 22 | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.46 (0.46 to 0.46) | 0.46 (0.46 to 0.46) | 0.60 (0.53 to 0.66) | 0.61 (0.53 to 0.68) | 0.94 (0.84 to 1.00) | 0.89 (0.89 to 0.90) | 0.74 (0.74 to 0.75) |
+| 80 to 100 | 22 | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.46 (0.46 to 0.46) | 0.46 (0.46 to 0.46) | 0.59 (0.52 to 0.65) | 0.61 (0.53 to 0.68) | 1.05 (0.95 to 1.10) | 0.97 (0.97 to 0.97) | 0.89 (0.88 to 0.90) |
+| 100 to 150 | 22 | 0.50 (0.49 to 0.50) | 0.57 (0.56 to 0.57) | 0.57 (0.56 to 0.57) | 0.59 (0.58 to 0.59) | 0.59 (0.58 to 0.59) | 0.69 (0.58 to 0.77) | 0.69 (0.59 to 0.77) | 1.14 (1.08 to 1.17) | 1.06 (1.06 to 1.06) | 0.98 (0.97 to 0.99) |
+| 150 to 200 | 22 | 0.66 (0.65 to 0.66) | 0.92 (0.91 to 0.93) | 0.92 (0.91 to 0.93) | 0.93 (0.92 to 0.93) | 0.93 (0.92 to 0.93) | 0.96 (0.82 to 1.07) | 0.92 (0.77 to 1.03) | 1.19 (1.17 to 1.20) | 1.15 (1.15 to 1.15) | 1.01 (1.00 to 1.02) |
+| 200 to 260 | 22 | 0.85 (0.85 to 0.86) | 1.27 (1.27 to 1.28) | 1.14 (1.14 to 1.14) | 1.19 (1.19 to 1.20) | 1.19 (1.19 to 1.20) | 1.31 (1.16 to 1.45) | 1.19 (1.03 to 1.33) | 1.20 (1.19 to 1.20) | 1.19 (1.19 to 1.19) | 1.05 (1.03 to 1.06) |
+| above 260 | 22 | 1.09 (1.08 to 1.12) | 1.60 (1.59 to 1.65) | 1.14 (1.14 to 1.14) | 1.24 (1.24 to 1.24) | 1.15 (1.13 to 1.16) | 1.95 (1.57 to 2.06) | 1.52 (1.33 to 1.78) | 1.20 (1.20 to 1.20) | 1.20 (1.20 to 1.20) | 1.10 (1.08 to 1.12) |
 
 Total correction units over every reading above 100 mg/dL.
 
-| Readings | People | Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| All people | 22 | 0.70 (0.64 to 0.71) | 0.97 (0.87 to 1.00) | 0.90 (0.85 to 0.93) | 1.01 (0.80 to 1.25) | 0.95 (0.78 to 1.16) | 1.18 (1.15 to 1.19) | 1.14 (1.13 to 1.15) | 1.02 (1.01 to 1.02) |
-| Announce meals | 22 | 0.70 (0.65 to 0.71) | 0.97 (0.88 to 1.00) | 0.90 (0.85 to 0.93) | 1.01 (0.83 to 1.25) | 0.95 (0.78 to 1.16) | 1.18 (1.15 to 1.19) | 1.14 (1.13 to 1.15) | 1.02 (1.01 to 1.02) |
-| Do not announce meals | 0 | - | - | - | - | - | - | - | - |
-| Announce meals, 0 to 2 h after an entry | 22 | 0.70 (0.67 to 0.75) | 0.98 (0.93 to 1.07) | 0.93 (0.89 to 0.96) | 1.07 (0.91 to 1.27) | 0.99 (0.82 to 1.19) | 1.19 (1.17 to 1.20) | 1.15 (1.14 to 1.16) | 1.03 (1.01 to 1.04) |
-| Announce meals, 2 to 4 h after an entry | 22 | 0.71 (0.65 to 0.76) | 1.00 (0.89 to 1.07) | 0.94 (0.86 to 0.97) | 1.05 (0.83 to 1.21) | 1.00 (0.79 to 1.15) | 1.19 (1.16 to 1.20) | 1.15 (1.13 to 1.16) | 1.02 (1.01 to 1.02) |
-| Announce meals, 4 to 6 h after an entry | 22 | 0.68 (0.63 to 0.71) | 0.93 (0.84 to 0.99) | 0.88 (0.82 to 0.91) | 1.01 (0.83 to 1.11) | 0.94 (0.75 to 1.07) | 1.19 (1.15 to 1.19) | 1.14 (1.13 to 1.15) | 1.02 (1.02 to 1.03) |
-| Announce meals, over 6 h after an entry | 22 | 0.61 (0.58 to 0.66) | 0.80 (0.75 to 0.90) | 0.78 (0.73 to 0.85) | 0.89 (0.73 to 1.03) | 0.87 (0.71 to 0.99) | 1.16 (1.11 to 1.18) | 1.12 (1.10 to 1.13) | 1.01 (0.99 to 1.02) |
+| Readings | People | Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | Profile link, start, REPLACE-BG shape, level above 244 | Profile link, start, REPLACE-BG shape as fitted | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| All people | 22 | 0.70 (0.64 to 0.71) | 0.97 (0.87 to 1.00) | 0.90 (0.84 to 0.93) | 0.93 (0.86 to 0.95) | 0.92 (0.87 to 0.95) | 1.01 (0.83 to 1.25) | 0.95 (0.74 to 1.14) | 1.18 (1.15 to 1.19) | 1.14 (1.13 to 1.15) | 1.02 (1.01 to 1.02) |
+| Announce meals | 22 | 0.70 (0.65 to 0.71) | 0.97 (0.87 to 1.00) | 0.90 (0.84 to 0.93) | 0.93 (0.87 to 0.95) | 0.92 (0.86 to 0.95) | 1.01 (0.83 to 1.25) | 0.95 (0.78 to 1.16) | 1.18 (1.16 to 1.19) | 1.14 (1.13 to 1.15) | 1.02 (1.01 to 1.02) |
+| Do not announce meals | 0 | - | - | - | - | - | - | - | - | - | - |
+| Announce meals, 0 to 2 h after an entry | 22 | 0.70 (0.67 to 0.75) | 0.98 (0.93 to 1.07) | 0.93 (0.89 to 0.97) | 0.95 (0.91 to 1.00) | 0.95 (0.90 to 0.99) | 1.07 (0.91 to 1.29) | 0.99 (0.80 to 1.19) | 1.19 (1.17 to 1.20) | 1.15 (1.14 to 1.16) | 1.03 (1.01 to 1.04) |
+| Announce meals, 2 to 4 h after an entry | 22 | 0.71 (0.65 to 0.75) | 1.00 (0.89 to 1.08) | 0.94 (0.85 to 0.97) | 0.96 (0.87 to 1.01) | 0.96 (0.88 to 0.99) | 1.05 (0.83 to 1.21) | 1.00 (0.79 to 1.19) | 1.19 (1.16 to 1.20) | 1.15 (1.13 to 1.16) | 1.02 (1.01 to 1.02) |
+| Announce meals, 4 to 6 h after an entry | 22 | 0.68 (0.63 to 0.71) | 0.93 (0.84 to 0.98) | 0.88 (0.81 to 0.91) | 0.90 (0.83 to 0.94) | 0.90 (0.83 to 0.94) | 1.01 (0.81 to 1.11) | 0.94 (0.72 to 1.06) | 1.19 (1.15 to 1.19) | 1.14 (1.13 to 1.15) | 1.02 (1.02 to 1.03) |
+| Announce meals, over 6 h after an entry | 22 | 0.61 (0.58 to 0.66) | 0.80 (0.75 to 0.91) | 0.78 (0.72 to 0.85) | 0.80 (0.75 to 0.88) | 0.80 (0.74 to 0.87) | 0.89 (0.73 to 1.06) | 0.87 (0.71 to 1.00) | 1.16 (1.11 to 1.18) | 1.12 (1.10 to 1.13) | 1.01 (0.99 to 1.02) |
 
 The same total across people: 10th and 90th centile.
 
-| Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
-|---:|---:|---:|---:|---:|---:|---:|---:|
-| 0.62 to 0.80 | 0.82 to 1.15 | 0.79 to 0.98 | 0.73 to 1.44 | 0.69 to 1.37 | 1.12 to 1.20 | 1.12 to 1.16 | 1.00 to 1.03 |
+| Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | Profile link, start, REPLACE-BG shape, level above 244 | Profile link, start, REPLACE-BG shape as fitted | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0.62 to 0.80 | 0.82 to 1.15 | 0.79 to 0.98 | 0.81 to 1.02 | 0.81 to 1.00 | 0.73 to 1.44 | 0.69 to 1.37 | 1.12 to 1.20 | 1.12 to 1.16 | 1.00 to 1.03 |
 
 ## AndroidAPS
 
 By glucose at the reading, mg/dL.
 
-| Glucose | People | Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| below 80 | 19 | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.66 (0.52 to 0.95) | 0.68 (0.51 to 0.98) | 1.33 (1.04 to 1.92) | 0.90 (0.90 to 0.90) | 0.76 (0.74 to 0.78) |
-| 80 to 100 | 19 | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.62 (0.49 to 0.92) | 0.68 (0.51 to 0.98) | 1.48 (1.16 to 2.19) | 0.97 (0.97 to 0.97) | 0.88 (0.84 to 0.89) |
-| 100 to 150 | 19 | 0.50 (0.50 to 0.50) | 0.58 (0.57 to 0.58) | 0.58 (0.57 to 0.58) | 0.74 (0.58 to 1.12) | 0.79 (0.59 to 1.14) | 1.84 (1.43 to 2.77) | 1.07 (1.06 to 1.07) | 0.96 (0.93 to 0.97) |
-| 150 to 200 | 19 | 0.66 (0.65 to 0.66) | 0.92 (0.91 to 0.93) | 0.92 (0.91 to 0.93) | 1.07 (0.81 to 1.68) | 1.02 (0.77 to 1.52) | 2.43 (1.83 to 3.77) | 1.15 (1.15 to 1.16) | 1.01 (0.99 to 1.04) |
-| 200 to 260 | 19 | 0.85 (0.85 to 0.86) | 1.27 (1.26 to 1.28) | 1.14 (1.14 to 1.14) | 1.46 (1.12 to 2.23) | 1.31 (1.00 to 1.94) | 2.95 (2.24 to 4.46) | 1.19 (1.19 to 1.19) | 1.06 (1.00 to 1.08) |
-| above 260 | 15 | 1.10 (1.08 to 1.12) | 1.61 (1.59 to 1.67) | 1.14 (1.14 to 1.14) | 2.64 (1.66 to 3.57) | 1.81 (1.59 to 2.93) | 4.55 (3.29 to 5.34) | 1.20 (1.20 to 1.20) | 1.09 (1.02 to 1.13) |
+| Glucose | People | Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | Profile link, start, REPLACE-BG shape, level above 244 | Profile link, start, REPLACE-BG shape as fitted | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| below 80 | 19 | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.46 (0.46 to 0.46) | 0.46 (0.46 to 0.46) | 0.66 (0.52 to 0.95) | 0.68 (0.51 to 0.98) | 1.33 (1.04 to 1.92) | 0.90 (0.90 to 0.90) | 0.76 (0.74 to 0.78) |
+| 80 to 100 | 19 | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.46 (0.46 to 0.46) | 0.46 (0.46 to 0.46) | 0.62 (0.49 to 0.92) | 0.68 (0.51 to 0.98) | 1.48 (1.16 to 2.19) | 0.97 (0.97 to 0.97) | 0.88 (0.84 to 0.89) |
+| 100 to 150 | 19 | 0.50 (0.50 to 0.50) | 0.58 (0.57 to 0.58) | 0.58 (0.57 to 0.58) | 0.60 (0.59 to 0.60) | 0.60 (0.59 to 0.60) | 0.74 (0.58 to 1.12) | 0.79 (0.59 to 1.14) | 1.84 (1.43 to 2.77) | 1.07 (1.06 to 1.07) | 0.96 (0.93 to 0.97) |
+| 150 to 200 | 19 | 0.66 (0.65 to 0.66) | 0.92 (0.91 to 0.93) | 0.92 (0.91 to 0.93) | 0.93 (0.92 to 0.93) | 0.93 (0.92 to 0.93) | 1.07 (0.81 to 1.68) | 1.02 (0.77 to 1.52) | 2.43 (1.83 to 3.77) | 1.15 (1.15 to 1.16) | 1.01 (0.99 to 1.04) |
+| 200 to 260 | 19 | 0.85 (0.85 to 0.86) | 1.27 (1.26 to 1.28) | 1.14 (1.14 to 1.14) | 1.19 (1.19 to 1.20) | 1.19 (1.19 to 1.20) | 1.46 (1.12 to 2.23) | 1.31 (1.00 to 1.94) | 2.95 (2.24 to 4.46) | 1.19 (1.19 to 1.19) | 1.06 (1.00 to 1.08) |
+| above 260 | 15 | 1.10 (1.08 to 1.11) | 1.61 (1.58 to 1.67) | 1.14 (1.14 to 1.14) | 1.24 (1.24 to 1.24) | 1.15 (1.14 to 1.17) | 2.64 (1.86 to 3.04) | 1.81 (1.60 to 2.78) | 4.55 (3.29 to 5.34) | 1.20 (1.20 to 1.20) | 1.09 (0.96 to 1.13) |
 
 Total correction units over every reading above 100 mg/dL.
 
-| Readings | People | Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| All people | 19 | 0.69 (0.66 to 0.73) | 0.96 (0.89 to 1.02) | 0.90 (0.85 to 0.95) | 1.22 (0.86 to 1.82) | 1.10 (0.81 to 1.66) | 2.60 (1.88 to 3.84) | 1.14 (1.13 to 1.15) | 1.01 (0.99 to 1.03) |
-| Announce meals | 17 | 0.70 (0.68 to 0.74) | 0.98 (0.93 to 1.04) | 0.92 (0.88 to 0.95) | 1.45 (0.99 to 1.83) | 1.29 (0.95 to 1.76) | 2.95 (2.19 to 4.03) | 1.15 (1.14 to 1.15) | 1.02 (0.99 to 1.05) |
-| Do not announce meals | 2 | - | - | - | - | - | - | - | - |
-| Announce meals, 0 to 2 h after an entry | 17 | 0.72 (0.70 to 0.78) | 1.02 (0.97 to 1.12) | 0.95 (0.90 to 1.02) | 1.51 (1.15 to 2.14) | 1.32 (0.96 to 1.81) | 3.05 (2.33 to 4.56) | 1.16 (1.15 to 1.17) | 1.07 (1.03 to 1.09) |
-| Announce meals, 2 to 4 h after an entry | 17 | 0.71 (0.69 to 0.75) | 1.00 (0.95 to 1.07) | 0.93 (0.89 to 0.97) | 1.38 (1.07 to 2.05) | 1.25 (1.00 to 1.81) | 2.87 (2.33 to 4.47) | 1.15 (1.14 to 1.16) | 1.06 (1.02 to 1.08) |
-| Announce meals, 4 to 6 h after an entry | 17 | 0.68 (0.66 to 0.71) | 0.93 (0.89 to 0.99) | 0.88 (0.84 to 0.93) | 1.10 (0.96 to 1.81) | 1.10 (0.91 to 1.81) | 2.42 (2.08 to 3.97) | 1.14 (1.13 to 1.15) | 1.00 (0.95 to 1.02) |
-| Announce meals, over 6 h after an entry | 17 | 0.64 (0.61 to 0.67) | 0.85 (0.79 to 0.92) | 0.80 (0.77 to 0.90) | 0.99 (0.80 to 1.41) | 1.21 (0.87 to 1.61) | 2.22 (1.79 to 3.25) | 1.12 (1.12 to 1.14) | 0.92 (0.86 to 0.97) |
+| Readings | People | Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | Profile link, start, REPLACE-BG shape, level above 244 | Profile link, start, REPLACE-BG shape as fitted | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| All people | 19 | 0.69 (0.66 to 0.73) | 0.96 (0.89 to 1.02) | 0.90 (0.85 to 0.95) | 0.92 (0.87 to 0.97) | 0.92 (0.86 to 0.97) | 1.22 (0.86 to 1.82) | 1.10 (0.81 to 1.66) | 2.60 (1.88 to 3.84) | 1.14 (1.13 to 1.15) | 1.01 (0.99 to 1.03) |
+| Announce meals | 17 | 0.70 (0.68 to 0.74) | 0.98 (0.93 to 1.04) | 0.92 (0.88 to 0.95) | 0.94 (0.91 to 0.98) | 0.93 (0.90 to 0.97) | 1.45 (0.99 to 1.83) | 1.29 (0.95 to 1.76) | 2.95 (2.19 to 4.03) | 1.15 (1.14 to 1.15) | 1.02 (0.99 to 1.05) |
+| Do not announce meals | 2 | - | - | - | - | - | - | - | - | - | - |
+| Announce meals, 0 to 2 h after an entry | 17 | 0.72 (0.70 to 0.78) | 1.02 (0.97 to 1.12) | 0.95 (0.90 to 1.02) | 0.98 (0.93 to 1.06) | 0.97 (0.92 to 1.04) | 1.51 (1.15 to 2.14) | 1.32 (0.96 to 1.81) | 3.05 (2.33 to 4.56) | 1.16 (1.15 to 1.17) | 1.07 (1.03 to 1.09) |
+| Announce meals, 2 to 4 h after an entry | 17 | 0.71 (0.69 to 0.75) | 1.00 (0.95 to 1.07) | 0.93 (0.89 to 0.97) | 0.96 (0.91 to 1.00) | 0.95 (0.91 to 0.99) | 1.38 (1.07 to 2.05) | 1.25 (1.00 to 1.81) | 2.87 (2.33 to 4.47) | 1.15 (1.14 to 1.16) | 1.06 (1.02 to 1.08) |
+| Announce meals, 4 to 6 h after an entry | 17 | 0.68 (0.66 to 0.71) | 0.93 (0.89 to 0.99) | 0.88 (0.84 to 0.93) | 0.90 (0.87 to 0.96) | 0.89 (0.86 to 0.94) | 1.10 (0.96 to 1.81) | 1.10 (0.91 to 1.81) | 2.42 (2.08 to 3.97) | 1.14 (1.13 to 1.15) | 1.00 (0.95 to 1.02) |
+| Announce meals, over 6 h after an entry | 17 | 0.64 (0.61 to 0.67) | 0.85 (0.79 to 0.92) | 0.80 (0.77 to 0.90) | 0.82 (0.79 to 0.91) | 0.82 (0.79 to 0.91) | 0.99 (0.80 to 1.41) | 1.21 (0.87 to 1.61) | 2.22 (1.79 to 3.25) | 1.12 (1.12 to 1.14) | 0.92 (0.86 to 0.97) |
 
 The same total across people: 10th and 90th centile.
 
-| Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
-|---:|---:|---:|---:|---:|---:|---:|---:|
-| 0.61 to 0.79 | 0.79 to 1.13 | 0.76 to 0.98 | 0.49 to 2.35 | 0.49 to 2.06 | 1.16 to 5.27 | 1.11 to 1.16 | 0.93 to 1.05 |
+| Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | Profile link, start, REPLACE-BG shape, level above 244 | Profile link, start, REPLACE-BG shape as fitted | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0.61 to 0.79 | 0.79 to 1.13 | 0.76 to 0.98 | 0.78 to 1.02 | 0.77 to 1.00 | 0.49 to 2.35 | 0.49 to 2.06 | 1.16 to 5.27 | 1.11 to 1.16 | 0.93 to 1.05 |
 
 ## oref0
 
 By glucose at the reading, mg/dL.
 
-| Glucose | People | Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| below 80 | 96 | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.56 (0.47 to 0.61) | 0.58 (0.50 to 0.64) | 1.11 (0.93 to 1.19) | 0.90 (0.89 to 0.90) | 0.74 (0.73 to 0.75) |
-| 80 to 100 | 97 | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.54 (0.45 to 0.59) | 0.59 (0.50 to 0.65) | 1.29 (1.06 to 1.40) | 0.97 (0.97 to 0.97) | 0.86 (0.85 to 0.87) |
-| 100 to 150 | 97 | 0.50 (0.50 to 0.50) | 0.57 (0.57 to 0.58) | 0.57 (0.57 to 0.58) | 0.65 (0.55 to 0.71) | 0.68 (0.58 to 0.74) | 1.61 (1.39 to 1.77) | 1.06 (1.06 to 1.06) | 0.96 (0.95 to 0.97) |
-| 150 to 200 | 97 | 0.66 (0.66 to 0.66) | 0.92 (0.92 to 0.93) | 0.92 (0.92 to 0.93) | 0.93 (0.76 to 1.05) | 0.90 (0.76 to 0.98) | 2.11 (1.73 to 2.35) | 1.15 (1.15 to 1.15) | 1.02 (1.02 to 1.04) |
-| 200 to 260 | 97 | 0.85 (0.85 to 0.86) | 1.27 (1.27 to 1.28) | 1.14 (1.14 to 1.14) | 1.31 (1.09 to 1.44) | 1.17 (0.98 to 1.26) | 2.61 (2.20 to 2.94) | 1.19 (1.19 to 1.19) | 1.07 (1.05 to 1.09) |
-| above 260 | 90 | 1.11 (1.10 to 1.12) | 1.65 (1.63 to 1.66) | 1.14 (1.14 to 1.14) | 1.84 (1.53 to 1.97) | 1.57 (1.31 to 1.66) | 3.22 (2.66 to 3.47) | 1.20 (1.20 to 1.20) | 1.09 (1.07 to 1.11) |
+| Glucose | People | Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | Profile link, start, REPLACE-BG shape, level above 244 | Profile link, start, REPLACE-BG shape as fitted | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| below 80 | 96 | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.46 (0.46 to 0.46) | 0.46 (0.46 to 0.46) | 0.56 (0.47 to 0.61) | 0.58 (0.50 to 0.64) | 1.11 (0.92 to 1.19) | 0.90 (0.89 to 0.90) | 0.74 (0.73 to 0.75) |
+| 80 to 100 | 97 | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.44 (0.44 to 0.44) | 0.46 (0.46 to 0.46) | 0.46 (0.46 to 0.46) | 0.54 (0.45 to 0.59) | 0.59 (0.50 to 0.64) | 1.29 (1.06 to 1.40) | 0.97 (0.97 to 0.97) | 0.86 (0.85 to 0.88) |
+| 100 to 150 | 97 | 0.50 (0.50 to 0.50) | 0.57 (0.57 to 0.58) | 0.57 (0.57 to 0.58) | 0.59 (0.59 to 0.60) | 0.59 (0.59 to 0.60) | 0.65 (0.56 to 0.71) | 0.68 (0.57 to 0.74) | 1.61 (1.39 to 1.77) | 1.06 (1.06 to 1.07) | 0.96 (0.95 to 0.97) |
+| 150 to 200 | 97 | 0.66 (0.66 to 0.66) | 0.92 (0.92 to 0.93) | 0.92 (0.92 to 0.93) | 0.93 (0.93 to 0.93) | 0.93 (0.93 to 0.93) | 0.93 (0.78 to 1.05) | 0.90 (0.75 to 0.99) | 2.11 (1.76 to 2.35) | 1.15 (1.15 to 1.16) | 1.02 (1.02 to 1.04) |
+| 200 to 260 | 97 | 0.85 (0.85 to 0.86) | 1.27 (1.27 to 1.28) | 1.14 (1.14 to 1.14) | 1.19 (1.19 to 1.20) | 1.19 (1.19 to 1.20) | 1.31 (1.07 to 1.45) | 1.17 (0.98 to 1.26) | 2.61 (2.20 to 2.89) | 1.19 (1.19 to 1.19) | 1.07 (1.05 to 1.09) |
+| above 260 | 90 | 1.11 (1.10 to 1.12) | 1.65 (1.63 to 1.66) | 1.14 (1.14 to 1.14) | 1.24 (1.24 to 1.24) | 1.13 (1.13 to 1.14) | 1.84 (1.52 to 1.97) | 1.57 (1.31 to 1.67) | 3.22 (2.68 to 3.47) | 1.20 (1.20 to 1.20) | 1.09 (1.07 to 1.11) |
 
 Total correction units over every reading above 100 mg/dL.
 
-| Readings | People | Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| All people | 97 | 0.71 (0.70 to 0.74) | 1.00 (0.97 to 1.05) | 0.93 (0.91 to 0.95) | 1.10 (0.92 to 1.21) | 0.95 (0.87 to 1.14) | 2.28 (1.95 to 2.55) | 1.15 (1.15 to 1.15) | 1.03 (1.02 to 1.04) |
-| Announce meals | 92 | 0.72 (0.70 to 0.74) | 1.01 (0.97 to 1.05) | 0.93 (0.91 to 0.95) | 1.13 (1.01 to 1.23) | 1.01 (0.92 to 1.15) | 2.39 (2.12 to 2.59) | 1.15 (1.15 to 1.15) | 1.03 (1.02 to 1.04) |
-| Do not announce meals | 5 | 0.70 (0.57 to 0.73) | 0.97 (0.72 to 1.02) | 0.91 (0.70 to 0.93) | 0.72 (0.32 to 0.77) | 0.67 (0.28 to 0.75) | 1.56 (0.75 to 1.67) | 1.15 (1.10 to 1.15) | 1.04 (1.00 to 1.07) |
-| Announce meals, 0 to 2 h after an entry | 91 | 0.74 (0.71 to 0.76) | 1.05 (1.00 to 1.08) | 0.96 (0.94 to 0.97) | 1.20 (1.07 to 1.30) | 1.05 (0.93 to 1.17) | 2.54 (2.28 to 2.70) | 1.16 (1.15 to 1.16) | 1.06 (1.05 to 1.08) |
-| Announce meals, 2 to 4 h after an entry | 91 | 0.73 (0.72 to 0.75) | 1.04 (1.01 to 1.08) | 0.95 (0.94 to 0.97) | 1.21 (1.05 to 1.32) | 1.01 (0.92 to 1.16) | 2.50 (2.22 to 2.69) | 1.16 (1.15 to 1.16) | 1.06 (1.05 to 1.07) |
-| Announce meals, 4 to 6 h after an entry | 91 | 0.70 (0.68 to 0.74) | 0.97 (0.94 to 1.03) | 0.90 (0.88 to 0.93) | 1.07 (0.91 to 1.18) | 0.97 (0.87 to 1.10) | 2.30 (1.88 to 2.51) | 1.15 (1.14 to 1.15) | 1.01 (1.00 to 1.02) |
-| Announce meals, over 6 h after an entry | 92 | 0.67 (0.63 to 0.69) | 0.90 (0.85 to 0.95) | 0.84 (0.80 to 0.88) | 0.93 (0.79 to 1.02) | 0.93 (0.82 to 1.07) | 1.97 (1.70 to 2.19) | 1.13 (1.12 to 1.14) | 0.94 (0.91 to 0.95) |
+| Readings | People | Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | Profile link, start, REPLACE-BG shape, level above 244 | Profile link, start, REPLACE-BG shape as fitted | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| All people | 97 | 0.71 (0.70 to 0.74) | 1.00 (0.97 to 1.05) | 0.93 (0.91 to 0.94) | 0.95 (0.93 to 0.98) | 0.95 (0.93 to 0.96) | 1.10 (0.92 to 1.21) | 0.95 (0.87 to 1.13) | 2.28 (1.93 to 2.58) | 1.15 (1.15 to 1.15) | 1.03 (1.02 to 1.04) |
+| Announce meals | 92 | 0.72 (0.70 to 0.74) | 1.01 (0.97 to 1.05) | 0.93 (0.91 to 0.95) | 0.96 (0.93 to 0.98) | 0.95 (0.93 to 0.97) | 1.13 (1.02 to 1.22) | 1.01 (0.92 to 1.15) | 2.39 (2.12 to 2.59) | 1.15 (1.15 to 1.15) | 1.03 (1.02 to 1.04) |
+| Do not announce meals | 5 | 0.70 (0.57 to 0.73) | 0.97 (0.72 to 1.02) | 0.91 (0.70 to 0.93) | 0.93 (0.72 to 0.96) | 0.93 (0.72 to 0.95) | 0.72 (0.32 to 0.77) | 0.67 (0.28 to 0.75) | 1.56 (0.75 to 1.67) | 1.15 (1.10 to 1.15) | 1.04 (1.00 to 1.07) |
+| Announce meals, 0 to 2 h after an entry | 91 | 0.74 (0.71 to 0.76) | 1.05 (1.00 to 1.08) | 0.96 (0.94 to 0.97) | 0.99 (0.97 to 1.01) | 0.97 (0.95 to 0.99) | 1.20 (1.07 to 1.30) | 1.05 (0.93 to 1.17) | 2.54 (2.28 to 2.70) | 1.16 (1.15 to 1.16) | 1.06 (1.05 to 1.08) |
+| Announce meals, 2 to 4 h after an entry | 91 | 0.73 (0.72 to 0.75) | 1.04 (1.01 to 1.08) | 0.95 (0.94 to 0.97) | 0.98 (0.96 to 1.01) | 0.97 (0.95 to 0.98) | 1.21 (1.05 to 1.32) | 1.01 (0.92 to 1.16) | 2.50 (2.22 to 2.69) | 1.16 (1.15 to 1.16) | 1.06 (1.05 to 1.07) |
+| Announce meals, 4 to 6 h after an entry | 91 | 0.70 (0.68 to 0.74) | 0.97 (0.94 to 1.03) | 0.90 (0.88 to 0.93) | 0.93 (0.91 to 0.96) | 0.92 (0.89 to 0.95) | 1.07 (0.93 to 1.18) | 0.97 (0.87 to 1.10) | 2.30 (1.88 to 2.51) | 1.15 (1.14 to 1.15) | 1.01 (1.00 to 1.02) |
+| Announce meals, over 6 h after an entry | 92 | 0.67 (0.63 to 0.69) | 0.90 (0.85 to 0.95) | 0.84 (0.80 to 0.88) | 0.87 (0.82 to 0.90) | 0.86 (0.82 to 0.89) | 0.93 (0.79 to 1.02) | 0.93 (0.81 to 1.06) | 1.97 (1.69 to 2.19) | 1.13 (1.12 to 1.14) | 0.94 (0.91 to 0.95) |
 
 The same total across people: 10th and 90th centile.
 
-| Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
-|---:|---:|---:|---:|---:|---:|---:|---:|
-| 0.63 to 0.81 | 0.83 to 1.17 | 0.81 to 1.01 | 0.56 to 1.74 | 0.51 to 1.50 | 1.29 to 3.63 | 1.12 to 1.17 | 0.98 to 1.07 |
+| Profile link, midpoint | Profile link, start | Profile link, start, flat above 200 | Profile link, start, REPLACE-BG shape, level above 244 | Profile link, start, REPLACE-BG shape as fitted | TDD link | Average-dose link | Logarithmic as shipped | Sigmoid | First draft |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0.63 to 0.81 | 0.83 to 1.17 | 0.81 to 1.01 | 0.82 to 1.05 | 0.82 to 1.02 | 0.56 to 1.74 | 0.51 to 1.50 | 1.29 to 3.63 | 1.12 to 1.17 | 0.98 to 1.07 |

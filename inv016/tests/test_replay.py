@@ -1,6 +1,6 @@
 import numpy as np
 
-from inv016.replay import ARMS, arms, hours_since_meal
+from inv016.replay import ARMS, RBG_COEF, RBG_MIN, arms, hours_since_meal, rbg_shape
 
 
 def test_arms_at_known_points():
@@ -17,6 +17,14 @@ def test_arms_at_known_points():
     double = arms(bg, np.full(3, 76.6), 50.0, 38.3, trio=False)
     assert np.allclose(double["TDD link"], 2 * r["TDD link"])    # the dose reaches the TDD arm
     assert np.allclose(double["Profile link, midpoint"], r["Profile link, midpoint"])
+
+
+def test_rbg_shape():
+    g = np.arange(100.0, 371.0)
+    assert g[np.argmin(np.polyval(RBG_COEF, g))] == RBG_MIN
+    # the refit's shape in results/inv013_refit.md: 2.17, 1.28, 0.89, 0.81 and 0.90
+    assert np.allclose(rbg_shape(np.array([100.0, 150, 200, 250, 300]), 370.0), [2.17, 1.28, 0.89, 0.81, 0.90], atol=0.01)
+    assert rbg_shape(90.0) == rbg_shape(100.0) and rbg_shape(350.0) == rbg_shape(RBG_MIN) < rbg_shape(350.0, 370.0)
 
 
 def test_hours_since_meal():

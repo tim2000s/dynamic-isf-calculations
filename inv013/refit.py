@@ -113,7 +113,7 @@ def refit(wide: pd.DataFrame, n_boot: int = N_BOOT) -> dict:
     pts = [p for p in POINTS if p <= g.max()]
     y, k = med[keep], n[keep]
     c = fit_quartic(g, y, k)
-    return dict(bins=g, people=int(len(x)), coef=c / 100.0 ** np.arange(4, -1, -1),
+    return dict(bins=g, people=int(len(x)), med=y, n=k, coef=c / 100.0 ** np.arange(4, -1, -1),
                 at_ref=val[0], scale=val[1],
                 level=dict(zip(pts, val[2:2 + len(pts)])), shape=dict(zip(pts, val[2 + len(pts):])),
                 miss_refit=miss(np.polyval(c, g / 100.0), y, k),
@@ -157,6 +157,13 @@ def main() -> None:
           "Sensitivity x daily dose = a + b G + c G^2 + d G^3 + e G^4, G in mg/dL, valid over the bins fitted.", "",
           "| Cohort | a | b | c | d | e |", "|---|---:|---:|---:|---:|---:|"]
     L += [f"| {name} | " + " | ".join(f"{v:.4g}" for v in r["coef"][::-1]) + " |" for name, r in fits.items()]
+    L += ["", "## Bin medians relative to the refit at 180 mg/dL", "",
+          "Each fitted bin's median over the cohort's refit at 180 mg/dL, with the people behind it in brackets.", "",
+          "| Bin, mg/dL | " + " | ".join(fits) + " |", "|---:|" + "---:|" * len(fits)]
+    for b in sorted(set().union(*(r["bins"] for r in fits.values()))):
+        L.append(f"| {b:.0f} | " + " | ".join(
+            next((f"{m / r['at_ref'][0]:.2f} ({k})" for g, m, k in zip(r["bins"], r["med"], r["n"]) if g == b), "-")
+            for r in fits.values()) + " |")
     out = RESULTS / "inv013_refit.md"
     out.write_text("\n".join(L) + "\n")
     print(out.read_text())
