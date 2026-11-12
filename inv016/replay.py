@@ -66,7 +66,10 @@ below one entry a day, so the stage describes people who announce meals.
 Limits. One profile sensitivity per person stands in for a schedule that may vary by
 hour. Every decision is counted, including those at which the loop would not have dosed.
 The daily dose on AndroidAPS and oref0 is a reconstruction, and the two arms linked to it
-and the logarithmic arm inherit its errors there. On Trio most people ran a dynamic sensitivity, so their glucose record already reflects
+and the logarithmic arm inherit its errors there. Nobody in the AndroidAPS cohort ran a
+dynamic sensitivity (no decision of the 1,307,076 in `oref_v6` is flagged for it), so the
+logarithmic arm there is the equation at 100% on profiles never set up for it, and the
+stage holds no record of the model as AndroidAPS users run it. On Trio most people ran a dynamic sensitivity, so their glucose record already reflects
 one of the reference arms.
 
 Run as
