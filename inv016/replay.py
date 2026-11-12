@@ -59,6 +59,15 @@ value at 180 mg/dL, at 100, 150, 200, 250 and 300 mg/dL):
   Time since a meal enters no arm. Within a glucose band it should change nothing, and
   the totals should be highest in the two hours after an entry, where glucose is highest.
 
+Added on 12 November 2026, after the first run: a ninth arm, the profile link read at the
+start with the shape held at its value at 200 mg/dL (0.87) for every reading above 200.
+On the REPLACE-BG records the refitted shape follows the published one from 100 to 200
+mg/dL and stops falling above (results/inv013_refit.md: 0.81 at 250 and 0.90 at 300
+against the published 0.70 and 0.60). Expected before its run: equal to the start-read
+arm up to 200 mg/dL, 1.15 in the two rows above, and a total between the midpoint arm's
+0.70 and the start-read arm's 0.97 to 1.00, nearer the second. It returned 1.14 in those rows and
+totals of 0.90, 0.90 and 0.93 in the three cohorts.
+
 The run agreed with each expectation but one: the totals were as high from two to four
 hours after an entry as in the first two. Only 0, 2 and 5 people in the three cohorts fell
 below one entry a day, so the stage describes people who announce meals.
@@ -92,8 +101,8 @@ from inv008.config import DB
 from inv013.candidate import (RESULTS, TARGET, candidate, curve_isf, curve_shape,
                               stock_v1, trio_log, trio_sigmoid)
 
-ARMS = ("Profile link, midpoint", "Profile link, start", "TDD link", "Average-dose link",
-        "Logarithmic as shipped", "Sigmoid", "First draft")
+ARMS = ("Profile link, midpoint", "Profile link, start", "Profile link, start, flat above 200",
+        "TDD link", "Average-dose link", "Logarithmic as shipped", "Sigmoid", "First draft")
 G_EDGES = (40, 80, 100, 150, 200, 260, 401)
 G_LABELS = ("below 80", "80 to 100", "100 to 150", "150 to 200", "200 to 260", "above 260")
 M_EDGES = (0, 2, 4, 6, np.inf)
@@ -110,7 +119,7 @@ def arms(bg, tdd, pisf: float, mean_tdd: float, trio: bool) -> dict:
     mid = (bg + TARGET) / 2.0
     log = trio_log(bg, tdd, pisf) if trio else stock_v1(bg, tdd, 55.0)
     return dict(zip(ARMS, (
-        1.0 / curve_shape(mid), 1.0 / curve_shape(bg),
+        1.0 / curve_shape(mid), 1.0 / curve_shape(bg), 1.0 / curve_shape(np.minimum(bg, 200.0)),
         pisf / curve_isf(mid, tdd), pisf / curve_isf(mid, mean_tdd),
         pisf / log, pisf / trio_sigmoid(bg, pisf), pisf / candidate(bg, pisf, tdd, mean_tdd))))
 
