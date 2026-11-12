@@ -11,9 +11,12 @@ for glucose in (100, 380] (`inv008.dynisf.quartic_isf`) and a quadratic for [0, 
 
 The link to daily dose is this repository's and is a modelling choice. The entered
 settings' product for adults (sensitivity x daily dose = 1915, document 6) is taken to
-hold at 180 mg/dL, the reference glucose the abstract uses, which gives
+hold at one glucose, the anchor (`ANCHOR_GLUCOSE`), which gives
 
-    sensitivity = 1915 x quartic(glucose) / quartic(180) / TDD
+    sensitivity = 1915 x quartic(glucose) / quartic(anchor) / TDD
+
+The anchor was 180 mg/dL, the reference glucose the abstract uses, until 12 November
+2026. Since then it is 140 mg/dL, the initial proposal, and it is a modelling choice.
 
 `curve_profile` is the alternative link, the same shape scaled by the profile value.
 Below 100 mg/dL the curve is held at its value at 100 where the published quadratic
@@ -47,6 +50,16 @@ a dip at 150 mg/dL under Loop, Trio and oref0 (their 100:150 ratios are 2.6 to 3
 against the published 1.76), and rising above 200 mg/dL in every cohort that reaches
 it (250:200 of 0.84 and 0.90 against 0.80). The run agreed.
 
+Changed on 12 November 2026: the anchor moved from 180 to 140 mg/dL, so a person's
+entered setting is taken to be valid at 140. Expected before the rerun: the published
+value at 140 mg/dL is 1.44 times its value at 180, so every value of the curve on either
+link is the earlier one divided by 1.44 and every dose is 1.44 times larger. The
+reference dose falls from 54 U to about 38 U. The profile link equals the profile value
+at 140 mg/dL and lies inside Trio's default limits from about 109 to 158 mg/dL. For the
+worked person the curve no longer sits above AndroidAPS at 100% over the whole range:
+the two should meet between 200 and 220 mg/dL with a divisor of 55. The run agreed on
+each point: 37.7 U, 109 to 158 mg/dL, and a meeting at 211 mg/dL.
+
 `candidate` is the profile-anchored form of this document's first draft (commit
 fd3662e), kept as the flat arm of the evaluation.
 
@@ -62,13 +75,15 @@ import numpy as np
 from inv008.dynisf import quartic_isf
 
 DIVISORS = {"rapid, 75 min peak": 55.0, "ultra-rapid, 55 min peak": 65.0, "45 min peak": 75.0}
-BG_POINTS = (70.0, 80.0, 100.0, 120.0, 150.0, 180.0, 200.0, 250.0, 300.0, 380.0)
+BG_POINTS = (70.0, 80.0, 100.0, 120.0, 140.0, 150.0, 180.0, 200.0, 250.0, 300.0, 380.0)
 # The worked person: the simulator's, close to the adult entered median of 1915.
 PROFILE_ISF, TDD = 50.0, 40.0
 # Tenth and ninetieth percentile of blended over own average dose, 960 people (document 6).
 TDD_SWING = (0.72, 1.14)
 # The abstract's reference glucose, and the range over which the quartic is used.
 REF_GLUCOSE, CURVE_RANGE = 180.0, (100.0, 380.0)
+# The glucose at which a person's entered setting is taken to hold: a modelling choice.
+ANCHOR_GLUCOSE = 140.0
 # The poster's fit for glucose in [0, 100] mg/dL: constant, linear and squared terms.
 _QUADRATIC = (98.03, -1.077, 0.008868)
 RESULTS = Path(__file__).resolve().parents[1] / "results"
@@ -99,17 +114,17 @@ def own_levels(path: Path = RESULTS / "inv012_peak_trough.md") -> dict:
 
 
 def curve_shape(bg):
-    """The published quartic relative to its value at 180 mg/dL, held outside its range."""
-    return quartic_isf(np.clip(np.asarray(bg, dtype=float), *CURVE_RANGE)) / quartic_isf(REF_GLUCOSE)
+    """The published quartic relative to its value at the anchor, held outside its range."""
+    return quartic_isf(np.clip(np.asarray(bg, dtype=float), *CURVE_RANGE)) / quartic_isf(ANCHOR_GLUCOSE)
 
 
 def curve_k(bg, product: float = 1915.0):
-    """Sensitivity x daily dose: the entered product at 180 mg/dL, shaped by the quartic."""
+    """Sensitivity x daily dose: the entered product at the anchor, shaped by the quartic."""
     return product * curve_shape(bg)
 
 
 def curve_profile(bg, profile_isf):
-    """The alternative link: the profile value at 180 mg/dL, shaped by the quartic."""
+    """The profile link: the profile value at the anchor, shaped by the quartic."""
     return profile_isf * curve_shape(bg)
 
 
@@ -170,7 +185,7 @@ def main() -> None:
         "## Sensitivity x daily dose by glucose",
         "",
         "The stock equation is 1800 / ln(glucose / divisor + 1). The curve is",
-        "1915 x quartic(glucose) / quartic(180), held below 100 and above 380 mg/dL.",
+        f"1915 x quartic(glucose) / quartic({ANCHOR_GLUCOSE:.0f}), held below 100 and above 380 mg/dL.",
         "The published column is the poster's fit in mg/dL per unit: the quadratic up to",
         "100 mg/dL and the quartic above. The curve uses the quartic's value at 100 (80.6).",
         "",
@@ -204,19 +219,23 @@ def main() -> None:
               "The published curve carries no daily dose. Linking it to one needs the dose at",
               "which the published values apply, which is a level divided by the quartic.", "",
               "| Level taken | Reference dose, U | Curve x daily dose at 200 mg/dL |", "|---|---:|---:|"]
-    levels = {"Adult entered product 1915 at 180 mg/dL (this draft)": (ENTERED["adults"], REF_GLUCOSE),
-              "Pooled entered product 2067 at 180 mg/dL": (ENTERED["pooled, 51% children"], REF_GLUCOSE),
+    levels = {f"Adult entered product 1915 at {ANCHOR_GLUCOSE:.0f} mg/dL (this draft)": (ENTERED["adults"], ANCHOR_GLUCOSE),
+              f"Pooled entered product 2067 at {ANCHOR_GLUCOSE:.0f} mg/dL": (ENTERED["pooled, 51% children"], ANCHOR_GLUCOSE),
+              "Adult entered product 1915 at 180 mg/dL (the anchor until 12 November 2026)": (ENTERED["adults"], REF_GLUCOSE),
               "1800 rule at 105 mg/dL (March 2026 work)": (1800.0, 105.0)}
     own = own_levels()
     levels |= {f"Own peak-to-trough level under {n} at 200 mg/dL": (v[200][0], 200.0) for n, (_, v) in own.items()}
     for name, (level, at) in levels.items():
         lines.append(f"| {name} | {level / q(at):.1f} | {level / q(at) * q(200.0):.0f} |")
     lines += ["", "The adult product carries a 95% interval of 1828 to 1986, which at 200 mg/dL is "
-              f"{float(curve_k(200.0, 1828.0)):.0f} to {float(curve_k(200.0, 1986.0)):.0f}.",
-              f"At 180 mg/dL the TDD link gives {float(curve_isf(180.0, 20.0)):.1f} mg/dL per unit on 20 U a day and "
-              f"{float(curve_isf(180.0, 80.0)):.1f} on 80 U a day. The published value there is {q(180.0):.1f} for both."]
-    lines += ["", f"Dose multiple against the reference glucose: {1.0 / float(curve_shape(120.0)):.2f} at 120 mg/dL "
-              f"and {1.0 / float(curve_shape(340.0)):.2f} at 340 mg/dL. The abstract gives about a half and about double."]
+              f"{float(curve_k(200.0, 1828.0)):.0f} to {float(curve_k(200.0, 1986.0)):.0f}, and with the product held at {REF_GLUCOSE:.0f} mg/dL "
+              f"{1828.0 / q(REF_GLUCOSE) * q(200.0):.0f} to {1986.0 / q(REF_GLUCOSE) * q(200.0):.0f}.",
+              f"At {ANCHOR_GLUCOSE:.0f} mg/dL the TDD link gives {float(curve_isf(ANCHOR_GLUCOSE, 20.0)):.1f} mg/dL per unit on 20 U a day and "
+              f"{float(curve_isf(ANCHOR_GLUCOSE, 80.0)):.1f} on 80 U a day. The published value there is {q(ANCHOR_GLUCOSE):.1f} for both.",
+              f"The published value at {ANCHOR_GLUCOSE:.0f} mg/dL is {q(ANCHOR_GLUCOSE) / q(REF_GLUCOSE):.2f} times its value at {REF_GLUCOSE:.0f}."]
+    ref = float(curve_shape(REF_GLUCOSE))
+    lines += ["", f"Dose multiple against the abstract's reference glucose of {REF_GLUCOSE:.0f} mg/dL: {ref / float(curve_shape(120.0)):.2f} at 120 mg/dL "
+              f"and {ref / float(curve_shape(340.0)):.2f} at 340 mg/dL. The abstract gives about a half and about double."]
 
     lines += ["", "## The published curve against the measured levels", "",
               "Measured sensitivity x daily dose in each glucose bin (INV-012, median over events with",
@@ -235,6 +254,7 @@ def main() -> None:
         "Trio sigmoid": trio_sigmoid(bg, PROFILE_ISF),
         "Curve, TDD link": curve_isf(bg, TDD),
         "Curve, profile link": curve_profile(bg, PROFILE_ISF),
+        "Curve, profile link, inside Trio's limits": np.clip(curve_profile(bg, PROFILE_ISF), PROFILE_ISF / 1.2, PROFILE_ISF / 0.7),
         "Profile, eased below 100": candidate(bg, PROFILE_ISF, TDD, TDD),
     }
     lines += ["", "## One person", "",
@@ -265,7 +285,11 @@ def main() -> None:
               f"returns the AndroidAPS value: {float(trio_log(200.0, TDD, PROFILE_ISF, factor=1.0, lo=0.01, hi=100.0)):.1f} "
               f"against {float(stock_v1(200.0, TDD, 55.0)):.1f} mg/dL per unit at 200 mg/dL."]
     lines += ["", f"Inside Trio's default limits ({PROFILE_ISF / 1.2:.1f} to {PROFILE_ISF / 0.7:.1f}) the curve on the profile link "
-              f"runs only from {inside.min():.0f} to {inside.max():.0f} mg/dL for this person."]
+              f"runs only from {inside.min():.0f} to {inside.max():.0f} mg/dL for this person. As a multiple of the profile value it is "
+              f"{float(curve_shape(100.0)):.2f} at 100 mg/dL, {float(curve_shape(300.0)):.2f} at 300 and {float(curve_shape(380.0)):.2f} at 380, "
+              f"so the insulin it asks for per mg/dL is {1 / float(curve_shape(100.0)):.2f}, {1 / float(curve_shape(300.0)):.2f} and "
+              f"{1 / float(curve_shape(380.0)):.2f} times the profile's. A correction from 300 to 100 mg/dL read at the start is "
+              f"{units_to_target(link, 300.0):.2f} U from the curve and {200.0 / (PROFILE_ISF / 1.2):.2f} U with the upper limit."]
 
     lines += ["", "## Units to bring that person to 100 mg/dL", "",
               "Distance from 100 mg/dL over the sensitivity, with the curve on the profile link. This is",
@@ -285,7 +309,7 @@ def main() -> None:
     extra = [units_to_target(curve, g) / units_to_target(curve, g, "midpoint") - 1.0 for g in (150.0, 200.0, 250.0, 300.0)]
     lines += ["", f"Reading at the start asks for {100 * min(extra):.0f} to {100 * max(extra):.0f}% more than reading at the midpoint."]
     same = fine[np.argmin(np.abs(curve_isf(fine, TDD) - PROFILE_ISF))]
-    lines += [f"For this person the TDD link equals the profile value at {same:.0f} mg/dL; the profile link does so at {REF_GLUCOSE:.0f}."]
+    lines += [f"For this person the TDD link equals the profile value at {same:.0f} mg/dL; the profile link does so at {ANCHOR_GLUCOSE:.0f}."]
 
     lines += ["", "## Movement with recent dose", "",
               "The daily dose in the link is this draft's to define. Dividing by",

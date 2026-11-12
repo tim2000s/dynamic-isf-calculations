@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from inv008.dynisf import isf_v1, quartic_isf
-from inv013.candidate import (_QUADRATIC, candidate, curve_isf, curve_k, curve_profile, curve_shape,
+from inv013.candidate import (ANCHOR_GLUCOSE, _QUADRATIC, candidate, curve_isf, curve_k, curve_profile, curve_shape,
                               own_levels, published, stock_v1, trio_log, trio_sigmoid, units_to_target)
 
 BG = np.array([60.0, 80.0, 100.0, 150.0, 200.0, 300.0])
@@ -38,13 +38,13 @@ def test_dose_ratio_is_clamped_and_the_high_option_takes_the_stock_shape():
     assert high[5] / high[4] == pytest.approx(float(stock_v1(300.0, 1.0, 55.0) / stock_v1(200.0, 1.0, 55.0)))
 
 
-def test_curve_is_the_published_quartic_carrying_the_entered_product_at_180():
-    assert float(curve_k(180.0)) == pytest.approx(1915.0)
-    assert float(curve_isf(180.0, 1915.0 / 35.0)) == pytest.approx(35.0)  # the abstract's reference
-    assert float(curve_isf(100.0, 1915.0 / 35.0)) == pytest.approx(79.0, rel=0.03)
-    # The abstract: doses about halved at 120 mg/dL and about doubled above 340.
-    assert 1.0 / float(curve_shape(120.0)) == pytest.approx(0.5, abs=0.07)
-    assert 1.0 / float(curve_shape(340.0)) == pytest.approx(2.0, abs=0.1)
+def test_curve_is_the_published_quartic_carrying_the_entered_product_at_the_anchor():
+    assert ANCHOR_GLUCOSE == 140.0 and float(curve_k(ANCHOR_GLUCOSE)) == pytest.approx(1915.0)
+    assert float(curve_profile(ANCHOR_GLUCOSE, 50.0)) == pytest.approx(50.0)
+    # The abstract: 35 at 180 mg/dL and 79 at 100, doses about halved at 120 and about doubled above 340.
+    assert float(curve_k(100.0) / curve_k(180.0)) == pytest.approx(79.0 / 35.0, rel=0.03)
+    assert float(curve_shape(180.0) / curve_shape(120.0)) == pytest.approx(0.5, abs=0.07)
+    assert float(curve_shape(180.0) / curve_shape(340.0)) == pytest.approx(2.0, abs=0.1)
     assert float(curve_k(60.0)) == float(curve_k(100.0)) and float(curve_k(450.0)) == float(curve_k(380.0))
     assert np.all(np.diff(curve_k(np.linspace(100.0, 380.0, 100))) < 0)
     # The poster's quadratic gives the abstract's 79 at 100 mg/dL and 65 near 60.
