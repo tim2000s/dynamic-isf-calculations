@@ -182,8 +182,9 @@ def person_bins(ev: pd.DataFrame, tdd: float, width: float = 10.0) -> pd.DataFra
     return out[out.n >= MIN_PER_BIN].reset_index()
 
 
-def _from_grid(g: pd.DataFrame, subject: str, cohort: str, streams: dict,
-               model: str, prom: float, tdd: float | None = None) -> pd.DataFrame:
+def grid_events(g: pd.DataFrame, subject: str, streams: dict, model: str, prom: float,
+                tdd: float | None = None) -> tuple[pd.DataFrame, float, bool]:
+    """One person's events in time order, their daily dose, and whether a bolus stood in for meals."""
     n = len(g)
     tot = np.nan_to_num(g.total_u.to_numpy(float))
     sched, _ = schedule_units(g, subject, streams)
@@ -197,6 +198,12 @@ def _from_grid(g: pd.DataFrame, subject: str, cohort: str, streams: dict,
     bg[(bg < BG_LO) | (bg > BG_HI)] = np.nan
     ev = find_events(np.arange(n) * config.GRID_MIN, bg,
                      acted_cum(tot - np.nan_to_num(sched), M.kernel(model)), carbs, prom)
+    return ev, tdd, proxy
+
+
+def _from_grid(g: pd.DataFrame, subject: str, cohort: str, streams: dict,
+               model: str, prom: float, tdd: float | None = None) -> pd.DataFrame:
+    ev, tdd, proxy = grid_events(g, subject, streams, model, prom, tdd)
     return person_bins(ev, tdd).assign(subject=subject, cohort=cohort, tdd=tdd,
                                        n_events=len(ev), meal_proxy=proxy)
 
