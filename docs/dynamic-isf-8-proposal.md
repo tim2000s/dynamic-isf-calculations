@@ -85,16 +85,32 @@ covers. The limits need a decision from Trio's maintainers before the model can
 run there as published. AndroidAPS applies no such limit in its dynamic ISF
 calculation.
 
-Two things are unsettled. The first is how far that comparison reaches. It covers
-adults on a pump who gave their own corrections, and it compares people with each
-other, so it does not show whether one person's value should also move with their
-recent insulin use, as the TDD link does. People using a loop were not tested,
-and nor were children. The second is whether a loop dosing to this equation does
-better than one dosing to either existing model, which has not been tested.
+The candidate has since been run in simulation (INV-019). Forty simulated adults
+were run for 35 days in TimSim with shipped oref0 dosing, and only the sensitivity
+rule differed between arms. Against the same people on their unchanged profile,
+the candidate lowered mean glucose by 1.8 mg/dL (95% interval 0.7 to 2.9) and
+raised time below 54 mg/dL by 0.43 percentage points (0.24 to 0.61), which is
+about what a profile ISF entered 30% too low did. A harm rule written before the
+run read harm on the low side against oref0 with autosens. It read unresolved
+against a logarithmic model matched to the profile, and cleared on the high side
+against both. Held inside Trio's default limits, the candidate raised time below
+54 mg/dL by 0.13 points (-0.02 to 0.27) and time in range by 0.90 points (0.11 to
+1.69). The simulated body is built the opposite way to the equation's premise,
+since a unit of insulin does more there as glucose rises. The run therefore ranks
+the rules in that simulator, and its sizes are not estimates for people. The harm
+reading is reported and looked into, and it does not stop the candidate from
+moving to shadow running.
 
-This is a draft for discussion. The equation has not run on a device or in a
-closed-loop simulator, and the candidate uses the published coefficients
-unchanged. Readers are assumed to
+Two things are unsettled. The first is how far the comparison of links reaches. It
+covers adults on a pump who gave their own corrections, and it compares people
+with each other, so it does not show whether one person's value should also move
+with their recent insulin use, as the TDD link does. People using a loop were not
+tested, and nor were children. The second is whether a loop dosing to this
+equation does better in people than one dosing to either existing model. The
+simulation is the only test so far, and nothing has been tested in people.
+
+This is a draft for discussion. The equation has not run on a device, and the
+candidate uses the published coefficients unchanged. Readers are assumed to
 know how dynamic ISF works in both systems. Glucose is in mg/dL throughout because
 the code is.
 
@@ -124,6 +140,13 @@ mg/dL per unit at 100 mg/dL, 35.3 at 180, 21.1 at 300 and 15.3 at 380. It implie
 dose multiples of 0.56 at 120 mg/dL and 1.95 at 340, in line with the abstract's
 half and double. The quadratic gives 79.0 at 100 mg/dL and 65.3 at 60, so the two
 pieces differ by 2% where they meet.
+
+The figure below redraws the poster's results figure. The poster gives its bin
+medians and quartiles only as a drawing, so they were measured from the image, and
+the measured medians sit within 2.6 mg/dL per unit of the published equations
+(`results/inv013_poster_figure.md`).
+
+![The published results figure, redrawn. Bars are bin medians and whiskers are quartiles, both measured from the poster's image. The curves are the published equations.](../charts/proposal8/fig1_published_curve.png)
 
 The equation is steeper than the logarithmic model. Between 100 and 200 mg/dL its
 value falls by a factor of 2.61, where the logarithmic model with a divisor of 55
@@ -418,8 +441,9 @@ reader can weigh them.
 
 Two questions remain for this series. One is the scale for each person, taken up
 in the next section. The other is whether a loop that doses to the equation does
-better than one dosing to either existing model or to a flat profile. That has
-not been tested, and the evaluation proposed below is designed to answer it.
+better than one dosing to either existing model or to a flat profile. The third
+stage of the evaluation below ran that comparison in simulation, and it has not
+been tested in people.
 
 A proposal from June 2026 that used this shape (document 3) was withdrawn for live
 dosing on 16 September 2026. The audit of that date left the way open for such
@@ -573,6 +597,8 @@ entered ISF in every case. The link to TDD is therefore excluded as the scale
 between people unless about three quarters of the six-hour fall was independent
 of the dose.
 
+![The measured coefficients against what each link predicts. The small points are the constructed cases, in which the true link is known.](../charts/proposal8/fig3_profile_or_daily_dose.png)
+
 The result has limits. It comes from 150 adults in one trial. It compares people
 with each other, so it does not test whether one person's sensitivity moves with
 their recent dosing, which is what the link to TDD adds within a person. Document
@@ -601,6 +627,8 @@ measured intervals only when three quarters of the six-hour fall was taken to be
 independent of the dose, which is the same reservation as in the test of the
 links.
 
+![The published curve attached to four profile ISFs, by multiplying and by adding a constant.](../charts/proposal8/fig4_multiply_or_shift.png)
+
 A further possibility is a curve measured for each person from their own events.
 The publication's measurement was run person by person (INV-018), first on the
 196 adults of REPLACE-BG, who had a median of 448 events each. In thirds of
@@ -610,6 +638,8 @@ share in the lowest. The drop in mg/dL per unit over the same span was 2.32 (1.2
 to 5.51) times as large in the highest third as in the lowest, where curves that
 differ by an added constant give 1. People with different entered settings
 therefore had curves of one shape at different heights.
+
+![The publication's measurement run on each of 196 adults in REPLACE-BG, as measured and with each curve divided by its own reading at 140 mg/dL.](../charts/inv018/fig_person_curves.png)
 
 Each person's events were then divided into two halves and a curve was built from
 each half. The height repeated: in REPLACE-BG the reading at 140 mg/dL had a rank
@@ -623,6 +653,8 @@ above 1. Longer records did not change that. Among 38 people using Loop with at
 least 1,600 events each, the figure was 1.06 (0.93 to 1.20) at 190 mg/dL, the
 highest in the run. Trio and oref0 had too few people for the comparison of
 shapes.
+
+![Each REPLACE-BG adult's curve built from two halves of their events. The height at 140 mg/dL repeats between the halves, and the share kept at 250 mg/dL repeats weakly.](../charts/inv018/fig_split_half.png)
 
 The height of a person's measured curve is not used either. Its reading at 140
 mg/dL was 2.5 to 2.9 times the entered ISF in every third, because the
@@ -663,6 +695,8 @@ mode, and more above. Against the person's own profile it gives less insulin
 below 140 mg/dL and more above, which holds for everyone. The comparison with AndroidAPS
 holds for this person only, since AndroidAPS scales by daily dose and the
 candidate by the profile.
+
+![The candidate for three profile ISFs, and the worked person under each model with the band Trio's default limits allow.](../charts/proposal8/fig2_scaled_to_profile.png)
 
 The published fit stops at both ends, and the reference implementation
 (`inv013/candidate.py`) makes a choice at each. Below 100 mg/dL it holds the value
@@ -713,8 +747,11 @@ Running the curve as published needs limits for this mode of about 0.63 and 3.33
 or no limits on it, and the upper figure is the one that carries risk, since it
 more than triples a correction at the top of the range. Which of
 these Trio should do is a question for its maintainers. The third stage of the
-evaluation runs the candidate with and without the default limits so that the
-decision has figures behind it. `calculateRawDynIsf` in AndroidAPS applies no
+evaluation ran the candidate with and without the default limits, in simulation.
+Against the unchanged profile, the full curve raised time below 54 mg/dL by 0.43
+percentage points (0.24 to 0.61) and the curve inside the limits by 0.13 (-0.02 to
+0.27). Their changes in time above 250 mg/dL were -0.35 points (-0.72 to 0.02) and
+-0.14 (-0.40 to 0.16). `calculateRawDynIsf` in AndroidAPS applies no
 limit, so the whole curve would reach the dose there, and the same question about
 the top of the range applies to it.
 
@@ -851,14 +888,16 @@ since covered 100 to 250 mg/dL, and the measurement sat too far from the truth
 there to set one. What remains for the simulation is 300 mg/dL and a truth
 measured inside the free-living runs.
 
-The third stage is simulation in TimSim, with runs paired by seed and an arm for
-unannounced meals. The candidate is also run with a mis-set profile ISF, and the
-TDD arm with a mis-set adjustment factor. The candidate is run with Trio's default
-limits and without them, and with the anchor at 140 and at 180 mg/dL. A harm rule
-is written before the runs and has two sides, time below 54 mg/dL and time above
-250 mg/dL. Both are needed. For the worked person this model gives less insulin
-than AndroidAPS at 100% below 211 mg/dL and more above it, and at 380 mg/dL it
-asks for 3.33 times the profile's insulin.
+The third stage is simulation in TimSim, with runs paired by seed. It was run as
+INV-019 and is reported at the end of this section. The candidate was run with
+Trio's default limits and without them, and with the anchor at 140 and at 180
+mg/dL. It was also run on a mis-set profile ISF. A harm rule was written before
+the runs and has two sides, time below 54 mg/dL and time above 250 mg/dL. Both
+are needed. For the worked person this model gives less insulin than AndroidAPS
+at 100% below 211 mg/dL and more above it, and at 380 mg/dL it asks for 3.33
+times the profile's insulin. The arm for unannounced meals was left for a second
+run, as were the TDD arm with a mis-set adjustment factor and the arm on a plain
+average daily dose.
 
 A harm reading in the simulation is reported and looked into, and it does not by
 itself stop the candidate. The simulated body differs from the equation's premise,
@@ -883,6 +922,156 @@ The way back at every stage is the mode selector. The existing modes stay in the
 code unchanged and remain the default until the fifth stage has run, and any build
 that includes the new mode names the build before it.
 
+### The third stage in simulation
+
+The third stage was run on 12 November 2026 (INV-019). Each arm was the shipped
+oref0 algorithm run by TimSim's adapter, with the sensitivity it is handed every
+five minutes replaced by the arm's rule at the current sensor glucose. The 40
+simulated adults, their meals, the sensor noise and their titrated settings were
+the same in every arm, so a difference between two arms is the rule. Every arm
+with a rule ran with autosens held at 1.0, which is what AndroidAPS does in
+dynamic mode at its default settings. A rule switched on once seven days of
+delivery were held, as AndroidAPS requires, and outcomes were read on true glucose
+from day 8 to day 35. The arms and the margins of the harm rule were committed
+before the run, with the expected sign of each result
+(`inv019/outcome_test.py`). There
+were sixteen arms and 640 runs, and none raised an error. Twelve runs ended early
+through hypoglycaemia and none through hyperglycaemia.
+
+The checks were read before any result. Week one, before any rule had switched
+on, differed from the reference by 0.000 mg/dL of mean glucose in every arm that
+shares its profile. Each rule reached its runs, as the second column of the table
+below shows. The null arm was a profile ISF multiplied by 1.01, which shows how
+far two runs drift apart when nothing of size is changed. Every one of its
+intervals included zero and it read cleared on both sides of the harm rule, so
+both sides could be judged with a panel of this size. Median glucose across the
+arms ran from 123 to 138 mg/dL, with 5th percentiles of 75 to 91.
+
+The panel differs in two ways from the people the rule is written for. Its
+titrated profile ISF multiplied by daily dose has a median of 988, about half of
+the 1,915 that adults enter. The arms scaled by daily dose therefore dosed these
+people more weakly than their profiles did, and an arm was added with the
+logarithmic model's factor set per person so that it returns the profile ISF at
+140 mg/dL. That arm removes the difference of level and leaves the difference of
+shape. The other difference is in the simulated body. Its true sensitivity rises
+with glucose between 100 and 300 mg/dL (INV-014), and the equation's falls.
+
+The table gives each arm against the same people on their unchanged profile ISF.
+Differences are means over the people who completed both runs, with 95% intervals
+from resampling people, and those in time are percentage points.
+
+| Arm | Sensitivity applied ÷ profile ISF | Time below 54 mg/dL | Time above 250 mg/dL | Time in range | Mean glucose, mg/dL |
+|----------------------------------|---------:|-----------------:|-----------------:|-----------------:|-----------------:|
+| Candidate (profile ISF at 140 mg/dL) | 1.12 | +0.43 (+0.24 to +0.61) | -0.35 (-0.72 to +0.02) | +0.15 (-0.74 to +1.07) | -1.77 (-2.86 to -0.70) |
+| Candidate inside Trio's limits, 0.7 to 1.2 | 1.12 | +0.13 (-0.02 to +0.27) | -0.14 (-0.40 to +0.16) | +0.90 (+0.11 to +1.69) | -1.16 (-1.93 to -0.37) |
+| Candidate, profile ISF at 180 mg/dL | 1.53 | -0.01 (-0.13 to +0.12) | -0.14 (-0.41 to +0.15) | -0.33 (-1.03 to +0.34) | +3.06 (+2.40 to +3.72) |
+| Equation linked to TDD | 2.26 | -0.09 (-0.29 to +0.09) | +0.05 (-0.32 to +0.40) | -1.89 (-2.94 to -0.91) | +8.87 (+6.77 to +10.96) |
+| First draft: profile above 100 mg/dL, curve below | 1.00 | +0.03 (-0.04 to +0.11) | +0.05 (-0.16 to +0.27) | -0.20 (-0.74 to +0.34) | +0.57 (+0.08 to +1.15) |
+| oref0 with autosens, no dynamic rule | 1.00 | +0.02 (-0.09 to +0.11) | -0.03 (-0.22 to +0.18) | +0.38 (-0.28 to +1.01) | -0.75 (-1.43 to -0.02) |
+| Logarithmic, AndroidAPS at 100% | 1.62 | -0.02 (-0.22 to +0.18) | -0.31 (-0.62 to +0.02) | -0.26 (-1.05 to +0.55) | +4.85 (+2.78 to +6.89) |
+| Logarithmic, matched to the profile at 140 | 0.98 | +0.23 (+0.09 to +0.37) | -0.37 (-0.63 to -0.12) | +0.72 (-0.11 to +1.63) | -1.36 (-2.39 to -0.31) |
+| Logarithmic, Trio (factor 0.8, limits) | 1.43 | -0.17 (-0.32 to -0.03) | -0.06 (-0.31 to +0.21) | -0.18 (-1.03 to +0.69) | +4.35 (+3.39 to +5.35) |
+| Trio sigmoid, defaults | 0.95 | +0.16 (+0.05 to +0.27) | -0.19 (-0.42 to +0.06) | +0.33 (-0.40 to +1.04) | -1.55 (-2.31 to -0.71) |
+| Placebo: profile ISF x 1.01 | 1.00 | +0.03 (-0.08 to +0.13) | +0.09 (-0.10 to +0.29) | -0.07 (-0.79 to +0.61) | +0.42 (-0.16 to +1.06) |
+| Profile ISF entered 30% too low | 1.00 | +0.39 (+0.22 to +0.56) | -0.36 (-0.69 to -0.04) | +1.00 (+0.09 to +1.91) | -5.95 (-6.90 to -4.95) |
+| Profile ISF entered 40% too high | 1.00 | -0.17 (-0.31 to -0.05) | +0.32 (-0.03 to +0.69) | -1.45 (-2.53 to -0.36) | +5.81 (+4.89 to +6.72) |
+
+The candidate lowered mean glucose by 1.77 mg/dL (0.70 to 2.86) and time above 180
+mg/dL by 1.03 points (0.20 to 1.89). Its changes in time above 250 mg/dL and in
+time in range had intervals that include zero. Time below 54 mg/dL rose by 0.43
+points (0.24 to 0.61). The median person spent 0.22% of time there on the
+unchanged profile and 0.81% under the candidate. A profile ISF entered 30% too low
+raised it by 0.39 points (0.22 to 0.56), so on the low side the candidate cost
+about what that mis-setting did.
+
+![Each rule against the same simulated people on their unchanged profile ISF, with 95% intervals. Results from TimSim are relative.](../charts/proposal8/fig5_outcomes_in_simulation.png)
+
+The arms that change one part of the candidate indicate where the extra time
+below 54 mg/dL came from. The first draft's form follows the curve below 100 mg/dL
+and the profile above it, and it changed time below 54 mg/dL by +0.03 points
+(-0.04 to +0.11), so the easing near target was not the source. Inside Trio's
+limits the candidate stops at 1.2 times the profile's insulin, and the rise was
+0.13 points (-0.02 to 0.27). Anchored at 180 mg/dL the rule asks for more insulin
+than the profile only above 180, and the change was -0.01 (-0.13 to +0.12) with
+mean glucose 3.06 mg/dL higher (2.40 to 3.72). The rise therefore went with how
+much more insulin than the profile the rule asked for above target. That reading
+rests on the arms. The cycles that preceded each low were not traced.
+
+Among the rules run on the unchanged profile, only the candidate inside Trio's
+limits had an interval for time in range that lay above zero, at +0.90 points
+(0.11 to 1.69). The profile ISF entered 30% too low did the same, at +1.00 (0.09
+to 1.91).
+
+The existing models moved the same way where they dosed at the profile's level.
+The matched logarithmic model raised time below 54 mg/dL by 0.23 points (0.09 to
+0.37) and Trio's sigmoid by 0.16 (0.05 to 0.27). The logarithmic model at
+AndroidAPS's 100% and at Trio's defaults dosed more weakly than the profile on
+this panel, and mean glucose rose by 4.85 mg/dL (2.78 to 6.89) and 4.35 (3.39 to
+5.35). The equation linked to TDD applied 2.26 times the profile's sensitivity
+and raised mean glucose by 8.87 mg/dL (6.77 to 10.96). That figure describes the
+level of this panel, and it does not test the link in adults whose product is
+near 1,915.
+
+On a profile ISF entered 30% too low, the candidate added 0.20 points of time
+below 54 mg/dL (-0.01 to 0.43) to what the mis-setting did alone, and four of its
+40 runs ended early through hypoglycaemia against one for the mis-set profile
+alone. On a profile entered 40% too high it added 0.19 points (0.11 to 0.28) and
+lowered time above 250 mg/dL by 0.60 points (0.29 to 0.92).
+
+The harm rule compares the candidate with two arms. The matched logarithmic model
+has the candidate's level at 140 mg/dL and differs in shape. oref0 with autosens
+is what a person has with dynamic sensitivity switched off. The margins are 0.25
+points of time below 54 mg/dL and 1.25 points above 250, a quarter of the
+consensus limits of 1% and 5% [6], and the fraction is a choice. A side reads
+harm when the interval lies wholly above zero and the mean is above the margin.
+It reads cleared when the upper bound is below the margin, and unresolved
+otherwise. The logarithmic model at 100% is shown beside these and is outside the
+rule, because on this panel it doses at a different level.
+
+| Arm | Against | Side, mg/dL | People | Difference, points of time | Margin | Reading |
+|------------|--------------------------|------------|-------:|----------------------:|-------:|-----------|
+| Placebo | Unchanged profile | Below 54 | 39 | +0.03 (-0.08 to +0.13) | 0.25 | Cleared |
+| Placebo | Unchanged profile | Above 250 | 39 | +0.09 (-0.10 to +0.29) | 1.25 | Cleared |
+| Candidate | Logarithmic, matched at 140 | Below 54 | 39 | +0.25 (+0.09 to +0.42) | 0.25 | Unresolved |
+| Candidate | Logarithmic, matched at 140 | Above 250 | 39 | +0.03 (-0.24 to +0.31) | 1.25 | Cleared |
+| Candidate | oref0 with autosens | Below 54 | 40 | +0.41 (+0.26 to +0.59) | 0.25 | Harm |
+| Candidate | oref0 with autosens | Above 250 | 40 | -0.36 (-0.80 to +0.04) | 1.25 | Cleared |
+| Candidate | Logarithmic, AndroidAPS at 100% | Below 54 | 40 | +0.46 (+0.29 to +0.63) | 0.25 | Harm |
+| Candidate | Logarithmic, AndroidAPS at 100% | Above 250 | 40 | -0.04 (-0.27 to +0.21) | 1.25 | Cleared |
+
+On the low side the candidate read harm against oref0 with autosens, at +0.41
+points (0.26 to 0.59). Against the matched logarithmic model it read unresolved at
++0.25 (0.09 to 0.42), an interval that lies above zero with its mean at the
+margin. On the high side it read cleared against both. No comparison met the
+separate criterion on runs that ended early. The largest rise in one person's
+time below 54 mg/dL was 1.97 points.
+
+Two of the signs written down before the run did not hold. Time above 250 mg/dL
+was expected to be lower under the candidate than under the matched logarithmic
+model, and the difference was +0.03 points (-0.24 to +0.31). It was expected to be
+higher under the logarithmic model at 100% than on the profile, and it was -0.31
+(-0.62 to +0.02), with mean glucose higher as expected. The second is unexplained.
+The low side had been expected to read harm or unresolved.
+
+Two properties of the simulator could produce the low-side reading without the
+same holding in people. The simulated body responds more to a unit of insulin as
+glucose rises, so a rule that gives more insulin at high glucose gives it where
+each unit already does most. The equation was measured in people in whom, by its
+own account, a unit does less there. The titrated profiles also sit at about half
+the level adults enter for their daily dose, and how that moves the result was not
+tested. Neither property was shown to be the cause.
+
+The run has further limits. The vendored oref0 takes one sensitivity per cycle.
+AndroidAPS in dynamic mode also uses the value along its forecast, and that use
+was not exercised. One seed was run. TimSim orders options and finds failures,
+and the sizes above are not estimates for people.
+
+What follows was fixed before the run. The harm reading is looked into, and the
+candidate carries on to the fourth stage. The unresolved reading against the
+matched model calls for a larger panel or a second seed.
+Shadow running, in which the device calculates the value and doses nothing from
+it, is unaffected by either reading.
+
 ## What is not settled
 
 Some of what is missing can only come from the authors. The level of the TDD arm
@@ -902,7 +1091,10 @@ adds within a person. Whether a later version should carry one is open.
 
 The anchor is open. The 140 mg/dL used here is an initial proposal, and the
 publication's reference is 180 mg/dL. The two differ by a factor of 1.44 in every
-dose, and the third stage of the evaluation runs both.
+dose. In the simulation the anchor at 180 mg/dL left time below 54 mg/dL where the
+profile had it and raised mean glucose by 3.06 mg/dL (2.40 to 3.72). The anchor at
+140 lowered mean glucose by 1.77 mg/dL (0.70 to 2.86) and raised time below 54
+mg/dL. That is the ranking in one simulator and it does not settle the choice.
 
 The level of the TDD arm is open, as described above. A level set from entered
 settings at 140 mg/dL may not apply to open-source systems, since the measurement
@@ -918,14 +1110,18 @@ used, neither REPLACE-BG nor Loop reproduces it, whichever way that ratio is
 summarised. By the extra fall per extra unit, both do.
 
 Parts of the existing systems were not read. The bolus calculator's sensitivity in
-dynamic mode is one, and the behaviour of autosens in that mode is another.
-TimSim's oref adapter has not been checked for whether it runs the logarithmic
-model closely enough to act as the comparator in the third stage.
+dynamic mode is one. Autosens in that mode was read in AndroidAPS only, where the
+default setting holds it at 1.0 (`ApsDynIsfAdjustSensitivity` off,
+nightscout/AndroidAPS dev f66398c9d0). The third stage did not run AndroidAPS's
+or Trio's own code for the existing models. It ran each model's equation from
+`inv013/candidate.py` inside the vendored oref0, with TDD blended as AndroidAPS
+blends it, and Trio's own blend was not reproduced.
 
 The third stage has a further limit. In TimSim a unit of insulin does more at
 higher glucose, and the equation assumes it does less. A result from that stage
 describes the equation in a body built the other way, and whether people resemble
-the simulator in this respect is not known.
+the simulator in this respect is not known. The low-side reading reported above
+is subject to that limit.
 
 The last question is for the maintainers of AndroidAPS and Trio, and it is whether
 they want one shared definition. The two systems run the same equation and, at
@@ -953,7 +1149,12 @@ on recorded histories. `python3 -m inv017.shift_or_scale` writes
 `python3 -m inv018.person_curves` writes `results/inv018_person_curves.md`, the
 curve of each person in REPLACE-BG. `python3 -m inv018.split_half` and `python3 -m
 inv018.split_half_cohorts` write the comparison of halves, on REPLACE-BG and on
-all eight cohorts.
+all eight cohorts. `python -m inv019.outcome_test --timsim <TimSim checkout>`
+writes `results/inv019_outcome_test.md`, the outcome test in simulation. It needs
+the same interpreter as INV-014 and took about seven hours on seven workers, and
+its raw runs stay out of git. `python3 -m inv013.figures` draws the standalone
+figures in `charts/proposal8/` and writes `results/inv013_poster_figure.md`, the
+values measured from the poster's figure.
 `inv013/tests/test_candidate.py` checks the logarithmic equation against the
 replay code of INV-008, Trio's form against AndroidAPS's, and the published fit
 against the values in the abstract and on the poster's figure. It also checks that
@@ -972,8 +1173,9 @@ as the candidate and judged the equation against the simulations. The fourth
 (commit b19e3f1) anchored both links at 180 mg/dL. The fifth (commit e856095)
 moved the anchor to 140 mg/dL and set a reading of the curve at the midpoint of a
 correction beside the reading at the current glucose. The sixth (commit
-1468fc2) applied the equation at the current glucose only. This version adds the
-evidence for multiplying the curve and for one shape shared by everyone.
+1468fc2) applied the equation at the current glucose only. The seventh (commit
+f1672de) added the evidence for multiplying the curve and for one shape shared by
+everyone. This version adds the outcome test in simulation and the figures.
 
 ## References
 
@@ -992,3 +1194,7 @@ evidence for multiplying the curve and for one shape shared by everyone.
    proof of concept in closed-loop control of type 1 diabetes. J Diabetes Sci
    Technol 2009;3(1):44-55.
 5. Xie J. Simglucose v0.2.1. 2018. github.com/jxx123/simglucose
+6. Battelino T, Danne T, Bergenstal RM, et al. Clinical targets for continuous
+   glucose monitoring data interpretation: recommendations from the International
+   Consensus on Time in Range. Diabetes Care 2019;42(8):1593-1603.
+   doi:10.2337/dci19-0028
