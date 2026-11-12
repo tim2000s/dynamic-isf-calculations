@@ -9,6 +9,8 @@ def test_arms_at_known_points():
     assert set(r) == set(ARMS)
     assert abs(r["Profile link, midpoint"][0] - 1) < 1e-9       # midpoint of 260 and 100 is 180
     assert abs(r["Profile link, start"][1] - 1) < 1e-9
+    flat = r["Profile link, start, flat above 200"]
+    assert flat[1] == r["Profile link, start"][1] and 1.14 < flat[0] < 1.15 < r["Profile link, start"][0]
     assert np.allclose(r["TDD link"], r["Profile link, midpoint"])   # the links agree at 1915
     assert np.allclose(r["Average-dose link"], r["TDD link"])
     assert r["Profile link, midpoint"][2] < 0.5 < r["Logarithmic as shipped"][2]
