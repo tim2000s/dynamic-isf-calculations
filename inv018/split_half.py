@@ -84,9 +84,8 @@ import matplotlib.ticker
 import numpy as np
 import pandas as pd
 
-from inv009 import config, db, grid as gridmod
-from inv009.forward_isf import MODEL_DEFAULT
-from inv012.peak_trough import PROMINENCE, grid_events, person_bins
+from inv009 import config, db
+from inv012.peak_trough import PROMINENCE, jaeb_events, person_bins
 from inv013.candidate import ANCHOR_GLUCOSE
 from inv015.link import boot
 from inv018.person_curves import (ANCHOR_BINS, BLUE, CHART, COHORT, HIGH, HIGH_BINS, INK, MUTED,
@@ -106,11 +105,10 @@ def halves(n: int) -> dict:
 
 
 def _person(sid: str) -> pd.DataFrame | None:
-    st = db.streams(sid)
-    g = gridmod.build_grid(st)
-    if g is None or g.empty:
+    r = jaeb_events(sid, PROMINENCE)
+    if r is None:
         return None
-    ev, tdd, _ = grid_events(g, sid, st, MODEL_DEFAULT, PROMINENCE)
+    ev, tdd, _ = r
     parts = [person_bins(ev[m if first else ~m], tdd).assign(split=split, half="ab"[not first])
              for split, m in halves(len(ev)).items() for first in (True, False)]
     return pd.concat(parts, ignore_index=True).assign(subject=sid, tdd=tdd, n_events=len(ev))
@@ -125,11 +123,14 @@ def measures(wide: pd.DataFrame) -> pd.DataFrame:
 def agreement(a: pd.Series, b: pd.Series) -> dict:
     """How well the first half predicts the second across people."""
     p = np.log(pd.DataFrame({"a": a, "b": b})).replace([np.inf, -np.inf], np.nan).dropna()
-    r, own, shared = boot(p, lambda x: np.array([
-        x.a.corr(x.b, method="spearman"),
-        np.exp(np.median(np.abs(x.b - x.a))),                 # predicted from the person's own first half
-        np.exp(np.median(np.abs(x.b - x.a.median())))]))      # predicted from the median first half
-    return dict(people=len(p), r=r, full=tuple(2 * v / (1 + v) for v in r), own=own, shared=shared)
+    def stat(x):
+        own = np.median(np.abs(x.b - x.a))                    # predicted from the person's own first half
+        shared = np.median(np.abs(x.b - x.a.median()))        # predicted from the median first half
+        # Spearman by ranks, quicker than Series.corr. The last is above 1 where the own half wins.
+        return np.array([np.corrcoef(x.a.rank(), x.b.rank())[0, 1],
+                         np.exp(own), np.exp(shared), np.exp(shared - own)])
+    r, own, shared, gain = boot(p, stat)
+    return dict(people=len(p), r=r, full=tuple(2 * v / (1 + v) for v in r), own=own, shared=shared, gain=gain)
 
 
 def verdict(full: tuple) -> str:
@@ -190,16 +191,17 @@ def write_md(pb: pd.DataFrame, table: pd.DataFrame, path) -> None:
          "The rank correlation is across people, between the two halves. The reliability on all events",
          "steps it up by 2r / (1 + r) and is given for alternate events only. The last two columns are the",
          "typical factor by which a prediction of the second half missed: from the person's own first half,",
-         "and from the median of everyone's first half.", "",
+         "and from the median of everyone's first half. The last column divides the second miss by the first,",
+         "so the person's own half predicts better where it is above 1.", "",
          "![Half against half](../charts/inv018/fig_split_half.png)", ""]
     for split in SPLITS:
         L += [f"## {split}", "",
-              "| Quantity | People | Rank correlation between halves | Reliability on all events | Verdict | Miss from own first half | Miss from the median first half |",
-              "|---|---:|---:|---:|---|---:|---:|"]
+              "| Quantity | People | Rank correlation between halves | Reliability on all events | Verdict | Miss from own first half | Miss from the median first half | Median miss over own miss |",
+              "|---|---:|---:|---:|---|---:|---:|---:|"]
         for r in table[table.split == split].itertuples():
             alt = split == SPLITS[0]
             L.append(f"| {r.measure} | {r.people} | {f(r.r)} | {f(r.full) if alt else '-'} | "
-                     f"{verdict(r.full) if alt else '-'} | {f(r.own)} | {f(r.shared)} |")
+                     f"{verdict(r.full) if alt else '-'} | {f(r.own)} | {f(r.shared)} | {f(r.gain)} |")
         L.append("")
     L += [f"A quantity is repeatable at a reliability of {REPEATABLE[0]} or more with an interval above {REPEATABLE[1]},",
           f"and not repeatable with an interval below {NOT_REPEATABLE}. The thresholds were set before the run.",

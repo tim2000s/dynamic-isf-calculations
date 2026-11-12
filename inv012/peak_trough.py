@@ -208,14 +208,22 @@ def _from_grid(g: pd.DataFrame, subject: str, cohort: str, streams: dict,
                                        n_events=len(ev), meal_proxy=proxy)
 
 
-def _jaeb(subject_id: str, prom: float) -> pd.DataFrame | None:
+def jaeb_events(subject_id: str, prom: float) -> tuple[pd.DataFrame, float, bool] | None:
     st = db.streams(subject_id)
     g = gridmod.build_grid(st)
     if g is None or g.empty:
         return None
-    study = subject_id.split(":")[0]
-    return _from_grid(g, subject_id, study, st,
-                      _loop_model(subject_id) if study == "Loop" else MODEL_DEFAULT, prom)
+    loop = subject_id.split(":")[0] == "Loop"
+    return grid_events(g, subject_id, st, _loop_model(subject_id) if loop else MODEL_DEFAULT, prom)
+
+
+def _jaeb(subject_id: str, prom: float) -> pd.DataFrame | None:
+    r = jaeb_events(subject_id, prom)
+    if r is None:
+        return None
+    ev, tdd, proxy = r
+    return person_bins(ev, tdd).assign(subject=subject_id, cohort=subject_id.split(":")[0], tdd=tdd,
+                                       n_events=len(ev), meal_proxy=proxy)
 
 
 def _synth(seed: int, arm: str, kw: dict, prom: float) -> pd.DataFrame:
@@ -226,7 +234,7 @@ def _synth(seed: int, arm: str, kw: dict, prom: float) -> pd.DataFrame:
                       MODEL_DEFAULT, prom, tdd=SYN_TDD)
 
 
-def _oref(user_id: str, cohort: str, tdd: float, prom: float) -> pd.DataFrame | None:
+def oref_events(user_id: str, cohort: str, prom: float) -> pd.DataFrame | None:
     """The loop's own insulin activity, already net of profile basal, integrated.
 
     Activity is used in place of IOB difference plus delivery because the tables
@@ -252,7 +260,13 @@ def _oref(user_id: str, cohort: str, tdd: float, prom: float) -> pd.DataFrame | 
     acted = np.cumsum(0.5 * (a + np.roll(a, 1)) * dt)
     acted[~np.isfinite(act)] = np.nan
     carb = np.diff(d.cob.ffill().fillna(0).to_numpy(float), prepend=0.0) >= COB_JUMP_G
-    ev = find_events(t, bg, acted, carb, prom)
+    return find_events(t, bg, acted, carb, prom)
+
+
+def _oref(user_id: str, cohort: str, tdd: float, prom: float) -> pd.DataFrame | None:
+    ev = oref_events(user_id, cohort, prom)
+    if ev is None:
+        return None
     return person_bins(ev, tdd).assign(subject=user_id, cohort=cohort, tdd=tdd,
                                        n_events=len(ev), meal_proxy=False)
 

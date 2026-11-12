@@ -31,3 +31,9 @@ def test_a_shape_repeats_only_where_people_differ_in_it(spread, shape_repeats):
 def test_each_way_of_halving_puts_every_event_in_one_half():
     for first in halves(11).values():
         assert first.sum() in (5, 6) and len(first) == 11
+
+
+def test_the_length_tier_is_the_longest_that_thirty_people_reach():
+    from inv018.split_half_cohorts import tier
+    assert tier(pd.Series([900] * 40 + [1700] * 29)) == 800
+    assert tier(pd.Series([150] * 100)) == 0
