@@ -7,14 +7,14 @@ def test_arms_at_known_points():
     bg = np.array([180.0, 140.0, 100.0])
     r = arms(bg, np.full(3, 38.3), 50.0, 38.3, trio=False)      # 50 x 38.3 = 1915
     assert set(r) == set(ARMS)
-    assert abs(r["Profile link, midpoint"][0] - 1) < 1e-9       # midpoint of 180 and 100 is the anchor, 140
-    assert abs(r["Profile link, start"][1] - 1) < 1e-9
-    assert np.allclose(r["TDD link"], r["Profile link, midpoint"])   # the links agree at 1915
+    assert abs(r["Profile link"][1] - 1) < 1e-9                 # the profile holds at the anchor, 140
+    assert r["Profile link"][0] > 1 > r["Profile link"][2]      # read at the reading: more above, less below
+    assert np.allclose(r["TDD link"], r["Profile link"])         # the links agree at 1915
     assert np.allclose(r["Average-dose link"], r["TDD link"])
-    assert r["Profile link, midpoint"][2] < 0.7 < r["Logarithmic as shipped"][2]
+    assert r["Profile link"][2] < 0.7 < r["Logarithmic as shipped"][2]
     double = arms(bg, np.full(3, 76.6), 50.0, 38.3, trio=False)
     assert np.allclose(double["TDD link"], 2 * r["TDD link"])    # the dose reaches the TDD arm
-    assert np.allclose(double["Profile link, midpoint"], r["Profile link, midpoint"])
+    assert np.allclose(double["Profile link"], r["Profile link"])
 
 
 def test_hours_since_meal():

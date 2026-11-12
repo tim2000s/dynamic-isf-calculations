@@ -83,9 +83,8 @@ Two things are unsettled. The first is how far that comparison reaches. It cover
 adults on a pump who gave their own corrections, and it compares people with each
 other, so it does not show whether one person's value should also move with their
 recent insulin use, as the TDD link does. People using a loop were not tested,
-and nor were children. The second is where on the curve a correction is read,
-which moves the dose by 31 to 49%. Whether a loop dosing to this equation does
-better than one dosing to either existing model has not been tested.
+and nor were children. The second is whether a loop dosing to this equation does
+better than one dosing to either existing model, which has not been tested.
 
 This is a draft for discussion. The equation has not run on a device or in a
 closed-loop simulator, and the candidate uses the published coefficients
@@ -140,7 +139,9 @@ reference basal. The curve is the fit through those event values against glucose
 
 Each event ends where glucose stopped falling, so events are selected on what
 glucose did. The figure is therefore a ratio of two outcomes, the fall and the
-insulin used during it. That bears on how the curve is read in the next section.
+insulin used during it. The events are how the variation of sensitivity with
+glucose was measured. The proposal uses the equation fitted through them, applied
+at the current glucose.
 
 Four things the derivation depends on are absent from the publication. It does not
 define the reference basal or say which insulin action model produced the insulin
@@ -644,8 +645,8 @@ The two ends are affected unequally. Near target the curve withholds slightly mo
 insulin than the limits allow: at 100 mg/dL it asks for 0.63 of what the profile
 would, and the lower limit holds that at 0.7. At high glucose the gap is wide. The
 curve asks for 2.41 times the profile's insulin at 300 mg/dL and 3.33 times at
-380, where the upper limit holds 1.2. A correction from 300 mg/dL to 100, read at
-the starting glucose, is 9.62 U from the curve and 4.80 U inside the limits.
+380, where the upper limit holds 1.2. A correction from 300 mg/dL to 100 is 9.62 U
+from the curve and 4.80 U inside the limits.
 
 With the limits as they are, the model in Trio would follow the curve between 109
 and 158 mg/dL and give 1.2 times the profile's insulin at every glucose above
@@ -695,48 +696,41 @@ person the adjustment factor moves the level in either direction, as it does now
 Its guidance has to be worked out again for this arm, because at 100% the arm's
 value at 100 mg/dL is 1.75 times the existing one.
 
-### Where on the curve a correction is read
+### Correction doses at the current glucose
 
-A correction from 200 mg/dL to a target of 100 passes through every glucose in
-between, and the equation gives a different sensitivity at each. The existing code
-reads the logarithmic model at the current glucose, or at a glucose chosen by one
-of three branches in `DetermineBasalSMB.kt`. This draft assumes the publication
-filed each event under its midpoint glucose, and that assumption has not been
-confirmed.
+The equation is applied at the current glucose. The existing code applies the
+logarithmic model the same way, at the current glucose or at a glucose chosen by
+one of three branches in `DetermineBasalSMB.kt`, and the candidate takes whichever
+glucose that code already passes. The publication's interval from peak to minimum
+is how the variation of sensitivity with glucose was measured. It plays no part
+in how the equation is used.
 
-The table gives the units needed to bring the worked person to 100 mg/dL under
-each reading, with the equation linked to the profile. It is the arithmetic of the sensitivity alone, before insulin on
-board and the loop's predictions change it.
+The table gives the units needed to bring the worked person to 100 mg/dL, with the
+equation linked to the profile. It is the arithmetic of the sensitivity alone,
+before insulin on board and the loop's predictions change it.
 
-| Starting glucose, mg/dL | AndroidAPS, divisor 55 | Trio logarithmic | Profile | Equation, read at the start | Equation, read at the midpoint | Equation, summed along the path |
-|---:|---:|---:|---:|---:|---:|---:|
-| 150 | 1.46 | 1.17 | 1.00 | 1.11 | 0.85 | 0.86 |
-| 200 | 3.41 | 2.40 | 2.00 | 3.30 | 2.22 | 2.24 |
-| 250 | 5.71 | 3.60 | 3.00 | 6.15 | 4.16 | 4.10 |
-| 300 | 8.29 | 4.80 | 4.00 | 9.62 | 6.60 | 6.32 |
+| Current glucose, mg/dL | AndroidAPS, divisor 55 | Trio logarithmic | Profile | Equation, profile link |
+|---:|---:|---:|---:|---:|
+| 150 | 1.46 | 1.17 | 1.00 | 1.11 |
+| 200 | 3.41 | 2.40 | 2.00 | 3.30 |
+| 250 | 5.71 | 3.60 | 3.00 | 6.15 |
+| 300 | 8.29 | 4.80 | 4.00 | 9.62 |
 
-Reading the equation at the starting glucose asks for 31 to 49% more insulin than
-reading it at the midpoint. From 200 mg/dL the two readings give 3.30 and 2.22 U,
-against the 2.00 U the flat profile gives. Adding up the equation along the whole
-path gives 2.24 U. The midpoint reading stays within 0.06 U of that sum up to a
-starting glucose of 250 mg/dL and is 0.28 U above it at 300.
+At 150 mg/dL the equation asks for 1.11 U, close to the 1.00 U of the flat profile.
+At 300 mg/dL it asks for 9.62 U, against 4.00 U from the profile and 8.29 U from
+AndroidAPS at 100%.
 
-The default proposed is the midpoint between the glucose being corrected and the
-target, which is a modelling choice. With the anchor at 140 mg/dL, that reading
-gives a correction from 180 mg/dL to a target of 100 the dose the profile ISF
-alone would give. Reading at the starting glucose is kept as an arm of the
-evaluation.
-
-The anchor and the reading together set how much insulin the candidate asks for
-overall. Each form was replayed on the recorded loop decisions of 138 people
-(INV-016), of whom 22 used Trio, 19 AndroidAPS and 97 oref0. The insulin asked for
-at every reading above 100 mg/dL was summed and set against the same sum under
-the profile ISF alone. Read at the midpoint, the candidate asked for 1.00 (95%
-interval 0.94 to 1.03), 1.00 (0.95 to 1.05) and 1.03 (1.01 to 1.06) times the
-profile's correction insulin in those cohorts. Read at the starting glucose it
-asked for 1.39 (1.26 to 1.44), 1.38 (1.29 to 1.47) and 1.44 (1.39 to 1.51) times.
+The anchor sets how much insulin the candidate asks for overall. Each arm was
+replayed on the recorded loop decisions of 138 people (INV-016), of whom 22 used
+Trio, 19 AndroidAPS and 97 oref0. The insulin asked for at every reading above
+100 mg/dL was summed and set against the same sum under the profile ISF alone.
+The candidate asked for 1.39 (95% interval 1.28 to 1.42), 1.38 (1.29 to 1.47) and
+1.44 (1.39 to 1.51) times the profile's correction insulin in those cohorts. By
+glucose at the reading, it asked for 0.82 to 0.83 times the profile's insulin
+between 100 and 150 mg/dL, 1.33 times between 150 and 200, 1.83 to 1.84 times
+between 200 and 260, and 2.31 to 2.37 times above 260.
 An anchor of 180 mg/dL lowers every one of those figures by the factor of 1.44.
-The replay shows what each form would have asked for at readings recorded under
+The replay shows what each arm would have asked for at readings recorded under
 another algorithm, and says nothing about where glucose would then have gone.
 
 ### What changes in the code
@@ -773,11 +767,12 @@ ISF into the AndroidAPS calculation, which does not use it now.
 
 ## Evaluation
 
-Eight arms are compared throughout. Three are references. The logarithmic model
+Seven arms are compared throughout. Three are references. The logarithmic model
 as shipped and Trio's sigmoid are the two existing models, and the profile alone
-is the baseline for both. Four arms are forms of the equation: linked to the profile and read at the
-midpoint, the same read at the starting glucose, linked to TDD, and linked to a
-plain average daily dose. The eighth is the first draft of this document, a sensitivity anchored to
+is the baseline for both. Three arms are forms of the equation, each applied
+at the current glucose. One is linked to the profile and is the candidate. The
+other two are linked to TDD and to a plain average daily dose. The seventh is the
+first draft of this document, a sensitivity anchored to
 the profile and flat above 100 mg/dL. It is the arm the equation has to beat for
 its shape to matter.
 
@@ -824,8 +819,8 @@ that includes the new mode names the build before it.
 
 ## What is not settled
 
-Some of what is missing can only come from the authors. How the curve is read
-and the level of the TDD arm depend on four things the publication does not give: which glucose an event is filed under, how
+Some of what is missing can only come from the authors. The level of the TDD arm
+and the comparison with the measurements in this series depend on four things the publication does not give: which glucose an event is filed under, how
 the reference basal was defined, which insulin action model gave the insulin on
 board, and what daily doses the people measured were using. The authors have not
 been asked. They have also not been asked whether an equation derived by a
@@ -890,8 +885,8 @@ link it was given. `python3 -m inv016.replay --replay <INV-008 replay cache>
 on recorded histories.
 `inv013/tests/test_candidate.py` checks the logarithmic equation against the
 replay code of INV-008, Trio's form against AndroidAPS's, and the published fit
-against the values in the abstract and on the poster's figure. It also checks the
-ways of reading the curve, and that the refit returns a quartic it was given.
+against the values in the abstract and on the poster's figure. It also checks that
+the refit returns a quartic it was given.
 
 Figures from other analyses are quoted from where they were produced. The
 measurement on other cohorts is in `results/inv012_peak_trough.md` and section 7
@@ -903,7 +898,10 @@ the profile-anchored, flat form now kept as an arm. The
 second (commit b324528) opened on the comparison with AndroidAPS and described both
 systems for a general reader. The third (commit 1667e8f) carried the link to TDD
 as the candidate and judged the equation against the simulations. The fourth
-(commit b19e3f1) anchored both links at 180 mg/dL.
+(commit b19e3f1) anchored both links at 180 mg/dL. The fifth (commit e856095)
+moved the anchor to 140 mg/dL and set a reading of the curve at the midpoint of a
+correction beside the reading at the current glucose. This version applies the
+equation at the current glucose only.
 
 ## References
 
