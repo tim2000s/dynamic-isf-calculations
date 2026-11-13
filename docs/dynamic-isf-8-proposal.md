@@ -90,16 +90,21 @@ were run for 35 days in TimSim with shipped oref0 dosing, and only the sensitivi
 rule differed between arms. Against the same people on their unchanged profile,
 the candidate lowered mean glucose by 1.8 mg/dL (95% interval 0.7 to 2.9) and
 raised time below 54 mg/dL by 0.43 percentage points (0.24 to 0.61), which is
-about what a profile ISF entered 30% too low did. A harm rule written before the
-run read harm on the low side against oref0 with autosens. It read unresolved
-against a logarithmic model matched to the profile, and cleared on the high side
-against both. Held inside Trio's default limits, the candidate raised time below
+about what a profile ISF entered 30% too low did. About seven tenths of that
+extra time followed a glucose peak above 180 mg/dL, where the rule gives more
+insulin than the profile does. A harm rule written before the run was read on two
+simulated months together. On the low side it read harm against oref0 with
+autosens, at +0.37 points of time below 54 mg/dL (0.24 to 0.51). Against a
+logarithmic model matched to the profile it read unresolved, at +0.17 points (0.04
+to 0.32). It read cleared on the high side against both. Held inside Trio's default limits, the candidate raised time below
 54 mg/dL by 0.13 points (-0.02 to 0.27) and time in range by 0.90 points (0.11 to
 1.69). The simulated body is built the opposite way to the equation's premise,
 since a unit of insulin does more there as glucose rises. The run therefore ranks
 the rules in that simulator, and its sizes are not estimates for people. The harm
 reading is reported and looked into, and it does not stop the candidate from
-moving to shadow running.
+moving to shadow running. Code for that stage has been written for AndroidAPS and
+for Trio. It calculates the candidate each cycle and stores it, and nothing doses
+from it. It has passed each project's unit tests and has not yet run on a device.
 
 Two things are unsettled. The first is how far the comparison of links reaches. It
 covers adults on a pump who gave their own corrections, and it compares people
@@ -857,6 +862,32 @@ new mode, alongside its existing tests (`ReplayApsResultsTest` in AndroidAPS,
 `DynamicISFTests` in Trio). A guard test confirms that the existing modes' output
 is unchanged.
 
+The shadow part was written on 13 November 2026, on the development branches of
+nightscout/AndroidAPS and nightscout/Trio. In each system one function returns the
+candidate from the current glucose and the profile ISF, and the value is stored
+with the loop's decision. Nothing reads it back, so the insulin delivered and the
+forecasts are as they were. AndroidAPS stores it as a new field of the
+loop result (`curve_sens`), which the SMB plugin fills and the other algorithm
+plugins leave empty. Trio writes it into the reason text of each determination, in
+the form `Curve ISF: 55→49.6`. The reason text already reaches Trio's database
+and Nightscout and is shown on the loop status screen, so nothing in the stored
+schema changed.
+For a person who uses mmol/L, Trio converts the new tag as it converts the
+existing ISF tag, and the value is then kept to one decimal place. The profile ISF
+is the profile's own value in both systems, with the profile percentage applied
+in AndroidAPS and any active override applied in Trio.
+
+The two implementations and the Python reference are tested against one table of
+ten glucose values. Each device test was confirmed to fail when the upper end of
+the range was moved from 380 to 400 mg/dL. AndroidAPS's unit tests passed with the
+change (14,562 tests) and so did Trio's (998 tests). Trio keeps 14 recorded
+decisions that its tests compare character by character. The 13 that carry a full
+reason were recorded again, and each differs from the earlier file only by the new
+tag. A fresh-context review of both changes found no route from the new value to
+a dose. The code has no mode selector, and it has not
+been built for or run on a device. It has not been published or offered to either
+project.
+
 In AndroidAPS the code touched is `calculateRawDynIsf` and the preference screen,
 together with the per-prediction lines and the dose-sensitivity branches in
 `DetermineBasalSMB.kt`. In Trio it is `DynamicISF.swift` and the forecast
@@ -907,7 +938,8 @@ titrated profiles sit well below the level that adults enter.
 The fourth stage is shadow running. Both values are calculated on the device each
 cycle and stored, and the existing one doses. That gives the distribution of the
 ratio between them for each person, and for the TDD arm a starting adjustment
-factor.
+factor. The code for this stage has been written, as described under "What changes
+in the code", and no shadow records exist yet.
 
 The fifth stage is use, on the developer's own device first and on released lines
 after that. It follows only when the third stage has been reported and the fourth
@@ -994,8 +1026,27 @@ limits the candidate stops at 1.2 times the profile's insulin, and the rise was
 0.13 points (-0.02 to 0.27). Anchored at 180 mg/dL the rule asks for more insulin
 than the profile only above 180, and the change was -0.01 (-0.13 to +0.12) with
 mean glucose 3.06 mg/dL higher (2.40 to 3.72). The rise therefore went with how
-much more insulin than the profile the rule asked for above target. That reading
-rests on the arms. The cycles that preceded each low were not traced.
+much more insulin than the profile the rule asked for above target.
+
+The lows were then traced in the raw runs (`inv019/low_trace.py`), with the
+expected result written down first. Each period below 54 mg/dL was filed under the
+highest true glucose in the four hours before it began, and four hours is a
+choice. The candidate's runs held 5.4 such periods per person, against 2.8 on the
+unchanged profile. Of the 0.43 extra points, 0.24 (0.14 to 0.35) followed a peak
+between 180 and 250 mg/dL and 0.06 (-0.04 to 0.18) a peak above 250 mg/dL, which
+together is about seven tenths. Lows that followed a peak below 140 mg/dL added
+0.02 points (0.00 to 0.05). The placebo's interval included zero in every band.
+
+![Time below 54 mg/dL in three arms, split by the highest glucose in the four hours before each low began. Each arm is compared with the same simulated people on their unchanged profile ISF.](../charts/proposal8/fig6_what_preceded_the_lows.png)
+
+In the four hours before a low that followed a peak of 180 to 250 mg/dL, the
+candidate's run had delivered a median of 11.7 U. The run on the unchanged profile
+delivered 9.0 U to the same person over the same hours. Across people the
+candidate delivered 1.90 U more (1.02 to 2.95) before its lows. The matched
+logarithmic model showed the same pattern at a smaller size, with 0.16 points
+(0.06 to 0.27) after a peak of 180 to 250 mg/dL. The extra time below 54 mg/dL
+was therefore the tail of corrections given at high glucose. The trace covers the
+first simulated month only.
 
 Among the rules run on the unchanged profile, only the candidate inside Trio's
 limits had an interval for time in range that lay above zero, at +0.90 points
@@ -1063,14 +1114,65 @@ tested. Neither property was shown to be the cause.
 
 The run has further limits. The vendored oref0 takes one sensitivity per cycle.
 AndroidAPS in dynamic mode also uses the value along its forecast, and that use
-was not exercised. One seed was run. TimSim orders options and finds failures,
+was not exercised. The sixteen arms were run on one simulated month, and five of
+them on a second, as described below. TimSim orders options and finds failures,
 and the sizes above are not estimates for people.
 
 What follows was fixed before the run. The harm reading is looked into, and the
 candidate carries on to the fourth stage. The unresolved reading against the
-matched model calls for a larger panel or a second seed.
+matched model called for a larger panel or a second seed.
 Shadow running, in which the device calculates the value and doses nothing from
 it, is unaffected by either reading.
+
+### A second simulated month
+
+The second seed was run on 13 November 2026. Its plan was committed before it ran,
+with the first run's results in hand. Five arms were rerun on TimSim's second
+measured month with the same people and settings: the candidate, its two
+comparators, the unchanged profile and the placebo. The meals, the sensor noise,
+the infusion-site failures and the day-to-day sensitivity differ between the two
+months, and the people do not. A person's difference was taken as the mean over
+the months in which both runs completed, and the harm rule was applied to those
+means with its margins unchanged. Combining the months in that way is a choice.
+None of the 200 runs raised an error. Week one differed by 0.000 mg/dL between the
+arms that share a profile, and the placebo read cleared on both sides.
+
+| Arm | Against | Side, mg/dL | People | Difference, points of time | Margin | Reading |
+|------------|--------------------------|------------|-------:|----------------------:|-------:|-----------|
+| Placebo | Unchanged profile | Below 54 | 40 | -0.02 (-0.11 to +0.06) | 0.25 | Cleared |
+| Placebo | Unchanged profile | Above 250 | 40 | -0.02 (-0.15 to +0.11) | 1.25 | Cleared |
+| Candidate | Logarithmic, matched at 140 | Below 54 | 39 | +0.17 (+0.04 to +0.32) | 0.25 | Unresolved |
+| Candidate | Logarithmic, matched at 140 | Above 250 | 39 | +0.09 (-0.12 to +0.29) | 1.25 | Cleared |
+| Candidate | oref0 with autosens | Below 54 | 40 | +0.37 (+0.24 to +0.51) | 0.25 | Harm |
+| Candidate | oref0 with autosens | Above 250 | 40 | -0.31 (-0.59 to -0.05) | 1.25 | Cleared |
+
+Every reading was the one the first month gave, and each had been written down as
+expected. Against oref0 with autosens the candidate's time below 54 mg/dL was 0.37
+points higher (0.24 to 0.51), which reads harm. Against the matched logarithmic
+model it was 0.17 points higher (0.04 to 0.32). That reads unresolved, because the
+interval lies above zero and its upper end is past the margin. On the high side
+the candidate read cleared against both, and its time above 250 mg/dL was 0.31
+points lower than under oref0 with autosens (0.05 to 0.59). One more of the
+candidate's runs than of the autosens runs ended early through hypoglycaemia,
+where the separate criterion needs three. The largest rise in one person's time
+below 54 mg/dL was 1.69 points. Against the unchanged profile over both months,
+the candidate raised time below 54 mg/dL by 0.35 points (0.20 to 0.50) and lowered
+mean glucose by 2.12 mg/dL (1.22 to 3.02).
+
+The second month read alone gave smaller differences on the low side. They were
++0.25 points (0.09 to 0.43) against oref0 with autosens and +0.04 (-0.15 to 0.20)
+against the matched logarithmic model, where the first month gave +0.41 and +0.25.
+Reading one month alone was not in the plan, and the figures are given to show how
+far two months differ. In that month the placebo's time in range differed from the
+unchanged profile by +0.98 points (0.13 to 1.94). A difference of about one point
+of time in range within a single month can therefore arise with nothing of size
+changed.
+
+No third month is planned. The low side against the matched logarithmic model
+stays unresolved, with a mean below the margin. Against oref0 with autosens the
+candidate cost about a third of a percentage point of time below 54 mg/dL in this
+simulator, and the trace places most of that after corrections given at high
+glucose.
 
 ## What is not settled
 
@@ -1152,13 +1254,20 @@ inv018.split_half_cohorts` write the comparison of halves, on REPLACE-BG and on
 all eight cohorts. `python -m inv019.outcome_test --timsim <TimSim checkout>`
 writes `results/inv019_outcome_test.md`, the outcome test in simulation. It needs
 the same interpreter as INV-014 and took about seven hours on seven workers, and
-its raw runs stay out of git. `python3 -m inv013.figures` draws the standalone
+its raw runs stay out of git. The same command with `--seed 101 1101` and the
+five arms named in the script's docstring writes
+`results/inv019_outcome_test_seeds_101_1101.md`, the two months together, and took
+about two and a half hours. With `--seed 1101 --stage report` it writes the second
+month alone. `python -m inv019.low_trace` writes `results/inv019_low_trace.md`,
+the trace of the lows, from the raw runs of the first month.
+`python3 -m inv013.figures` draws the standalone
 figures in `charts/proposal8/` and writes `results/inv013_poster_figure.md`, the
 values measured from the poster's figure.
 `inv013/tests/test_candidate.py` checks the logarithmic equation against the
 replay code of INV-008, Trio's form against AndroidAPS's, and the published fit
 against the values in the abstract and on the poster's figure. It also checks that
-the refit returns a quartic it was given.
+the refit returns a quartic it was given, and it holds the table of ten values
+that the device code is tested against.
 
 Figures from other analyses are quoted from where they were produced. The
 measurement on other cohorts is in `results/inv012_peak_trough.md` and section 7
@@ -1175,7 +1284,9 @@ moved the anchor to 140 mg/dL and set a reading of the curve at the midpoint of 
 correction beside the reading at the current glucose. The sixth (commit
 1468fc2) applied the equation at the current glucose only. The seventh (commit
 f1672de) added the evidence for multiplying the curve and for one shape shared by
-everyone. This version adds the outcome test in simulation and the figures.
+everyone. The eighth (commit 24b0706) added the outcome test in simulation and the
+figures. This version adds the second simulated month, the trace of the lows and
+the shadow code.
 
 ## References
 
