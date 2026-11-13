@@ -1,0 +1,15 @@
+<section id="worked" data-transition="fade">
+<div class="bar"></div>
+<h2>What does one person get?</h2>
+<p class="lede">One person: profile ISF 50 mg/dL per unit, 40 U a day, every setting at its default.</p>
+<table class="data">
+<tr class="head"><th class="name" style="width:44%">Glucose (mg/dL)</th><th style="width:14%">100</th><th style="width:14%">140</th><th style="width:14%">200</th><th style="width:14%">300</th></tr>
+<tr><td class="name">AndroidAPS dynamic ISF</td><td>43.4</td><td>35.6</td><td>29.3</td><td>24.1</td></tr>
+<tr class="alt"><td class="name">Trio logarithmic</td><td>54.3</td><td>44.4</td><td>41.7</td><td>41.7</td></tr>
+<tr><td class="name">Trio sigmoid</td><td>50.0</td><td>45.0</td><td>42.4</td><td>41.7</td></tr>
+<tr class="pick"><td class="name">Published curve on profile ISF</td><td>79.3</td><td>50.0</td><td>30.3</td><td>20.8</td></tr>
+</table>
+<p class="lede">At 200 mg/dL the two systems are already 42% apart for this person.</p>
+<div class="foot"><p class="foot-src">Sensitivity in mg/dL per unit. AndroidAPS with a divisor of 55 at 100%. Trio at its default limits.</p><div class="pageno"></div></div>
+<aside>Let’s dig in with one person, because that’s easier to follow than a formula. Their profile ISF is 50, they use 40 units a day and everything else is at its default. At 140 mg/dL the proposed rule gives them 50, which is their profile. At 100 it gives 79.3, so a good deal less insulin near target, and at 300 it gives 20.8, falling to 15.0 at 380. The row above shows Trio’s sigmoid flattening out at 41.7 where its limits bite. It’s worth noting that AndroidAPS and Trio already return values 42% apart for this same person at 200 mg/dL on default settings, which is one reason I’d like to talk about a shared definition.</aside>
+</section>

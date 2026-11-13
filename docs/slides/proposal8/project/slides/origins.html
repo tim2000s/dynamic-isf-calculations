@@ -1,0 +1,17 @@
+<section id="origins" data-transition="fade">
+<div class="bar"></div>
+<h2>Where did dynamic ISF come from?</h2>
+<div class="cards">
+<div class="card">
+<h3 class="card-title">Logarithmic</h3>
+<p class="card-text">Chris Wilson collected about 300 data points from around 50 volunteers, who reported their correction doses and what followed. It’s been in AndroidAPS since February 2022.</p>
+</div>
+<div class="card">
+<h3 class="card-title">Sigmoid</h3>
+<p class="card-text">Trio’s sigmoid came from its author’s own observation of how glucose responded. As far as I can find, no analysis of data has been published in support of it.</p>
+</div>
+</div>
+<p class="lede">Neither had a large measured dataset to draw on. In 2025 Diabeloop published one, from 11,201 adults.</p>
+<div class="foot"><p class="foot-src">Wilson C., talk to Loop and Learn, 6 February 2022. AndroidAPS source history.</p><div class="pageno"></div></div>
+<aside>It’s worth starting with where the existing models came from, because both were built by people in the community with what was available at the time. The logarithmic model began with Chris Wilson. He ran an online form, about 50 volunteers answered, and he had roughly 300 data points of doses and effects that people reported from experience and didn’t measure. A neural network on those gave something close to 277,700 ÷ (glucose × TDD). That went into AndroidAPS in February 2022 and the logarithm followed in June 2022. Trio’s sigmoid came from its author’s observation of glucose response. Both describe a real thing, which is that a unit of insulin appears to do less at higher glucose. What’s changed is that there’s now a published measurement of it on a much larger group.</aside>
+</section>

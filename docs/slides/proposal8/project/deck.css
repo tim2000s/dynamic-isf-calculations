@@ -1,0 +1,78 @@
+/* Diabettech look: Open Sans, cyan #00aae1, slate #333f49, pale #e9ecf6, taken from diabettech.com.
+   Type scale: 104 / 64 / 44 / 32 / 24. Figures carry a #fcfcfb background, so the light slide matches it. */
+
+section {
+  counter-increment: page;
+  font-family: 'Open Sans', sans-serif;
+  background: #fcfcfb;
+  color: #333f49;
+  padding: 128px 128px 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+h1, h2, h3, p { margin: 0; }
+
+h2 { font-size: 64px; font-weight: 700; line-height: 1.1; color: #333f49; }
+
+.bar { position: absolute; left: 0; top: 0; width: 1920px; height: 16px; background: #00aae1; }
+
+.lede { font-size: 32px; line-height: 1.4; color: #4a5762; }
+
+/* cover */
+.cover { background: #333f49; color: #fcfcfb; padding: 128px; justify-content: space-between; }
+.cover h1 { font-size: 104px; font-weight: 700; line-height: 1.1; color: #fcfcfb; }
+.cover .kicker { font-size: 32px; font-weight: 600; color: #6fd0f0; }
+.cover .cover-main { display: flex; flex-direction: column; gap: 40px; }
+.cover .cover-sub { font-size: 44px; line-height: 1.3; color: #e9ecf6; width: 1400px; }
+.cover .cover-by { font-size: 32px; color: #e9ecf6; }
+
+/* statement */
+.statement { background: #00aae1; color: #10202a; }
+.statement h2 { color: #10202a; }
+.statement .formula { font-size: 64px; font-weight: 700; line-height: 1.1; color: #10202a; }
+.statement .stat { border-top: 4px solid #10202a; }
+.statement .stat-label { color: #10202a; }
+.statement .point { font-size: 32px; font-weight: 700; line-height: 1.4; color: #10202a; }
+.statement .foot { color: #10202a; }
+
+/* cards */
+.cards { display: flex; gap: 48px; }
+.card { flex: 1; background: #e9ecf6; border-radius: 8px; padding: 40px; display: flex; flex-direction: column; gap: 20px; }
+.card .card-title { font-size: 44px; font-weight: 700; line-height: 1.1; color: #333f49; }
+.card .card-text { font-size: 32px; line-height: 1.4; color: #4a5762; }
+
+/* big numbers */
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 64px; }
+.stats-one { grid-template-columns: 1fr; }
+.stat { border-top: 4px solid #00aae1; padding-top: 20px; display: flex; flex-direction: column; gap: 8px; }
+.stat .stat-num { font-size: 64px; font-weight: 700; line-height: 1.1; color: #333f49; }
+.stat .stat-label { font-size: 32px; line-height: 1.4; color: #4a5762; }
+
+/* text beside a figure */
+.split { display: flex; gap: 64px; align-items: flex-start; }
+.split-text { flex: 1; display: flex; flex-direction: column; gap: 24px; }
+.split-text .para { font-size: 32px; line-height: 1.4; color: #4a5762; }
+.fig { object-fit: contain; background: #fcfcfb; }
+
+/* tables: fills on rows, font on the table */
+table.data { width: 100%; border-collapse: collapse; font-size: 32px; line-height: 1.4; color: #333f49; }
+table.data th { padding: 12px 24px; text-align: right; color: #fcfcfb; }
+table.data td { padding: 12px 24px; text-align: right; }
+table.data .name { text-align: left; }
+table.data tr.head { background: #333f49; }
+table.data tr.alt { background: #e9ecf6; }
+table.data tr.pick { background: #bfe8f7; }
+
+/* label and text rows */
+.rows { display: flex; flex-direction: column; gap: 20px; }
+.row { display: flex; gap: 48px; border-top: 2px solid #e9ecf6; padding-top: 20px; }
+.row .row-label { width: 420px; font-size: 32px; font-weight: 700; line-height: 1.4; color: #006a8e; }
+.row .row-text { flex: 1; font-size: 32px; line-height: 1.4; color: #4a5762; }
+
+/* footer band: one pinned row */
+.foot { position: absolute; left: 128px; bottom: 64px; width: 1664px; display: flex; justify-content: space-between; font-size: 24px; line-height: 1; color: #5b6770; }
+.foot .foot-src { font-size: 24px; }
+.foot .pageno { font-size: 24px; }
+.foot .pageno::after { content: counter(page); }
