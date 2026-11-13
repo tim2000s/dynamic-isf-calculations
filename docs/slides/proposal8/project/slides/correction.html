@@ -1,7 +1,7 @@
 <section id="correction" data-transition="fade">
 <div class="bar"></div>
-<h2>What does that do to a correction?</h2>
-<p class="lede">These are the units to bring the same person down to 100 mg/dL, worked from the sensitivity alone.</p>
+<h2>Effect on a correction dose</h2>
+<p class="lede">The table gives the units to bring the same person down to 100 mg/dL, worked from the sensitivity alone.</p>
 <table class="data">
 <tr class="head"><th class="name" style="width:44%">Starting glucose (mg/dL)</th><th style="width:14%">150</th><th style="width:14%">200</th><th style="width:14%">250</th><th style="width:14%">300</th></tr>
 <tr><td class="name">AndroidAPS dynamic ISF</td><td>1.46</td><td>3.41</td><td>5.71</td><td>8.29</td></tr>
@@ -9,7 +9,7 @@
 <tr><td class="name">Unchanged profile ISF</td><td>1.00</td><td>2.00</td><td>3.00</td><td>4.00</td></tr>
 <tr class="pick"><td class="name">Published curve on profile ISF</td><td>1.11</td><td>3.30</td><td>6.15</td><td>9.62</td></tr>
 </table>
-<p class="lede">IOB and the predictions come after this and decide what’s delivered.</p>
+<p class="lede">IOB and the predictions are applied after this and decide what is delivered.</p>
 <div class="foot"><p class="foot-src">Units of insulin for the worked person, with a profile ISF of 50 and 40 U a day on default settings.</p><div class="pageno"></div></div>
-<aside>Sensitivity is hard to picture, so here it is as a correction dose. From 150 mg/dL the curve asks for 1.11 units against the profile’s 1.00, which is a small difference. From 300 it asks for 9.62 against the profile’s 4.00 and AndroidAPS’s 8.29. That’s the steepness of the published curve showing up as insulin. I should be clear this is arithmetic on the sensitivity alone. In a running loop the IOB and the predictions come afterwards, and they decide what’s delivered, so these aren’t the doses anyone would get in one go.</aside>
+<aside>The same sensitivities are shown here as a correction dose. From 150 mg/dL the curve asks for 1.11 U against the profile’s 1.00. From 300 mg/dL it asks for 9.62 U against the profile’s 4.00 and 8.29 from AndroidAPS. This is arithmetic on the sensitivity alone. In a running loop the IOB and the predictions are applied afterwards and decide what is delivered, so these are not the doses a loop would deliver at once.</aside>
 </section>
