@@ -1,0 +1,17 @@
+<section id="built" data-transition="fade">
+<div class="bar"></div>
+<h2>What’s been built?</h2>
+<div class="cards">
+<div class="card">
+<h3 class="card-title">AndroidAPS</h3>
+<p class="card-text">Shadow code on the dev line stores the curve’s value as curve_sens in the loop result, and nothing reads it back. 14,562 tests passed.</p>
+</div>
+<div class="card">
+<h3 class="card-title">Trio</h3>
+<p class="card-text">Shadow code on the dev line writes “Curve ISF: 55→49.6” into the reason. 998 tests passed, and 13 recorded decisions differ only by the new tag.</p>
+</div>
+</div>
+<p class="lede">Both are checked against one table of ten glucose values. Neither has run on a device, and neither has been published or offered to either project.</p>
+<div class="foot"><p class="foot-src">Written against nightscout/AndroidAPS and nightscout/Trio dev, 13 November 2026.</p><div class="pageno"></div></div>
+<aside>Shadow running means the new value is calculated every cycle and stored, and the existing mode carries on dosing. I’ve written that for both systems against their dev lines. In AndroidAPS the value is stored as curve_sens in the loop result. In Trio it’s written into the reason string, for example “Curve ISF: 55→49.6”. Nothing reads either value back, so dosing is unchanged, and the tests check that: 14,562 passed in AndroidAPS and 998 in Trio, and 13 recorded Trio decisions differ only by the new tag. Both implementations are tested against the same table of ten glucose values, so they agree with each other and with the reference. None of it has been built for or run on a device yet, and none of it has been published or offered to either project.</aside>
+</section>

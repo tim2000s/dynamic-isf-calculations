@@ -1,0 +1,18 @@
+<section id="person-term" data-transition="fade">
+<div class="bar"></div>
+<h2>What’s missing from the equation?</h2>
+<p class="lede">The published curve has no term for the person. Someone on 20 U a day and someone on 80 U a day both get 50.9 mg/dL per unit at 140 mg/dL.</p>
+<div class="cards">
+<div class="card">
+<h3 class="card-title">Scale it by profile ISF</h3>
+<p class="card-text">The curve passes through the person’s own profile ISF at a chosen glucose and keeps its published shape either side.</p>
+</div>
+<div class="card">
+<h3 class="card-title">Scale it by TDD</h3>
+<p class="card-text">The height comes from total daily dose, as AndroidAPS and Trio do now. Adult settings, with ISF × TDD near 1,915, would put those two people at about 96 and 24.</p>
+</div>
+</div>
+<p class="lede">Which of the two fits what people do is something we can test.</p>
+<div class="foot"><p class="foot-src">ISF × TDD = 1,915 (1,828 to 1,986) in 422 adults.</p><div class="pageno"></div></div>
+<aside>The equation is a population curve, so it returns 35.3 mg/dL per unit at 180 for everyone, and 50.9 at 140 whether you’re on 20 units a day or 80. Adults’ entered settings put ISF × TDD at 1,915 (1,828 to 1,986) in 422 adults, which would give those two people something near 96 and 24. So before the curve can dose for anybody it needs a scale for the person, and there are two candidates. One is the profile ISF the person already has. The other is total daily dose, which is how the existing dynamic ISF models in AndroidAPS and Trio work. The question for the rest of the deck is which of those the curve should hang from. It isn’t whether the curve is right.</aside>
+</section>
