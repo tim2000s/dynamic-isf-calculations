@@ -185,6 +185,25 @@ does not stop the candidate. Two departures of the simulator could produce it, t
 true sensitivity and the level of the titrated profiles, and neither was shown to be the
 cause. The unresolved reading calls for a larger panel or a second seed. Shadow code is
 unaffected.
+
+The lows were traced afterwards in inv019/low_trace.py (results/inv019_low_trace.md):
+about seven tenths of the candidate's extra time below 54 mg/dL followed a peak above
+180 mg/dL.
+
+The second seed, run on 13 November 2026: 200 runs, none raised, about two and a half
+hours on seven workers (results/inv019_outcome_test_seeds_101_1101.md). Week one differed
+by 0.000 mg/dL in the pinned arms and the placebo read cleared on both sides. Pooled over
+the two seeds, the candidate's time below 54 mg/dL was 0.37 points above `profile,
+autosens` (0.24 to 0.51), which reads harm, and 0.17 points above `logarithmic, matched`
+(0.04 to 0.32), which reads unresolved. The high side read cleared against both, at -0.31
+(-0.59 to -0.05) and +0.09 (-0.12 to +0.29). The excess of early ends was one run against
+`profile, autosens`, below the criterion of three. All four readings were the expected
+ones. The low side against `logarithmic, matched` is therefore reported as a difference
+below the margin's size, and no third seed is planned.
+  Outside the plan, seed 1101 alone (results/inv019_outcome_test_seeds_1101.md) gave
+  +0.25 (0.09 to 0.43) against `profile, autosens` and +0.04 (-0.15 to +0.20) against
+  `logarithmic, matched`. Its placebo's time in range differed from `profile, pinned` by
+  +0.98 points (0.13 to 1.94), so a single seed's differences of that size are not read.
 """
 from __future__ import annotations
 

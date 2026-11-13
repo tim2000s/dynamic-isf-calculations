@@ -24,6 +24,10 @@ each rule's mean paired difference from the same simulated people on their uncha
 profile ISF, with its 95% interval. The harm-rule readings in its heading are read from the
 same file. TimSim's results are relative, and the figure says so in its source line.
 
+Figure 6 draws the trace of the lows in that test from results/inv019_low_trace.md: each
+arm's change in time below 54 mg/dL, split by the highest glucose in the four hours before
+each low began.
+
 Modelling choices shown, each made in the proposal and none in the publication: the
 profile ISF taken to hold at 140 mg/dL, the worked person (profile ISF 50 mg/dL per unit,
 40 U a day), AndroidAPS at an adjustment factor of 100% with a divisor of 55, and Trio's
@@ -371,6 +375,53 @@ def fig_outcomes() -> Path:
         "fig5_outcomes_in_simulation.png")
 
 
+TRACE_ARMS = [("candidate", "Proposed rule (profile ISF at 140 mg/dL)", BLUE),
+              ("logarithmic, matched", "Logarithmic, matched to the profile at 140", ORANGE),
+              ("placebo", "Placebo: profile ISF x 1.01", MUTED)]
+
+
+def trace_rows(path: Path = RESULTS / "inv019_low_trace.md") -> tuple[list, dict]:
+    """INV-019's trace: the bands of peak glucose before a low, and arm -> [(mean, low, high) per band]."""
+    lines = path.read_text().splitlines()
+    head = next(i for i, row in enumerate(lines) if row.startswith("| Arm | People |"))
+    bands = [c.strip() for c in lines[head].split("|")][4:-2]
+    out = {}
+    for row in lines[head + 2:]:
+        c = [x.strip() for x in row.split("|")]
+        if len(c) != len(bands) + 6:
+            break
+        out[c[1]] = [_pair(v) for v in c[4:-2]]
+    assert len(bands) == 4 and all(arm in out for arm, _, _ in TRACE_ARMS), (bands, list(out))
+    return bands, out
+
+
+def fig_low_trace() -> Path:
+    bands, rows = trace_rows()
+    fig, ax = plt.subplots(figsize=(9.5, 5.8), facecolor=SURFACE)
+    fig.subplots_adjust(left=0.085, right=0.975, top=0.77, bottom=0.2)
+    for k, (arm, label, colour) in enumerate(TRACE_ARMS):
+        x = np.arange(len(bands)) + 0.22 * (k - 1)              # the arms sit side by side in each band
+        for xi, (mean, low, high) in zip(x, rows[arm]):
+            ax.plot([xi, xi], [low, high], color=colour, lw=2, solid_capstyle="round")
+            if arm == "candidate":
+                ax.annotate(f"{mean:+.2f}", (xi, mean), xytext=(-7, 0), textcoords="offset points", ha="right", va="center", fontsize=9, color=INK)
+        ax.plot(x, [mean for mean, _, _ in rows[arm]], "o", ms=8, color=colour, mec=SURFACE, mew=2, ls="none", label=label)
+    ax.axhline(0, color=MUTED, lw=0.8)
+    ax.set_xticks(range(len(bands)), [f"{band} mg/dL" for band in bands])
+    ax.tick_params(axis="x", labelcolor=INK)
+    _style(ax, "Highest true glucose in the four hours before the low began", "Change in time below 54 mg/dL, percentage points")
+    ax.grid(axis="x", visible=False)
+    ax.legend(frameon=False, fontsize=9, labelcolor=MUTED, loc="upper left")
+    return _finish(
+        fig, "What preceded the extra time below 54 mg/dL, in simulation",
+        "Time below 54 mg/dL split by the highest glucose in the four hours before each low began. Points are the mean difference\n"
+        "from the same simulated people on their unchanged profile ISF (days 8 to 35), lines the 95% interval over people.\n"
+        "The four bands add up to each rule's whole change in time below 54 mg/dL.",
+        "Source: results/inv019_low_trace.md (inv019/low_trace.py), TimSim on simglucose, one seed. Results are relative. In this simulator\n"
+        "the true sensitivity rises with glucose where the published curve's falls.",
+        "fig6_what_preceded_the_lows.png")
+
+
 def main() -> None:
     d = digitise_poster()
     miss = (d["median"] - d.published_fit).abs()
@@ -383,7 +434,7 @@ def main() -> None:
     L += [f"| {r.glucose} | {r.median:.1f} | {f(r.q25)} | {f(r.q75)} | {r.published_fit:.1f} |" for r in d.itertuples()]
     (RESULTS / "inv013_poster_figure.md").write_text("\n".join(L) + "\n")
     print("\n".join(L))
-    for path in (fig_published(d), fig_scaled(), fig_link(), fig_multiply_or_shift(), fig_outcomes()):
+    for path in (fig_published(d), fig_scaled(), fig_link(), fig_multiply_or_shift(), fig_outcomes(), fig_low_trace()):
         print(path)
 
 
