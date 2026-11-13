@@ -76,3 +76,6 @@ table.data tr.pick { background: #bfe8f7; }
 .foot .foot-src { font-size: 24px; }
 .foot .pageno { font-size: 24px; }
 .foot .pageno::after { content: counter(page); }
+
+/* links and identifiers stay on one line, so a wrap never reads as punctuation */
+.nw { white-space: nowrap; }
