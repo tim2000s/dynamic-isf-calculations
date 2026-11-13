@@ -34,7 +34,29 @@ from the repository root with DYNISF_ROOT unset. Writes results/inv019_low_trace
 per-person rows stay out of git.
 
 Results
-(none yet)
+Run on 13 November 2026 on the 640 runs of seed 101 (results/inv019_low_trace.md). The
+bands added up to the outcome report's figure for every arm. Differences are percentage
+points of time against `profile, pinned`, with 95% intervals.
+
+The placebo's interval included zero in every band. Of the candidate's 0.43 points of extra
+time below 54 mg/dL, 0.24 (0.14 to 0.35) lay in lows that followed a peak of 180 to 250
+mg/dL, 0.10 (0.01 to 0.18) after a peak of 140 to 180 and 0.06 (-0.04 to 0.18) after a
+peak above 250. Lows with no glucose above 140 in the four hours before them added 0.02
+(0.00 to 0.05). The expectation held: about seven tenths of the rise followed a peak above
+180. In the four hours before its lows the candidate run had delivered 1.90 U (1.02 to
+2.95) more than the reference run over the same clock hours, 210 lows in 35 people.
+
+`candidate, anchor 180` showed no rise in any band, as expected. `logarithmic, matched` had
+the candidate's pattern at a smaller size, 0.16 (0.06 to 0.27) after a peak of 180 to 250.
+`profile x 0.7` reached the same total as the candidate by a different route: 0.12 (0.07 to
+0.19) with no glucose above 140 beforehand, 0.14 after a peak of 140 to 180 and 0.18 after
+180 to 250. It was expected to rise in every band and did not above 250, at -0.05 (-0.14 to
+0.02).
+
+The candidate's extra lows in this simulator were therefore lows after corrected highs,
+which is where the rule asks for more insulin than the profile. TimSim's body has a unit
+doing more at 180 to 250 mg/dL than at 140, the reverse of the equation's premise, and that
+would produce this pattern. The trace does not show that it did.
 """
 from __future__ import annotations
 
