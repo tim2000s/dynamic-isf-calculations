@@ -1,12 +1,12 @@
 <section id="rule" class="statement" data-transition="fade">
-<h2>What’s the rule?</h2>
+<h2>The proposed rule</h2>
 <p class="formula">Sensitivity = profile ISF × curve at current glucose ÷ curve at 140 mg/dL</p>
 <div class="stats">
-<div class="stat"><p class="point">The shape is the publication’s</p><p class="stat-label">The published quartic is used as it stands, read between 100 and 380 mg/dL.</p></div>
-<div class="stat"><p class="point">The height is yours</p><p class="stat-label">At 140 mg/dL the rule returns your profile ISF, whatever your daily dose.</p></div>
-<div class="stat"><p class="point">140 is a choice</p><p class="stat-label">The publication’s reference is 180, which would make every dose 1.44 times smaller.</p></div>
-<div class="stat"><p class="point">It’s an extra mode</p><p class="stat-label">The existing dynamic ISF modes stay in the code and stay the default.</p></div>
+<div class="stat"><p class="point">Shape from the publication</p><p class="stat-label">The published quartic is used as it stands, read between 100 and 380 mg/dL.</p></div>
+<div class="stat"><p class="point">Height from the profile ISF</p><p class="stat-label">At 140 mg/dL the rule returns the person’s profile ISF, whatever their daily dose.</p></div>
+<div class="stat"><p class="point">Anchor at 140 mg/dL</p><p class="stat-label">The anchor is a modelling choice. The publication’s reference is 180 mg/dL, which would make every dose 1.44 times smaller.</p></div>
+<div class="stat"><p class="point">An additional mode</p><p class="stat-label">The existing dynamic ISF modes stay in the code and remain the default.</p></div>
 </div>
 <div class="foot"><p class="foot-src">The curve is from Romero-Ugalde et al. (doi:10.2337/db25-920-P).</p><div class="pageno"></div></div>
-<aside>So this is the whole proposal on one slide. Take the published curve at the current glucose, divide it by the curve’s value at 140 mg/dL, and multiply by the person’s profile ISF. At 140 you get your profile ISF back. Below that the rule gives a higher sensitivity and above it a lower one, following the published shape. Glucose is read between 100 and 380 mg/dL, so below 100 the value at 100 is used and above 380 the value at 380. The 140 anchor is a modelling choice of mine. The publication’s own reference is 180, and anchoring there would make every dose 1.44 times smaller. It’s offered as an alternative mode beside the ones people already use.</aside>
+<aside>The rule takes the published curve at the current glucose as a ratio to its value at 140 mg/dL and multiplies the profile ISF by that ratio. At 140 mg/dL it returns the profile ISF. Below 140 it gives a higher sensitivity and above 140 a lower one, following the published shape. Glucose is read between 100 and 380 mg/dL, so the value at 100 is used below 100 and the value at 380 above 380. The 140 mg/dL anchor is a modelling choice. The publication’s own reference is 180 mg/dL, and anchoring there would make every dose 1.44 times smaller. The rule is offered as an alternative mode beside the existing ones.</aside>
 </section>

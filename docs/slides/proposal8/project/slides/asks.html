@@ -1,12 +1,12 @@
 <section id="asks" data-transition="fade">
 <div class="bar"></div>
-<h2>What would I like your view on?</h2>
+<h2>Questions for the maintainers</h2>
 <div class="rows">
 <div class="row"><p class="row-label">One definition</p><p class="row-text">Would AndroidAPS and Trio maintainers want a shared definition with shared test vectors? The two shadow builds already use one table.</p></div>
 <div class="row"><p class="row-label">Trio’s limits</p><p class="row-text">Should this mode keep the 0.7 to 1.2 limits or have its own?</p></div>
-<div class="row"><p class="row-label">The anchor</p><p class="row-text">Is 140 mg/dL the right place to pin the curve to the profile ISF, or should it be the publication’s 180?</p></div>
-<div class="row"><p class="row-label">The shadow value</p><p class="row-text">Would either project carry the shadow value on its dev line, so we can collect records before anything doses from it?</p></div>
+<div class="row"><p class="row-label">The anchor</p><p class="row-text">Is 140 mg/dL the right place to pin the curve to the profile ISF, or should it be the publication’s 180 mg/dL?</p></div>
+<div class="row"><p class="row-label">The shadow value</p><p class="row-text">Would either project carry the shadow value on its dev line, so that records can be collected before anything doses from it?</p></div>
 </div>
-<div class="foot"><p class="foot-src">The existing modes stay the default throughout.</p><div class="pageno"></div></div>
-<aside>These are the things I’d like a view on, and they’re questions for the people who maintain AndroidAPS and Trio more than for me. The first is whether there’s appetite for one shared definition of this mode, with shared test vectors, given the two systems currently return values 42% apart for the same person at 200 mg/dL on defaults. The second is what Trio’s limits should do for a mode whose curve sits outside them for most of its range. The third is the anchor. The last is whether either project would be willing to carry the shadow value on its dev line, because records from real use are what the next stage needs, and nothing would dose from it while they’re collected.</aside>
+<div class="foot"><p class="foot-src">The existing modes remain the default throughout.</p><div class="pageno"></div></div>
+<aside>These questions are for the people who maintain AndroidAPS and Trio. The first is whether there is appetite for one shared definition of this mode, with shared test vectors, given that the two systems return values 42% apart for the same person at 200 mg/dL on defaults. The second is what Trio’s limits should do for a mode whose curve sits outside them for most of its range. The third is the anchor. The last is whether either project would carry the shadow value on its dev line. Records from real use are what the next stage needs, and nothing would dose from the value while they are collected.</aside>
 </section>

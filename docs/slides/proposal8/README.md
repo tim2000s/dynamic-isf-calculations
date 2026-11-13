@@ -20,4 +20,10 @@ in `charts/proposal8/`:
 | lows | fig6_what_preceded_the_lows.png |
 
 The colours and typeface follow diabettech.com: Open Sans, cyan #00aae1, slate #333f49 and pale
-blue-grey #e9ecf6. The layout was not rendered or checked visually when it was written.
+blue-grey #e9ecf6. All 20 slides were rendered locally in
+headless Chrome at 1920 by 1080 on 13 November 2026 and read for overflow. The figures were not
+loaded in those renders, so their appearance on the slide has not been checked.
+
+The text follows the register of the paper: plain label headings, impersonal voice and no
+contractions. `punctuation_pass.py` and `style_pass.py` record the two text passes made after
+the first build, each as a list of exact replacements.
