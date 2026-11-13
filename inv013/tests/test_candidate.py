@@ -81,3 +81,11 @@ def test_refit_returns_a_known_quartic_and_the_scale_of_a_scaled_published_curve
     same = pd.DataFrame(np.tile(60.0 * quartic_isf(g.astype(float)), (12, 1)), columns=g)
     r = refit(same, n_boot=5)
     assert r["scale"][0] == pytest.approx(60.0) and r["miss_published"] < 1e-9
+
+
+def test_profile_link_gives_the_table_the_device_shadow_code_is_tested_against():
+    # The same glucose and sensitivity pairs sit in the AndroidAPS and Trio tests (profile ISF 50).
+    table = {40: 79.2753, 60: 79.2753, 100: 79.2753, 120: 62.4565, 140: 50.0,
+             180: 34.678, 250: 24.3772, 300: 20.7823, 380: 15.0273, 450: 15.0273}
+    for glucose, isf in table.items():
+        assert float(curve_profile(glucose, 50.0)) == pytest.approx(isf, abs=1e-4)
