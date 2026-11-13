@@ -1,7 +1,8 @@
 import numpy as np
+import pandas as pd
 
 from inv019.outcome_test import (ARMS, LIMITS, MARGIN, RULES, blended_tdd, matched_factor,
-                                 outcomes, verdict)
+                                 outcomes, paired, verdict)
 
 STEPS_PER_DAY = 288
 
@@ -62,3 +63,11 @@ def test_the_verdict_weighs_size_as_well_as_sign():
     assert verdict(rng.normal(0, 3.0, 40), m) == "unresolved"
     # a difference that is certain and smaller than the margin is not harm
     assert verdict(m / 5 + rng.normal(0, 0.01, 40), m) == "cleared"
+
+
+def test_a_persons_difference_is_the_mean_over_the_seeds_where_both_runs_completed():
+    row = lambda who, seed, arm, v, done=True: dict(subject=who, seed=seed, arm=arm, tbr54=v, completed=done)
+    runs = pd.DataFrame([row("a", 1, "x", 1.0), row("a", 1, "ref", 0.0), row("a", 2, "x", 4.0), row("a", 2, "ref", 1.0),
+                         row("b", 1, "x", 2.0), row("b", 1, "ref", 1.5), row("b", 2, "x", 9.0, False), row("b", 2, "ref", 0.0)])
+    assert list(paired(runs, "x", "ref", "tbr54")) == [2.0, 0.5]
+    assert list(paired(runs[runs.seed == 1], "x", "ref", "tbr54")) == [1.0, 0.5]

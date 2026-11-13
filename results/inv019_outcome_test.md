@@ -29,7 +29,7 @@ Week one is the same run in every pinned arm on the unscaled profile, so its lar
 
 ## The arms
 
-Medians over the people who completed the arm.
+Medians over the runs that completed.
 
 | Arm | Completed | Ended early, hypoglycaemic | Ended early, hyperglycaemic | Daily dose, U | Glucose 5th / 50th / 95th percentile, mg/dL | Mean glucose, mg/dL | 70 to 180 | Below 70 | Below 54 | Above 180 | Above 250 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
