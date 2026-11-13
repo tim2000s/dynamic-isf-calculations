@@ -71,3 +71,13 @@ def test_a_persons_difference_is_the_mean_over_the_seeds_where_both_runs_complet
                          row("b", 1, "x", 2.0), row("b", 1, "ref", 1.5), row("b", 2, "x", 9.0, False), row("b", 2, "ref", 0.0)])
     assert list(paired(runs, "x", "ref", "tbr54")) == [2.0, 0.5]
     assert list(paired(runs[runs.seed == 1], "x", "ref", "tbr54")) == [1.0, 0.5]
+
+
+def test_time_below_54_is_filed_under_the_peak_in_the_four_hours_before_each_low():
+    from inv019.low_trace import BEFORE, by_band, lows
+    bg = np.full(400, 120.0)
+    bg[100], bg[120:124] = 260.0, 50.0           # a low of four steps, twenty steps after a peak of 260
+    bg[300:302] = 50.0                           # a low of two steps with nothing above 140 before it
+    bg[100 + BEFORE + 60] = 53.0                 # outside four hours of the peak
+    assert [(s, n) for s, n, _ in lows(bg)] == [(120, 4), (208, 1), (300, 2)]
+    assert list(by_band(bg) * 4) == [3.0, 0.0, 0.0, 4.0] and abs(by_band(bg).sum() - 100 * np.mean(bg < 54)) < 1e-12
