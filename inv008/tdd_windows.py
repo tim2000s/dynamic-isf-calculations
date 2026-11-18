@@ -83,7 +83,8 @@ def build_delivery_grid(start_sec: int, end_sec: int,
 
 
 def windowed_tdd(grid: pd.DataFrame, bin_sec: int = config.GRID_SEC,
-                 min_days_for_7d: int = config.MIN_DAYS_FOR_7D) -> pd.DataFrame:
+                 min_days_for_7d: int = config.MIN_DAYS_FOR_7D,
+                 day_offset_sec: int = 0) -> pd.DataFrame:
     """Per-bin TDD components mirroring the device TDD calculator:
 
     tdd_4h    = calculateDaily(-4, 0)   → trailing 4 h sum
@@ -95,6 +96,11 @@ def windowed_tdd(grid: pd.DataFrame, bin_sec: int = config.GRID_SEC,
 
     A calendar day is valid if it is complete on the grid and saw ≥ 1 bolus event
     (zero-bolus days indicate upload gaps and would silently deflate the average).
+
+    Calendar days run from UTC midnight by default. `day_offset_sec` moves the
+    boundary to midnight at UTC + offset, so a positive offset is a zone east of
+    UTC; it exists to measure how much the UTC boundary moves the blend
+    (inv008/day_boundary.py), and the default leaves every committed output as it was.
     """
     ts = grid["ts"].to_numpy()
     total = grid["total_u"].to_numpy()
@@ -117,7 +123,7 @@ def windowed_tdd(grid: pd.DataFrame, bin_sec: int = config.GRID_SEC,
     tdd_24h = trailing(per_24h)
 
     # calendar-day totals
-    day = ts // 86400
+    day = (ts + int(day_offset_sec)) // 86400
     df = pd.DataFrame({"day": day, "total_u": total, "bolus_u": grid["bolus_u"].to_numpy()})
     daily = df.groupby("day").agg(total=("total_u", "sum"),
                                   n_bins=("total_u", "size"),

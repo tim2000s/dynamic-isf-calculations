@@ -84,3 +84,17 @@ def test_windowed_tdd_zero_bolus_days_invalid():
     assert np.isnan(day6["tdd_1d"]).all()
     # but 7d average still defined (other days valid) and equals 30
     assert day6["tdd_7d"].iloc[-1] == pytest.approx(30.0, abs=0.01)
+
+
+def test_windowed_tdd_day_offset_moves_late_bolus_between_days():
+    # 0.1 U at noon every day keeps each day valid; 10 U at 23:00 UTC on day 5.
+    ts = [d * DAY + 12 * 3600.0 for d in range(10)] + [5 * DAY + 23 * 3600.0]
+    u = [0.1] * 10 + [10.0]
+    order = np.argsort(ts)
+    g = build_delivery_grid(0, 10 * DAY - 300, np.array(ts)[order], np.array(u)[order], [], FLAT_1UH)
+    at = int((6 * DAY + 18 * 3600) // 300)          # 18:00 UTC on day 6
+    utc = windowed_tdd(g)
+    east = windowed_tdd(g, day_offset_sec=2 * 3600)   # local midnight is 22:00 UTC
+    assert utc["tdd_1d"].iloc[at] == pytest.approx(24.0 + 0.1 + 10.0)  # yesterday holds it
+    assert east["tdd_1d"].iloc[at] == pytest.approx(24.0 + 0.1)        # today holds it
+    assert windowed_tdd(g, day_offset_sec=0).equals(utc)
