@@ -1,0 +1,475 @@
+{
+ "full": {
+  "n_windows": 62751,
+  "n_people": 89,
+  "static": {
+   "mae": 20.290709290709287,
+   "bias": 6.5862068965517295
+  },
+  "loop": {
+   "mae": 18.60000000000001,
+   "bias": 7.3999999999999915
+  }
+ },
+ "unscorable": {
+  "windows without V1 and V2": "5,673 from 30 people; in every one the blended TDD was missing or zero",
+  "Trio (oref_v5), device-logged TDD recorded as zero": "2,309 windows",
+  "Trio (oref_v5), no device TDD within 60 min of the window start": "36 windows",
+  "OpenAPS (oref_v7), reconstructed blend undefined": "3,328 windows; the blend is undefined when yesterday's calendar day is incomplete or holds no bolus, when fewer than three of the previous seven days are complete, or when the window lies outside the reconstructed delivery span",
+  "other": "0 windows"
+ },
+ "primary": {
+  "label": "common set as committed",
+  "n_windows": 57078,
+  "n_people": 89,
+  "by_divisor": {
+   "55": {
+    "static": {
+     "mae": 20.909090909090907,
+     "bias": 7.125
+    },
+    "loop": {
+     "mae": 19.0,
+     "bias": 8.0
+    },
+    "v1": {
+     "mae": 25.121958041916976,
+     "bias": -15.55630360468049
+    },
+    "v2": {
+     "mae": 38.19977649527977,
+     "bias": 3.879665985651111
+    },
+    "paired": {
+     "v1_minus_static": [
+      4.212867132826069,
+      1.0566545848558286,
+      7.5628217204279915
+     ],
+     "v2_minus_static": [
+      17.290685586188864,
+      10.925843900140489,
+      26.262099558226875
+     ],
+     "v2_minus_v1": [
+      13.077818453362795,
+      4.992132971551838,
+      24.33751014062483
+     ],
+     "loop_minus_static": [
+      -1.9090909090909065,
+      -3.441234015345265,
+      -0.1904761904761898
+     ],
+     "mae_static": [
+      20.909090909090907,
+      18.865999999999993,
+      23.592641176470583
+     ],
+     "mae_loop": [
+      19.0,
+      17.0,
+      21.60000000000001
+     ],
+     "mae_v1": [
+      25.121958041916976,
+      21.72914444454107,
+      29.283292065588046
+     ],
+     "mae_v2": [
+      38.19977649527977,
+      31.80952023221568,
+      47.58609186166792
+     ]
+    },
+    "verdicts": {
+     "v1_minus_static": "interval above zero",
+     "v2_minus_static": "interval above zero",
+     "v2_minus_v1": "interval above zero",
+     "loop_minus_static": "interval below zero"
+    },
+    "per_person_best": {
+     "static": 22,
+     "loop": 36,
+     "v1": 14,
+     "v2": 8
+    },
+    "n_people_ranked": 80
+   },
+   "65": {
+    "static": {
+     "mae": 20.909090909090907,
+     "bias": 7.125
+    },
+    "loop": {
+     "mae": 19.0,
+     "bias": 8.0
+    },
+    "v1": {
+     "mae": 24.731364639955448,
+     "bias": -12.938285246320094
+    },
+    "v2": {
+     "mae": 42.846230322492865,
+     "bias": 13.1325502335755
+    },
+    "paired": {
+     "v1_minus_static": [
+      3.8222737308645414,
+      1.322016279051958,
+      6.752489938654511
+     ],
+     "v2_minus_static": [
+      21.937139413401958,
+      13.227525485236384,
+      36.16605069659348
+     ],
+     "v2_minus_v1": [
+      18.114865682537417,
+      8.125091471409604,
+      33.457100033779355
+     ],
+     "loop_minus_static": [
+      -1.9090909090909065,
+      -3.441234015345265,
+      -0.1904761904761898
+     ],
+     "mae_static": [
+      20.909090909090907,
+      18.865999999999993,
+      23.592641176470583
+     ],
+     "mae_loop": [
+      19.0,
+      17.0,
+      21.60000000000001
+     ],
+     "mae_v1": [
+      24.731364639955448,
+      21.875330312981205,
+      28.535648447156078
+     ],
+     "mae_v2": [
+      42.846230322492865,
+      34.19893158298806,
+      56.99416932208402
+     ]
+    },
+    "verdicts": {
+     "v1_minus_static": "interval above zero",
+     "v2_minus_static": "interval above zero",
+     "v2_minus_v1": "interval above zero",
+     "loop_minus_static": "interval below zero"
+    },
+    "per_person_best": {
+     "static": 23,
+     "loop": 35,
+     "v1": 14,
+     "v2": 8
+    },
+    "n_people_ranked": 80
+   },
+   "75": {
+    "static": {
+     "mae": 20.909090909090907,
+     "bias": 7.125
+    },
+    "loop": {
+     "mae": 19.0,
+     "bias": 8.0
+    },
+    "v1": {
+     "mae": 24.57001062349611,
+     "bias": -10.432087747378922
+    },
+    "v2": {
+     "mae": 49.74445054589351,
+     "bias": 25.205754026291466
+    },
+    "paired": {
+     "v1_minus_static": [
+      3.6609197144052033,
+      1.5711660574912696,
+      6.318456991700154
+     ],
+     "v2_minus_static": [
+      28.8353596368026,
+      17.214959735246378,
+      49.533808545886416
+     ],
+     "v2_minus_v1": [
+      25.174439922397397,
+      12.843877958200306,
+      46.031034185246085
+     ],
+     "loop_minus_static": [
+      -1.9090909090909065,
+      -3.441234015345265,
+      -0.1904761904761898
+     ],
+     "mae_static": [
+      20.909090909090907,
+      18.865999999999993,
+      23.592641176470583
+     ],
+     "mae_loop": [
+      19.0,
+      17.0,
+      21.60000000000001
+     ],
+     "mae_v1": [
+      24.57001062349611,
+      22.11585598333449,
+      27.927036956297204
+     ],
+     "mae_v2": [
+      49.74445054589351,
+      38.25490588148586,
+      70.37396137679129
+     ]
+    },
+    "verdicts": {
+     "v1_minus_static": "interval above zero",
+     "v2_minus_static": "interval above zero",
+     "v2_minus_v1": "interval above zero",
+     "loop_minus_static": "interval below zero"
+    },
+    "per_person_best": {
+     "static": 23,
+     "loop": 35,
+     "v1": 17,
+     "v2": 5
+    },
+    "n_people_ranked": 80
+   }
+  }
+ },
+ "dedup": {
+  "label": "common set, exact duplicate rows collapsed",
+  "n_windows": 49745,
+  "n_people": 89,
+  "by_divisor": {
+   "55": {
+    "static": {
+     "mae": 20.60454545454546,
+     "bias": 6.6000000000000085
+    },
+    "loop": {
+     "mae": 18.799999999999997,
+     "bias": 8.0
+    },
+    "v1": {
+     "mae": 24.859791554042538,
+     "bias": -15.263596221612307
+    },
+    "v2": {
+     "mae": 38.32116006731242,
+     "bias": 4.5886205666857265
+    },
+    "paired": {
+     "v1_minus_static": [
+      4.255246099497079,
+      0.930102934706836,
+      7.7754758917758595
+     ],
+     "v2_minus_static": [
+      17.71661461276696,
+      11.448462550526267,
+      26.13169451703175
+     ],
+     "v2_minus_v1": [
+      13.461368513269882,
+      4.88697820651157,
+      24.354563872842096
+     ],
+     "loop_minus_static": [
+      -1.8045454545454618,
+      -3.212642045454537,
+      -0.34464179498661657
+     ],
+     "mae_static": [
+      20.60454545454546,
+      18.66666666666667,
+      23.188311502589308
+     ],
+     "mae_loop": [
+      18.799999999999997,
+      17.0,
+      21.39999999999999
+     ],
+     "mae_v1": [
+      24.859791554042538,
+      21.322259314205514,
+      29.43914270486105
+     ],
+     "mae_v2": [
+      38.32116006731242,
+      31.758075340128062,
+      47.07722595930221
+     ]
+    },
+    "verdicts": {
+     "v1_minus_static": "interval above zero",
+     "v2_minus_static": "interval above zero",
+     "v2_minus_v1": "interval above zero",
+     "loop_minus_static": "interval below zero"
+    },
+    "per_person_best": {
+     "static": 24,
+     "loop": 33,
+     "v1": 13,
+     "v2": 8
+    },
+    "n_people_ranked": 78
+   },
+   "65": {
+    "static": {
+     "mae": 20.60454545454546,
+     "bias": 6.6000000000000085
+    },
+    "loop": {
+     "mae": 18.799999999999997,
+     "bias": 8.0
+    },
+    "v1": {
+     "mae": 24.52467711923211,
+     "bias": -12.703865575702764
+    },
+    "v2": {
+     "mae": 43.106223869683,
+     "bias": 13.753784707869983
+    },
+    "paired": {
+     "v1_minus_static": [
+      3.92013166468665,
+      1.376424266174963,
+      6.798039848037481
+     ],
+     "v2_minus_static": [
+      22.50167841513754,
+      13.51369541909205,
+      36.19382540535237
+     ],
+     "v2_minus_v1": [
+      18.58154675045089,
+      8.010173487759559,
+      33.995317682785235
+     ],
+     "loop_minus_static": [
+      -1.8045454545454618,
+      -3.212642045454537,
+      -0.34464179498661657
+     ],
+     "mae_static": [
+      20.60454545454546,
+      18.66666666666667,
+      23.188311502589308
+     ],
+     "mae_loop": [
+      18.799999999999997,
+      17.0,
+      21.39999999999999
+     ],
+     "mae_v1": [
+      24.52467711923211,
+      21.575316759283844,
+      28.557693112107675
+     ],
+     "mae_v2": [
+      43.106223869683,
+      34.14384935366171,
+      56.831138481937664
+     ]
+    },
+    "verdicts": {
+     "v1_minus_static": "interval above zero",
+     "v2_minus_static": "interval above zero",
+     "v2_minus_v1": "interval above zero",
+     "loop_minus_static": "interval below zero"
+    },
+    "per_person_best": {
+     "static": 25,
+     "loop": 32,
+     "v1": 14,
+     "v2": 7
+    },
+    "n_people_ranked": 78
+   },
+   "75": {
+    "static": {
+     "mae": 20.60454545454546,
+     "bias": 6.6000000000000085
+    },
+    "loop": {
+     "mae": 18.799999999999997,
+     "bias": 8.0
+    },
+    "v1": {
+     "mae": 24.443992629112046,
+     "bias": -10.261112696351177
+    },
+    "v2": {
+     "mae": 50.08558801555545,
+     "bias": 25.901042245250068
+    },
+    "paired": {
+     "v1_minus_static": [
+      3.839447174566587,
+      1.838399356558039,
+      6.34990742714711
+     ],
+     "v2_minus_static": [
+      29.481042561009993,
+      17.145288183872417,
+      50.069219955644755
+     ],
+     "v2_minus_v1": [
+      25.641595386443406,
+      12.409749781594583,
+      47.08091637237865
+     ],
+     "loop_minus_static": [
+      -1.8045454545454618,
+      -3.212642045454537,
+      -0.34464179498661657
+     ],
+     "mae_static": [
+      20.60454545454546,
+      18.66666666666667,
+      23.188311502589308
+     ],
+     "mae_loop": [
+      18.799999999999997,
+      17.0,
+      21.39999999999999
+     ],
+     "mae_v1": [
+      24.443992629112046,
+      22.014668817541704,
+      27.921658646610837
+     ],
+     "mae_v2": [
+      50.08558801555545,
+      37.94672127662536,
+      70.79477872066526
+     ]
+    },
+    "verdicts": {
+     "v1_minus_static": "interval above zero",
+     "v2_minus_static": "interval above zero",
+     "v2_minus_v1": "interval above zero",
+     "loop_minus_static": "interval below zero"
+    },
+    "per_person_best": {
+     "static": 25,
+     "loop": 33,
+     "v1": 15,
+     "v2": 5
+    },
+    "n_people_ranked": 78
+   }
+  }
+ },
+ "n_exact_duplicate_rows_full_table": 7682,
+ "n_exact_duplicate_rows_common_set": 7333
+}
