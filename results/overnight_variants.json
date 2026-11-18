@@ -1,0 +1,910 @@
+{
+ "rows": {
+  "raw": 9473413,
+  "distinct": 9212338
+ },
+ "baseline_as_committed": {
+  "n_people": 112,
+  "n_windows": 81769,
+  "per_person_median_ratio": 31.63989254645296,
+  "bands": {
+   "106": {
+    "pooled_median": 14.124293785310735,
+    "pooled_lo": 9.626941328580667,
+    "pooled_hi": 18.223382925208806,
+    "normalised": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "n_windows": 4142
+   },
+   "118": {
+    "pooled_median": 23.904382470119522,
+    "pooled_lo": 20.63628546861565,
+    "pooled_hi": 29.975222668209714,
+    "normalised": 1.692430278884462,
+    "lo": 1.375521474143332,
+    "hi": 2.455546306261185,
+    "n_windows": 7858
+   },
+   "135": {
+    "pooled_median": 29.074215761285387,
+    "pooled_lo": 24.53979367235116,
+    "pooled_hi": 34.582454147889344,
+    "normalised": 2.0584544758990053,
+    "lo": 1.6572975688364504,
+    "hi": 2.945345846036585,
+    "n_windows": 17533
+   },
+   "160": {
+    "pooled_median": 31.169231231592235,
+    "pooled_lo": 26.755852842809364,
+    "pooled_hi": 35.45329358934738,
+    "normalised": 2.2067815711967302,
+    "lo": 1.7440025738020328,
+    "hi": 3.1813640658054174,
+    "n_windows": 21564
+   },
+   "198": {
+    "pooled_median": 32.08213025344883,
+    "pooled_lo": 29.074478096459003,
+    "pooled_hi": 36.17951300459929,
+    "normalised": 2.271414821944177,
+    "lo": 1.7701447232455747,
+    "hi": 3.334824724071975,
+    "n_windows": 16583
+   }
+  },
+  "normalisation_stable": true,
+  "top_minus_lowest": {
+   "diff": 17.957836468138098,
+   "lo": 13.256584846736432,
+   "hi": 23.405896564306026,
+   "verdict": "interval above zero"
+  },
+  "top_band_verdict": "interval above 1"
+ },
+ "variants": {
+  "rise screen 1, IOB >= 0.30 U": {
+   "n_people": 86,
+   "n_windows": 27637,
+   "per_person_median_ratio": 36.45568236071036,
+   "bands": {
+    "106": {
+     "pooled_median": 21.711366538952745,
+     "pooled_lo": 18.42105263157895,
+     "pooled_hi": 38.70967741935484,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 586
+    },
+    "118": {
+     "pooled_median": 26.567756602407208,
+     "pooled_lo": 22.252537398249277,
+     "pooled_hi": 35.39094650205761,
+     "normalised": 1.223679612922638,
+     "lo": 0.7823127928843511,
+     "hi": 1.5134388895333095,
+     "n_windows": 1670
+    },
+    "135": {
+     "pooled_median": 34.18803418803419,
+     "pooled_lo": 27.595052735735194,
+     "pooled_hi": 41.666666666666664,
+     "normalised": 1.5746606334841629,
+     "lo": 0.9217600636866486,
+     "hi": 1.961800151537275,
+     "n_windows": 4159
+    },
+    "160": {
+     "pooled_median": 34.38673239781716,
+     "pooled_lo": 29.372847877282855,
+     "pooled_hi": 39.566563467492266,
+     "normalised": 1.583812439264167,
+     "lo": 0.886587711513593,
+     "hi": 1.9502608427096466,
+     "n_windows": 6986
+    },
+    "198": {
+     "pooled_median": 34.58790477544784,
+     "pooled_lo": 30.084235860409148,
+     "pooled_hi": 39.64067370805804,
+     "normalised": 1.5930782023044505,
+     "lo": 0.877289288183375,
+     "hi": 1.9905331421237418,
+     "n_windows": 6614
+    }
+   },
+   "normalisation_stable": true,
+   "top_minus_lowest": {
+    "diff": 12.876538236495094,
+    "lo": -4.76212291771404,
+    "hi": 19.265703891559042,
+    "verdict": "interval includes zero"
+   },
+   "top_band_verdict": "interval includes 1"
+  },
+  "rise screen 2, IOB >= 0.30 U": {
+   "n_people": 112,
+   "n_windows": 81012,
+   "per_person_median_ratio": 31.63989254645296,
+   "bands": {
+    "106": {
+     "pooled_median": 14.04494382022472,
+     "pooled_lo": 9.54543245607404,
+     "pooled_hi": 18.205461638491546,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 4111
+    },
+    "118": {
+     "pooled_median": 23.88059701492537,
+     "pooled_lo": 20.65197530748813,
+     "pooled_hi": 29.947916666666664,
+     "normalised": 1.7002985074626864,
+     "lo": 1.38459861930961,
+     "hi": 2.511408007169628,
+     "n_windows": 7747
+    },
+    "135": {
+     "pooled_median": 29.082774049217,
+     "pooled_lo": 24.51598607420364,
+     "pooled_hi": 34.70057616601924,
+     "normalised": 2.0706935123042505,
+     "lo": 1.662539081767288,
+     "hi": 3.0228031815445067,
+     "n_windows": 17317
+    },
+    "160": {
+     "pooled_median": 31.020550086793385,
+     "pooled_lo": 26.629375797890212,
+     "pooled_hi": 35.38869377934728,
+     "normalised": 2.2086631661796887,
+     "lo": 1.7393640476765968,
+     "hi": 3.214509823275467,
+     "n_windows": 21366
+    },
+    "198": {
+     "pooled_median": 31.997350908306824,
+     "pooled_lo": 29.003713415659067,
+     "pooled_hi": 36.200825089904114,
+     "normalised": 2.2782113846714456,
+     "lo": 1.7731140938195855,
+     "hi": 3.387358342100513,
+     "n_windows": 16412
+    }
+   },
+   "normalisation_stable": true,
+   "top_minus_lowest": {
+    "diff": 17.952407088082104,
+    "lo": 13.320433638323342,
+    "hi": 23.471271374291046,
+    "verdict": "interval above zero"
+   },
+   "top_band_verdict": "interval above 1"
+  },
+  "rise screen 3, IOB >= 0.30 U": {
+   "n_people": 125,
+   "n_windows": 150916,
+   "per_person_median_ratio": 28.957404296536847,
+   "bands": {
+    "106": {
+     "pooled_median": 10.99634779431738,
+     "pooled_lo": 7.395810501466904,
+     "pooled_hi": 13.916616311412268,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 9594
+    },
+    "118": {
+     "pooled_median": 20.1294033069734,
+     "pooled_lo": 17.354385929778,
+     "pooled_hi": 24.123018695387117,
+     "normalised": 1.8305535331808749,
+     "lo": 1.511952460799752,
+     "hi": 2.6482379172107517,
+     "n_windows": 17137
+    },
+    "135": {
+     "pooled_median": 26.023041769264715,
+     "pooled_lo": 22.445326435830093,
+     "pooled_hi": 29.933647118180488,
+     "normalised": 2.3665167977601373,
+     "lo": 1.8719112070838138,
+     "hi": 3.4601760930502854,
+     "n_windows": 35228
+    },
+    "160": {
+     "pooled_median": 28.91326021934198,
+     "pooled_lo": 25.66619830780255,
+     "pooled_hi": 32.32025566435483,
+     "normalised": 2.6293511955199875,
+     "lo": 2.0440142662172223,
+     "hi": 3.9184021501282222,
+     "n_windows": 38759
+    },
+    "198": {
+     "pooled_median": 30.38936372269706,
+     "pooled_lo": 27.98312521377341,
+     "pooled_hi": 33.949547098524235,
+     "normalised": 2.7635869918921148,
+     "lo": 2.1966025539149636,
+     "hi": 4.095473323568986,
+     "n_windows": 28641
+    }
+   },
+   "normalisation_stable": true,
+   "top_minus_lowest": {
+    "diff": 19.39301592837968,
+    "lo": 15.683122350234681,
+    "hi": 24.02866255850773,
+    "verdict": "interval above zero"
+   },
+   "top_band_verdict": "interval above 1"
+  },
+  "rise screen 5, IOB >= 0.30 U": {
+   "n_people": 137,
+   "n_windows": 306117,
+   "per_person_median_ratio": 23.08078273958856,
+   "bands": {
+    "106": {
+     "pooled_median": 6.836991723641598,
+     "pooled_lo": 4.755288118570248,
+     "pooled_hi": 9.64119532404408,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 23093
+    },
+    "118": {
+     "pooled_median": 14.979029358897543,
+     "pooled_lo": 12.081429237933168,
+     "pooled_hi": 17.80415430267062,
+     "normalised": 2.19088013623033,
+     "lo": 1.651039936527233,
+     "hi": 2.9674396108434076,
+     "n_windows": 38764
+    },
+    "135": {
+     "pooled_median": 22.20324508966695,
+     "pooled_lo": 19.701027917023527,
+     "pooled_hi": 25.000469932242517,
+     "normalised": 3.2475167423254976,
+     "lo": 2.2959868046743375,
+     "hi": 4.661700121549839,
+     "n_windows": 70812
+    },
+    "160": {
+     "pooled_median": 25.462962962962962,
+     "pooled_lo": 23.036516226175017,
+     "pooled_hi": 27.897245234055298,
+     "normalised": 3.724293372319688,
+     "lo": 2.6091430635189616,
+     "hi": 5.399997191337362,
+     "n_windows": 79040
+    },
+    "198": {
+     "pooled_median": 28.188539741219962,
+     "pooled_lo": 26.24343050977587,
+     "pooled_hi": 30.78890686984639,
+     "normalised": 4.12294483899212,
+     "lo": 2.9214600075646233,
+     "hi": 5.984173964620316,
+     "n_windows": 55847
+    }
+   },
+   "normalisation_stable": true,
+   "top_minus_lowest": {
+    "diff": 21.351548017578367,
+    "lo": 18.149337099458673,
+    "hi": 24.549505132559453,
+    "verdict": "interval above zero"
+   },
+   "top_band_verdict": "interval above 1"
+  },
+  "rise screen none, IOB >= 0.30 U": {
+   "n_people": 137,
+   "n_windows": 889339,
+   "per_person_median_ratio": 12.953367875647668,
+   "bands": {
+    "106": {
+     "pooled_median": -0.6924357257586706,
+     "pooled_lo": -2.3551417831505437,
+     "pooled_hi": 0.9399694801901782,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 78172
+    },
+    "118": {
+     "pooled_median": 5.5096418732782375,
+     "pooled_lo": 3.43097074895532,
+     "pooled_hi": 7.812732980961972,
+     "normalised": -7.956900067860553,
+     "lo": -25.64063088984091,
+     "hi": NaN,
+     "n_windows": 110119
+    },
+    "135": {
+     "pooled_median": 12.811594020543655,
+     "pooled_lo": 10.11175354863466,
+     "pooled_hi": 15.346213792004782,
+     "normalised": -18.502214059661014,
+     "lo": -56.23668878297204,
+     "hi": NaN,
+     "n_windows": 186988
+    },
+    "160": {
+     "pooled_median": 17.95164096976559,
+     "pooled_lo": 15.327639873712176,
+     "pooled_hi": 20.431761341669898,
+     "normalised": -25.925353504972303,
+     "lo": -79.48590626632131,
+     "hi": NaN,
+     "n_windows": 211732
+    },
+    "198": {
+     "pooled_median": 21.94092646211004,
+     "pooled_lo": 19.589347531417857,
+     "pooled_hi": 24.063798445380417,
+     "normalised": -31.686589304834545,
+     "lo": -98.45773840377281,
+     "hi": NaN,
+     "n_windows": 159784
+    }
+   },
+   "normalisation_stable": false,
+   "top_minus_lowest": {
+    "diff": 22.63336218786871,
+    "lo": 20.016536667437794,
+    "hi": 25.0697065522857,
+    "verdict": "interval above zero"
+   },
+   "top_band_verdict": "reference band interval includes zero"
+  },
+  "rise screen 2, IOB >= 0.10 U": {
+   "n_people": 112,
+   "n_windows": 86162,
+   "per_person_median_ratio": 32.79723834929652,
+   "bands": {
+    "106": {
+     "pooled_median": 18.885741265344667,
+     "pooled_lo": 15.172743005961507,
+     "pooled_hi": 28.011799410029496,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 5859
+    },
+    "118": {
+     "pooled_median": 28.67924528301887,
+     "pooled_lo": 22.900217582721456,
+     "pooled_hi": 36.89422177682836,
+     "normalised": 1.518566037735849,
+     "lo": 1.1630557659590377,
+     "hi": 1.8205446066024524,
+     "n_windows": 9457
+    },
+    "135": {
+     "pooled_median": 30.54448871181939,
+     "pooled_lo": 25.31630740393627,
+     "pooled_hi": 37.41886803861594,
+     "normalised": 1.6173306772908365,
+     "lo": 1.184421051697956,
+     "hi": 2.0195727566359807,
+     "n_windows": 18459
+    },
+    "160": {
+     "pooled_median": 31.222123104371097,
+     "pooled_lo": 26.755852842809364,
+     "pooled_hi": 35.59192285256276,
+     "normalised": 1.6532114183764495,
+     "lo": 1.1776183038326644,
+     "hi": 2.053590925647868,
+     "n_windows": 21517
+    },
+    "198": {
+     "pooled_median": 32.02479338842975,
+     "pooled_lo": 29.056680044031506,
+     "pooled_hi": 36.227516202390575,
+     "normalised": 1.695712809917355,
+     "lo": 1.1611080655656996,
+     "hi": 2.171928026723982,
+     "n_windows": 16445
+    }
+   },
+   "normalisation_stable": true,
+   "top_minus_lowest": {
+    "diff": 13.139052123085083,
+    "lo": 4.27496568394525,
+    "hi": 18.58328632039539,
+    "verdict": "interval above zero"
+   },
+   "top_band_verdict": "interval above 1"
+  },
+  "rise screen 2, IOB >= 0.50 U": {
+   "n_people": 111,
+   "n_windows": 75022,
+   "per_person_median_ratio": 31.312268716196982,
+   "bands": {
+    "106": {
+     "pooled_median": 11.785503830288745,
+     "pooled_lo": 6.846251374259673,
+     "pooled_hi": 14.176228357902586,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 3019
+    },
+    "118": {
+     "pooled_median": 19.83825064274322,
+     "pooled_lo": 17.834451168283465,
+     "pooled_hi": 23.271973051683503,
+     "normalised": 1.683275567036762,
+     "lo": 1.424655946278977,
+     "hi": 2.944323089094448,
+     "n_windows": 5880
+    },
+    "135": {
+     "pooled_median": 26.72010688042752,
+     "pooled_lo": 22.96917656235291,
+     "pooled_hi": 31.120533768183797,
+     "normalised": 2.267201068804275,
+     "lo": 1.8000682247477893,
+     "hi": 4.0050959639163235,
+     "n_windows": 15255
+    },
+    "160": {
+     "pooled_median": 30.22825416409624,
+     "pooled_lo": 26.259215900935118,
+     "pooled_hi": 34.45652832212907,
+     "normalised": 2.5648673658235657,
+     "lo": 2.0229423206338337,
+     "hi": 4.52400192425492,
+     "n_windows": 20699
+    },
+    "198": {
+     "pooled_median": 31.806637132551415,
+     "pooled_lo": 28.900887200812534,
+     "pooled_hi": 35.87332770240662,
+     "normalised": 2.6987931606969875,
+     "lo": 2.180026860336528,
+     "hi": 4.719988727081065,
+     "n_windows": 16266
+    }
+   },
+   "normalisation_stable": true,
+   "top_minus_lowest": {
+    "diff": 20.02113330226267,
+    "lo": 16.176589093439876,
+    "hi": 26.550482134961214,
+    "verdict": "interval above zero"
+   },
+   "top_band_verdict": "interval above 1"
+  },
+  "rise screen 2, IOB >= 1.00 U": {
+   "n_people": 106,
+   "n_windows": 59254,
+   "per_person_median_ratio": 28.533443781750094,
+   "bands": {
+    "106": {
+     "pooled_median": 8.823529411764705,
+     "pooled_lo": 4.612159329140461,
+     "pooled_hi": 11.74934725848564,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 1613
+    },
+    "118": {
+     "pooled_median": 14.713610089332633,
+     "pooled_lo": 11.789269927472521,
+     "pooled_hi": 16.642547033285094,
+     "normalised": 1.6675424767910318,
+     "lo": 1.287341139883663,
+     "hi": 3.04865704139433,
+     "n_windows": 3007
+    },
+    "135": {
+     "pooled_median": 19.89026063100137,
+     "pooled_lo": 17.70715634768122,
+     "pooled_hi": 22.98879324719831,
+     "normalised": 2.2542295381801556,
+     "lo": 1.559981057134692,
+     "hi": 4.525832646099459,
+     "n_windows": 8905
+    },
+    "160": {
+     "pooled_median": 26.424442609413706,
+     "pooled_lo": 23.6013986013986,
+     "pooled_hi": 29.908515510239347,
+     "normalised": 2.9947701624002203,
+     "lo": 2.115409714182326,
+     "hi": 5.908967055933753,
+     "n_windows": 16911
+    },
+    "198": {
+     "pooled_median": 30.63540090771558,
+     "pooled_lo": 27.942115498721446,
+     "pooled_hi": 34.383954154727796,
+     "normalised": 3.472012102874433,
+     "lo": 2.544208508853246,
+     "hi": 6.709037368410125,
+     "n_windows": 15361
+    }
+   },
+   "normalisation_stable": true,
+   "top_minus_lowest": {
+    "diff": 21.811871495950875,
+    "lo": 17.470331576586624,
+    "hi": 27.60654719274935,
+    "verdict": "interval above zero"
+   },
+   "top_band_verdict": "interval above 1"
+  }
+ },
+ "by_platform": {
+  "Trio | rise screen 2": {
+   "n_people": 16,
+   "n_windows": 7145,
+   "per_person_median_ratio": 29.15786610343062,
+   "bands": {
+    "106": {
+     "pooled_median": 24.384715146245117,
+     "pooled_lo": 15.30650845759742,
+     "pooled_hi": 34.22053231939163,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 292
+    },
+    "118": {
+     "pooled_median": 21.639659366854048,
+     "pooled_lo": 17.456066917890283,
+     "pooled_hi": 30.15460729746445,
+     "normalised": 0.8874271951536917,
+     "lo": 0.7060783220989221,
+     "hi": 1.2885073297329128,
+     "n_windows": 718
+    },
+    "135": {
+     "pooled_median": 27.463607532423687,
+     "pooled_lo": 24.813895781637715,
+     "pooled_hi": 36.86006825938566,
+     "normalised": 1.1262632090517848,
+     "lo": 0.8613942897909533,
+     "hi": 1.8401844868533817,
+     "n_windows": 1630
+    },
+    "160": {
+     "pooled_median": 32.32741800613212,
+     "pooled_lo": 29.39975500204165,
+     "pooled_hi": 40.13157894736842,
+     "normalised": 1.3257246521950887,
+     "lo": 1.007644210926986,
+     "hi": 2.0884145920307082,
+     "n_windows": 2270
+    },
+    "198": {
+     "pooled_median": 30.952173934045337,
+     "pooled_lo": 26.241317211216877,
+     "pooled_hi": 35.91606133979015,
+     "normalised": 1.2693268610444075,
+     "lo": 0.898091310392659,
+     "hi": 2.0130797962789737,
+     "n_windows": 1436
+    }
+   },
+   "normalisation_stable": true,
+   "top_minus_lowest": {
+    "diff": 6.56745878780022,
+    "lo": -3.3913426507132463,
+    "hi": 15.84041236732567,
+    "verdict": "interval includes zero"
+   },
+   "top_band_verdict": "interval includes 1"
+  },
+  "Trio | no rise screen": {
+   "n_people": 22,
+   "n_windows": 201873,
+   "per_person_median_ratio": 13.127091393113094,
+   "bands": {
+    "106": {
+     "pooled_median": -1.1621185806622387,
+     "pooled_lo": -4.114119395009732,
+     "pooled_hi": 2.495520413315461,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 22154
+    },
+    "118": {
+     "pooled_median": 4.018371014211931,
+     "pooled_lo": 0.0,
+     "pooled_hi": 8.631324902089172,
+     "normalised": -3.4577977506581505,
+     "lo": -15.45716715461494,
+     "hi": NaN,
+     "n_windows": 30096
+    },
+    "135": {
+     "pooled_median": 10.37344398340249,
+     "pooled_lo": 6.492101276779917,
+     "pooled_hi": 14.826252048614776,
+     "normalised": -8.926321423663268,
+     "lo": -33.442971587260594,
+     "hi": NaN,
+     "n_windows": 47189
+    },
+    "160": {
+     "pooled_median": 16.872439016895786,
+     "pooled_lo": 10.855725173456108,
+     "pooled_hi": 22.037520644952465,
+     "normalised": -14.518689656679395,
+     "lo": -53.77021865663954,
+     "hi": NaN,
+     "n_windows": 49382
+    },
+    "198": {
+     "pooled_median": 19.43418167802501,
+     "pooled_lo": 13.409361691215487,
+     "pooled_hi": 25.73987719977914,
+     "normalised": -16.72306251824177,
+     "lo": -58.438189757872365,
+     "hi": NaN,
+     "n_windows": 31218
+    }
+   },
+   "normalisation_stable": false,
+   "top_minus_lowest": {
+    "diff": 20.596300258687247,
+    "lo": 13.972506877312243,
+    "hi": 27.352551847732055,
+    "verdict": "interval above zero"
+   },
+   "top_band_verdict": "reference band interval includes zero"
+  },
+  "AAPS | rise screen 2": {
+   "n_people": 14,
+   "n_windows": 14512,
+   "per_person_median_ratio": 32.49495180159016,
+   "bands": {
+    "106": {
+     "pooled_median": 11.207170728672507,
+     "pooled_lo": 8.130081300813009,
+     "pooled_hi": 20.588235294117645,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 376
+    },
+    "118": {
+     "pooled_median": 29.320987654320987,
+     "pooled_lo": 11.93565127140633,
+     "pooled_hi": 47.62853348510718,
+     "normalised": 2.616270275896303,
+     "lo": 1.2362385253252028,
+     "hi": 4.242330621447445,
+     "n_windows": 873
+    },
+    "135": {
+     "pooled_median": 35.6378233719893,
+     "pooled_lo": 22.21975227023783,
+     "pooled_hi": 47.50593824228029,
+     "normalised": 3.1799125965675916,
+     "lo": 1.538038262666427,
+     "hi": 4.924051261915144,
+     "n_windows": 2614
+    },
+    "160": {
+     "pooled_median": 30.325443786982248,
+     "pooled_lo": 23.37742233159028,
+     "pooled_hi": 44.05325333000668,
+     "normalised": 2.705896476565438,
+     "lo": 1.3637187434380416,
+     "hi": 4.521251152035639,
+     "n_windows": 3665
+    },
+    "198": {
+     "pooled_median": 28.733944508911584,
+     "pooled_lo": 24.010382868267357,
+     "pooled_hi": 47.18686837652184,
+     "normalised": 2.563889245962717,
+     "lo": 1.3162372853221145,
+     "hi": 4.74322240568635,
+     "n_windows": 3128
+    }
+   },
+   "normalisation_stable": true,
+   "top_minus_lowest": {
+    "diff": 17.526773780239076,
+    "lo": 6.245633877318246,
+    "hi": 35.166071471129705,
+    "verdict": "interval above zero"
+   },
+   "top_band_verdict": "interval above 1"
+  },
+  "AAPS | no rise screen": {
+   "n_people": 18,
+   "n_windows": 112776,
+   "per_person_median_ratio": 12.961443005784014,
+   "bands": {
+    "106": {
+     "pooled_median": 0.6295247712152028,
+     "pooled_lo": -4.354230840538089,
+     "pooled_hi": 3.365120138091413,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 7474
+    },
+    "118": {
+     "pooled_median": 8.185554116228168,
+     "pooled_lo": 3.497981747344309,
+     "pooled_hi": 17.54463046896679,
+     "normalised": 13.002751425376301,
+     "lo": -19.370657141092522,
+     "hi": NaN,
+     "n_windows": 11902
+    },
+    "135": {
+     "pooled_median": 17.54385964912281,
+     "pooled_lo": 9.8182607982295,
+     "pooled_hi": 29.445537486244305,
+     "normalised": 27.868418291558296,
+     "lo": -41.409165885176044,
+     "hi": NaN,
+     "n_windows": 22644
+    },
+    "160": {
+     "pooled_median": 20.899303356554782,
+     "pooled_lo": 14.68550288946909,
+     "pooled_hi": 31.115582969895893,
+     "normalised": 33.198540092730305,
+     "lo": -46.31997544182782,
+     "hi": NaN,
+     "n_windows": 25693
+    },
+    "198": {
+     "pooled_median": 24.55716586151369,
+     "pooled_lo": 18.68795085324408,
+     "pooled_hi": 38.21909740484738,
+     "normalised": 39.00905410617882,
+     "lo": -56.12694382377803,
+     "hi": NaN,
+     "n_windows": 20239
+    }
+   },
+   "normalisation_stable": false,
+   "top_minus_lowest": {
+    "diff": 23.927641090298486,
+    "lo": 17.91944973369551,
+    "hi": 38.745599308044795,
+    "verdict": "interval above zero"
+   },
+   "top_band_verdict": "reference band interval includes zero"
+  },
+  "OpenAPS | rise screen 2": {
+   "n_people": 82,
+   "n_windows": 59355,
+   "per_person_median_ratio": 32.095956693339645,
+   "bands": {
+    "106": {
+     "pooled_median": 13.906447534766118,
+     "pooled_lo": 8.359456635318704,
+     "pooled_hi": 17.7472904743109,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 3443
+    },
+    "118": {
+     "pooled_median": 23.711810853346467,
+     "pooled_lo": 20.569518564316166,
+     "pooled_hi": 30.13698630136987,
+     "normalised": 1.7050947622724597,
+     "lo": 1.3800695664841434,
+     "hi": 2.8437073328049816,
+     "n_windows": 6156
+    },
+    "135": {
+     "pooled_median": 28.268551236749115,
+     "pooled_lo": 23.017769050498135,
+     "pooled_hi": 35.36715247257003,
+     "normalised": 2.0327658207516865,
+     "lo": 1.6052630360917244,
+     "hi": 3.3199867531256655,
+     "n_windows": 13073
+    },
+    "160": {
+     "pooled_median": 30.902348578491964,
+     "pooled_lo": 25.250612822958008,
+     "pooled_hi": 36.196388418510395,
+     "normalised": 2.222159793235195,
+     "lo": 1.7004427547121959,
+     "hi": 3.6504893291518683,
+     "n_windows": 15431
+    },
+    "198": {
+     "pooled_median": 33.258110623577615,
+     "pooled_lo": 29.67231087145568,
+     "pooled_hi": 37.41152212254194,
+     "normalised": 2.391560500295445,
+     "lo": 1.859297889978524,
+     "hi": 3.9412114942250045,
+     "n_windows": 11848
+    }
+   },
+   "normalisation_stable": true,
+   "top_minus_lowest": {
+    "diff": 19.3516630888115,
+    "lo": 14.416894218128407,
+    "hi": 25.601216492924607,
+    "verdict": "interval above zero"
+   },
+   "top_band_verdict": "interval above 1"
+  },
+  "OpenAPS | no rise screen": {
+   "n_people": 97,
+   "n_windows": 574690,
+   "per_person_median_ratio": 12.953367875647668,
+   "bands": {
+    "106": {
+     "pooled_median": -0.6956522580751314,
+     "pooled_lo": -3.127804320295661,
+     "pooled_hi": 1.412622372753264,
+     "normalised": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_windows": 48544
+    },
+    "118": {
+     "pooled_median": 5.6818181818181825,
+     "pooled_lo": 2.8672966982338846,
+     "pooled_hi": 8.650944283047666,
+     "normalised": -8.167612648221345,
+     "lo": -26.623022673202357,
+     "hi": NaN,
+     "n_windows": 68121
+    },
+    "135": {
+     "pooled_median": 13.0,
+     "pooled_lo": 9.252817131743916,
+     "pooled_hi": 16.366990968054797,
+     "normalised": -18.687497739130436,
+     "lo": -59.19364263941147,
+     "hi": NaN,
+     "n_windows": 117155
+    },
+    "160": {
+     "pooled_median": 17.76649746192893,
+     "pooled_lo": 14.549510773193836,
+     "pooled_hi": 21.073063991894482,
+     "normalised": -25.539337011697192,
+     "lo": -82.36848067026484,
+     "hi": NaN,
+     "n_windows": 136657
+    },
+    "198": {
+     "pooled_median": 22.11302211302211,
+     "pooled_lo": 20.038511515449848,
+     "pooled_hi": 24.292803959261125,
+     "normalised": -31.787465441726308,
+     "lo": -102.36995270921044,
+     "hi": NaN,
+     "n_windows": 108327
+    }
+   },
+   "normalisation_stable": false,
+   "top_minus_lowest": {
+    "diff": 22.808674371097243,
+    "lo": 20.12371703818568,
+    "hi": 25.7876431248963,
+    "verdict": "interval above zero"
+   },
+   "top_band_verdict": "reference band interval includes zero"
+  }
+ }
+}

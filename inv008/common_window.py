@@ -9,7 +9,9 @@ scores every form on the windows where V1 and V2 are both finite, so that the fo
 medians, the paired differences between them and the per-person ranking all refer
 to the same windows. The cached table is used in place of a rerun of the database
 pipeline because it holds the activity integral each window was rescaled with, and
-a rerun would reselect windows from a database that has been appended to since.
+a rerun would reselect windows from a database whose oref_v5 rows have changed
+since that table was written (inv008/overnight_variants.py records three Trio
+people whose four-hour window counts now differ from the committed output).
 
 What is computed, on the common set:
   median absolute error and median signed error for each form, error being
