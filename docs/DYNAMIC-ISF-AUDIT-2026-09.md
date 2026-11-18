@@ -65,8 +65,10 @@ The replay includes bolus insulin and temporary-basal delivery where those recor
 basal changes are dosing information and are not interchangeable with scheduled basal. This matters
 for AID systems that deliver corrections mainly through temporary basal.
 
-The AAPS v6 export used here does not contain temporary-basal records. Its reconstructed TDD therefore
-uses scheduled basal and is incomplete for that cohort. Calendar-day totals are also formed on UTC
+The reconstruction of the AAPS v6 cohort does not read temporary-basal records. Its reconstructed TDD
+therefore uses scheduled basal and is incomplete for that cohort. (Corrected 18 November 2026: this
+paragraph said the export holds no such records. It holds them for all 44 people, in
+`TemporaryBasals.json`, and `inv008/sources.py` does not read them.) Calendar-day totals are also formed on UTC
 day boundaries, whereas AndroidAPS uses local calendar days. These differences prevent an exact
 device-level replay for affected users.
 

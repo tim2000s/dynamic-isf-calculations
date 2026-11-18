@@ -46,6 +46,19 @@ nit (optional) or pre-existing (record it, do not let it block).
     Trio, oref0 and AndroidAPS. A constant is stated with its population, since the pooled
     JAEB record is 51% children.
 11. Withdrawn figures stay withdrawn: 880, 355, the square-root TDD law and the 0.41 ratio.
+17. A statement that a source lacks a record type is checked by listing the files. Until
+    18 November 2026 `inv008/sources.py`, the audit and the paper said the AAPS v6 export
+    holds no temporary-basal records; it holds `TemporaryBasals.json` for all 44 people and
+    the reader did not open it. Nothing catches this automatically yet.
+18. The same-windows claim. A sentence that says every candidate was scored on the same
+    windows is checked against the window count of each arm. `results/head_to_head.md`,
+    `results/divisor_sensitivity.md` and the title of `fig_head_to_head.png` say so, while
+    V1 and V2 were scored on 57,078 of the 62,751. `results/common_window.md` holds the
+    comparison on identical windows and is the one to quote.
+19. The source tables move. On 18 November 2026 `inv008/overnight_sensitivity.py`, run
+    unchanged, returned 81,769 windows against the 81,814 it had committed, with three Trio
+    people's `oref_v5` rows changed in between. A variant run reproduces the committed
+    count first and states both where they differ (`inv008/overnight_variants.py` does).
 
 ## Running
 

@@ -246,7 +246,7 @@ def markdown(res: dict) -> str:
           "|---|---|---|---|---|"]
     for name, r in list(res["variants"].items()) + list(res["by_platform"].items()):
         b0, bt, d = r["bands"][cs[0]], r["bands"][cs[-1]], r["top_minus_lowest"]
-        L.append(f"| {name} | {b0['pooled_median']:.1f} ({b0['pooled_lo']:.1f} to {b0['pooled_hi']:.1f}) | "
+        L.append(f"| {name.replace(' | ', ', ')} | {b0['pooled_median']:.1f} ({b0['pooled_lo']:.1f} to {b0['pooled_hi']:.1f}) | "
                  f"{bt['pooled_median']:.1f} ({bt['pooled_lo']:.1f} to {bt['pooled_hi']:.1f}) | "
                  f"{d['diff']:+.1f} ({d['lo']:+.1f} to {d['hi']:+.1f}) | {d['verdict']} |")
     L += ["", "## By platform, committed screen and no screen, repeated rows collapsed", "",

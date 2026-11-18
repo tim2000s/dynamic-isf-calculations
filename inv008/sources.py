@@ -7,9 +7,12 @@ Formats (verified against the archive 2026-06-07):
       records with neither are cancellations. isFakedTempBasal → extended-bolus
       emulation, treated like any other temp segment.
   v6 (direct-sharing-396/upload-*): AAPS export. Treatments.json = flat bolus records
-      (date ms, insulin, isSMB, isValid, isDeletion). NO temp basal records exist in
-      these uploads → basal contribution approximated by the profile schedule
-      (flagged basal_source="profile_only").
+      (date ms, insulin, isSMB, isValid, isDeletion). Temp basals are NOT read: the
+      basal contribution is approximated by the profile schedule (flagged
+      basal_source="profile_only"). This was written on the reading that the uploads
+      hold no temp basal records. They do, in upload-*/TemporaryBasals.json, for all
+      44 people (found 18 November 2026), so the v6 TDD is incomplete by choice of
+      reader and not for want of data.
   v5 (Trio): no raw files needed — oref_v5.sug_TDD is the device-logged TDD.
 """
 from __future__ import annotations
@@ -127,7 +130,7 @@ def load_v7_events(raw_dir: str):
 # ------------------------------------------------------------ v6 (AAPS export)
 
 def load_v6_events(raw_dir: str):
-    """→ (bolus_ts, bolus_units, []) from upload-*/Treatments.json. No temp basals."""
+    """→ (bolus_ts, bolus_units, []) from upload-*/Treatments.json. TemporaryBasals.json is not read."""
     ds396 = config.NS_SAMPLES / raw_dir / "direct-sharing-396"
     bolus_ts, bolus_u = [], []
     for f in sorted(ds396.glob("upload-*/Treatments.json")):

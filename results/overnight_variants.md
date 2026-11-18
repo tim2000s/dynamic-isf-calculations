@@ -46,12 +46,12 @@ Pooled median ratio in the top band minus that in the lowest band, mg/dL per U (
 | rise screen 2, IOB >= 0.10 U | 18.9 (15.2 to 28.0) | 32.0 (29.1 to 36.2) | +13.1 (+4.3 to +18.6) | interval above zero |
 | rise screen 2, IOB >= 0.50 U | 11.8 (6.8 to 14.2) | 31.8 (28.9 to 35.9) | +20.0 (+16.2 to +26.6) | interval above zero |
 | rise screen 2, IOB >= 1.00 U | 8.8 (4.6 to 11.7) | 30.6 (27.9 to 34.4) | +21.8 (+17.5 to +27.6) | interval above zero |
-| Trio | rise screen 2 | 24.4 (15.3 to 34.2) | 31.0 (26.2 to 35.9) | +6.6 (-3.4 to +15.8) | interval includes zero |
-| Trio | no rise screen | -1.2 (-4.1 to 2.5) | 19.4 (13.4 to 25.7) | +20.6 (+14.0 to +27.4) | interval above zero |
-| AAPS | rise screen 2 | 11.2 (8.1 to 20.6) | 28.7 (24.0 to 47.2) | +17.5 (+6.2 to +35.2) | interval above zero |
-| AAPS | no rise screen | 0.6 (-4.4 to 3.4) | 24.6 (18.7 to 38.2) | +23.9 (+17.9 to +38.7) | interval above zero |
-| OpenAPS | rise screen 2 | 13.9 (8.4 to 17.7) | 33.3 (29.7 to 37.4) | +19.4 (+14.4 to +25.6) | interval above zero |
-| OpenAPS | no rise screen | -0.7 (-3.1 to 1.4) | 22.1 (20.0 to 24.3) | +22.8 (+20.1 to +25.8) | interval above zero |
+| Trio, rise screen 2 | 24.4 (15.3 to 34.2) | 31.0 (26.2 to 35.9) | +6.6 (-3.4 to +15.8) | interval includes zero |
+| Trio, no rise screen | -1.2 (-4.1 to 2.5) | 19.4 (13.4 to 25.7) | +20.6 (+14.0 to +27.4) | interval above zero |
+| AAPS, rise screen 2 | 11.2 (8.1 to 20.6) | 28.7 (24.0 to 47.2) | +17.5 (+6.2 to +35.2) | interval above zero |
+| AAPS, no rise screen | 0.6 (-4.4 to 3.4) | 24.6 (18.7 to 38.2) | +23.9 (+17.9 to +38.7) | interval above zero |
+| OpenAPS, rise screen 2 | 13.9 (8.4 to 17.7) | 33.3 (29.7 to 37.4) | +19.4 (+14.4 to +25.6) | interval above zero |
+| OpenAPS, no rise screen | -0.7 (-3.1 to 1.4) | 22.1 (20.0 to 24.3) | +22.8 (+20.1 to +25.8) | interval above zero |
 
 ## By platform, committed screen and no screen, repeated rows collapsed
 
