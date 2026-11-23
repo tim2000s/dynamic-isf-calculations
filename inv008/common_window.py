@@ -41,6 +41,11 @@ zero, and V2 minus V1 positive. The static and loop medians on the common set ar
 expected to lie within about 1 mg/dL of their full-set values, since the dropped
 windows are a tenth of the set and come from 30 of the 89 people.
 
+After the corrected readers and the unit fix of 23 November 2026 (REVIEW.md item 20) the table
+holds 62,824 windows and V1 and V2 are scored on 57,151. V2 minus static and V2 minus V1 stayed
+above zero; V1 minus static did not, its interval including zero at every divisor, so that part
+of the expectation failed (results/common_window.md).
+
     python3 -m inv008.common_window \
         --windows ~/oref-investigations/results/head_to_head_windows.parquet
 

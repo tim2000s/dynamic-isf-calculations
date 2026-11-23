@@ -1,27 +1,27 @@
 {
- "n_patients": 112,
- "fitted_exponent_free": -0.335,
+ "n_patients": 115,
+ "fitted_exponent_free": -0.443,
  "fitted_exponent_95ci": [
-  -0.572,
-  -0.113
+  -0.682,
+  -0.219
  ],
- "fitted_exponent_nwin_weighted": -0.098,
+ "fitted_exponent_nwin_weighted": -0.245,
  "supports_half": true,
  "excludes_one": true,
- "K_sqrt_tdd": 207.0,
+ "K_sqrt_tdd": 197.0,
  "scores_median_log_err": {
   "sqrt_TDD": {
-   "K": 207.0,
-   "median_log_err": 0.292
+   "K": 197.0,
+   "median_log_err": 0.271
   },
   "free_power": {
-   "A": 110.7,
-   "exponent": -0.335,
-   "median_log_err": 0.28
+   "A": 158.1,
+   "exponent": -0.443,
+   "median_log_err": 0.272
   },
   "inv_TDD": {
-   "K": 1432.0,
-   "median_log_err": 0.412
+   "K": 1329.0,
+   "median_log_err": 0.343
   }
  },
  "note": "level = per-person median overnight sensitivity (supra-target, 4h, carb-screened). Compare exponent to -0.5 (\u221aTDD) and -1 (1/TDD)."

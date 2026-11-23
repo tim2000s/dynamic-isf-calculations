@@ -60,13 +60,13 @@ The main dataset is per-tick logs from people on open-source AID (predominantly 
 
 ## 3. A well-set static ISF already does the job
 
-Before anything subtle, the blunt result. On identical correction windows, the typical size of the prediction error (mg/dL) came out as:
+Before anything subtle, the blunt result. On the selected correction windows, the typical size of the prediction error (mg/dL) came out as below, on the 57,151 of the 62,824 windows where v1 and v2 could be scored.
 
 | | loop as-run | static profile ISF | v1 (1/TDD) | v2 (1/TDD²) |
 |---|---|---|---|---|
-| typical error | 18.6 | 20.3 | 24.6 | 49.7 |
+| typical error | 19.0 | 21.1 | 23.3 | 60.1 |
 
-A well-set static ISF essentially matches the loop and comfortably beats both dynamic forms. The v2 form, with the steepest dependence, is far and away the worst.
+A well-set static ISF comes within 2 mg/dL of the loop. On the common windows v1's error is 2.2 mg/dL above static ISF's with a 95% interval of -0.2 to 4.9, so v1 is not shown to differ from it, while v2's is 39.0 mg/dL above it (23.7 to 59.4) (`results/common_window.md`). The v2 form, with the steepest dependence, is far and away the worst.
 
 That on its own doesn't tell you why. It just says the steep equations are reaching for something that isn't paying off on average. The rest is about what that something is.
 
@@ -78,11 +78,11 @@ Here's the part that made me sit up. When you compute the effective ISF in genui
 
 | glucose (mg/dL) | effective ISF (loop-based) | effective ISF (conservation) | v1 | v2 |
 |---|---|---|---|---|
-| 100–120 | 0.71 | 0.20 | 0.93 | 2.89 |
-| 120–145 | 0.82 | 0.37 | 0.87 | 2.35 |
-| 145–175 | 0.91 | 0.47 | 0.72 | 1.57 |
-| 175–205 | 0.89 | 0.53 | 0.60 | 1.08 |
-| 205–260 | 0.94 | 0.45 | 0.50 | 0.78 |
+| 100–120 | 0.63 | 0.20 | 0.93 | 2.89 |
+| 120–145 | 0.78 | 0.38 | 0.87 | 2.35 |
+| 145–175 | 0.85 | 0.47 | 0.72 | 1.57 |
+| 175–205 | 0.83 | 0.53 | 0.60 | 1.08 |
+| 205–260 | 0.86 | 0.48 | 0.50 | 0.78 |
 
 The two effective-ISF estimates sit at different levels (the conservation one reads low, for a reason I'll own up to in the limitations), but they agree on the thing that matters: the line trends gently up, while the dynamic forms trend steeply down. Restricting to windows where glucose was dead flat on entry barely moves it.
 
@@ -98,25 +98,18 @@ If the effective ISF doesn't fall when you're fasting, why does it so obviously 
 
 ### 5a. The meals you don't announce
 
-Take the first external individual (call them User A), running AAPS fully closed-loop and not announcing carbohydrate, relying on the loop to catch meals itself. Across all hours, their effective ISF falls steeply with glucose, and a glucose-driven ISF predicts their drops much better than a static one (typical error around 28 mg/dL for the Dynamic ISF they run, versus 49 static). On the face of it, a textbook case for Dynamic ISF.
-
-But the fall is a daytime thing. Restrict to the overnight sleep window, when even a non-announcer is genuinely not eating, and the steepness collapses to a fraction of its daytime value. Roughly three-quarters of the apparent glucose dependence simply goes away once they're asleep and not eating.
-
-Read plainly: a lot of what looks like "insulin working worse when I'm high" for this person is unannounced food sitting in the system and holding glucose up, depressing the apparent drop-per-unit during the day. Their Dynamic ISF is doing something genuinely useful here, leaning in harder to cover meals the loop wasn't told about. But it's covering carbs, not correcting a sensitivity that's actually changed.
+An earlier draft described one person who does not announce carbohydrate. Per-person results are not published, so that case is left out here.
 
 ### 5b. The tail of the meals you do announce
 
 This second pattern is less clear-cut, so I'll flag the uncertainty as I go. I include it because it points in the same direction as the rest, not because I think it's settled.
 
-Take the second external individual, User B, on oref, a careful carb-announcer. You might assume that once their carbs-on-board has counted down to zero, the meal is done and any window after that is clean. I looked at whether that holds, comparing the effective ISF in the hour straight after carbs-on-board reached zero against genuinely carbohydrate-free overnight windows for the same person.
+You might assume that once carbs-on-board has counted down to zero, the meal is done and any window after that is clean. I looked at whether that holds across the main cohort, comparing each person's effective ISF in the hour straight after carbs-on-board reached zero against their own carbohydrate-free overnight windows.
 
-The hour right after carbs reach zero does look a little different from true overnight fasting. The effective ISF in that hour tends to run lower, glucose is somewhat more likely to be drifting up even with active insulin on board, and the value climbs back towards the fasting level over the following half hour. The same general pattern showed up when I ran the test across the main cohort, one person at a time.
-
+The hour right after carbs reach zero does look a little different from true overnight fasting. The effective ISF in that hour tends to run lower, glucose is somewhat more likely to be drifting up even with active insulin on board, and the value climbs back towards the fasting level over the following half hour. 
 ![After announced carbs reach zero, effective ISF tends to sit lower and recover over the following hour. Left: per person across the cohort. Right: the same person-by-person recovery.](charts/inv008/fig_post_cob_isf.png)
 
-![The same test on User B's five months of data shows a similar shape.](charts/inv008/fig_post_cob_isf_site-***.png)
-
-I'd be cautious about over-reading this, and there's a real confound to put on the table first. The hour after a meal is a busy one. There's more insulin still in flight, and some of its effect lands later than the glucose you can see inside the window, so part of that gap will be timing rather than carbohydrate. With that allowed for, timing alone wouldn't obviously push glucose up against active insulin, and it doesn't obviously explain why the effect eases off as the meal recedes. One explanation that's consistent with both the announcers and the non-announcers is that a little absorption can carry on past the point where the carbs-on-board count has finished. I'd put that no more firmly than as a possibility worth looking at properly, rather than something this analysis can confirm.
+I'd be cautious about over-reading this, and there's a real confound to put on the table first. The hour after a meal is a busy one. There's more insulin still in flight, and some of its effect lands later than the glucose you can see inside the window, so part of that gap will be timing rather than carbohydrate. With that allowed for, timing alone wouldn't obviously push glucose up against active insulin, and it doesn't obviously explain why the effect eases off as the meal recedes. One explanation consistent with this is that a little absorption can carry on past the point where the carbs-on-board count has finished. I'd put that no more firmly than as a possibility worth looking at properly, rather than something this analysis can confirm.
 
 ### What the cohort says when you pool it
 
@@ -147,7 +140,7 @@ Then I asked what the method returns when the answer is known. I simulated peopl
 | REPLACE-BG, no algorithm | 4,577 | 3,283 | 2,985 |
 | Loop | 2,661 | 2,182 | 2,025 |
 | Trio | 2,406 | 2,273 | too few people |
-| oref0 | 3,203 | 2,398 | too few people |
+| oref0 | 2,836 | 2,316 | too few people |
 | Simulated, true value 2,000, gentler controller | 6,770 | 4,754 | 4,204 |
 | Simulated, true value 2,000, firmer controller | 3,790 | 2,989 | 2,723 |
 
@@ -218,8 +211,8 @@ concerns glucocorticoids. See `tim2000s/diabetes-knowledge-base`, `kb/not_verifi
 
 Code: `github.com/tim2000s/dynamic-isf-calculations`, package `inv008/` (`python -m inv008.<name>`).
 Key stages: `head_to_head` and `effective_isf_independent` (the two effective-ISF estimates),
-`cob_uam_cohort` (the carbohydrate-free overnight decomposition), `post_cob_isf` and
-`post_cob_isf_site-***` (the hour after carbs reach zero, cohort and external individual), `magnitude_bias`
+`cob_uam_cohort` (the carbohydrate-free overnight decomposition), `post_cob_isf` (the hour after
+carbs reach zero, across the cohort), `magnitude_bias`
 (correction-size effect), `gradient_isf_fit` and `adaptive_k_nestedcv` (per-user level versus glucose
 curve), `daytime_clearance` (daytime versus overnight).
 Section 7 is `python3 -m inv012.peak_trough` (and `--prominence 30`), with its numbers in

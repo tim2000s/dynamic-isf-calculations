@@ -37,6 +37,8 @@ abstract: |
   at a ratio near 1.6 against 1.25 entered.
 ---
 
+Figures here predate the correction of 23 November 2026 to the daily-dose readers and a unit conversion (REVIEW.md item 20); current values are in results/.
+
 # Introduction
 
 Initial insulin pump settings are conventionally derived from total daily dose

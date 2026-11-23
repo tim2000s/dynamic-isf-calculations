@@ -51,9 +51,6 @@ CLAMP = 1.5            # §8.2: level never more than 1.5x stronger than profile
 R2_MIN = 0.10          # fit-quality gate on the measured-sensitivity regression
 
 
-def to_mgdl(v):
-    v = float(v)
-    return v * 18.018 if v < 20 else v
 
 
 def shadow_user(args):
@@ -113,7 +110,7 @@ def main():
         u = Path(f).stem
         e = measured.get(u)
         if u in cohort and e and e.get("r2", 0) >= R2_MIN and 5 <= e.get("empirical_isf", 0) <= 500:
-            jobs.append((f, to_mgdl(cohort[u]["isf"]), float(e["empirical_isf"])))
+            jobs.append((f, float(cohort[u]["isf"]), float(e["empirical_isf"])))
     n_workers = min(config.DEFAULT_WORKERS, mp.cpu_count())
     print(f"Phase 12 (Tier-2): {len(jobs)} users with measured ISF on {n_workers} workers")
     with mp.Pool(n_workers) as pool:

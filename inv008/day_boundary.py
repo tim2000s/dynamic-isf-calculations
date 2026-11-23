@@ -201,8 +201,7 @@ def summarise(rows: list[dict], arm: str, n_boot: int = N_BOOT, seed: int = SEED
             bm[i], bp[i] = np.median(v), np.percentile(v, 95)
         out[k] = {"median": float(med), "median_lo": float(np.percentile(bm, 2.5)),
                   "median_hi": float(np.percentile(bm, 97.5)), "p95": float(p95),
-                  "p95_lo": float(np.percentile(bp, 2.5)), "p95_hi": float(np.percentile(bp, 97.5)),
-                  "max_person_p95": float(max(np.percentile(a, 95) for a in arrs))}
+                  "p95_lo": float(np.percentile(bp, 2.5)), "p95_hi": float(np.percentile(bp, 97.5))}
     return out
 
 
@@ -224,8 +223,7 @@ def markdown(res: dict) -> str:
          f"equal number of bins; 95% intervals from {N_BOOT} bootstrap draws resampling people.", ""]
     for c, r in res["cohorts"].items():
         L += [f"## {c}", "", f"{r['n_people']} people recomputed. Recorded offset found for "
-              f"{r['n_recorded']} ({r['n_recorded_nonzero']} non-zero); recorded offsets ranged "
-              f"{r['recorded_range_h'][0]:+g} to {r['recorded_range_h'][1]:+g} h." if r['n_recorded'] else
+              f"{r['n_recorded']} ({r['n_recorded_nonzero']} non-zero)." if r['n_recorded'] else
               f"{r['n_people']} people recomputed. No recorded offset found.", "",
               "| Shift | People | Blended TDD median | TDD 95th pct | V1 ISF median | V1 95th pct "
               "| V2 ISF median | V2 95th pct | Bins whose blend validity changes (median person) |",
@@ -266,6 +264,7 @@ def main() -> int:
                 rows.append(r)
             if i % 20 == 0:
                 print(f"  {i}/{len(jobs)} {time.time() - t0:.0f} s", flush=True)
+    rows.sort(key=lambda r: r["user"])  # the pool returns people in any order (REVIEW.md item 21)
     if a.raw:
         import pickle
         a.raw.write_bytes(pickle.dumps(rows))     # raw output first (REVIEW.md item 16)
@@ -277,7 +276,6 @@ def main() -> int:
         res["cohorts"][c] = {
             "n_people": len(rc), "n_recorded": len(recs),
             "n_recorded_nonzero": sum(1 for x in recs if x != 0),
-            "recorded_range_h": [min(recs) / 60, max(recs) / 60] if recs else None,
             "arms": {arm: summarise(rc, arm) for arm in arms}}
         print(f"  {c}: {len(rc)} people", flush=True)
     a.out.mkdir(exist_ok=True)

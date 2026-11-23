@@ -133,8 +133,6 @@ def analyse(args):
     }
 
 
-def to_mgdl(v):
-    v = float(v); return v * 18.018 if v < 20 else v
 
 
 def main():
@@ -144,7 +142,7 @@ def main():
     for u, e in emp.items():
         if (u in coh and e.get("r2", 0) >= R2_MIN and 5 <= e.get("empirical_isf", 0) <= 500
                 and (config.REPLAY_DIR / f"{u}.parquet").exists()):
-            jobs.append((u, e["table"], float(e["empirical_isf"]), to_mgdl(coh[u]["isf"])))
+            jobs.append((u, e["table"], float(e["empirical_isf"]), float(coh[u]["isf"])))
     n_workers = min(config.DEFAULT_WORKERS, mp.cpu_count())
     print(f"Tier-2 anchor de-bias: {len(jobs)} users on {n_workers} workers")
     with mp.Pool(n_workers) as pool:

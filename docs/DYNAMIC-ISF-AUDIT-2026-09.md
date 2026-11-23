@@ -65,12 +65,12 @@ The replay includes bolus insulin and temporary-basal delivery where those recor
 basal changes are dosing information and are not interchangeable with scheduled basal. This matters
 for AID systems that deliver corrections mainly through temporary basal.
 
-The reconstruction of the AAPS v6 cohort does not read temporary-basal records. Its reconstructed TDD
-therefore uses scheduled basal and is incomplete for that cohort. (Corrected 18 November 2026: this
-paragraph said the export holds no such records. It holds them for all 44 people, in
-`TemporaryBasals.json`, and `inv008/sources.py` does not read them.) Calendar-day totals are also formed on UTC
-day boundaries, whereas AndroidAPS uses local calendar days. These differences prevent an exact
-device-level replay for affected users.
+Until 23 November 2026 the reconstruction of the AAPS v6 cohort did not read temporary-basal records,
+so its reconstructed TDD used scheduled basal and was incomplete for that cohort. `inv008/sources.py`
+now reads them and the affected analyses were rerun. (Corrected 18 November 2026: this paragraph had
+said the export holds no such records. It holds them for all 44 people, in `TemporaryBasals.json`.)
+Calendar-day totals are formed on UTC day boundaries, whereas AndroidAPS uses local calendar days.
+This difference prevents an exact device-level replay for affected users.
 
 The main analyses fix the divisor at 75 because insulin type was not reliably available for every
 person. This is the standard rapid-acting configuration requested for the comparison. It should not
@@ -102,10 +102,15 @@ random cross-validation remain too narrow.
 
 ## Findings that remain supported
 
-The direct equation comparison is supported. On the selected common windows, static ISF and the
-loop's own calibrated ISF predicted the recorded endpoint more closely than either Dynamic ISF
-equation. The reported median absolute errors were 20.3 mg/dL for static ISF, 18.6 mg/dL for the
-loop value, 24.6 mg/dL for V1 and 49.7 mg/dL for V2. These figures compare candidate scalings of the
+The direct equation comparison is supported. On the selected windows, the loop's own calibrated ISF
+predicted the recorded endpoint more closely than static ISF, and static ISF more closely than V2.
+V1 was not shown to differ from static ISF. The median absolute errors were 20.5 mg/dL for static
+ISF and 18.6 mg/dL for the loop value on 62,824 windows, and 23.3 mg/dL for V1 and 60.1 mg/dL for
+V2 on the 57,151 of them where both could be scored. On those common windows V1's error exceeded
+static ISF's by 2.2 mg/dL (95% interval −0.2 to 4.9), an interval that includes zero, and V2's by
+39.0 mg/dL (23.7 to 59.4). These values were rerun on 23 November 2026 after the daily-dose readers
+and a unit conversion were corrected (REVIEW.md item 20); the earlier values were 20.3, 18.6, 24.6
+and 49.7 mg/dL. These figures compare candidate scalings of the
 same loop prediction. They do not measure the causal effect of changing the controller.
 
 The fitted glucose-shape work found no material predictive gain after each person's magnitude was

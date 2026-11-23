@@ -15,3 +15,13 @@ ns_sites.json
 inv009_cache/
 inv009_cache_6h/
 inv019_raw*/
+
+# private: per-person outputs and Boost profile histories, never committed (REVIEW.md item 22)
+inv020_cache/
+# per-person charts and pages from the private runs (REVIEW.md item 22)
+charts/inv008/users/
+charts/inv008/fig_tier2_per_person.png
+charts/inv008/fig_n1_cases.png
+charts/inv008/fig_post_cob_isf_*.png
+# single-person Boost analysis and third-party poster images, kept locally and never published (REVIEW.md items 15, 22)
+glucose-isf/

@@ -147,7 +147,7 @@ def curve(S: pd.DataFrame, n_boot: int = N_BOOT, seed: int = SEED) -> dict:
     band = np.digitize(S.bg0.to_numpy(float), BG_EDGES) - 1
     users = S.user.to_numpy()
     sens, band, users = sens[ok], band[ok], users[ok]
-    codes, uniq = pd.factorize(users)
+    codes, uniq = pd.factorize(users, sort=True)  # sorted: the pool returns people in any order
     nb = len(BG_CENTRES)
 
     def bands(sv, bv):

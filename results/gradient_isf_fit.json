@@ -1,14 +1,14 @@
 {
  "n_users": 80,
- "n_windows": 62344,
- "static_mae": 24.16,
- "magnitude_mae_k0": 18.66,
+ "n_windows": 62417,
+ "static_mae": 24.61,
+ "magnitude_mae_k0": 18.69,
  "best_fit_k": 0.0,
- "best_fit_mae": 18.66,
+ "best_fit_mae": 18.69,
  "glucose_adds_over_magnitude": 0.0,
  "diabeloop_shape_scaled_mae": 24.03,
  "mae_vs_k_adaptive": {
-  "0.0": 18.66,
+  "0.0": 18.69,
   "0.25": 19.44,
   "0.5": 20.44,
   "0.75": 21.48,
@@ -26,15 +26,15 @@
   "3.75": 22.58,
   "4.0": 22.16
  },
- "cold_start_best_k": 0.75,
- "cold_start_best_mae": 22.44,
+ "cold_start_best_k": 0.25,
+ "cold_start_best_mae": 22.58,
  "cold_start_mae_vs_k": {
-  "0.0": 24.16,
+  "0.0": 24.61,
   "0.25": 22.58,
   "0.5": 23.48,
-  "0.75": 22.44,
+  "0.75": 22.64,
   "1.0": 24.62,
-  "1.25": 27.16,
+  "1.25": 27.01,
   "1.5": 28.66,
   "1.75": 32.33,
   "2.0": 34.78,
@@ -45,22 +45,22 @@
   "3.25": 42.64,
   "3.5": 43.88,
   "3.75": 44.79,
-  "4.0": 45.52
+  "4.0": 45.96
  },
  "per_user_optimal_k": {
-  "median": 0.25,
+  "median": 0.125,
   "iqr": [
    0.0,
-   3.0625
+   3.0
   ],
-  "share_k0": 0.4875,
-  "share_k_ge1": 0.4125
+  "share_k0": 0.5,
+  "share_k_ge1": 0.4
  },
  "scale_s_predictable": {
-  "spearman_vs_tdd": 0.03,
-  "p_tdd": 0.8188,
-  "spearman_vs_profile_isf": -0.17,
-  "p_isf": 0.135
+  "spearman_vs_tdd": -0.07,
+  "p_tdd": 0.5124,
+  "spearman_vs_profile_isf": -0.06,
+  "p_isf": 0.628
  },
  "read": "k=0 is flat (=magnitude model). best_fit_k>0 with lower MAE \u21d2 an individualised glucose shape helps BEYOND magnitude. cold-start = population shape with no per-user adaptation. per-user optimal k shows whether people want different steepness."
 }

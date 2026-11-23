@@ -1,65 +1,65 @@
 {
  "n_users": 89,
- "n_windows": 62751,
+ "n_windows": 62824,
  "overall_mae_bias": {
   "static": {
-   "mae": 20.3,
-   "bias": 6.6,
-   "n": 62751
+   "mae": 20.5,
+   "bias": 8.1,
+   "n": 62824
   },
   "v1": {
-   "mae": 24.6,
-   "bias": -10.4,
-   "n": 57078
+   "mae": 23.3,
+   "bias": -1.3,
+   "n": 57151
   },
   "v2": {
-   "mae": 49.7,
-   "bias": 25.2,
-   "n": 57078
+   "mae": 60.1,
+   "bias": 52.5,
+   "n": 57151
   },
   "loop": {
    "mae": 18.6,
    "bias": 7.4,
-   "n": 62751
+   "n": 62824
   }
  },
  "by_bg_band": {
   "80-100": {
    "static": {
-    "mae": 16.0,
-    "bias": 14.7,
-    "n": 1898
+    "mae": 16.1,
+    "bias": 14.9,
+    "n": 1889
    },
    "v1": {
-    "mae": 18.0,
-    "bias": 14.9,
-    "n": 1793
+    "mae": 28.1,
+    "bias": 27.9,
+    "n": 1784
    },
    "v2": {
-    "mae": 64.2,
-    "bias": 64.2,
-    "n": 1793
+    "mae": 134.3,
+    "bias": 134.3,
+    "n": 1784
    },
    "loop": {
     "mae": 16.0,
     "bias": 15.0,
-    "n": 1898
+    "n": 1889
    }
   },
   "100-120": {
    "static": {
     "mae": 13.0,
-    "bias": 6.5,
+    "bias": 6.7,
     "n": 8294
    },
    "v1": {
-    "mae": 15.6,
-    "bias": 3.7,
+    "mae": 16.4,
+    "bias": 12.3,
     "n": 7786
    },
    "v2": {
-    "mae": 44.1,
-    "bias": 43.4,
+    "mae": 77.6,
+    "bias": 77.6,
     "n": 7786
    },
    "loop": {
@@ -70,78 +70,78 @@
   },
   "120-145": {
    "static": {
-    "mae": 16.0,
-    "bias": 6.0,
-    "n": 17249
+    "mae": 16.2,
+    "bias": 7.0,
+    "n": 17233
    },
    "v1": {
-    "mae": 19.1,
-    "bias": -1.8,
-    "n": 15446
+    "mae": 18.6,
+    "bias": 7.3,
+    "n": 15430
    },
    "v2": {
-    "mae": 47.5,
-    "bias": 43.2,
-    "n": 15446
+    "mae": 70.2,
+    "bias": 70.1,
+    "n": 15430
    },
    "loop": {
     "mae": 14.6,
     "bias": 5.8,
-    "n": 17249
+    "n": 17233
    }
   },
   "145-175": {
    "static": {
-    "mae": 21.0,
-    "bias": 5.0,
-    "n": 16770
+    "mae": 21.3,
+    "bias": 7.9,
+    "n": 16823
    },
    "v1": {
-    "mae": 24.6,
-    "bias": -12.2,
-    "n": 14966
+    "mae": 21.5,
+    "bias": -1.7,
+    "n": 15019
    },
    "v2": {
-    "mae": 48.6,
-    "bias": 29.9,
-    "n": 14966
+    "mae": 56.7,
+    "bias": 54.7,
+    "n": 15019
    },
    "loop": {
-    "mae": 19.6,
-    "bias": 8.0,
-    "n": 16770
+    "mae": 19.4,
+    "bias": 8.2,
+    "n": 16823
    }
   },
   "175-230": {
    "static": {
-    "mae": 31.1,
-    "bias": 7.8,
-    "n": 14665
+    "mae": 30.7,
+    "bias": 10.6,
+    "n": 14734
    },
    "v1": {
-    "mae": 38.7,
-    "bias": -33.2,
-    "n": 13463
+    "mae": 32.4,
+    "bias": -24.6,
+    "n": 13532
    },
    "v2": {
-    "mae": 50.7,
-    "bias": 1.4,
-    "n": 13463
+    "mae": 45.3,
+    "bias": 15.8,
+    "n": 13532
    },
    "loop": {
     "mae": 27.8,
     "bias": 10.6,
-    "n": 14665
+    "n": 14734
    }
   }
  },
  "per_user_best_form_counts": {
-  "static": 24,
-  "v1": 17,
+  "static": 22,
+  "v1": 19,
   "v2": 4,
   "loop": 35
  },
  "n_users_scored": 80,
- "note": "error = actual_end minus predicted_end(ISF); lower MAE is better on the same future-rise-selected windows. The activity proxy is inherited from the loop prediction and is not physiological ground truth.",
+ "note": "error = actual_end \u2212 predicted_end(ISF); MAE & bias in mg/dL. Lower MAE = better predictor of the realised outcome on the same future-rise-selected windows. The activity proxy is inherited from the loop prediction and is not physiological ground truth.",
  "selection_status": "future_outcome_rise_filter; descriptive_same_model_comparison"
 }

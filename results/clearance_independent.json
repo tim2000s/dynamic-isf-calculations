@@ -1,6 +1,6 @@
 {
  "n_users": 79,
- "n_active": 57866,
+ "n_active": 57868,
  "method": "exploratory action-balance proxy; low-action windows do not identify non-insulin flux.",
  "estimator_status": "non_identifying_exploratory_decomposition",
  "nonInsulin_flux_mgdl": {
@@ -19,22 +19,22 @@
  },
  "net_ratio_by_bg": {
   "100-120": 0.2,
-  "120-145": 0.37,
-  "145-175": 0.47,
-  "175-205": 0.53,
-  "205-260": 0.45
+  "120-145": 0.38,
+  "145-175": 0.48,
+  "175-205": 0.54,
+  "205-260": 0.46
  },
  "clearance_corrected_ratio_by_bg": {
-  "100-120": 0.11,
+  "100-120": 0.12,
   "120-145": 0.13,
   "145-175": 0.13,
   "175-205": 0.09,
   "205-260": 0.09
  },
  "implied_k": {
-  "net": -0.37,
+  "net": -0.36,
   "corrected": 0.78,
   "note": "k>0 = ratio falls with BG = resistance"
  },
- "verdict": "The exploratory curves are net k=-0.37 and adjusted k=0.78. The design does not identify clearance or physiological insulin resistance."
+ "verdict": "The exploratory curves are net k=-0.36 and adjusted k=0.78. The design does not identify clearance or physiological insulin resistance, regardless of their difference."
 }

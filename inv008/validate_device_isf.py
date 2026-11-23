@@ -27,13 +27,14 @@ import numpy as np
 import pandas as pd
 import psycopg2
 
+from inv008.config import MMOL_TO_MGDL
+
 warnings.filterwarnings("ignore")
 
 ROOT = Path(os.environ.get("DYNISF_ROOT", Path.cwd()))
 REPLAY = ROOT / "inv008_cache" / "replay"
 OUT = ROOT / "results"
 MMOL_THRESHOLD = 20.0       # sug_ISF below this is logged in mmol/L per U
-MMOL_TO_MGDL = 18.018
 
 
 def correct_units(dev_isf: pd.Series) -> pd.Series:
@@ -94,7 +95,7 @@ def main() -> None:
              f"\n{summary['generated']} · {summary['n_users']} Trio DynISF users",
              f"\nMixed-unit users (sug_ISF switches mmol↔mgdl mid-history, "
              f"corrected <{MMOL_THRESHOLD:.0f}→×{MMOL_TO_MGDL}): "
-             f"{', '.join(summary['mixed_unit_users']) or 'none'}",
+             f"{len(summary['mixed_unit_users'])} people",
              f"\nlog-DynISF subgroup: median per-tick log-correlation "
              f"{summary['log_dynisf']['median_log_corr']}, median ratio IQR "
              f"{summary['log_dynisf']['median_ratio_iqr']}\n",

@@ -5,6 +5,8 @@
 > This is the corrected evidence summary for the historical feasibility work. The original
 > physiological constants and dosing recommendations are withdrawn. See
 > `DYNAMIC-ISF-AUDIT-2026-09.md` for the full review.
+>
+> Figures here predate the correction of 23 November 2026 to the daily-dose readers and a unit conversion (REVIEW.md item 20); current values are in results/.
 
 ---
 

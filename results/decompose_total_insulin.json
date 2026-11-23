@@ -1,20 +1,20 @@
 {
  "n_users": 89,
- "n_windows": 92918,
+ "n_windows": 92919,
  "pooled": {
-  "isf_at_100": -0.2,
-  "egp_rise_mgdl_per_h_zero_insulin": -1.4,
-  "residual_c_per_mgdl": 0.814,
+  "isf_at_100": -0.3,
+  "egp_rise_mgdl_per_h_zero_insulin": -1.6,
+  "residual_c_per_mgdl": 0.82,
   "interaction_d": 0.001,
-  "frac_change_per_mgdl": -0.0075
+  "frac_change_per_mgdl": -0.0022
  },
- "high_minus_low_insulin_drop_gap_mgdl": 1.0,
+ "high_minus_low_insulin_drop_gap_mgdl": 0.5,
  "per_user_isf_at_100": {
   "n": 80,
-  "median": -1.3,
-  "p25": -5.5,
-  "p75": -0.0,
-  "frac_positive": 0.237
+  "median": -1.7,
+  "p25": -6.7,
+  "p75": -0.1,
+  "frac_positive": 0.225
  },
  "diagnostic_bands": {
   "centres": [
@@ -32,7 +32,7 @@
   "high_ins_drop": [
    9.0,
    23.0,
-   39.0,
+   38.0,
    63.0
   ]
  }

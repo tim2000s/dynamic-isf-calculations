@@ -128,7 +128,6 @@ def main():
         # per-user interaction too (Q3), where enough data
         bbeta = fit(bg, iob, drop)
         prof = coh.get(u, {}).get("isf")
-        prof = (prof * 18.018 if prof and prof < 20 else prof)
         # near-target-only drop/IOB (alternative anchor)
         nt = (bg >= 95) & (bg <= 105)
         nt_isf = float(np.median(drop[nt] / iob[nt])) if nt.sum() >= 20 else None

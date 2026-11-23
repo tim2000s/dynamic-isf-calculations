@@ -27,7 +27,11 @@ period. This is outcome selection, not an independent carbohydrate measurement. 
 therefore describes candidate rescaling performance on selected falling or flat trajectories and
 must not be interpreted as a physiological ISF estimate.
 
-Units: per user, if median sug_isf < 20 it is mmol/L per U → ×18.018 to mg/dL (same for profile).
+Units: Trio (oref_v5) logs sug_ISF in mmol/L per U on some readings and mg/dL on others, so a
+Trio value under 20 is converted (×18.018) reading by reading. oref0 values under 20 are mg/dL
+(the logged request reproduces in mg/dL and not in mmol/L) and the profile ISF is mg/dL, so
+neither is converted. Until 23 November 2026 a person's whole series, and the profile, were
+converted when the median was under 20.
 v6 is excluded (its iob/isf accounting did not reconcile). Output:
 results/head_to_head.{json,md}, results/head_to_head_windows.parquet,
 charts/inv008/fig_head_to_head.png
@@ -61,8 +65,11 @@ MIN_PRED_DROP = 8.0     # only windows where the loop predicted a real drop (rat
 BG_BANDS = [(80, 100), (100, 120), (120, 145), (145, 175), (175, 230)]
 
 
-def to_mgdl_scalar(v):
-    return v * 18.018 if (v is not None and v < 20) else v
+
+
+def sug_isf_mgdl(sugisf: np.ndarray, table: str) -> np.ndarray:
+    """Trio's mixed-unit sug_ISF converted reading by reading; oref0 is mg/dL throughout."""
+    return np.where(sugisf < 20, sugisf * config.MMOL_TO_MGDL, sugisf) if table == "oref_v5" else sugisf
 
 
 def analyse(args):
@@ -95,11 +102,8 @@ def analyse(args):
     v1 = d.isf_v1.values.astype(float); v2 = d.isf_v2.values.astype(float)
     tdd = d.tdd.values.astype(float)
 
-    # unit cleaning: scale sug_isf (and profile) to mg/dL if mmol-scale
-    med_sug = float(np.nanmedian(sugisf[sugisf > 0])) if np.any(sugisf > 0) else np.nan
-    scale = 18.018 if (np.isfinite(med_sug) and med_sug < 20) else 1.0
-    sugisf = sugisf * scale
-    pisf = to_mgdl_scalar(profile_isf)
+    sugisf = sug_isf_mgdl(sugisf, table)
+    pisf = profile_isf
 
     n = len(d)
     end4 = np.searchsorted(ts, ts + HZ); end4 = np.where(end4 < n, end4, n - 1)
@@ -212,9 +216,9 @@ def main():
 
     md = ["# Same-window head-to-head: static vs dynamic ISF as a drop predictor\n",
           f"{summary['n_users']} v5/v7 users, {len(D):,} overnight future-rise-selected windows. Each "
-          "ISF form is tested on the *same* windows by rescaling the loop's IOB prediction. "
-          "error = actual end BG − predicted end BG; lower MAE = better. The activity proxy comes "
-          "from the loop's own prediction, and the historical rise filter selects on the later outcome.\n",
+          "ISF form is tested on the same windows by rescaling the loop's IOB prediction. "
+          "Error = actual end BG − predicted end BG; lower MAE = better. The activity proxy comes "
+          "from the loop prediction, and the historical rise filter selects on the later outcome.\n",
           "## Overall (median |error|, mg/dL)\n",
           "| form | MAE | bias | n |", "|---|---|---|---|"]
     for f in fl:
@@ -232,7 +236,7 @@ def main():
     md += ["\n![Head-to-head](charts/inv008/fig_head_to_head.png)\n",
            "*Per-window dataset (features + realised ISF) saved to "
            "`results/head_to_head_windows.parquet` for the pattern/ML step. v6 excluded "
-           "(iob/isf accounting did not reconcile). Units cleaned (mmol-scale ISF ×18.018).*"]
+           "(iob/isf accounting did not reconcile). Trio ISF under 20 converted from mmol/L, reading by reading.*"]
     (OUT / "head_to_head.md").write_text("\n".join(md))
     print("\n".join(md))
 

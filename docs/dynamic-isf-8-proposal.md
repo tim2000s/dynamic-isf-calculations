@@ -217,7 +217,7 @@ shown, with the 95% interval over people.
 | No algorithm (REPLACE-BG) | 196 | 103 (89 to 115) | 100 (94 to 108) | 106 (94 to 125) | 120 (103 to 137) | 174 (132 to 233) |
 | Loop | 842 | 88 (84 to 91) | 58 (56 to 60) | 71 (67 to 73) | 82 (77 to 89) | 108 (95 to 119) |
 | Trio | 22 | 90 (63 to 111) | 52 (40 to 64) | 74 (51 to 104) | | |
-| oref0 | 86 | 109 (90 to 136) | 70 (59 to 86) | 78 (58 to 188) | | |
+| oref0 | 86 | 96 (83 to 125) | 62 (51 to 83) | 75 (55 to 166) | | |
 
 With no algorithm dosing, the published equation fits from 100 to 200 mg/dL at one
 scale: 103, 100 and 106 U, each inside the other two intervals. Above 200 mg/dL
@@ -251,7 +251,7 @@ a percentage of each value.
 | No algorithm (REPLACE-BG) | 196 | 100 to 370 | 103 (96 to 113) | 14% | 7% |
 | Loop | 842 | 100 to 380 | 71 (69 to 74) | 17% | 6% |
 | Trio | 22 | 100 to 200 | 65 (48 to 80) | 18% | 7% |
-| oref0 | 86 | 100 to 240 | 82 (71 to 99) | 23% | 14% |
+| oref0 | 86 | 100 to 240 | 73 (65 to 90) | 21% | 14% |
 
 The refit misses by less in every cohort, as a fit with four more free numbers
 must. The second table shows where the two differ. It gives each fit relative to
@@ -263,7 +263,7 @@ its own value at 180 mg/dL.
 | Refit, no algorithm (REPLACE-BG) | 196 | 2.17 (1.91 to 2.40) | 1.28 (1.21 to 1.33) | 0.89 (0.86 to 0.92) | 0.81 (0.72 to 0.87) | 0.90 (0.77 to 1.02) |
 | Refit, Loop | 842 | 3.19 (3.02 to 3.34) | 1.25 (1.22 to 1.27) | 1.00 (0.98 to 1.01) | 1.07 (1.03 to 1.11) | 0.94 (0.88 to 1.01) |
 | Refit, Trio | 22 | 3.29 (2.15 to 4.76) | 1.19 (0.85 to 1.53) | 1.12 (0.66 to 1.61) | | |
-| Refit, oref0 | 86 | 2.96 (2.22 to 3.83) | 1.00 (0.78 to 1.24) | 1.02 (0.82 to 1.38) | | |
+| Refit, oref0 | 86 | 2.69 (2.16 to 3.70) | 0.97 (0.78 to 1.22) | 1.00 (0.78 to 1.34) | | |
 
 With no algorithm dosing, the refit returns the published shape from 100 to 200
 mg/dL, and all three intervals there include the published figure. At 250 and 300
@@ -774,7 +774,7 @@ would apply unchanged, called the reference dose here.
 | The 1800 rule, taken to hold at 105 mg/dL (this series, March 2026) | | 731 | 23.7 |
 | Measured under Loop | 842 | 2,182 (2,065 to 2,266) | 70.8 |
 | Measured under Trio | 22 | 2,273 (1,569 to 3,218) | 73.7 |
-| Measured under oref0 | 86 | 2,398 (1,779 to 5,809) | 77.8 |
+| Measured under oref0 | 86 | 2,316 (1,711 to 5,111) | 75.1 |
 | Measured with no algorithm dosing (REPLACE-BG) | 196 | 3,283 (2,898 to 3,854) | 106.5 |
 
 The first row takes a person's entered sensitivity to be right at 140 mg/dL, and
@@ -821,11 +821,11 @@ At 300 mg/dL it asks for 9.62 U, against 4.00 U from the profile and 8.29 U from
 AndroidAPS at 100%.
 
 The anchor sets how much insulin the candidate asks for overall. Each arm was
-replayed on the recorded loop decisions of 138 people (INV-016), of whom 22 used
-Trio, 19 AndroidAPS and 97 oref0. The insulin asked for at every reading above
+replayed on the recorded loop decisions of 141 people (INV-016), of whom 22 used
+Trio, 22 AndroidAPS and 97 oref0. The insulin asked for at every reading above
 100 mg/dL was summed and set against the same sum under the profile ISF alone.
-The candidate asked for 1.39 (95% interval 1.28 to 1.42), 1.38 (1.29 to 1.47) and
-1.44 (1.39 to 1.51) times the profile's correction insulin in those cohorts. By
+The candidate asked for 1.39 (95% interval 1.28 to 1.42), 1.38 (1.31 to 1.47) and
+1.44 (1.40 to 1.51) times the profile's correction insulin in those cohorts. By
 glucose at the reading, it asked for 0.82 to 0.83 times the profile's insulin
 between 100 and 150 mg/dL, 1.33 times between 150 and 200, 1.83 to 1.84 times
 between 200 and 260, and 2.31 to 2.37 times above 260.
@@ -909,7 +909,7 @@ The first stage replays each arm's value on recorded histories using the INV-008
 pipeline. Results are split by glucose and by time since the last meal, and
 reported separately for people who announce meals and people who do not. The stage
 shows how much insulin each arm asks for and in whom. It is descriptive and has no
-pass rule. It was run on 138 people as INV-016, and its totals for the candidate
+pass rule. It was run on 141 people as INV-016, and its totals for the candidate
 are quoted above.
 
 The second stage runs the publication's measurement (`inv012/peak_trough.py`) on

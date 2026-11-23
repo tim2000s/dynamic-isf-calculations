@@ -95,16 +95,17 @@ ev = df[(df.r2 >= 0.10) & df.empirical_isf.between(5, 500)]
 K_ent = float(np.median(df.dropna(subset=["isf"]).isf * np.sqrt(df.dropna(subset=["isf"]).tdd)))
 K_emp = float(np.median(ev.empirical_isf * np.sqrt(ev.tdd)))
 res = json.loads((ROOT / "best_isf_fit_results.json").read_text())
-check("K (entered) ~ 355", abs(K_ent - 355) < 6, f"recomputed {K_ent:.1f}, json {res['sqrt_rule_entered_K']}")
-check("K (empirical) ~ 145", abs(K_emp - 145) < 6, f"recomputed {K_emp:.1f}, json {res['sqrt_rule_empirical_K']}")
-check("anchor ratio 355/145 ~ 2.45", abs(K_ent / K_emp - 2.45) < 0.2, f"{K_ent/K_emp:.2f}")
+# 355, 145, 114 and 138 until the reader correction of 23 November 2026 (REVIEW.md item 20)
+check("K (entered) ~ 340", abs(K_ent - 340) < 6, f"recomputed {K_ent:.1f}, json {res['sqrt_rule_entered_K']}")
+check("K (empirical) ~ 136", abs(K_emp - 136) < 6, f"recomputed {K_emp:.1f}, json {res['sqrt_rule_empirical_K']}")
+check("anchor ratio 340/136 ~ 2.5", abs(K_ent / K_emp - 2.5) < 0.2, f"{K_ent/K_emp:.2f}")
 # power-law slopes
 for tgt, col, lo, hi in [("entered", "isf", -0.6, -0.3), ("empirical", "empirical_isf", -0.6, -0.3)]:
     d = (ev if tgt == "empirical" else df).dropna(subset=[col])
     b = np.polyfit(np.log(d.tdd), np.log(d[col]), 1)[0]
     check(f"stored power-law slope ({tgt}) reproduces in [-0.6,-0.3]", lo < b < hi, f"slope {b:.3f}")
-check("n_empirical = 114", len(ev) == 114, f"{len(ev)}")
-check("n_cohort = 138", len(df) == 138, f"{len(df)}")
+check("n_empirical = 116", len(ev) == 116, f"{len(ev)}")
+check("n_cohort = 141", len(df) == 141, f"{len(df)}")
 
 print("\n6. Replay parquet: v2/v1 reproduced from the equations, glucose-dependent")
 worst_ratio = 0.0; n_checked = 0; low_b, high_b = [], []

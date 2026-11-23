@@ -1,9 +1,6 @@
 # Phase 5 — does the derived (sensitivity-anchored) ISF beat tuned ISF?
 
-> Audit status: the delta-IOB coefficient does not identify physiological ISF. Associations with
-> outcomes are descriptive and confounded by the controller and existing settings.
-
-112 users with realised CGM outcomes + valid empirical ISF.
+114 users with realised CGM outcomes + valid empirical ISF.
 Median R = entered/empirical = **2.38** (users dose, on average, well weaker than their measured sensitivity).
 
 ## Directional test (Spearman across users)
@@ -12,19 +9,19 @@ If the derived/empirical ISF is *right*, weaker-than-sensitivity dosing (high R)
 
 | association | ρ | expected sign |
 |---|---|---|
-| logR_vs_TAR (expect +) | +0.00 | + |
-| logR_vs_TBR (expect -) | +0.38 | − |
-| logR_vs_TIR | -0.12 | ? |
-| mismatch_vs_TIR (expect -) | -0.12 | − |
-| mismatch_vs_TBR | +0.38 | ? |
+| logR_vs_TAR (expect +) | -0.01 | + |
+| logR_vs_TBR (expect -) | +0.39 | − |
+| logR_vs_TIR | -0.10 | ? |
+| mismatch_vs_TIR (expect -) | -0.10 | − |
+| mismatch_vs_TBR | +0.39 | ? |
 
 ## Outcomes by entered/empirical ratio tertile
 
 | R band | n | median R | TIR | TAR | TBR |
 |---|---|---|---|---|---|
 | low (≈ doses to sensitivity) | 38 | 1.6 | 85% | 14% | 1.6% |
-| mid | 37 | 2.4 | 81% | 16% | 3.0% |
-| high (doses weak) | 37 | 4.5 | 83% | 12% | 4.3% |
+| mid | 38 | 2.4 | 82% | 16% | 3.0% |
+| high (doses weak) | 38 | 4.5 | 82% | 12% | 4.4% |
 
 ## Reading
 

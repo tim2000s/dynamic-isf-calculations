@@ -1,39 +1,39 @@
 # Best-fit ISF equation search — LOUO-CV comparison
 
-2026-09-16 16:59 · empirical target n=114 · entered target n=138
+2026-11-23 12:41 · empirical target n=116 · entered target n=141
 
-Fitted power law (empirical): ISF = 86.0·TDD^-0.376
-Fitted power law (entered):  ISF = 285.1·TDD^-0.433
-Blend weight on entered ISF: 0.0
+Fitted power law (empirical): ISF = 101.4·TDD^-0.431
+Fitted power law (entered):  ISF = 349.6·TDD^-0.5
+Blend weight on entered ISF: 0.1
 
 ## Target: delta-IOB observational outcome proxy
 
 | candidate | fitted_cv | median_abs_err | p75_abs_err | median_log_err | frac_within_30pct |
 |---|---|---|---|---|---|
-| Power law + basal_frac | True | 6.0 | 10.9 | 0.294 | 0.439 |
-| K/sqrt(TDD) | True | 6.2 | 10.7 | 0.297 | 0.447 |
-| Fitted C/TDD | True | 6.7 | 12.0 | 0.298 | 0.386 |
-| TDD-quartile bands | True | 6.6 | 10.5 | 0.303 | 0.421 |
-| Power law A·TDD^b | True | 6.1 | 11.1 | 0.304 | 0.447 |
-| Blend entered×power law | True | 6.1 | 11.1 | 0.304 | 0.447 |
-| Multivariate (TDD,CR,basal,target) | True | 6.2 | 10.2 | 0.306 | 0.395 |
-| Power law + ln(CR) | True | 6.5 | 11.2 | 0.33 | 0.412 |
-| 1700-rule | False | 16.2 | 31.2 | 0.605 | 0.149 |
-| v1 (TDD^-1) | False | 26.0 | 48.0 | 0.813 | 0.07 |
-| Entered profile ISF | False | 32.0 | 50.3 | 0.896 | 0.044 |
-| v2 (TDD^-2) | False | 171.1 | 464.1 | 2.323 | 0.018 |
+| TDD-quartile bands | True | 6.2 | 9.3 | 0.282 | 0.44 |
+| Blend entered×power law | True | 5.9 | 9.8 | 0.283 | 0.466 |
+| Fitted C/TDD | True | 6.8 | 10.9 | 0.284 | 0.448 |
+| K/sqrt(TDD) | True | 6.0 | 10.5 | 0.295 | 0.414 |
+| Power law A·TDD^b | True | 6.4 | 11.1 | 0.297 | 0.405 |
+| Power law + basal_frac | True | 6.3 | 11.1 | 0.299 | 0.388 |
+| Multivariate (TDD,CR,basal,target) | True | 6.2 | 10.0 | 0.307 | 0.405 |
+| Power law + ln(CR) | True | 6.3 | 10.2 | 0.315 | 0.431 |
+| 1700-rule | False | 18.6 | 33.8 | 0.627 | 0.138 |
+| v1 (TDD^-1) | False | 29.0 | 50.2 | 0.856 | 0.052 |
+| Entered profile ISF | False | 31.0 | 49.9 | 0.896 | 0.043 |
+| v2 (TDD^-2) | False | 207.0 | 512.0 | 2.427 | 0.0 |
 
 ## Target: entered ISF (user-tuned profile)
 
 | candidate | fitted_cv | median_abs_err | p75_abs_err | median_log_err | frac_within_30pct |
 |---|---|---|---|---|---|
-| K/sqrt(TDD) | True | 12.8 | 30.8 | 0.256 | 0.514 |
-| Power law A·TDD^b | True | 13.5 | 29.4 | 0.268 | 0.493 |
-| Power law + basal_frac | True | 14.4 | 24.8 | 0.285 | 0.442 |
-| TDD-quartile bands | True | 13.8 | 28.9 | 0.292 | 0.478 |
-| Multivariate (TDD,CR,basal,target) | True | 14.7 | 28.5 | 0.306 | 0.457 |
-| Power law + ln(CR) | True | 15.4 | 28.4 | 0.318 | 0.428 |
-| v1 (TDD^-1) | False | 17.0 | 37.8 | 0.324 | 0.377 |
-| Fitted C/TDD | True | 19.3 | 37.0 | 0.336 | 0.435 |
-| 1700-rule | False | 17.9 | 36.7 | 0.454 | 0.341 |
-| v2 (TDD^-2) | False | 124.0 | 375.7 | 1.304 | 0.065 |
+| Power law A·TDD^b | True | 12.1 | 30.0 | 0.243 | 0.539 |
+| K/sqrt(TDD) | True | 12.6 | 27.7 | 0.256 | 0.511 |
+| Power law + basal_frac | True | 13.6 | 26.1 | 0.256 | 0.518 |
+| TDD-quartile bands | True | 13.8 | 29.0 | 0.26 | 0.511 |
+| Multivariate (TDD,CR,basal,target) | True | 13.7 | 28.7 | 0.289 | 0.468 |
+| Power law + ln(CR) | True | 13.9 | 29.5 | 0.297 | 0.454 |
+| v1 (TDD^-1) | False | 16.7 | 39.5 | 0.322 | 0.397 |
+| Fitted C/TDD | True | 18.1 | 38.5 | 0.326 | 0.369 |
+| 1700-rule | False | 16.1 | 35.1 | 0.412 | 0.369 |
+| v2 (TDD^-2) | False | 158.8 | 385.8 | 1.508 | 0.043 |

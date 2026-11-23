@@ -6,6 +6,9 @@
 > replay used that form. The delta-IOB and action-balance estimators are outcome proxies rather
 > than independent physiological ISF measurements. Conclusions relying on them as ground truth
 > are withdrawn. See `DYNAMIC-ISF-AUDIT-2026-09.md`.
+>
+> Correction, 23 November 2026: the cohort figures in section 5 were rerun after the daily-dose
+> readers were corrected and a unit conversion was fixed (REVIEW.md item 20).
 
 ---
 
@@ -159,7 +162,8 @@ delivery records:
 This matters because the equations are functions of the blended TDD, not a flat daily average.
 Reconstructing the windowed signal makes the replay substantially closer to the device calculation
 than a flat daily average. It remains approximate where temporary-basal delivery is absent from an
-export, particularly in the AAPS cohort. A flat-TDD arm runs alongside it to measure how much the
+export. The AAPS reader did not read that cohort's temporary-basal records until 23 November 2026,
+and the figures in section 5 were rerun with them. A flat-TDD arm runs alongside it to measure how much the
 blend itself contributes.
 
 ### 4.3 Absolute-time recovery and ISF replay
@@ -191,10 +195,10 @@ relationship with the observed points and the fitted slope.
 To ask whether a better equation fits these data, candidates are scored against two targets:
 
 - **delta-IOB sensitivity proxy** — a regression on fasting windows
-  (`ΔBG = a + b·ΔIOB + c·BG_trend`; proxy = −b; n = 114 after quality gates). New insulin
+  (`ΔBG = a + b·ΔIOB + c·BG_trend`; proxy = −b; n = 116 after quality gates). New insulin
   delivery changes IOB during the window, and delivery responds to glucose. This target does
   not identify the physiological effect of insulin.
-- **tuned-profile ISF** — each person's own profile setting (n = 138): "what experienced
+- **tuned-profile ISF** — each person's own profile setting (n = 141): "what experienced
   users converge to".
 
 Candidates: the two equations above; the historical 1700-rule; the tuned profile value;
@@ -230,22 +234,24 @@ the main pipeline never consumes that field.
 ## 5. How the outputs support the conclusions
 
 **v2 is the gentler equation for almost everyone.** Across the replayed cohort, v2 gives a
-higher ISF, and so a weaker correction, than v1 on 92% of readings, a median of 3.0×. The
-margin is widest at low glucose, where the v2 log nears its floor, and narrows to about 1.5×
+higher ISF, and so a weaker correction, than v1 on 98% of readings, a median of 3.3×. The
+margin is widest at low glucose, where the v2 log nears its floor, and narrows to about 1.6×
 when glucose is high. Both differences between the equations push the same way at realistic
 doses: the steeper TDD law and the altered glucose term each lift v2's ISF above v1's, so at
 target glucose the two would only meet near 194 U/day, well beyond anyone in the cohort. The
 pattern is a direct reading of the replayed data, not a modelling artefact.
 
 **Both TDD power laws are steeper than the fitted proxy relationship.** The log-log fit of
-sensitivity against reconstructed TDD has a slope near −0.5 (bootstrap interval excluding
-−1). v1 assumes −1 and v2 assumes −2. The proxy is calculated from the same closed-loop record,
+sensitivity against reconstructed TDD has a slope near −0.72, and the power law fitted to the
+same proxy in the equation search has an exponent of −0.43. The bootstrap interval reported earlier, which
+excluded −1, was computed before the correction of 23 November 2026 and has not been rerun. v1 assumes −1 and v2 assumes −2. The proxy is calculated from the same closed-loop record,
 so this comparison does not establish a physiological TDD exponent.
 
-**A square-root law fits these two targets best.** Under cross-validation the K/√TDD form is best against
-tuned-profile ISF and tied-best against the delta-IOB proxy, beating both equations and
-the other candidates tested. Added inputs (carb ratio, target, basal fraction) do not robustly
-improve it. This is a predictive ranking against two observational targets. It does not settle
+A square-root law is among the best fits to these two targets. Under cross-validation the
+K/√TDD form had a median log-error of 0.256 against tuned-profile ISF, second to a free-exponent
+power law (0.243), and 0.295 against the delta-IOB proxy, where the fitted forms ranged from 0.282
+to 0.315. It beat both equations, whose log-errors were 0.322 and 1.508 against tuned-profile ISF.
+Added inputs (carb ratio, target, basal fraction) do not robustly improve it. This is a predictive ranking against two observational targets. It does not settle
 the physiological shape or level.
 
 **The implementation is faithful.** The unit tests fix the implementation to the defined
@@ -286,12 +292,13 @@ python -m inv008.validate_device_isf
 
 1. **Counterfactual replay.** We compare the ISF each equation *would have computed* on
    real histories, not closed-loop glycaemic outcomes.
-2. **Basal approximation for one platform.** Where exports lack temp-basal records, basal
-   TDD uses the profile schedule.
+2. Basal approximation. Where exports lack temp-basal records, basal TDD uses the profile
+   schedule. Until 23 November 2026 this applied to the whole AAPS cohort, whose temp-basal
+   records were not read.
 3. **Delta-IOB proxy.** The regression is affected by in-window delivery, unrecorded
    carbohydrate, endogenous-glucose effects and closed-loop confounding. It has confidence
    intervals but no external physiological ground truth. Its level and TDD slope are provisional.
 4. **Single cohort.** Open-source AID users, mostly 2016–2023; no commercial-system or
-   demographic data. n = 114/138 for the historical proxy analyses.
+   demographic data. n = 116/141 for the historical proxy analyses.
 5. **Anchor uncertainty.** Five reconstructed users retain time-anchor uncertainty and are
    flagged.

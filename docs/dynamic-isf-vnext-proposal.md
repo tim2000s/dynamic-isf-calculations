@@ -5,6 +5,8 @@
 > This document records a model proposed in June 2026 and the evidence that led to its
 > withdrawal. It is not a dosing recommendation. The full technical review is in
 > `DYNAMIC-ISF-AUDIT-2026-09.md`.
+>
+> Figures here predate the correction of 23 November 2026 to the daily-dose readers and a unit conversion (REVIEW.md item 20); current values are in results/.
 
 ---
 

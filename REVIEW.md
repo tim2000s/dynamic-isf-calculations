@@ -49,16 +49,43 @@ nit (optional) or pre-existing (record it, do not let it block).
 17. A statement that a source lacks a record type is checked by listing the files. Until
     18 November 2026 `inv008/sources.py`, the audit and the paper said the AAPS v6 export
     holds no temporary-basal records; it holds `TemporaryBasals.json` for all 44 people and
-    the reader did not open it. Nothing catches this automatically yet.
+    the reader did not open it. Since 23 November 2026 it does, and `inv008/tests/test_v6_temps.py`
+    tests the reading; nothing yet catches an unread record type in general.
 18. The same-windows claim. A sentence that says every candidate was scored on the same
     windows is checked against the window count of each arm. `results/head_to_head.md`,
     `results/divisor_sensitivity.md` and the title of `fig_head_to_head.png` say so, while
-    V1 and V2 were scored on 57,078 of the 62,751. `results/common_window.md` holds the
+    V1 and V2 were scored on 57,078 of the 62,751 (57,151 of 62,824 since the rerun of
+    23 November 2026). `results/common_window.md` holds the
     comparison on identical windows and is the one to quote.
 19. The source tables move. On 18 November 2026 `inv008/overnight_sensitivity.py`, run
     unchanged, returned 81,769 windows against the 81,814 it had committed, with three Trio
     people's `oref_v5` rows changed in between. A variant run reproduces the committed
     count first and states both where they differ (`inv008/overnight_variants.py` does).
+
+20. One record in several files is counted once. The AndroidAPS uploads and the oref0 dump
+    files overlap in time, and `inv008/sources.py` read every copy of a bolus, and
+    `extract_treatments_tdd.py`, behind canonical_cohort.json, did the same and also summed
+    deleted AndroidAPS records (found 23 November 2026; `results/reader_correction.md`
+    gives the size). Both now count each (time, units) once. The same day `parse_ts` was
+    found cutting times at 25 characters, which dropped every record written with
+    milliseconds and an offset. Tested in `inv008/tests/test_v6_temps.py`. Every result built
+    on the daily doses, the cohort file or the replay cache was rerun the same day, together
+    with a unit fix: ISF values under 20 had been read as mmol/L where they are mg/dL
+    (`inv008/tests/test_units.py`). A new reader of these archives checks the share of unique records
+    and of unparsed times before summing.
+
+21. A bootstrap that resamples people numbers them in a fixed order. `inv008/overnight_variants.py`
+    took people in the order its worker pool returned them, so the same seed drew different
+    people on each run and its intervals moved by up to 0.3 mg/dL per U between identical runs
+    (found 23 November 2026, fixed by sorting). A rerun whose point estimates match and whose
+    intervals do not is this fault.
+
+22. Per-person results are never published (decided 23 November 2026). Scripts write their
+    full output, per-person parts included, to the private data folder or a git-ignored cache;
+    `inv008/publish.py` copies a result into results/ with per-person records and rows removed
+    and fails if a participant ID remains. A diff that adds a participant ID (U and three
+    digits) outside a cohort's ID range, a per-person table, a per-person chart or a per-person
+    page to the repository is refused. Boost data is never in this repository.
 
 ## Running
 

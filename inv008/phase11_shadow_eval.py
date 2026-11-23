@@ -50,9 +50,9 @@ CLAMP = 1.5   # §8.2: never more than 1.5× stronger than profile ISF
 
 
 def profile_isf_mgdl(rec):
-    """canonical_cohort isf is already mg/dL; guard the rare mmol-magnitude value."""
-    v = float(rec["isf"])
-    return v * 18.018 if v < 20 else v
+    """canonical_cohort isf is already mg/dL. Until 23 November 2026 a value under 20 was multiplied
+    by 18.018; the three such values (10 and 14 for oref0 and AAPS people) are genuine mg/dL."""
+    return float(rec["isf"])
 
 
 def shadow_user(args):

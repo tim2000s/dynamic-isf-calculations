@@ -38,6 +38,10 @@ pre-declared statistic the direction is not predicted, because the share of
 events with no net insulin used at 100 mg/dL is expected to rise and the median
 over every event moves with that share.
 
+The run of 18 November 2026 did not bear out the last expectation: under the bolus rule the
+share of events at 100 mg/dL with no net insulin used fell, from 41% to 36% in REPLACE-BG and
+from 40% to 33% in Loop (results/inv012_meal_proxy_bound.md).
+
 The value is an outcome ratio, since an event ends where glucose stops falling.
 
     python3 -m inv012.meal_proxy_bound        # DYNISF_ROOT left unset

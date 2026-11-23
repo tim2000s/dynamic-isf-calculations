@@ -42,9 +42,6 @@ PCTS = [5, 10, 25, 50, 75, 90, 95]
 BINS = np.logspace(np.log10(5), np.log10(1000), 61)   # ISF mg/dL per U, log-spaced
 
 
-def to_mgdl(v):
-    v = float(v)
-    return v * 18.018 if v < 20 else v
 
 
 def person_dist(args):
@@ -79,7 +76,7 @@ def main():
         u = Path(f).stem
         e = measured.get(u)
         if u in cohort and e and e.get("r2", 0) >= R2_MIN and 5 <= e.get("empirical_isf", 0) <= 500:
-            jobs.append((f, to_mgdl(cohort[u]["isf"]), float(e["empirical_isf"])))
+            jobs.append((f, float(cohort[u]["isf"]), float(e["empirical_isf"])))
     n_workers = min(config.DEFAULT_WORKERS, mp.cpu_count())
     print(f"Tier-2 ISF distribution: {len(jobs)} users on {n_workers} workers")
     with mp.Pool(n_workers) as pool:
@@ -168,7 +165,7 @@ def main():
           f"p5–p95 {summary['population_pooled_isf_pct']['5']}–{summary['population_pooled_isf_pct']['95']}.",
           f"- Within a person the Tier-2 ISF spreads a median "
           f"{summary['median_within_person_p10_p90_span']}× from p10 to p90 (glucose range + TDD swings).",
-          "\n![Per-person Tier-2 ISF distribution](charts/inv008/fig_tier2_per_person.png)\n",
+          "\nThe per-person distribution chart (fig_tier2_per_person.png) stays in the private data folder.\n",
           "![Population view](charts/inv008/fig_tier2_population.png)\n",
           "## Per-person (sorted by median Tier-2 ISF)\n",
           "| person | TDD | n | profile ISF | measured ISF | Tier-2 p10 | p50 | p90 |",

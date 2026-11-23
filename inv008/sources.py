@@ -7,13 +7,17 @@ Formats (verified against the archive 2026-06-07):
       records with neither are cancellations. isFakedTempBasal → extended-bolus
       emulation, treated like any other temp segment.
   v6 (direct-sharing-396/upload-*): AAPS export. Treatments.json = flat bolus records
-      (date ms, insulin, isSMB, isValid, isDeletion). Temp basals are NOT read: the
-      basal contribution is approximated by the profile schedule (flagged
-      basal_source="profile_only"). This was written on the reading that the uploads
-      hold no temp basal records. They do, in upload-*/TemporaryBasals.json, for all
-      44 people (found 18 November 2026), so the v6 TDD is incomplete by choice of
-      reader and not for want of data.
-  v5 (Trio): no raw files needed — oref_v5.sug_TDD is the device-logged TDD.
+      (date ms, insulin, isSMB, isValid, isDeletion). TemporaryBasals.json holds the temp
+      basals for all 44 people (found 18 November 2026). Until 23 November 2026 they were
+      not read and the basal contribution came from the profile schedule (flagged
+      basal_source="profile_only"); since then `load_v6_events` reads them. Extended
+      boluses (ExtendedBoluses.json) are not read.
+  v5 (Trio): no raw files needed; oref_v5.sug_TDD is the device-logged TDD.
+
+Repeated boluses. The uploads (v6) and the dump files (v7) overlap in time, so one bolus
+appears in several of them, and until 23 November 2026 both readers counted every copy.
+Both now count each (time, units) once; results/reader_correction.md gives the size.
+Results before that date carry the repeated boluses (REVIEW.md item 20).
 """
 from __future__ import annotations
 
@@ -38,14 +42,17 @@ def parse_ts(s) -> float | None:
         return ts if ts > 0 else None
     s = str(s)
     try:
-        if s.endswith("Z"):
-            return datetime.fromisoformat(s[:-1] + "+00:00").timestamp()
-        d = datetime.fromisoformat(s[:25])
-        if d.tzinfo is None:
-            d = d.replace(tzinfo=timezone.utc)
-        return d.timestamp()
-    except Exception:
-        return None
+        # the whole string first: cutting it at 25 characters, as this did until 23 November 2026,
+        # broke times written with milliseconds and an offset, and those records were dropped
+        d = datetime.fromisoformat(s)
+    except ValueError:
+        try:
+            d = datetime.fromisoformat(s[:19])
+        except ValueError:
+            return None
+    if d.tzinfo is None:
+        d = d.replace(tzinfo=timezone.utc)
+    return d.timestamp()
 
 
 def load_mappings() -> dict[str, tuple[str, str]]:
@@ -75,6 +82,12 @@ def load_hourly_basal(user_id: str) -> np.ndarray | None:
 
 
 # ---------------------------------------------------------------- v7 (NS docs)
+
+def _bolus_arrays(bolus_ts, bolus_u):
+    """Time-ordered arrays with each (time, units) pair once: the source files overlap."""
+    pairs = sorted(set(zip(bolus_ts, bolus_u)))
+    return (np.array([t for t, _ in pairs], dtype=float), np.array([u for _, u in pairs], dtype=float))
+
 
 def load_v7_events(raw_dir: str):
     """→ (bolus_ts, bolus_units, [TempBasalEvent]) from all *treatments*.json files."""
@@ -121,16 +134,57 @@ def load_v7_events(raw_dir: str):
                     pct = None
                 temps.append(TempBasalEvent(ts=ts, duration_min=dur,
                                             rate_u_h=rate, percent=pct))
-    order = np.argsort(bolus_ts) if bolus_ts else []
-    return (np.asarray(bolus_ts, dtype=float)[order] if len(bolus_ts) else np.array([]),
-            np.asarray(bolus_u, dtype=float)[order] if len(bolus_u) else np.array([]),
-            sorted(temps, key=lambda e: e.ts))
+    return (*_bolus_arrays(bolus_ts, bolus_u), sorted(temps, key=lambda e: e.ts))
 
 
 # ------------------------------------------------------------ v6 (AAPS export)
 
+def _v6_temp(r: dict) -> tuple[float, float, TempBasalEvent | None] | None:
+    """One TemporaryBasals.json record as (start s, queued ms, event), the event None where the
+    record deletes or invalidates its start time; None for a record that is not a temp basal.
+
+    Two layouts occur. Structure 1: date (ms), durationInMinutes, isAbsolute with
+    absoluteRate (U/h) or percentRate (% of profile, 100 = profile), isDeletion. Structure 2,
+    the AndroidAPS 3 database export: timestamp (ms), duration (ms), isAbsolute with rate in
+    U/h or %, and isValid written out as the record's toString(). A structure 2 row with
+    referenceId set is a superseded version of another row and is not read."""
+    if r.get("referenceId") is not None:
+        return None
+    try:
+        if "durationInMinutes" in r:
+            ts, dur = float(r["date"]) / 1000.0, float(r["durationInMinutes"])
+            rate = float(r["absoluteRate"]) if r.get("isAbsolute") else None
+            pct = None if r.get("isAbsolute") else float(r["percentRate"])
+        else:
+            ts, dur = float(r["timestamp"]) / 1000.0, float(r["duration"]) / 60000.0
+            rate = float(r["rate"]) if r.get("isAbsolute") else None
+            pct = None if r.get("isAbsolute") else float(r["rate"])
+    except (KeyError, TypeError, ValueError):
+        return None
+    valid = r.get("isValid", True)
+    gone = r.get("isDeletion") or valid is False or (isinstance(valid, str) and "isValid=false" in valid)
+    return ts, float(r.get("queuedOn") or r.get("dateCreated") or 0), (
+        None if gone else TempBasalEvent(ts=ts, duration_min=dur, rate_u_h=rate, percent=pct))
+
+
+def load_v6_temps(ds396: Path) -> list[TempBasalEvent]:
+    """Temp basals from every upload, one per start time: uploads overlap, so a record recurs.
+    The copy queued last decides, so a later deletion or invalidation removes the start time."""
+    by_ts: dict[float, tuple[float, TempBasalEvent | None]] = {}
+    for f in sorted(ds396.glob("upload-*/TemporaryBasals.json")):
+        try:
+            recs = json.loads(f.read_text())
+        except (OSError, ValueError):  # unreadable or malformed upload
+            continue
+        for r in recs if isinstance(recs, list) else []:
+            got = _v6_temp(r) if isinstance(r, dict) else None
+            if got and (got[0] not in by_ts or got[1] >= by_ts[got[0]][0]):
+                by_ts[got[0]] = got[1:]
+    return sorted((e for _, e in by_ts.values() if e is not None), key=lambda e: e.ts)
+
+
 def load_v6_events(raw_dir: str):
-    """→ (bolus_ts, bolus_units, []) from upload-*/Treatments.json. TemporaryBasals.json is not read."""
+    """→ (bolus_ts, bolus_units, temps) from upload-*/Treatments.json and TemporaryBasals.json."""
     ds396 = config.NS_SAMPLES / raw_dir / "direct-sharing-396"
     bolus_ts, bolus_u = [], []
     for f in sorted(ds396.glob("upload-*/Treatments.json")):
@@ -155,10 +209,7 @@ def load_v6_events(raw_dir: str):
                 continue
             bolus_ts.append(ts)
             bolus_u.append(ins)
-    order = np.argsort(bolus_ts) if bolus_ts else []
-    return (np.asarray(bolus_ts, dtype=float)[order] if len(bolus_ts) else np.array([]),
-            np.asarray(bolus_u, dtype=float)[order] if len(bolus_u) else np.array([]),
-            [])
+    return (*_bolus_arrays(bolus_ts, bolus_u), load_v6_temps(ds396))
 
 
 # --------------------------------------------------------------- time anchors

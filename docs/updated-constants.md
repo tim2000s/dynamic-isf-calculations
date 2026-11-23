@@ -5,6 +5,8 @@ author: "Tim Street"
 date: "26 August 2026"
 ---
 
+Figures here predate the correction of 23 November 2026 to the daily-dose readers and a unit conversion (REVIEW.md item 20); current values are in results/.
+
 ## What this replaces
 
 An analysis in May tested Walsh's three rules against 138 open-source loop users

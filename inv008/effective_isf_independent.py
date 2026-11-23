@@ -47,10 +47,6 @@ LBL = [f"{a}-{b}" for a, b in BANDS]
 CTR = [(a + b) / 2 for a, b in BANDS]
 
 
-def to_mgdl(v):
-    return v * 18.018 if (v is not None and v < 20) else v
-
-
 def quartic(g):
     return 272 - 3.121 * g + 0.01511 * g**2 - 3.305e-5 * g**3 + 2.69e-8 * g**4
 
@@ -71,7 +67,7 @@ def user_windows(user_id, table, profile_isf, basal_hourly, min_acted=MIN_ACTED)
     smb = pd.to_numeric(d.smb, errors="coerce").fillna(0).values.astype(float)
     rate = pd.to_numeric(d.sug_rate, errors="coerce").values.astype(float)
     n = len(d)
-    pisf = to_mgdl(profile_isf)
+    pisf = profile_isf  # canonical_cohort.json holds mg/dL
     # per-tick basal deviation (U): (temp rate − profile basal at that hour) × Δt hours
     dt = np.diff(ts, prepend=ts[0]); dt = np.clip(dt, 0, 600)            # cap gaps at 10 min
     prof = np.array([basal_hourly[int(h) % 24] for h in hr])

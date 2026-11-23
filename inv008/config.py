@@ -12,6 +12,7 @@ REPLAY_DIR = CACHE / "replay"
 LOG_DIR = CACHE / "logs"
 
 DB = dict(host="localhost", dbname="oref")
+MMOL_TO_MGDL = 18.018  # mg/dL per mmol/L
 
 USER_MAPPING_V6 = ROOT / "user_mapping_v6.json"
 USER_MAPPING_V7 = ROOT / "user_mapping_v7.json"

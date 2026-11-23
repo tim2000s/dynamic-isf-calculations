@@ -220,11 +220,11 @@ def main():
     ax[1].set_ylim(0, max(2.0, np.nanmax(yv) * 1.15))
     fig.tight_layout(); fig.savefig(CHART / "fig_overnight_sensitivity.png", dpi=150); plt.close(fig)
 
-    md = ["# Overnight insulin sensitivity at a 4-hour horizon\n",
+    md = ["# Overnight glucose-drop per starting IOB at a 4-hour horizon\n",
           f"{n} people, {summary['total_windows']:,} future-rise-selected overnight windows "
           "(11pm–3am start). Outcome ratio = (BG(T) − BG(T+4h)) / IOB(T), mg/dL per U. "
-          "It is not an identified physiological ISF because insulin delivery and non-insulin "
-          "glucose flux continue during the four-hour interval.\n",
+          "The denominator omits insulin delivered during the window, including algorithmic "
+          "temporary basal and boluses. This is not an identified physiological ISF.\n",
           "## Population\n",
           f"- Per-person median sensitivity: median **{summary['per_person_median_sensitivity']['median']}** "
           f"mg/dL/U [IQR {summary['per_person_median_sensitivity']['p25']}–"

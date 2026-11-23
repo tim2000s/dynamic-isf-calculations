@@ -1,16 +1,13 @@
 # Test #1 (bounding): high-BG resistance after removing insulin-independent clearance
 
-> Audit status: withdrawn as a causal result. Low-action closed-loop windows do not identify
-> insulin-independent clearance, so subtraction does not identify insulin-only sensitivity.
-
-88 users, 62,084 insulin-active windows. Non-insulin flux estimated from windows where the loop expects ~no insulin action (|loop predicted drop|<5).
+88 users, 62,057 insulin-active windows. Non-insulin flux estimated from windows where the loop expects ~no insulin action (|loop predicted drop|<5).
 
 ## Data-derived non-insulin flux (mg/dL over 4h)
 
 | BG band | flux | n |
 |---|---|---|
-| 100-120 | 10.0 | 2,017 |
-| 120-145 | 23.0 | 848 |
+| 100-120 | 10.0 | 2,014 |
+| 120-145 | 23.0 | 845 |
 | 145-175 | 44.0 | 220 |
 | 175-205 | 67.0 | 106 |
 | 205-260 | 81.0 | 158 |
@@ -19,13 +16,13 @@
 
 | BG band | raw | corrected | clean+corrected |
 |---|---|---|---|
-| 100-120 | 0.59 | 0.3 | 0.35 |
-| 120-145 | 0.84 | 0.31 | 0.27 |
+| 100-120 | 0.59 | 0.3 | 0.36 |
+| 120-145 | 0.84 | 0.31 | 0.28 |
 | 145-175 | 0.86 | 0.21 | 0.24 |
 | 175-205 | 0.87 | 0.17 | 0.14 |
 | 205-260 | 0.89 | 0.25 | 0.24 |
 
-**Implied k**: raw -0.1, corrected **0.44**, clean+corrected 0.45 (k>0 = resistance).
+**Implied k**: raw -0.1, corrected **0.44**, clean+corrected 0.51 (k>0 = resistance).
 
 ## Power-law bound (clearance required vs data-derived)
 

@@ -119,11 +119,14 @@ def main():
     md.append("## log(ISF) ~ log(TDD) slope (95 % bootstrap CI on slope)\n")
     md.append("| Group | n | Slope b | 95 % CI on slope | Intercept a |")
     md.append("|---|---|---|---|---|")
+    with_minus_one = []
     for g in ("no_dynisf", "dynisf_sigmoid", "dynisf_log"):
         s = fdf[fdf["group"] == g]
         if len(s) < 5:
             md.append(f"| {g} | {len(s)} | (n<5) | | |"); continue
         r = loglin_slope_ci(s["tdd"].values, s["isf"].values)
+        if r["slope_ci_low"] <= -1 <= r["slope_ci_high"]:
+            with_minus_one.append(str(g))
         md.append(f"| **{g}** | {r['n']} | {r['slope']:.2f} | "
                   f"[{r['slope_ci_low']:.2f}, {r['slope_ci_high']:.2f}] | "
                   f"{r['intercept']:.2f} |")
@@ -132,7 +135,10 @@ def main():
     md.append(f"| ALL | {r['n']} | **{r['slope']:.2f}** | "
               f"[{r['slope_ci_low']:.2f}, {r['slope_ci_high']:.2f}] | {r['intercept']:.2f} |")
     md.append("")
-    md.append("Walsh's slope = −1.  No group's CI on the slope contains −1.\n")
+    if r["slope_ci_low"] <= -1 <= r["slope_ci_high"]:
+        with_minus_one.append("ALL")
+    md.append("Walsh's slope = −1. " + (f"The slope interval contains −1 for: {', '.join(with_minus_one)}.\n"
+                                         if with_minus_one else "No group's slope interval contains −1.\n"))
 
     # Sensitivity: outlier drop
     md.append("## Outlier sensitivity (drop |z(ISF×TDD)| > 2)\n")
@@ -142,7 +148,7 @@ def main():
     isf_x_trim = (trim["isf"] * trim["tdd"]).values
     cr_x_trim = (trim["cr"] * trim["tdd"]).values
     basal_div_trim = (trim["basal"] / trim["tdd"]).dropna().values
-    md.append(f"- Dropped {int((~keep).sum())} users: {fdf.loc[~keep, 'user_id'].tolist()}")
+    md.append(f"- Dropped {int((~keep).sum())} people")  # not named: per-person results are not published
     for label, arr, walsh, fmt in [
         ("ISF × TDD", isf_x_trim, 1700, ".0f"),
         ("CR × TDD",  cr_x_trim,  500,  ".0f"),

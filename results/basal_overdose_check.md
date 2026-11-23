@@ -1,19 +1,19 @@
 # Is the overnight 'reversion' actually scheduled-basal insulin?
 
-93 people, 44,060 overnight carb-screened windows with **|iob_iob| < 0.2** (net IOB ≈ 0, so insulin delivery ≈ scheduled basal).
+96 people, 45,115 overnight carb-screened windows with **|iob_iob| < 0.2** (net IOB ≈ 0, so insulin delivery ≈ scheduled basal).
 
 ## Result
 
-- BG drift: pooled median **-5.5 mg/dL/h**; per-user median **-5.5** [IQR -9.0, -3.0], **91% of users falling**.
+- BG drift: pooled median **-5.3 mg/dL/h**; per-user median **-5.5** [IQR -9.0, -2.88], **92% of users falling**.
 - Drift by starting glucose (mg/dL/h):
 
 | BG band | drift | n |
 |---|---|---|
-| 100-115 | -5.0 | 16,057 |
-| 115-130 | -7.1 | 8,103 |
-| 130-150 | -11.0 | 2,754 |
-| 150-175 | -19.0 | 1,284 |
-| 175-220 | -20.8 | 1,432 |
+| 100-115 | -5.0 | 16,667 |
+| 115-130 | -7.0 | 8,168 |
+| 130-150 | -11.0 | 2,763 |
+| 150-175 | -19.0 | 1,274 |
+| 175-220 | -20.5 | 1,463 |
 
 ![Basal over-dose](charts/inv008/fig_basal_overdose.png)
 

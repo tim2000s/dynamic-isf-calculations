@@ -34,14 +34,16 @@ equations depends on glucose as well as TDD.
 
 ## Audited headline results
 
-- v2 computes a weaker correction than v1 for almost everyone — on 92% of readings, a median
-  of 3× weaker, most markedly at low glucose. At target glucose the two equations would only
+- v2 computes a weaker correction than v1 for almost everyone: on 98% of readings, a median
+  of 3.3× weaker, most markedly at low glucose. At target glucose the two equations would only
   meet near 194 U/day, beyond anyone in the cohort.
-- The historical change-in-IOB proxy scales as approximately **TDD^−0.4…−0.56**. That is a
+- The historical change-in-IOB proxy scales as approximately TDD^−0.43 to TDD^−0.72. That is a
   reproducible description of the proxy, not evidence that physiological ISF follows the same
   law.
-- In selected overnight windows, a tuned static ISF and the loop's own calibrated prediction
-  have lower error than v1 or v2. This comparison remains inside the loop's linear IOB model.
+- In selected overnight windows, the loop's own calibrated prediction has lower error than a
+  tuned static ISF, and both have lower error than v2. V1's median absolute error was 2.2 mg/dL
+  above static ISF's (95% interval −0.2 to 4.9), so v1 was not shown to be less accurate than
+  static ISF. This comparison remains inside the loop's linear IOB model.
 - With contiguous time-fold validation, the best glucose-shape exponent is `k=0`; adding a
   glucose-dependent sensitivity multiplier does not improve median prediction error.
 - Post-COB analyses are consistent with carbohydrate absorption sometimes continuing after the
@@ -111,10 +113,10 @@ Point the pipeline at your local data tree with the `DYNISF_ROOT` environment va
 export DYNISF_ROOT=/path/to/your/data
 ```
 
-Only cohort-level figures and aggregate results are committed; one example per-person page
-is included (anonymised, from the public OpenAPS Data Commons). The committed result JSONs
-contain only anonymised participant IDs and derived statistics — no glucose timeseries or
-identifiers.
+Only cohort-level figures and aggregate results are committed; per-person pages are drawn into
+the private data folder and are not published. Committed results hold aggregates only, with
+no participant IDs and no glucose timeseries; `inv008/publish.py` removes per-person parts
+before a result is committed.
 
 ## Caveats
 

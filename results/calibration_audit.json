@@ -1,66 +1,66 @@
 {
- "n_users": 102,
- "n_windows": 88993,
- "overall_median_error_mgdl": 1.7,
+ "n_users": 105,
+ "n_windows": 93989,
+ "overall_median_error_mgdl": 2.0,
  "interpretation": "error = actual_end \u2212 loop_predicted_end. >0: insulin did less than the loop's ISF expected (ISF too aggressive); <0: did more (ISF too weak).",
  "by_glucose_at_decision": {
   "80-100": {
-   "n": 7079,
-   "median_error": -3.6,
-   "p25": -14.2,
-   "p75": 8.0
+   "n": 7265,
+   "median_error": -3.2,
+   "p25": -14.0,
+   "p75": 8.4
   },
   "100-120": {
-   "n": 14820,
-   "median_error": -1.8,
-   "p25": -14.0,
+   "n": 15614,
+   "median_error": -1.4,
+   "p25": -13.6,
    "p75": 11.0
   },
   "120-145": {
-   "n": 22537,
+   "n": 24205,
    "median_error": 2.0,
-   "p25": -12.6,
+   "p25": -12.4,
    "p75": 19.0
   },
   "145-175": {
-   "n": 20918,
-   "median_error": 6.0,
-   "p25": -13.4,
-   "p75": 26.6
+   "n": 22398,
+   "median_error": 6.2,
+   "p25": -13.0,
+   "p75": 27.0
   },
   "175-230": {
-   "n": 18457,
-   "median_error": 6.0,
-   "p25": -21.0,
-   "p75": 33.0
+   "n": 19205,
+   "median_error": 7.0,
+   "p25": -20.0,
+   "p75": 34.0
   }
  },
  "by_isf_formula": {
   "no_dynisf": {
-   "n": 84982,
-   "median_error": 1.0,
-   "p25": -15.6,
+   "n": 90030,
+   "median_error": 1.4,
+   "p25": -15.0,
    "p75": 21.0
   },
   "dynisf_sigmoid": {
-   "n": 1769,
-   "median_error": 8.0,
-   "p25": -13.0,
-   "p75": 33.0
+   "n": 1709,
+   "median_error": 6.6,
+   "p25": -14.0,
+   "p75": 31.2
   },
   "dynisf_log": {
-   "n": 2242,
-   "median_error": 21.6,
+   "n": 2250,
+   "median_error": 21.7,
    "p25": 3.0,
    "p75": 38.0
   }
  },
  "by_tdd_band_per_user": {
-  "<25": 15.0,
-  "25-45": 3.6,
-  "45-70": 9.0,
-  "70+": 0.0
+  "<25": 13.8,
+  "25-45": 0.8,
+  "45-70": 7.0,
+  "70+": 5.7
  },
- "corr_error_with_autosens_minus_1": -0.029,
+ "corr_error_with_autosens_minus_1": -0.033,
  "median_autosens_ratio": 1.0
 }
