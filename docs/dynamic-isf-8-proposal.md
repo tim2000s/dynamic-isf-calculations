@@ -68,6 +68,16 @@ per unit, the candidate gives 79.3 mg/dL per unit at 100 mg/dL, 50.0 at 140 and
 35.6 and 29.3. Both links are modelling choices made in this document and appear
 nowhere in the publication.
 
+The candidate was replayed against the logarithmic model on 6.7 million recorded
+loop decisions of 148 people in the OpenAPS Data Commons (INV-020). Its
+sensitivity was a median 1.56 and 1.55 times the logarithmic model's at 100% in
+the two cohorts, and where oref would have added insulin it asked for 0.50 and
+0.57 of the logarithmic model's request. Most of that difference is the
+logarithmic equation's constant: at 140 mg/dL it gives a sensitivity multiplied
+by daily dose of 1,422, against a median of 2,217 and 2,282 in these people's
+profiles. An adjustment factor of about 0.63 would remove the difference at 140
+mg/dL, and none removes it at every glucose.
+
 Multiplying gives every person the published shape, and two checks reported below
 support doing so. Attaching the curve by adding a constant in place of multiplying
 gave a sensitivity of zero or below at 299 of the 3,433 corrections. A curve
@@ -825,6 +835,63 @@ An anchor of 180 mg/dL lowers every one of those figures by the factor of 1.44.
 The replay shows what each arm would have asked for at readings recorded under
 another algorithm, and says nothing about where glucose would then have gone.
 
+### Against the logarithmic model at recorded decisions
+
+The replay was repeated with the logarithmic model in place of the profile
+(INV-020). Every decision recorded in the OpenAPS Data Commons by a person with a
+daily-dose reconstruction was replayed twice: once with the candidate's
+sensitivity at the glucose of the decision, and once with AndroidAPS's equation
+at 100% and a divisor of 55, as in INV-016. Nobody in these records ran the
+logarithmic model, so both arms are counterfactual. The prediction and the
+insulin requirement were recomputed from each sensitivity by oref's own
+arithmetic, with everything else as recorded and no dosing limit applied. At the
+logged sensitivity that arithmetic reproduced the logged requirement to within
+0.05 U at 97.7% of AndroidAPS decisions and 93.8% of oref0 decisions. The run
+admitted anyone with a day of decisions, where INV-016 used the cohort file of
+the INV-008 pipeline, so it holds more people.
+
+| Cohort | People | Decisions | Curve ISF ÷ logarithmic ISF | Decisions with the curve's ISF higher | Positive request, curve ÷ logarithmic |
+|---|---:|---:|---:|---:|---:|
+| AndroidAPS | 39 | 1,099,033 | 1.56 (1.44 to 1.80) | 97% (85 to 99) | 0.50 (0.44 to 0.75) |
+| oref0 | 109 | 5,558,649 | 1.55 (1.38 to 1.71) | 93% (89 to 97) | 0.57 (0.48 to 0.64) |
+
+Each figure is the median over people, with a 95% interval from resampling
+people. The candidate read the higher sensitivity at most decisions in both
+cohorts. Where oref would have added insulin, the candidate asked for half to
+three fifths of what the logarithmic model asked for. The gap was widest near
+target and narrowed as glucose rose. Between 100 and 150 mg/dL the ratio of
+sensitivities was 1.67 in both cohorts, and above 260 mg/dL it was 1.05 (0.94 to
+1.39) under AndroidAPS and 1.15 (1.01 to 1.22) under oref0.
+
+![The candidate's sensitivity over the logarithmic model's at recorded decisions in the OpenAPS Data Commons, by glucose at the decision. The line is the median over people and the shading the middle half.](../charts/inv020/fig1_isf_ratio_by_glucose.png)
+
+Most of the gap is one of level, and it comes from the constant in the
+logarithmic equation. At 140 mg/dL, with a divisor of 55 and the factor at 100%,
+the equation gives a sensitivity multiplied by daily dose of 1,422 for everyone.
+The candidate gives the profile ISF at that glucose, and the median profile ISF
+multiplied by daily dose was 2,217 in the AndroidAPS cohort and 2,282 in the
+oref0 cohort. Those are 1.56 and 1.60 times 1,422, close to the measured ratios.
+The adjustment factor multiplies the daily dose in the equation, so the factor
+that brings the logarithmic model to the median profile at 140 mg/dL is 1,422
+divided by that product, 0.64 for the AndroidAPS cohort and 0.62 for oref0. With
+a divisor of 75 the equation's constant at 140 mg/dL is 1,709 and the factors
+become 0.77 and 0.75. AndroidAPS's default of 100% and Trio's of 0.8 both lie
+above all four.
+
+A single factor cannot close the whole gap. The ratio falls with glucose, so a
+factor that matched the two models between 100 and 150 mg/dL would leave the
+candidate's sensitivity at about two thirds of the logarithmic model's above 260
+mg/dL, where the logarithmic model would then ask for less insulin. The product of profile ISF and
+daily dose also differs between people. Among 119 people in the Commons with
+entered settings, the log-log slope of
+profile ISF against daily dose was -0.48 (95% interval -0.65 to -0.30), shallower
+than the -1 at which the product would be constant. The product therefore rises
+with daily dose, and a person on a larger dose needs a lower factor to match their
+own profile. These figures give the size of a factor that would bring the
+logarithmic model to the settings people entered, and they take those settings as
+the reference. The series holds no record of why either system introduced the
+factor, and nothing here shows which level suits a given person.
+
 ### What changes in the code
 
 The glucose function is the smallest part. One function per system returns the
@@ -902,7 +969,8 @@ pipeline. Results are split by glucose and by time since the last meal, and
 reported separately for people who announce meals and people who do not. The stage
 shows how much insulin each arm asks for and in whom. It is descriptive and has no
 pass rule. It was run on 119 people as INV-016, and its totals for the candidate
-are quoted above.
+are quoted above. Its comparison with the logarithmic model was run on 148 people
+as INV-020.
 
 The second stage runs the publication's measurement (`inv012/peak_trough.py`) on
 AndroidAPS records from the OpenAPS Data Commons under the published event rules. An earlier draft had
@@ -1238,7 +1306,11 @@ per-person tables stay out of git. `python3 -m inv015.link` writes
 corrections, and `inv015/tests/test_link.py` checks that the regression returns a
 link it was given. `python3 -m inv016.replay --replay <INV-008 replay cache>
 --cohort <canonical_cohort.json>` writes `results/inv016_replay.md`, the replay
-on recorded histories. `python3 -m inv017.shift_or_scale` writes
+on recorded histories. `python3 -m inv020.replay` writes
+`results/inv020_replay.md`, the replay against the logarithmic model, with its
+per-person cache kept out of git; `python3 -m inv020.checks` writes
+`results/inv020_checks.md` and `python3 -m inv020.figures` draws its figure.
+`python3 -m inv017.shift_or_scale` writes
 `results/inv017_shift_or_scale.md`, the comparison of multiplying with adding.
 `python3 -m inv018.person_curves` writes `results/inv018_person_curves.md`, the
 spread across people of the curves built person by person in REPLACE-BG. `python3 -m inv018.split_half` and `python3 -m
@@ -1263,7 +1335,8 @@ that the device code is tested against.
 
 Figures from other analyses are quoted from where they were produced. The
 measurement on other cohorts is in `results/inv012_peak_trough.md` and section 7
-of document 5. The adult figure of 1915 is from `docs/preprint-dosing-constants.md`,
+of document 5. The slope of profile ISF against daily dose in the Commons is
+from `results/inv009_walsh_constants.json`. The adult figure of 1915 is from `docs/preprint-dosing-constants.md`,
 and the overnight test of the shape as a predictor is in
 `results/gradient_isf_fit.md`.
 
@@ -1282,7 +1355,8 @@ figures. This version adds the second simulated month, the trace of the lows and
 the shadow code. On 23 November 2026 the Trio cohort, which came from donated
 Nightscout sites outside the OpenAPS Data Commons, was removed from every
 measurement here, and the figures that included it were replaced with the rerun
-values.
+values. The comparison with the logarithmic model at recorded decisions (INV-020)
+was added the same day.
 
 ## References
 
