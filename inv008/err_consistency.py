@@ -28,6 +28,7 @@ import pandas as pd
 from scipy import stats
 
 from inv008 import config, err_common as ec
+from inv008.plots import hist
 
 OUT = config.ROOT / "results"
 CHART = config.ROOT / "charts" / "inv008"
@@ -113,7 +114,7 @@ def main():
     fig, ax = plt.subplots(1, 2, figsize=(13, 5))
     # left: per-user fractional BG-slope distribution + pooled estimate
     sl = F.frac_slope.dropna().values
-    ax[0].hist(sl, bins=22, color="#9ecae1", edgecolor="#3182bd")
+    hist(ax[0], sl, bins=22, color="#9ecae1", edgecolor="#3182bd")
     pr = pooled["frac_slope_raw"]
     ax[0].axvline(0, color="k", lw=1, ls="--")
     if pr:

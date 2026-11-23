@@ -38,7 +38,6 @@ which the published values apply, which is a level divided by the quartic.
 | Adult entered product 1915 at 180 mg/dL (the anchor until 12 November 2026) | 54.3 | 1674 |
 | 1800 rule at 105 mg/dL (March 2026 work) | 23.7 | 731 |
 | Own peak-to-trough level under Loop at 200 mg/dL | 70.8 | 2182 |
-| Own peak-to-trough level under Trio at 200 mg/dL | 73.7 | 2273 |
 | Own peak-to-trough level under oref0 at 200 mg/dL | 75.1 | 2316 |
 | Own peak-to-trough level under no algorithm (REPLACE-BG) at 200 mg/dL | 106.5 | 3283 |
 
@@ -58,7 +57,6 @@ measurement. A row that stays level means the published shape fits that cohort.
 | Cohort | People | 100 | 150 | 200 | 250 | 300 |
 |---|---:|---:|---:|---:|---:|---:|
 | Loop | 842 | 88 (84 to 91) | 58 (56 to 60) | 71 (67 to 73) | 82 (77 to 89) | 108 (95 to 119) |
-| Trio | 22 | 90 (63 to 111) | 52 (40 to 64) | 74 (51 to 104) | - | - |
 | oref0 | 86 | 96 (83 to 125) | 62 (51 to 83) | 75 (55 to 166) | - | - |
 | no algorithm (REPLACE-BG) | 196 | 103 (89 to 115) | 100 (94 to 108) | 106 (94 to 125) | 120 (103 to 137) | 174 (132 to 233) |
 

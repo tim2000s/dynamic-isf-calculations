@@ -287,7 +287,7 @@ def main() -> int:
         S = select(col, rise, iob)
         out["variants"][name] = curve(S)
         print(f"  {name:40s} people {S.user.nunique():4d} windows {len(S):7d}", flush=True)
-    for p in ("Trio", "AAPS", "OpenAPS"):
+    for p in ("AAPS", "OpenAPS"):
         for name, rise in ((f"rise screen {BASE_RISE:g}", BASE_RISE), ("no rise screen", None)):
             S = select(col[col.platform == p], rise, BASE_IOB)
             if S.user.nunique() >= 5:

@@ -8,7 +8,7 @@ technique (`results/inv012_peak_trough.md`).
 
 196 adults have a bin of 5 events between 100 and 380 mg/dL, out of 196 with any bin. They hold 100234 events, a median of 448 each, and a median of 18 bins each.
 
-![Each person's curve](../charts/inv018/fig_person_curves.png)
+The chart draws one mark per person and is kept in the private data folder (REVIEW.md item 22).
 
 ## Range across people, as measured
 

@@ -50,7 +50,6 @@ independent device validation.
 | Analysis | Intended test | Audit finding |
 |---|---|---|
 | Equation replay | Values V1 and V2 would calculate from recorded inputs | Valid counterfactual calculation, with the data limitations below |
-| Device ISF validation | Agreement between replay and logged ISF | Partial validation. Eighteen users were available and the median log correlation was 0.595. The replay is not an exact device reproduction |
 | Same-window head-to-head | Which candidate ISF best rescales the loop's IOB prediction | Valid comparison of candidate scalings within the loop prediction model. It is not an independent measurement of physiological ISF |
 | Gradient glucose fit | Whether a glucose curve improves prediction after fitting each person's level | Useful negative predictive result. Random folds contain overlapping four-hour windows, so uncertainty and test-set independence are overstated |
 | Overnight drop divided by starting IOB | Glucose change per unit of insulin | Descriptive outcome ratio. Continuing basal, boluses, temporary basal changes, endogenous glucose production and counter-regulation are omitted from the denominator |
@@ -103,14 +102,17 @@ random cross-validation remain too narrow.
 ## Findings that remain supported
 
 The direct equation comparison is supported. On the selected windows, the loop's own calibrated ISF
-predicted the recorded endpoint more closely than static ISF, and static ISF more closely than V2.
-V1 was not shown to differ from static ISF. The median absolute errors were 20.5 mg/dL for static
-ISF and 18.6 mg/dL for the loop value on 62,824 windows, and 23.3 mg/dL for V1 and 60.1 mg/dL for
-V2 on the 57,151 of them where both could be scored. On those common windows V1's error exceeded
-static ISF's by 2.2 mg/dL (95% interval −0.2 to 4.9), an interval that includes zero, and V2's by
-39.0 mg/dL (23.7 to 59.4). These values were rerun on 23 November 2026 after the daily-dose readers
-and a unit conversion were corrected (REVIEW.md item 20); the earlier values were 20.3, 18.6, 24.6
-and 49.7 mg/dL. These figures compare candidate scalings of the
+predicted the recorded endpoint more closely than static ISF, and static ISF more closely than V1
+and V2. The median absolute errors were 20.0 mg/dL for static ISF and 18.0 mg/dL for the loop value
+on 55,001 windows from oref0 users, and 23.5 mg/dL for V1 and 56.9 mg/dL for V2 on the 51,673 of
+them where both could be scored. On those common windows V1's error exceeded static ISF's by 3.0
+mg/dL (95% interval 0.8 to 6.4), an interval above zero, and V2's by 36.4 mg/dL (21.5 to 56.0). At
+a divisor of 55 the V1 difference was 2.7 mg/dL (−0.0 to 6.5), an interval that includes zero.
+These values were rerun on 23 November 2026 after the daily-dose readers and a unit conversion
+were corrected (REVIEW.md item 20), and again the same day after the Trio cohort, which came from
+donated Nightscout sites outside the OpenAPS Data Commons, was removed from public analyses. The
+values before the correction were 20.3, 18.6, 24.6 and 49.7 mg/dL. The device-ISF validation that
+this audit reviewed used only the Trio cohort and is no longer reported. These figures compare candidate scalings of the
 same loop prediction. They do not measure the causal effect of changing the controller.
 
 The fitted glucose-shape work found no material predictive gain after each person's magnitude was

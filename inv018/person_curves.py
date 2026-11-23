@@ -181,7 +181,7 @@ def write_md(pb: pd.DataFrame, wide: pd.DataFrame, thirds: pd.DataFrame, contras
          f"{len(people)} with any bin. They hold {int(people.n_events.sum())} events, a median of "
          f"{people.n_events.median():.0f} each, and a median of {wide.notna().sum(axis=1).median():.0f} "
          f"bins each.", "",
-         "![Each person's curve](../charts/inv018/fig_person_curves.png)", "",
+         "The chart draws one mark per person and is kept in the private data folder (REVIEW.md item 22).", "",
          "## Range across people, as measured", "",
          "Sensitivity in mg/dL per U. The median carries a 95% interval over people. The last column is",
          "the median person's share of events in the bin with no net insulin used, which the curve leaves out.", "",

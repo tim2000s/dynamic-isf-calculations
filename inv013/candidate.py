@@ -95,7 +95,7 @@ ANCHOR_GLUCOSE = 140.0
 _QUADRATIC = (98.03, -1.077, 0.008868)
 RESULTS = Path(__file__).resolve().parents[1] / "results"
 # The INV-012 cohorts that hold carbohydrate records, by their name in its results file.
-OWN_COHORTS = {"Loop": "Loop", "v5_trio": "Trio", "v7_oref0": "oref0", "ReplaceBG": "no algorithm (REPLACE-BG)"}
+OWN_COHORTS = {"Loop": "Loop", "v7_oref0": "oref0", "ReplaceBG": "no algorithm (REPLACE-BG)"}
 OWN_BINS = (100, 150, 200, 250, 300)
 TARGET = 100.0
 # Sensitivity x daily dose in entered settings: adults, and the pooled trial record.

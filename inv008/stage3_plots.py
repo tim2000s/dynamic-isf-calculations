@@ -2,7 +2,7 @@
 
 Usage:
     python -m inv008.stage3_plots                  # all users + cohort figs, 12 workers
-    python -m inv008.stage3_plots --users U*** ... # subset
+    python -m inv008.stage3_plots --users <user> ... # subset
     python -m inv008.stage3_plots --cohort-only
 
 Output: charts/inv008/users/<uid>.png, charts/inv008/fig_*.png, cohort_summary.json
@@ -21,6 +21,7 @@ import numpy as np
 import pandas as pd
 
 from inv008 import config
+from inv008.plots import binned, hist
 from inv008.dynisf import isf_v1, isf_v2
 
 CHART_DIR = config.ROOT / "charts" / "inv008"
@@ -108,7 +109,7 @@ def render_user_page(args: tuple[str,]) -> dict:
         # --- C: per-tick ratio distribution ---
         ax = axes[2]
         ratio = (df["isf_v2"] / df["isf_v1"]).to_numpy()
-        ax.hist(ratio, bins=60, color="#9467bd", alpha=0.85)
+        hist(ax, ratio, bins=60, color="#9467bd", alpha=0.85)
         ax.axvline(1.0, color="k", lw=1, ls=":")
         ax.axvline(float(np.nanmedian(ratio)), color="#9467bd", lw=1.5, ls="--",
                    label=f"median = {float(np.nanmedian(ratio)):.2f}")
@@ -131,7 +132,7 @@ def per_user_summary() -> pd.DataFrame:
     rows = []
     for f in sorted(config.REPLAY_DIR.glob("*.meta.json")):
         m = json.loads(f.read_text())
-        if m.get("median_tdd") is None:
+        if m.get("median_tdd") is None or m["platform"] not in config.COMMONS:
             continue
         df, _ = _load(m["user"])
         if len(df) < 500:
@@ -196,9 +197,8 @@ def render_cohort_figs(summary: pd.DataFrame) -> None:
     if len(e_all) >= 10:
         log_term = np.log(config.NORMAL_TARGET / config.INSULIN_DIVISOR + 1.0)
         fig, ax = plt.subplots(figsize=(8, 6))
-        for plat, g in e_all.groupby("platform"):
-            ax.scatter(g["median_tdd"], g["empirical_isf"], s=26, alpha=0.8,
-                       color=colors[plat], label=f"{labels[plat]} delta-IOB proxy (n={len(g)})")
+        binned(ax, e_all["median_tdd"], e_all["empirical_isf"], "#444444",
+               f"delta-IOB proxy, {len(e_all)} people")
         tt = np.geomspace(e_all["median_tdd"].min() * 0.8,
                           e_all["median_tdd"].max() * 1.2, 100)
         ax.plot(tt, 1800.0 / (tt * log_term), color=C_V1, lw=2,
@@ -260,7 +260,8 @@ def main() -> None:
     stamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     if not args.cohort_only:
-        users = args.users or sorted(p.stem for p in config.REPLAY_DIR.glob("*.parquet"))
+        users = args.users or sorted(p.stem for p in config.REPLAY_DIR.glob("*.parquet")
+                                     if json.loads(p.with_suffix(".meta.json").read_text())["platform"] in config.COMMONS)
         tasks = [(u,) for u in users]
         print(f"{stamp} rendering {len(tasks)} user pages with {args.workers} workers")
         ctx = mp.get_context("spawn")

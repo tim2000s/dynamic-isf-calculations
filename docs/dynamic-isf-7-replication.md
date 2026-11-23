@@ -11,7 +11,7 @@ Sensitivity estimated from what glucose did after insulin was given generally co
 out below the sensitivity people have entered into their pumps. That was
 established in 2026 on 138 users of open-source closed-loop systems, where the
 constant anchored to measured sensitivity was 145 against 355 anchored to the
-profiles people had tuned, a ratio of 0.41. Rerun after the correction of 23 November 2026 to the daily-dose readers (REVIEW.md item 20), the same fits give 136 against 340, on 116 and 141 users, a ratio of 0.40. The same work tested whether dosing to
+profiles people had tuned, a ratio of 0.41. Rerun after the correction of 23 November 2026 to the daily-dose readers (REVIEW.md item 20), and after the removal the same day of a Trio cohort that came from donated Nightscout sites outside the OpenAPS Data Commons, the same fits give 146 against 320, on 98 and 119 users, a ratio of 0.45. The same work tested whether dosing to
 the measured value would be safe and found it would not: people dosing well weaker
 than their measured sensitivity had more hypoglycaemia rather than less, and
 restricting the estimate to overnight periods left the bias unchanged.
@@ -80,7 +80,7 @@ to open with little insulin already on board.
 | Bolus corrections, per unit given | 5 | 0.49 to 0.92 |
 | Any route, insulin action across the window | 5 | 0.48 to 0.66 |
 | Any route, action, low insulin on board at the start | 4 | 0.30 to 0.65 |
-| oref archive, loop-recorded insulin on board | 1 | 0.61 (reported 0.41) |
+| oref archive, loop-recorded insulin on board | 1 | 0.65 (reported 0.41) |
 
 The constructions bracket rather than agree, and they do so in an interpretable
 direction. Dividing by insulin on board at the start ignores anything delivered
@@ -163,13 +163,13 @@ construction attached.
 The oref archive's 0.41 turns out to be mostly aggregation. Its two anchors were
 fitted on different subsets, the measured constant on 114 people and the entered
 constant on 138, and both were regression fits rather than medians. Matching person
-by person across the same 115 records and taking medians gives 197 measured against
-320 entered, a ratio of 0.61, and the median of per-person ratios agrees at 0.61
-with quartiles of 0.50 to 0.80. As a Walsh-style constant those records give 1329
-measured against 2104 entered, which sits inside the range the trial cohorts return
+by person across the same records, now 99 people from the OpenAPS Data Commons, and taking
+medians gives 197 measured against 311 entered, a ratio of 0.63, and the median of per-person
+ratios is 0.65 with quartiles of 0.53 to 0.84. As a Walsh-style constant those records give 1334
+measured against 2023 entered, which sits inside the range the trial cohorts return
 rather than below it.
 
-That leaves 0.61 on the oref archive against 0.72 to 1.12 on the trial cohorts
+That leaves 0.65 on the oref archive against 0.72 to 1.12 on the trial cohorts
 under the same construction, a real difference and a much smaller one. The two
 remaining candidates are the cohorts, self-selected users of open-source systems
 who have tuned their own settings over years against trial participants given

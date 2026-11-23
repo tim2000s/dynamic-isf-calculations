@@ -240,7 +240,7 @@ def main():
     for row in summary["by_tdd_band"]:
         md.append(f"| {row['tdd_band']} | {row['n_users']} | {row['median_r']} | "
                   f"{row['median_abs_dose_change_pct']} | {row['median_frac_level_clamped']} |")
-    md += ["\n![Shadow eval](charts/inv008/fig_shadow_eval.png)\n",
+    md += ["\nThe chart draws one mark per person and is kept in the private data folder (REVIEW.md item 22).\n",
            "**Reading:** Tier-1 v-next leaves the *level* essentially unchanged — at each "
            "person's median TDD and target glucose it returns their profile ISF, and the "
            "TDD-axis swing within a record is small (p10–p90 ≈ 0.87–1.17). The §8.2 level clamp "

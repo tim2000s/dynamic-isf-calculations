@@ -90,6 +90,8 @@ import numpy as np
 import pandas as pd
 from scipy.signal import find_peaks
 
+from inv008.config import MMOL_TO_MGDL
+
 from inv009 import config, db, grid as gridmod, insulin_models as M, synthetic as S
 from inv009.forward_isf import MODEL_DEFAULT, _loop_model, schedule_units
 
@@ -98,13 +100,13 @@ CARB_CLEAR_MIN = 180.0
 MAX_GAP_MIN = 10.0         # a longer step between readings ends the trace
 BG_LO, BG_HI = 40.0, 400.0
 # A rise in carbs on board this large is a carb entry. Fat and protein entered as
-# carbohydrate equivalents (U*** in Trio) arrive as many small entries, some under it.
+# carbohydrate equivalents (for one Trio person) arrive as many small entries, some under it.
 COB_JUMP_G = 2.0
 MIN_PER_BIN = 5
 MIN_PEOPLE = 10
 FIT_MIN = 10               # events in a person's bin before a line is fitted
 STUDIES = ("ReplaceBG", "Loop", "DCLP3", "DCLP5", "PEDAP", "IOBP2")
-OREF = {"v5_trio": "oref_v5", "v7_oref0": "oref_v7"}
+OREF = {"v7_oref0": "oref_v7"}  # Commons only; Trio removed 23 November 2026
 SYN_ISF, SYN_TDD, SYN_N, SYN_DAYS = 50.0, 40.0, 30, 200
 SYN_ARMS = [("open loop, meals logged", dict()),
             ("open loop, 45% unlogged", dict(unannounced=0.45)),
@@ -252,7 +254,7 @@ def oref_events(user_id: str, cohort: str, prom: float) -> pd.DataFrame | None:
     t = d.ts_relative_sec.to_numpy(float) / 60.0
     bg = d.cgm_mgdl.to_numpy(float).copy()
     if np.nanmedian(bg) < 40:
-        bg = bg * 18.018
+        bg = bg * MMOL_TO_MGDL
     bg[(bg < BG_LO) | (bg > BG_HI)] = np.nan
     act = d.iob_activity.to_numpy(float)              # units per minute
     a = np.nan_to_num(act)

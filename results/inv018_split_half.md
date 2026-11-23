@@ -14,7 +14,7 @@ typical factor by which a prediction of the second half missed: from the person'
 and from the median of everyone's first half. The last column divides the second miss by the first,
 so the person's own half predicts better where it is above 1.
 
-![Half against half](../charts/inv018/fig_split_half.png)
+The chart draws one mark per person and is kept in the private data folder (REVIEW.md item 22).
 
 ## Alternate events
 

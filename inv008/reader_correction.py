@@ -60,13 +60,13 @@ def bolus_section() -> list[str]:
         "Before counts every copy of a repeated bolus and deleted AAPS records; the corrected read counts",
         "each once and also parses times written with milliseconds and an offset, which were dropped.",
         "",
-        "| Cohort | People | Median ratio | People above 1.1 | Highest ratio |",
-        "|---|---:|---:|---:|---:|",
+        "| Cohort | People | Median ratio | People above 1.1 |",
+        "|---|---:|---:|---:|",
     ]
     for c, name in NAMES.items():
         r = np.array([a / b for _, p, a, b in rows if p == c and b > 0])
         L.append(
-            f"| {name} | {len(r)} | {np.median(r):.2f} | {(r > 1.1).sum()} | {r.max():.1f} |"
+            f"| {name} | {len(r)} | {np.median(r):.2f} | {(r > 1.1).sum()} |"
         )
     return L
 
@@ -79,10 +79,10 @@ def dose_section() -> list[str]:
         "of this comparison, which covers AAPS and OpenAPS only (REVIEW.md item 19).",
         "",
         "Per person, the median per-decision daily dose in the INV-008 replay cache after the correction",
-        "divided by the one before it; then the median and range over people.",
+        "divided by the one before it; then the median and interquartile range over people.",
         "",
-        "| Cohort | People | Median | Lowest | Highest |",
-        "|---|---:|---:|---:|---:|",
+        "| Cohort | People | Median | IQR |",
+        "|---|---:|---:|---|",
     ]
     by = {c: [] for c in NAMES}
     for f in sorted((config.CACHE / "replay").glob("*.meta.json")):
@@ -94,7 +94,7 @@ def dose_section() -> list[str]:
     for c, name in NAMES.items():
         r = np.array(by[c])
         L.append(
-            f"| {name} | {len(r)} | {np.median(r):.2f} | {r.min():.2f} | {r.max():.2f} |"
+            f"| {name} | {len(r)} | {np.median(r):.2f} | {np.percentile(r, 25):.2f} to {np.percentile(r, 75):.2f} |"
         )
     return L
 

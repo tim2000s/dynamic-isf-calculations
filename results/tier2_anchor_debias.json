@@ -1,0 +1,17 @@
+{
+ "n_patients": 98,
+ "median_window_bg": 112.0,
+ "median_frac_windows_above_target": 0.703,
+ "mean_g_factor": {
+  "median": 0.782,
+  "p25": 0.677,
+  "p75": 0.849,
+  "share_above_1": 0.041
+ },
+ "interpretation": "Tier-2 ISF is biased by the mean_g factor at every glucose: >1 means the current anchor makes Tier-2 too weak (corrected anchor lower / more aggressive); <1 means too aggressive.",
+ "anchor_shift_corrected_over_current": {
+  "median": 1.278,
+  "p25": 1.18,
+  "p75": 1.477
+ }
+}

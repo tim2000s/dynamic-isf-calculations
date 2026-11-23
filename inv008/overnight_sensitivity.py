@@ -42,6 +42,7 @@ import psycopg2
 warnings.filterwarnings("ignore")
 
 from inv008 import config
+from inv008.plots import hist  # noqa: E402  after the module-level setup above, like the imports beside it
 from inv008.dynisf import quartic_isf
 
 ROOT = config.ROOT
@@ -178,8 +179,7 @@ def main():
         "per_person_median_sensitivity": {
             "median": round(float(np.median(per_med)), 1),
             "p25": round(float(np.percentile(per_med, 25)), 1),
-            "p75": round(float(np.percentile(per_med, 75)), 1),
-            "min": round(float(per_med.min()), 1), "max": round(float(per_med.max()), 1)},
+            "p75": round(float(np.percentile(per_med, 75)), 1)},
         "sensitivity_vs_bg_pooled_median": {
             f"{BG_CENTRES[k]:.0f}": (None if obs_band[k] is None else round(obs_band[k], 1))
             for k in range(len(BG_CENTRES))},
@@ -198,7 +198,7 @@ def main():
     (OUT / "overnight_sensitivity.json").write_text(json.dumps(summary, indent=1))
 
     fig, ax = plt.subplots(1, 2, figsize=(13, 5))
-    ax[0].hist(per_med, bins=24, color="#2ca02c", alpha=0.85)
+    hist(ax[0], per_med, bins=24, color="#2ca02c", alpha=0.85)
     ax[0].axvline(np.median(per_med), color="k", ls="--", lw=1.5,
                   label=f"median {np.median(per_med):.0f}")
     ax[0].set_xlabel("per-person median glucose fall / starting IOB (mg/dL per U)")
@@ -228,8 +228,7 @@ def main():
           "## Population\n",
           f"- Per-person median sensitivity: median **{summary['per_person_median_sensitivity']['median']}** "
           f"mg/dL/U [IQR {summary['per_person_median_sensitivity']['p25']}–"
-          f"{summary['per_person_median_sensitivity']['p75']}, range "
-          f"{summary['per_person_median_sensitivity']['min']}–{summary['per_person_median_sensitivity']['max']}].",
+          f"{summary['per_person_median_sensitivity']['p75']}].",
           f"- Pooled per-window: median {summary['population_median_sensitivity']} "
           f"[IQR {summary['population_p25_p75'][0]}–{summary['population_p25_p75'][1]}].",
           f"- Observed sensitivity-vs-glucose exponent: **k ≈ {summary['observed_powerlaw_exponent']}** "

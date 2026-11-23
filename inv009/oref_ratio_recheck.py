@@ -16,6 +16,8 @@ from __future__ import annotations
 
 import json
 import math
+import os
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -26,7 +28,9 @@ from .walsh_constants import load as load_walsh
 
 def main() -> int:
     config.ensure_dirs()
-    p = config.RESULTS / "overnight_sensitivity.json"
+    # the full output with per-person rows is in the private data folder; the repository copy is
+    # stripped of them (REVIEW.md item 22)
+    p = Path(os.environ.get("DYNISF_ROOT", Path.home() / "oref-investigations")) / "results" / "overnight_sensitivity.json"
     if not p.exists():
         print("overnight_sensitivity.json not found")
         return 1

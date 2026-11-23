@@ -12,6 +12,14 @@
 > eight groups and to simulated people with a fixed sensitivity. Later sections are renumbered.
 > Section 9 no longer suggests a 1/√TDD starting point, since the square-root law is withdrawn.
 > On 11 November 2026 the sentence reporting that scaling was removed from section 3 for the same reason.
+>
+> Update, 23 November 2026: the Trio cohort, which came from donated Nightscout sites outside the
+> OpenAPS Data Commons, was removed from public analyses. Section 7 now covers seven groups, and
+> the figures in sections 3, 4 and 7 that drew on it were replaced with the rerun values. On the
+> selected windows V1 is now less accurate than static ISF at the standard divisor. The
+> analyses behind the nested out-of-sample test in section 4, section 5b, the pooled overnight
+> paragraph of section 5 and section 6 were run in June 2026 on a cohort that included the removed
+> users and have not been rerun, so their statements are provisional.
 
 ---
 
@@ -54,19 +62,17 @@ Importantly, the ISF the loop happened to be running cancels out of both, so thi
 
 To keep carbohydrate out where I wanted it out, I used fasting windows and threw away any window where glucose was rising in a way that smelt of absorption. For the overnight work I leaned on the small hours, when even someone who never announces a carb is genuinely not eating.
 
-And then, because cohort averages can hide as much as they show, I ran the same method on two real individuals' live Nightscout data, entirely outside the main dataset: one who runs AAPS fully closed without announcing carbs, and one on oref who announces carefully. They turned out to illustrate the two halves of the story rather neatly.
-
-The main dataset is per-tick logs from people on open-source AID (predominantly oref0, with some Trio), held locally in a database for the analysis. Numbers below are medians unless I say otherwise.
+The main dataset is per-tick logs from oref0 users in the OpenAPS Data Commons, held locally in a database for the analysis. Numbers below are medians unless I say otherwise.
 
 ## 3. A well-set static ISF already does the job
 
-Before anything subtle, the blunt result. On the selected correction windows, the typical size of the prediction error (mg/dL) came out as below, on the 57,151 of the 62,824 windows where v1 and v2 could be scored.
+Before anything subtle, the blunt result. On the selected correction windows, the typical size of the prediction error (mg/dL) came out as below, on the 51,673 of the 55,001 windows where v1 and v2 could be scored.
 
 | | loop as-run | static profile ISF | v1 (1/TDD) | v2 (1/TDD²) |
 |---|---|---|---|---|
-| typical error | 19.0 | 21.1 | 23.3 | 60.1 |
+| typical error | 18.0 | 20.5 | 23.5 | 56.9 |
 
-A well-set static ISF comes within 2 mg/dL of the loop. On the common windows v1's error is 2.2 mg/dL above static ISF's with a 95% interval of -0.2 to 4.9, so v1 is not shown to differ from it, while v2's is 39.0 mg/dL above it (23.7 to 59.4) (`results/common_window.md`). The v2 form, with the steepest dependence, is far and away the worst.
+A well-set static ISF comes within 2.5 mg/dL of the loop. On the common windows v1's error is 3.0 mg/dL above static ISF's with a 95% interval of 0.8 to 6.4, so v1 is less accurate than static ISF here, while v2's is 36.4 mg/dL above it (21.5 to 56.0) (`results/common_window.md`). The v1 gap depends on the insulin divisor: at 55 rather than the standard 75 it is 2.7 mg/dL (−0.0 to 6.5), and that interval includes zero. The v2 form, with the steepest dependence, is far and away the worst.
 
 That on its own doesn't tell you why. It just says the steep equations are reaching for something that isn't paying off on average. The rest is about what that something is.
 
@@ -76,19 +82,19 @@ Here's the part that made me sit up. When you compute the effective ISF in genui
 
 **Effective ISF against glucose (each divided by the person's own profile ISF, so 1.0 = their profile).**
 
-| glucose (mg/dL) | effective ISF (loop-based) | effective ISF (conservation) | v1 | v2 |
-|---|---|---|---|---|
-| 100–120 | 0.63 | 0.20 | 0.93 | 2.89 |
-| 120–145 | 0.78 | 0.38 | 0.87 | 2.35 |
-| 145–175 | 0.85 | 0.47 | 0.72 | 1.57 |
-| 175–205 | 0.83 | 0.53 | 0.60 | 1.08 |
-| 205–260 | 0.86 | 0.48 | 0.50 | 0.78 |
+| glucose (mg/dL) | effective ISF (loop-based) | effective ISF (conservation) | published glucose curve (section 7) |
+|---|---|---|---|
+| 100–120 | 0.58 | 0.20 | 0.89 |
+| 120–145 | 0.81 | 0.38 | 0.68 |
+| 145–175 | 0.86 | 0.47 | 0.52 |
+| 175–205 | 0.88 | 0.53 | 0.41 |
+| 205–260 | 0.88 | 0.48 | 0.33 |
 
-The two effective-ISF estimates sit at different levels (the conservation one reads low, for a reason I'll own up to in the limitations), but they agree on the thing that matters: the line trends gently up, while the dynamic forms trend steeply down. Restricting to windows where glucose was dead flat on entry barely moves it.
+The two effective-ISF estimates sit at different levels (the conservation one reads low, for a reason I'll own up to in the limitations), but they agree on the thing that matters: the line trends gently up, while the published glucose curve falls steeply (`results/effective_isf_independent.md`, 73 people). Restricting to windows where glucose was dead flat on entry barely moves it.
 
 ![Two model-dependent outcome ratios against glucose, both trending gently upward, set against the steeply falling dynamic form.](charts/inv008/fig_effective_isf_independent.png)
 
-I also looked at where the genuinely useful individual signal lives. When you let a model learn a per-person intercept and scale but share the glucose shape across everyone, the gain comes almost entirely from getting each person's overall level right (worth about 7 mg/dL), and the best shared glucose steepness lands at essentially zero. That per-person level isn't predictable from total daily dose, so it has to be learned from the person's own results over time. A careful out-of-sample test found that learning a personal glucose curve only beat a flat line for about a quarter of people, below what you'd get by chance, which tells you the handful who looked like they wanted a glucose curve were mostly noise dressed up as signal.
+I also looked at where the genuinely useful individual signal lives. When you let a model learn a per-person intercept and scale but share the glucose shape across everyone, the gain comes almost entirely from getting each person's overall level right (the typical error fell from 24.4 to 18.9 mg/dL across 67 people), and the best shared glucose steepness lands at essentially zero (`results/gradient_isf_fit.md`). That per-person level isn't predictable from total daily dose, so it has to be learned from the person's own results over time. A careful out-of-sample test found that learning a personal glucose curve only beat a flat line for about a quarter of people, below what you'd get by chance, which tells you the handful who looked like they wanted a glucose curve were mostly noise dressed up as signal.
 
 This held in the small hours and in the middle of the day alike (the slope was flat in both), so it isn't a quirk of overnight physiology.
 
@@ -107,7 +113,6 @@ This second pattern is less clear-cut, so I'll flag the uncertainty as I go. I i
 You might assume that once carbs-on-board has counted down to zero, the meal is done and any window after that is clean. I looked at whether that holds across the main cohort, comparing each person's effective ISF in the hour straight after carbs-on-board reached zero against their own carbohydrate-free overnight windows.
 
 The hour right after carbs reach zero does look a little different from true overnight fasting. The effective ISF in that hour tends to run lower, glucose is somewhat more likely to be drifting up even with active insulin on board, and the value climbs back towards the fasting level over the following half hour. 
-![After announced carbs reach zero, effective ISF tends to sit lower and recover over the following hour. Left: per person across the cohort. Right: the same person-by-person recovery.](charts/inv008/fig_post_cob_isf.png)
 
 I'd be cautious about over-reading this, and there's a real confound to put on the table first. The hour after a meal is a busy one. There's more insulin still in flight, and some of its effect lands later than the glucose you can see inside the window, so part of that gap will be timing rather than carbohydrate. With that allowed for, timing alone wouldn't obviously push glucose up against active insulin, and it doesn't obviously explain why the effect eases off as the meal recedes. One explanation consistent with this is that a little absorption can carry on past the point where the carbs-on-board count has finished. I'd put that no more firmly than as a possibility worth looking at properly, rather than something this analysis can confirm.
 
@@ -115,11 +120,9 @@ I'd be cautious about over-reading this, and there's a real confound to put on t
 
 Stepping back to the whole dataset and looking only at clean, carbohydrate-free overnight windows: the effective ISF sits a touch below each person's profile on average, but that offset doesn't track how much they announce carbs, so it reads as ordinary calibration (profiles set a little strong) rather than anything to do with food or glucose. And the glucose slope overnight is flat, not falling. Neither the level nor the slope, in clean fasting, looks like glucose-driven resistance.
 
-![Across the cohort, in carbohydrate-free overnight windows: the small sub-profile offset doesn't track carb-announcing behaviour (it's calibration), and the glucose slope is flat, not the falling shape Dynamic ISF assumes.](charts/inv008/fig_cob_uam_cohort.png)
-
 ## 6. One more thing that exaggerates the picture
 
-There's a second, more mundane reason the raw data looks like falling sensitivity, and it's worth naming so it isn't mistaken for physiology. The loop tends to over-predict big drops: when it expects a large fall, it gets roughly half of it. Across the data the realised drop works out at around 0.4 of the predicted drop plus a fairly fixed offset. Because the biggest corrections happen when you're highest, the size of the correction and the glucose level move together, and the loop's habit of over-promising large drops then masquerades as "insulin doesn't work when I'm high." That's really a property of the insulin-action model and basal, not of ISF, and it shouldn't be fixed by bending the ISF curve.
+There's a second, more mundane reason the raw data looks like falling sensitivity, and it's worth naming so it isn't mistaken for physiology. The loop tends to over-predict big drops: when it expects a large fall, it gets roughly half of it. Across the data the realised drop worked out at about half of the predicted drop plus a fairly fixed offset. Because the biggest corrections happen when you're highest, the size of the correction and the glucose level move together, and the loop's habit of over-promising large drops then masquerades as "insulin doesn't work when I'm high." That's really a property of the insulin-action model and basal, not of ISF, and it shouldn't be fixed by bending the ISF curve.
 
 ## 7. A published curve that does fall with glucose
 
@@ -127,11 +130,11 @@ One result seems to point the other way, and an earlier draft of this paper left
 
 The construction is simple. Find a glucose peak away from a meal and follow it down to the next trough. Divide the fall by the insulin used between the two, which is the drop in insulin on board plus whatever was delivered above the reference basal. The published curve is a fit through those answers against glucose, and it reads 80.6 mg/dL per unit at 100 mg/dL, 50.9 at 140, 30.8 at 200 and 21.1 at 300. For my own runs I filed each answer under the glucose halfway between peak and trough, multiplied it by total daily dose so that people on different doses can be compared, and took each person's median at each glucose level.
 
-I ran the same construction on 1,790 people in eight groups: six Jaeb trial cohorts, plus Trio and oref0 users from the open-source archives. It reproduces the shape. Within each person, the value at 100 mg/dL was 2.2 to 4.0 times the value at 200 in every group, against 2.6 on the published fit. In REPLACE-BG, where no algorithm was dosing, it was 2.55 [2.25, 2.82]. So the published shape is reproducible with the same sums on other people's data, and I've no reason to doubt it.
+I ran the same construction on 1,768 people in seven groups: six Jaeb trial cohorts, plus oref0 users from the OpenAPS Data Commons. It reproduces the shape. Within each person, the value at 100 mg/dL was 2.2 to 4.0 times the value at 200 in every group, against 2.6 on the published fit. In REPLACE-BG, where no algorithm was dosing, it was 2.55 [2.25, 2.82]. So the published shape is reproducible with the same sums on other people's data, and I've no reason to doubt it.
 
-What produces it shows in the two halves of the division. The fall hardly changes with glucose: a median of 30 to 43 mg/dL for events centred on 100, and 39 to 64 for events centred on 200. The insulin used changes a great deal, from between 0.02 and 0.2 U at 100 to between 0.3 and 1.5 U at 200. A similar fall divided by several times the insulin gives a smaller number, whatever the person's sensitivity is doing.
+What produces it shows in the two halves of the division. The fall hardly changes with glucose: a median of 30 to 43 mg/dL for events centred on 100, and 48 to 64 for events centred on 200. The insulin used changes a great deal, from between 0.02 and 0.2 U at 100 to between 0.3 and 1.5 U at 200. A similar fall divided by several times the insulin gives a smaller number, whatever the person's sensitivity is doing.
 
-Part of that fall arrives with no net insulin used at all. Fitting a line of fall against insulin used, within each person and glucose level, puts the fall at zero net insulin at 27 to 44 mg/dL around 100, and it stays there as glucose rises (44, 45, 44, 38 and 44 mg/dL from 100 to 300 in REPLACE-BG). In type 1 diabetes that fall is still insulin, the basal and earlier doses doing their work. Some of it is also how the events are chosen: a trough has to sit below its peak by the margin I required, and raising that margin from 15 to 30 mg/dL raised the figure to between 46 and 63. Either way it lands on the top of the division with nothing matching it underneath, and it weighs most where the insulin used is smallest, which is near target.
+Part of that fall arrives with no net insulin used at all. Fitting a line of fall against insulin used, within each person and glucose level, puts the fall at zero net insulin at 30 to 44 mg/dL around 100, and it stays there as glucose rises (44, 45, 44, 38 and 44 mg/dL from 100 to 300 in REPLACE-BG). In type 1 diabetes that fall is still insulin, the basal and earlier doses doing their work. Some of it is also how the events are chosen: a trough has to sit below its peak by the margin I required, and raising that margin from 15 to 30 mg/dL raised the figure to between 47 and 63. Either way it lands on the top of the division with nothing matching it underneath, and it weighs most where the insulin used is smallest, which is near target.
 
 Then I asked what the method returns when the answer is known. I simulated people whose sensitivity never changes, set so that the true value is 2,000 at every glucose level, with nearly half their meals unlogged and a controller gentle enough to leave glucose in a realistic range.
 
@@ -139,7 +142,6 @@ Then I asked what the method returns when the answer is known. I simulated peopl
 |---|---|---|---|
 | REPLACE-BG, no algorithm | 4,577 | 3,283 | 2,985 |
 | Loop | 2,661 | 2,182 | 2,025 |
-| Trio | 2,406 | 2,273 | too few people |
 | oref0 | 2,836 | 2,316 | too few people |
 | Simulated, true value 2,000, gentler controller | 6,770 | 4,754 | 4,204 |
 | Simulated, true value 2,000, firmer controller | 3,790 | 2,989 | 2,723 |
@@ -150,7 +152,7 @@ The line fitted within each glucose level does better on the same simulated peop
 
 That leaves two stretches of the curve the simulation doesn't reach. Near 100 mg/dL the simulated ratio is unusable, because almost no net insulin is used there, so the steep part between 100 and 200 has not been reproduced from a constant sensitivity. The case there rests on the split above: a fall that stays put, over insulin that grows. And no simulated group reached 300 mg/dL often enough to fit a line. That one matters more, because between 200 and 300 the real slope did fall, to 0.66 [0.49, 0.73] of its value at 200 in REPLACE-BG (24 people) and 0.73 [0.64, 0.93] in Loop (49 people), close to the published fit's 0.69. I can't put that down to the method on present evidence. It may be a real loss of effect per unit at very high glucose, or carbohydrate that was never logged still arriving, and this data can't separate the two. I'd leave it open.
 
-Some limits belong with this section. The simulated falls were larger than the real ones, 119 and 170 mg/dL at a midpoint of 200 against 39 to 64, and the simulated fall at zero net insulin grows with glucose, from 24 mg/dL at 100 to about 70 at 250, where the real one stays level. Four of the six trial cohorts hold no carbohydrate records, so a large bolus stood in for a meal there, which is why the table shows the groups that do have them. The fitted slope is a dose-to-drop comparison, which section 10 explains is unreliable where a loop is dosing reactively, and REPLACE-BG is the one group free of that. The peak margin and the rule of three hours clear of a meal are my choices, made before I'd read the abstract, which asks for an hour clear of a meal with under 2.5 g of carbohydrate still on board and a trough more than 20 minutes after the peak.
+Some limits belong with this section. The simulated falls were larger than the real ones, 119 and 170 mg/dL at a midpoint of 200 against 48 to 64, and the simulated fall at zero net insulin grows with glucose, from 24 mg/dL at 100 to about 70 at 250, where the real one stays level. Four of the six trial cohorts hold no carbohydrate records, so a large bolus stood in for a meal there, which is why the table shows the groups that do have them. The fitted slope is a dose-to-drop comparison, which section 10 explains is unreliable where a loop is dosing reactively, and REPLACE-BG is the one group free of that. The peak margin and the rule of three hours clear of a meal are my choices, made before I'd read the abstract, which asks for an hour clear of a meal with under 2.5 g of carbohydrate still on board and a trough more than 20 minutes after the peak.
 
 The curve and the rest of this paper are closer than they first appear. The curve is a fall per unit worked out on events chosen by how they ended, and it falls with glucose on everyone's data for reasons of arithmetic that apply equally to simulated people whose sensitivity is fixed. Between about 150 and 250 mg/dL that accounts for the decline in the curve. The published rule accepts a peak from an hour after a meal, once the carbohydrate on board has run down, which is the meal-tail territory of section 5b. Above 250 mg/dL I can't say, and the question in section 11 stays open.
 
@@ -170,7 +172,7 @@ A word on the absorption model, because this is the part I most want to get righ
 
 Modestly, and in this order:
 
-- **Get each person's overall sensitivity level right, and keep adapting it from their own results.** This is where the real, recoverable gain sits (about 7 mg/dL), it isn't predictable from TDD, and it dwarfs anything a glucose curve adds.
+- **Get each person's overall sensitivity level right, and keep adapting it from their own results.** This is where the real, recoverable gain sits (about 6 mg/dL), it isn't predictable from TDD, and it dwarfs anything a glucose curve adds.
 - **Keep a near-target easing of ISF as a one-sided safety measure.** Not because the data is fitted to it, but because counterregulation near target is real and the cost of a hypo is asymmetric. This is the one place real physiology pokes through, and it argues for being more cautious near target, not less.
 - **Treat carbohydrate as carbohydrate.** For people who don't announce, better catching of unannounced meals does the job a glucose-ISF is standing in for. For people who do, any residual is most likely to sit in the meal tail. Both feel like more honest levers than a glucose-indexed sensitivity.
 - **If you keep a glucose term, understand what it's for.** It's a reasonable, crude proxy for carbohydrate the loop is missing, and it's most valuable for non-announcers. It's worth remembering that when carbs are announced, a glucose-driven ISF and the carb model can end up leaning on the same meal from two directions, so it shouldn't be left to run hot by default.
@@ -179,7 +181,7 @@ Modestly, and in this order:
 
 This is observational data from people living their lives, not a controlled experiment, and it can only weakly pin down cause. A direct dose-to-drop test is no use here, because the loop doses reactively: it gives more correction exactly when glucose isn't budging, so more insulin can look like less effect. That's why I leaned on the loop's counterfactual prediction and the model-free conservation estimate, neither of which regresses outcome on dose.
 
-The conservation estimate is mostly from oref0 users (I didn't assemble Trio basal profiles), and its absolute level reads low because the basal-deviation accounting over-counts a bit where someone's profile basal is set wrong, so I read its direction, which is sound, not its absolute numbers. The post-carb-clear effect is partly inflated by post-meal insulin still in flight, as noted above. The two external individuals are a person each, with their own quirks, and the AAPS one is noisy in the top glucose band overnight. And the recommendation, particularly anything touching the absorption tail, should be tried in shadow mode and watched before it goes anywhere near live dosing.
+The conservation estimate comes from oref0 users, and its absolute level reads low because the basal-deviation accounting over-counts a bit where someone's profile basal is set wrong, so I read its direction, which is sound, not its absolute numbers. The post-carb-clear effect is partly inflated by post-meal insulin still in flight, as noted above. And the recommendation, particularly anything touching the absorption tail, should be tried in shadow mode and watched before it goes anywhere near live dosing.
 
 ## 11. The resistance question stays open
 
@@ -212,8 +214,7 @@ concerns glucocorticoids. See `tim2000s/diabetes-knowledge-base`, `kb/not_verifi
 Code: `github.com/tim2000s/dynamic-isf-calculations`, package `inv008/` (`python -m inv008.<name>`).
 Key stages: `head_to_head` and `effective_isf_independent` (the two effective-ISF estimates),
 `cob_uam_cohort` (the carbohydrate-free overnight decomposition), `post_cob_isf` (the hour after
-carbs reach zero, across the cohort), `magnitude_bias`
-(correction-size effect), `gradient_isf_fit` and `adaptive_k_nestedcv` (per-user level versus glucose
+carbs reach zero, across the cohort), `gradient_isf_fit` and `adaptive_k_nestedcv` (per-user level versus glucose
 curve), `daytime_clearance` (daytime versus overnight).
 Section 7 is `python3 -m inv012.peak_trough` (and `--prominence 30`), with its numbers in
 `results/inv012_peak_trough.md` and `results/inv012_peak_trough_prom30.md`.

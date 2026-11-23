@@ -41,7 +41,7 @@ import psycopg2
 warnings.filterwarnings("ignore")
 
 ROOT = Path(os.environ.get("DYNISF_ROOT", Path.cwd()))
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # repository code, not the data folder's stale copies
 
 OUT_JSON = ROOT / "empirical_isf_v5.json"
 OUT_MD   = ROOT / "empirical_isf_v5.md"

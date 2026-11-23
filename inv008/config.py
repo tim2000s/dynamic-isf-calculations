@@ -13,6 +13,9 @@ LOG_DIR = CACHE / "logs"
 
 DB = dict(host="localhost", dbname="oref")
 MMOL_TO_MGDL = 18.018  # mg/dL per mmol/L
+# platforms in public analyses: the OpenAPS Data Commons (AndroidAPS uploads, oref0); Trio (v5)
+# came from donated sites outside the Commons and was removed on 23 November 2026
+COMMONS = ("v6", "v7")
 
 USER_MAPPING_V6 = ROOT / "user_mapping_v6.json"
 USER_MAPPING_V7 = ROOT / "user_mapping_v7.json"
@@ -44,7 +47,7 @@ ANCHOR_HOUR_MISMATCH_MAX = 0.01   # max fraction of sampled ticks whose hour-of-
 DEFAULT_WORKERS = int(os.environ.get("INV008_WORKERS", "7"))
 MAXTASKSPERCHILD = 4              # recycle workers to bound pandas memory creep
 
-PLATFORMS = ("v5", "v6", "v7")
+PLATFORMS = COMMONS  # Trio (v5) removed from every analysis, 23 Nov 2026
 
 
 def ensure_dirs() -> None:

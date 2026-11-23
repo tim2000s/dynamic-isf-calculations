@@ -27,11 +27,10 @@ period. This is outcome selection, not an independent carbohydrate measurement. 
 therefore describes candidate rescaling performance on selected falling or flat trajectories and
 must not be interpreted as a physiological ISF estimate.
 
-Units: Trio (oref_v5) logs sug_ISF in mmol/L per U on some readings and mg/dL on others, so a
-Trio value under 20 is converted (×18.018) reading by reading. oref0 values under 20 are mg/dL
-(the logged request reproduces in mg/dL and not in mmol/L) and the profile ISF is mg/dL, so
-neither is converted. Until 23 November 2026 a person's whole series, and the profile, were
-converted when the median was under 20.
+Units: oref0 logs sug_ISF in mg/dL, values under 20 included (the logged request reproduces in
+mg/dL and not in mmol/L), and the profile ISF is mg/dL, so nothing is converted. Until 23 November
+2026 a person's whole series, and the profile, were converted when the median was under 20, and
+Trio's mixed-unit ISF was in the analysis; Trio is not in the OpenAPS Data Commons and was removed.
 v6 is excluded (its iob/isf accounting did not reconcile). Output:
 results/head_to_head.{json,md}, results/head_to_head_windows.parquet,
 charts/inv008/fig_head_to_head.png
@@ -56,9 +55,9 @@ from inv008 import config
 
 ROOT = config.ROOT
 OUT = ROOT / "results"; CHART = ROOT / "charts" / "inv008"
-TBL = {"v5_trio": "oref_v5", "v7_oref0": "oref_v7"}    # v6 excluded (iob/isf reconcile issue)
-PREDC = {"oref_v5": '"reason_IOBpredBG"', "oref_v7": "reason_iobpredbg"}
-ISFC = {"oref_v5": '"sug_ISF"', "oref_v7": "sug_isf"}
+TBL = {"v7_oref0": "oref_v7"}    # v6 excluded (iob/isf reconcile issue); Trio is not in the Commons
+PREDC = {"oref_v7": "reason_iobpredbg"}
+ISFC = {"oref_v7": "sug_isf"}
 START_HOURS = {23, 0, 1, 2}
 HZ, TOL, RISE_MAX = 4 * 3600, 300, 2.0
 MIN_PRED_DROP = 8.0     # only windows where the loop predicted a real drop (ratio stable)
@@ -67,12 +66,7 @@ BG_BANDS = [(80, 100), (100, 120), (120, 145), (145, 175), (175, 230)]
 
 
 
-def sug_isf_mgdl(sugisf: np.ndarray, table: str) -> np.ndarray:
-    """Trio's mixed-unit sug_ISF converted reading by reading; oref0 is mg/dL throughout."""
-    return np.where(sugisf < 20, sugisf * config.MMOL_TO_MGDL, sugisf) if table == "oref_v5" else sugisf
-
-
-def analyse(args):
+def analyse(args):  # noqa: PLR0915  pre-existing length (61 statements before 23 Nov 2026)
     user_id, table, profile_isf = args
     rp = config.REPLAY_DIR / f"{user_id}.parquet"
     if not rp.exists():
@@ -102,7 +96,6 @@ def analyse(args):
     v1 = d.isf_v1.values.astype(float); v2 = d.isf_v2.values.astype(float)
     tdd = d.tdd.values.astype(float)
 
-    sugisf = sug_isf_mgdl(sugisf, table)
     pisf = profile_isf
 
     n = len(d)
@@ -156,7 +149,7 @@ def main():
     jobs = [(u, TBL[r["cohort"]], r.get("isf")) for u, r in coh.items()
             if r.get("cohort") in TBL and r.get("isf")]
     nw = min(config.DEFAULT_WORKERS, mp.cpu_count())
-    print(f"head-to-head: {len(jobs)} v5/v7 users on {nw} workers")
+    print(f"head-to-head: {len(jobs)} oref0 users on {nw} workers")
     with mp.Pool(nw) as pool:
         parts = [p for p in pool.map(analyse, jobs) if p is not None]
     D = pd.concat(parts, ignore_index=True)
@@ -215,7 +208,7 @@ def main():
     fig.tight_layout(); fig.savefig(CHART / "fig_head_to_head.png", dpi=150); plt.close(fig)
 
     md = ["# Same-window head-to-head: static vs dynamic ISF as a drop predictor\n",
-          f"{summary['n_users']} v5/v7 users, {len(D):,} overnight future-rise-selected windows. Each "
+          f"{summary['n_users']} oref0 users, {len(D):,} overnight future-rise-selected windows. Each "
           "ISF form is tested on the same windows by rescaling the loop's IOB prediction. "
           "Error = actual end BG − predicted end BG; lower MAE = better. The activity proxy comes "
           "from the loop prediction, and the historical rise filter selects on the later outcome.\n",
@@ -236,7 +229,7 @@ def main():
     md += ["\n![Head-to-head](charts/inv008/fig_head_to_head.png)\n",
            "*Per-window dataset (features + realised ISF) saved to "
            "`results/head_to_head_windows.parquet` for the pattern/ML step. v6 excluded "
-           "(iob/isf accounting did not reconcile). Trio ISF under 20 converted from mmol/L, reading by reading.*"]
+           "(iob/isf accounting did not reconcile). OpenAPS Data Commons only.*"]
     (OUT / "head_to_head.md").write_text("\n".join(md))
     print("\n".join(md))
 

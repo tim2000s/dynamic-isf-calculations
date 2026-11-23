@@ -1,26 +1,26 @@
 {
- "n_patients": 116,
- "total_ticks": 7019691,
+ "n_patients": 98,
+ "total_ticks": 5605658,
  "tier": 2,
  "anchor": "measured_ISF * sqrt(median TDD)",
  "r2_gate": 0.1,
- "median_measured_over_profile_isf": 0.408,
- "implied_dose_vs_profile_at_level": 2.45,
- "median_abs_dose_change_pct_unclamped": 227.2,
- "median_abs_dose_change_pct_clamped": 92.7,
+ "median_measured_over_profile_isf": 0.438,
+ "implied_dose_vs_profile_at_level": 2.28,
+ "median_abs_dose_change_pct_unclamped": 214.3,
+ "median_abs_dose_change_pct_clamped": 96.1,
  "clamp_threshold_x": 1.5,
  "median_frac_ticks_level_clamp_binds": 1.0,
- "median_frac_ticks_stronger_1p5x_unclamped": 0.984,
- "median_frac_ticks_stronger_1p5x_clamped": 0.738,
- "median_t2_over_t1_unclamped": 0.408,
+ "median_frac_ticks_stronger_1p5x_unclamped": 0.966,
+ "median_frac_ticks_stronger_1p5x_clamped": 0.749,
+ "median_t2_over_t1_unclamped": 0.438,
  "median_t2_over_t1_clamped": 0.667,
  "sensitivity_ratio_vs_profile_by_bg_unclamped": {
-  "54-80": 0.601,
-  "80-100": 0.476,
-  "100-120": 0.376,
-  "120-150": 0.276,
-  "150-200": 0.184,
-  "200-260": 0.134
+  "54-80": 0.653,
+  "80-100": 0.509,
+  "100-120": 0.402,
+  "120-150": 0.294,
+  "150-200": 0.198,
+  "200-260": 0.143
  },
  "sensitivity_ratio_vs_profile_by_bg_clamped": {
   "54-80": 0.943,
@@ -39,20 +39,20 @@
   },
   {
    "tdd_band": "15-25",
-   "n_users": 14,
-   "median_measured_over_profile": 0.393,
+   "n_users": 11,
+   "median_measured_over_profile": 0.433,
    "median_frac_clamp_binds": 1.0
   },
   {
    "tdd_band": "25-40",
-   "n_users": 44,
-   "median_measured_over_profile": 0.457,
-   "median_frac_clamp_binds": 0.998
+   "n_users": 39,
+   "median_measured_over_profile": 0.497,
+   "median_frac_clamp_binds": 0.993
   },
   {
    "tdd_band": "40-65",
-   "n_users": 46,
-   "median_measured_over_profile": 0.378,
+   "n_users": 36,
+   "median_measured_over_profile": 0.411,
    "median_frac_clamp_binds": 1.0
   },
   {

@@ -36,6 +36,7 @@ import psycopg2
 warnings.filterwarnings("ignore")
 
 from inv008 import config
+from inv008.plots import hist  # noqa: E402  after the module-level setup above, like the imports beside it
 from inv008.dynisf import g_quartic
 
 ROOT = config.ROOT
@@ -161,7 +162,7 @@ def main():
         "mean_g_factor": {"median": round(float(np.median(mg)), 3),
                           "p25": round(float(np.percentile(mg, 25)), 3),
                           "p75": round(float(np.percentile(mg, 75)), 3),
-                          "min": round(float(mg.min()), 3), "max": round(float(mg.max()), 3)},
+                          "share_above_1": round(float((mg > 1).mean()), 3)},
         "interpretation": ("Tier-2 ISF is biased by the mean_g factor at every glucose: "
                            ">1 means the current anchor makes Tier-2 too weak (corrected anchor "
                            "lower / more aggressive); <1 means too aggressive."),
@@ -175,13 +176,13 @@ def main():
     (OUT / "tier2_anchor_debias.json").write_text(json.dumps(summary, indent=1))
 
     fig, ax = plt.subplots(1, 2, figsize=(13, 5))
-    ax[0].hist(wbg, bins=24, color="#6a6ad6", alpha=0.85)
+    hist(ax[0], wbg, bins=24, color="#6a6ad6", alpha=0.85)
     ax[0].axvline(TARGET, color="r", ls="--", lw=1.5, label=f"target {TARGET:.0f}")
     ax[0].axvline(np.median(wbg), color="k", ls=":", lw=1.5, label=f"median {np.median(wbg):.0f}")
     ax[0].set_xlabel("per-person median fasting-window BG (mg/dL)")
     ax[0].set_ylabel("people"); ax[0].set_title("Where the measured-ISF windows sit")
     ax[0].legend(fontsize=9); ax[0].grid(alpha=0.3)
-    ax[1].hist(mg, bins=24, color="#d62728", alpha=0.8)
+    hist(ax[1], mg, bins=24, color="#d62728", alpha=0.8)
     ax[1].axvline(1.0, color="k", ls="--", lw=1.5, label="1.0 (no bias)")
     ax[1].axvline(np.median(mg), color="b", ls=":", lw=1.5, label=f"median {np.median(mg):.2f}")
     ax[1].set_xlabel("mean g(BG) over the windows  =  Tier-2 glucose double-count factor")
@@ -201,19 +202,15 @@ def main():
           f"(target {TARGET:.0f}); a median **{100*summary['median_frac_windows_above_target']:.0f}%** "
           "of each person's windows are above target.",
           f"- Mean g(BG) over the windows (the bias factor): median **{mgm}** "
-          f"[IQR {mgm and summary['mean_g_factor']['p25']}–{summary['mean_g_factor']['p75']}, "
-          f"range {summary['mean_g_factor']['min']}–{summary['mean_g_factor']['max']}].",
+          f"[IQR {mgm and summary['mean_g_factor']['p25']}–{summary['mean_g_factor']['p75']}].",
           f"- So the corrected at-target anchor = measured_ISF / {mgm} → a median "
           f"**{summary['anchor_shift_corrected_over_current']['median']}×** the current anchor "
           f"(IQR {summary['anchor_shift_corrected_over_current']['p25']}–"
           f"{summary['anchor_shift_corrected_over_current']['p75']}×).",
           "\n![Tier-2 anchor de-bias](charts/inv008/fig_tier2_anchor_debias.png)\n",
           "## Reading\n",
-          (f"The double-count is real but modest: a median factor of {mgm}. Because fasting "
-           "windows sit close to target for most people, g(BG) over them is near 1, so the bias "
-           "is small on average — though it runs both ways across the cohort "
-           f"({summary['mean_g_factor']['min']}–{summary['mean_g_factor']['max']}) depending on "
-           "whether a person's fasting glucose ran above or below target. Where windows sat above "
+          (f"The double-count has a median factor of {mgm}, and the factor was below 1 for "
+           f"{1 - summary['mean_g_factor']['share_above_1']:.0%} of people. Where windows sat above "
            "target (g<1) the current anchor is too low and Tier-2 over-doses; where below (g>1) "
            "it under-doses. The clean fix is to divide the measured slope by this mean-g factor "
            "before using it as the at-target anchor, or to fit the slope on near-target windows "

@@ -7,6 +7,11 @@
 > physiological ISF. The phrase "two independent ways" in the original summary was incorrect
 > because both estimators use model-derived IOB or loop predictions. See
 > `DYNAMIC-ISF-AUDIT-2026-09.md`.
+>
+> Figures here predate the correction of 23 November 2026 to the daily-dose readers and a unit
+> conversion (REVIEW.md item 20), and the removal the same day of the Trio cohort from public
+> analyses, since it came from donated Nightscout sites outside the OpenAPS Data Commons. The
+> current account is `dynamic-isf-glucose-clearance-paper.md`; current values are in results/.
 
 Dynamic ISF lowers your insulin sensitivity factor as glucose rises, on the reasonable assumption that high glucose makes insulin work less well. It's a real biological effect, and plenty of people feel Dynamic ISF helps. I wanted to check something narrower: when you measure the glucose drop we actually get per unit of insulin, the number a loop really doses against, does that fall as glucose rises? On our own looping data, the answer is more interesting than a straight yes or no.
 

@@ -27,7 +27,7 @@ import pandas as pd
 warnings.filterwarnings("ignore")
 
 ROOT = Path(os.environ.get("DYNISF_ROOT", Path.cwd()))
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # repository code, not the data folder's stale copies
 from canonical_cohort import load_canonical_cohort
 
 OUT_MD = ROOT / "canonical_walsh_results.md"
@@ -84,8 +84,7 @@ def main():
     md = []
     md.append("# Canonical Walsh-constants analysis (n = %d)\n" % n)
     md.append("Single cohort, single TDD definition, used by every downstream artefact.\n")
-    md.append("- TDD = `basal + Σ treatments / span` for v6/v7 (treatments-derived); "
-              "`mean_tdd` from live extraction for v5 (mathematically equivalent — same delivery integration, different upstream).")
+    md.append("- TDD = `basal + Σ treatments / span` for v6/v7 (treatments-derived), the OpenAPS Data Commons cohorts.")
     md.append("- Quality filter: ISF [10,300], CR [2,50], target [70,130], TDD [5,200], n_days ≥ 14.")
     md.append("- Bootstrap B = 2000.\n")
 

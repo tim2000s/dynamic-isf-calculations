@@ -1,14 +1,14 @@
 # Phase 7 — outcome-based tuning prototype vs the sensitivity route
 
-114 users. Working-anchored cold-start constant K_pop = **338.2** (ISF·√TDD), i.e. ISF ≈ 338/√TDD.
+96 users. Working-anchored cold-start constant K_pop = **319.9** (ISF·√TDD), i.e. ISF ≈ 320/√TDD.
 
 Each candidate is a zero-entry per-user ISF. `err vs working` = median |log(ISF/entered)| as ± % (entered ISF is the known-working reference that achieves the users' actual TIR). `logR vs TBR` = directional hypo-safety (positive = the unsafe Phase-5 signature: the candidate assigns lower ISF / more insulin to hypo-prone users).
 
 | candidate | err vs working ISF | logR vs TBR (≤0 = safe) |
 |---|---|---|
-| sensitivity route (empirical) | ±138% | +0.39 |
-| cold start (√TDD, no per-user) | ±30% | +0.23 |
-| outcome route (cold + nudge) | ±35% | -0.01 |
+| sensitivity route (empirical) | ±124% | +0.35 |
+| cold start (√TDD, no per-user) | ±32% | +0.15 |
+| outcome route (cold + nudge) | ±36% | -0.07 |
 
 - median outcome nudge applied: ×1.00 (mostly weakening, reflecting hypo-avoidance).
 

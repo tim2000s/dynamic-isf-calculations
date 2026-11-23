@@ -34,7 +34,7 @@ derived, and reports what the same measurement shows on other cohorts. It then
 describes how the equation could be offered in AndroidAPS and Trio as an
 alternative to both the logarithmic and the sigmoid models.
 
-The measurement was repeated on 1,790 people in eight cohorts held in this series.
+The measurement was repeated on 1,768 people in seven cohorts held in this series.
 Within person, the value at 100 mg/dL was 2.2 to 4.0 times the value at 200,
 against 2.61 in the published equation, so the steep fall towards 200 mg/dL is
 reproducible. On records where no algorithm was dosing, the published equation
@@ -185,7 +185,7 @@ rest of the poster could not be retrieved, and the authors have not been asked.
 
 ## What does it show on our data?
 
-The same construction was run in this series as INV-012, on 1,790 people in eight
+The same construction was run in this series as INV-012, on 1,768 people in seven
 cohorts, and is reported in section 7 of document 5. It was built before the
 abstract was read, and two of its event rules differ from the published ones. It
 required three hours clear of a meal where the publication requires one hour with
@@ -197,34 +197,32 @@ daily dose.
 ### The shape between 100 and 200 mg/dL
 
 The steep fall is reproducible. Within person, the value at 100 mg/dL was 2.2 to
-4.0 times the value at 200 mg/dL across the eight cohorts, against 2.61 in the
+4.0 times the value at 200 mg/dL across the seven cohorts, against 2.61 in the
 published equation. In REPLACE-BG, where no algorithm was dosing, the ratio was
 2.55 (95% interval 2.25 to 2.82), which includes the published figure. Under
-closed loop it was steeper: 3.26 (3.11 to 3.39) for Loop, 3.86 (2.72 to 6.04) for
-oref0 and 3.21 (2.24 to 5.62) for Trio. The first two intervals lie above 2.61 and
-Trio's includes it.
+closed loop it was steeper: 3.26 (3.11 to 3.39) for Loop and 3.86 (2.72 to 6.04)
+for oref0. Both intervals lie above 2.61.
 
 ### Fitting the equation to the measured values
 
 The table divides the measured value in each glucose bin by the published value at
 that glucose. The result is the daily dose, in U, at which the published equation
 would return what was measured. A row that stays level means the published shape
-fits that cohort at one scale. Only the four cohorts with carbohydrate records are
+fits that cohort at one scale. Only the three cohorts with carbohydrate records are
 shown, with the 95% interval over people.
 
 | Cohort | People | 100 mg/dL | 150 | 200 | 250 | 300 |
 |---|---:|---:|---:|---:|---:|---:|
 | No algorithm (REPLACE-BG) | 196 | 103 (89 to 115) | 100 (94 to 108) | 106 (94 to 125) | 120 (103 to 137) | 174 (132 to 233) |
 | Loop | 842 | 88 (84 to 91) | 58 (56 to 60) | 71 (67 to 73) | 82 (77 to 89) | 108 (95 to 119) |
-| Trio | 22 | 90 (63 to 111) | 52 (40 to 64) | 74 (51 to 104) | | |
 | oref0 | 86 | 96 (83 to 125) | 62 (51 to 83) | 75 (55 to 166) | | |
 
 With no algorithm dosing, the published equation fits from 100 to 200 mg/dL at one
 scale: 103, 100 and 106 U, each inside the other two intervals. Above 200 mg/dL
 the row rises to 120 and then 174 U, so the published equation falls faster there
 than these records do. Under Loop no single scale fits. The figure is 88 U at 100
-mg/dL, 58 at 150 and 71 at 200, and those three intervals do not overlap. Trio and
-oref0 show the same dip at 150 mg/dL with wider intervals.
+mg/dL, 58 at 150 and 71 at 200, and those three intervals do not overlap. The oref0
+records show the same dip at 150 mg/dL with wider intervals.
 
 Two cautions apply to the table. The columns hold different people, since fewer
 reach the higher bins, and the within-person ratios in this section are the firmer
@@ -250,7 +248,6 @@ a percentage of each value.
 |---|---:|---|---:|---:|---:|
 | No algorithm (REPLACE-BG) | 196 | 100 to 370 | 103 (96 to 113) | 14% | 7% |
 | Loop | 842 | 100 to 380 | 71 (69 to 74) | 17% | 6% |
-| Trio | 22 | 100 to 200 | 65 (48 to 80) | 18% | 7% |
 | oref0 | 86 | 100 to 240 | 73 (65 to 90) | 21% | 14% |
 
 The refit misses by less in every cohort, as a fit with four more free numbers
@@ -262,7 +259,6 @@ its own value at 180 mg/dL.
 | Published | | 2.29 | 1.30 | 0.87 | 0.70 | 0.60 |
 | Refit, no algorithm (REPLACE-BG) | 196 | 2.17 (1.91 to 2.40) | 1.28 (1.21 to 1.33) | 0.89 (0.86 to 0.92) | 0.81 (0.72 to 0.87) | 0.90 (0.77 to 1.02) |
 | Refit, Loop | 842 | 3.19 (3.02 to 3.34) | 1.25 (1.22 to 1.27) | 1.00 (0.98 to 1.01) | 1.07 (1.03 to 1.11) | 0.94 (0.88 to 1.01) |
-| Refit, Trio | 22 | 3.29 (2.15 to 4.76) | 1.19 (0.85 to 1.53) | 1.12 (0.66 to 1.61) | | |
 | Refit, oref0 | 86 | 2.69 (2.16 to 3.70) | 0.97 (0.78 to 1.22) | 1.00 (0.78 to 1.34) | | |
 
 With no algorithm dosing, the refit returns the published shape from 100 to 200
@@ -271,8 +267,7 @@ mg/dL the refit sits at 0.81 and 0.90 of its value at 180, where the published f
 is at 0.70 and 0.60. Both of those intervals exclude the published figure. Under
 Loop the refit differs from the published fit at every glucose in the table. It is
 higher at 100 mg/dL, 3.19 against 2.29, and from 200 mg/dL upward it stays close
-to its value at 180. Trio's intervals, from 22 people, include the published
-figure at each of its three points. The oref0 values resemble Loop's, with an
+to its value at 180. The oref0 values resemble Loop's, with an
 interval that excludes the published figure only at 150 mg/dL.
 
 Two limits apply. A quartic suits these records poorly, because the values fall
@@ -398,12 +393,12 @@ hyperglycaemia, all with meal boluses only.
 ### Near target
 
 Near target the decline comes from the insulin, with the fall almost unchanged.
-Across cohorts the median fall was 30 to 43 mg/dL for events at 100 mg/dL and 39
+Across cohorts the median fall was 30 to 43 mg/dL for events at 100 mg/dL and 48
 to 64 for events at 200. The median insulin used was 0.02 to 0.2 U at 100 mg/dL
 and 0.3 to 1.5 U at 200. A similar fall divided by much less insulin gives a much
-higher figure. At 100 mg/dL between 9 and 58% of events had no net insulin used at
+higher figure. At 100 mg/dL between 24 and 58% of events had no net insulin used at
 all, and a line fitted through each person's events put the fall at zero net
-insulin at 27 to 44 mg/dL. In type 1 diabetes a raised glucose does not fall
+insulin at 30 to 44 mg/dL. In type 1 diabetes a raised glucose does not fall
 without insulin, so that fall is basal and earlier doses acting, together with the
 selection of events that end at a minimum. The steep part of the curve below 150
 mg/dL therefore rests on very small net doses. The second simulation showed the
@@ -423,14 +418,17 @@ second simulation.
 
 ### As a predictor
 
-The shape has been tried once as a predictor on oref records, where it did worse
-than the static profile. On 80 people and 62,344 overnight windows, with each
-shape anchored to the profile at 100 mg/dL, the typical miss was 24.2 mg/dL for
-the static profile and 29.8 for this shape. At 205 to 260 mg/dL it was 37.8
-against 73.7. No interval was reported for those figures. Two things limit the
-test. Its windows were selected on the later outcome, as the audit of 16 September
-2026 recorded, and it anchored the shape at 100 mg/dL where this document anchors
-at 140.
+The shape has been tried as a predictor on oref0 records from the OpenAPS Data
+Commons (`results/gradient_isf_fit.md`), where it did worse than the same fit with
+no glucose shape. On 67 people and 54,635 overnight windows, each person's
+loop-predicted fall was multiplied by the published shape relative to its value at
+100 mg/dL, and a scale and an offset were fitted for each person with contiguous
+five-fold validation within their record. The typical out-of-fold miss was 24.3
+mg/dL for the shape, against 18.9 for the same fit with the shape left flat and
+24.4 for the static profile with nothing fitted. No interval was reported for
+those figures. Because the scale is fitted for each person, the anchor does not
+affect the result. The windows were selected on the later outcome, as the audit of
+16 September 2026 recorded.
 
 ### Where that leaves the equation
 
@@ -644,11 +642,9 @@ to 5.51) times as large in the highest third as in the lowest, where curves that
 differ by an added constant give 1. People with different entered settings
 therefore had curves of one shape at different heights.
 
-![The publication's measurement run on each of 196 adults in REPLACE-BG, as measured and with each curve divided by its own reading at 140 mg/dL.](../charts/inv018/fig_person_curves.png)
-
 Each person's events were then divided into two halves and a curve was built from
 each half. The height repeated: in REPLACE-BG the reading at 140 mg/dL had a rank
-correlation of 0.74 (0.66 to 0.82) between the halves, and in the seven other
+correlation of 0.74 (0.66 to 0.82) between the halves, and in the six other
 cohorts it was 0.78 to 0.95. The shape was tested by prediction. A person's share
 kept at 190 and at 250 mg/dL in one half was predicted from their own other half
 and from the median person's, and the second miss was divided by the first, so
@@ -656,10 +652,8 @@ that a figure above 1 favours the person's own shape. Across the six cohorts wit
 it was 0.87 to 1.01 at 190 mg/dL and 0.96 to 1.03 at 250, and no interval lay
 above 1. Longer records did not change that. Among 38 people using Loop with at
 least 1,600 events each, the figure was 1.06 (0.93 to 1.20) at 190 mg/dL, the
-highest in the run. Trio and oref0 had too few people for the comparison of
+highest in the run. The oref0 cohort had too few people for the comparison of
 shapes.
-
-![Each REPLACE-BG adult's curve built from two halves of their events. The height at 140 mg/dL repeats between the halves, and the share kept at 250 mg/dL repeats weakly.](../charts/inv018/fig_split_half.png)
 
 The height of a person's measured curve is not used either. Its reading at 140
 mg/dL was 2.5 to 2.9 times the entered ISF in every third, because the
@@ -773,16 +767,14 @@ would apply unchanged, called the reference dose here.
 | Adult entered settings, taken to hold at 180 mg/dL (the publication's reference) | 422 | 1,674 (1,598 to 1,736) | 54.3 |
 | The 1800 rule, taken to hold at 105 mg/dL (this series, March 2026) | | 731 | 23.7 |
 | Measured under Loop | 842 | 2,182 (2,065 to 2,266) | 70.8 |
-| Measured under Trio | 22 | 2,273 (1,569 to 3,218) | 73.7 |
 | Measured under oref0 | 86 | 2,316 (1,711 to 5,111) | 75.1 |
 | Measured with no algorithm dosing (REPLACE-BG) | 196 | 3,283 (2,898 to 3,854) | 106.5 |
 
 The first row takes a person's entered sensitivity to be right at 140 mg/dL, and
 the second at 180. The third takes the conventional rule to be right near target,
-and it puts the whole curve lower again. The last four rows are the measured
-values from the previous section, read at 200 mg/dL. All four intervals lie above
-the arm's 1,161. Trio's, from 22 people, includes the 1,674 of the second row,
-and the other three lie above that as well. How far the measured rows sit from a true level is not known. At 200 mg/dL
+and it puts the whole curve lower again. The last three rows are the measured
+values from the previous section, read at 200 mg/dL. All three intervals lie above
+the arm's 1,161, and above the 1,674 of the second row as well. How far the measured rows sit from a true level is not known. At 200 mg/dL
 the same measurement on simulated people read between 0.62 and 2.4 times the
 truth across the seven regimes that dosed in response to glucose, and daily dose
 was not
@@ -821,14 +813,14 @@ At 300 mg/dL it asks for 9.62 U, against 4.00 U from the profile and 8.29 U from
 AndroidAPS at 100%.
 
 The anchor sets how much insulin the candidate asks for overall. Each arm was
-replayed on the recorded loop decisions of 141 people (INV-016), of whom 22 used
-Trio, 22 AndroidAPS and 97 oref0. The insulin asked for at every reading above
-100 mg/dL was summed and set against the same sum under the profile ISF alone.
-The candidate asked for 1.39 (95% interval 1.28 to 1.42), 1.38 (1.31 to 1.47) and
+replayed on the recorded loop decisions of 119 people (INV-016) from the OpenAPS
+Data Commons, of whom 22 used AndroidAPS and 97 oref0. The insulin asked for at
+every reading above 100 mg/dL was summed and set against the same sum under the
+profile ISF alone. The candidate asked for 1.38 (95% interval 1.31 to 1.47) and
 1.44 (1.40 to 1.51) times the profile's correction insulin in those cohorts. By
-glucose at the reading, it asked for 0.82 to 0.83 times the profile's insulin
-between 100 and 150 mg/dL, 1.33 times between 150 and 200, 1.83 to 1.84 times
-between 200 and 260, and 2.31 to 2.37 times above 260.
+glucose at the reading, it asked for 0.83 times the profile's insulin between 100
+and 150 mg/dL, 1.33 times between 150 and 200, 1.83 to 1.84 times between 200 and
+260, and 2.32 to 2.37 times above 260.
 An anchor of 180 mg/dL lowers every one of those figures by the factor of 1.44.
 The replay shows what each arm would have asked for at readings recorded under
 another algorithm, and says nothing about where glucose would then have gone.
@@ -909,11 +901,11 @@ The first stage replays each arm's value on recorded histories using the INV-008
 pipeline. Results are split by glucose and by time since the last meal, and
 reported separately for people who announce meals and people who do not. The stage
 shows how much insulin each arm asks for and in whom. It is descriptive and has no
-pass rule. It was run on 141 people as INV-016, and its totals for the candidate
+pass rule. It was run on 119 people as INV-016, and its totals for the candidate
 are quoted above.
 
 The second stage runs the publication's measurement (`inv012/peak_trough.py`) on
-AndroidAPS and Trio records under the published event rules. An earlier draft had
+AndroidAPS records from the OpenAPS Data Commons under the published event rules. An earlier draft had
 this stage decide the default level of the link to TDD. The simulation with a measured truth has
 since covered 100 to 250 mg/dL, and the measurement sat too far from the truth
 there to set one. What remains for the simulation is 300 mg/dL and a truth
@@ -1200,7 +1192,7 @@ mg/dL. That is the ranking in one simulator and it does not settle the choice.
 
 The level of the TDD arm is open, as described above. A level set from entered
 settings at 140 mg/dL may not apply to open-source systems, since the measurement
-on Loop, Trio and oref0 records read higher at 200 mg/dL.
+on Loop and oref0 records read higher at 200 mg/dL.
 
 It is an open question whether the steep part between 100 and 150 mg/dL should be
 used for dosing at all, given how many events there involved no net insulin. The
@@ -1249,9 +1241,9 @@ link it was given. `python3 -m inv016.replay --replay <INV-008 replay cache>
 on recorded histories. `python3 -m inv017.shift_or_scale` writes
 `results/inv017_shift_or_scale.md`, the comparison of multiplying with adding.
 `python3 -m inv018.person_curves` writes `results/inv018_person_curves.md`, the
-curve of each person in REPLACE-BG. `python3 -m inv018.split_half` and `python3 -m
+spread across people of the curves built person by person in REPLACE-BG. `python3 -m inv018.split_half` and `python3 -m
 inv018.split_half_cohorts` write the comparison of halves, on REPLACE-BG and on
-all eight cohorts. `python -m inv019.outcome_test --timsim <TimSim checkout>`
+all seven cohorts. `python -m inv019.outcome_test --timsim <TimSim checkout>`
 writes `results/inv019_outcome_test.md`, the outcome test in simulation. It needs
 the same interpreter as INV-014 and took about seven hours on seven workers, and
 its raw runs stay out of git. The same command with `--seed 101 1101` and the
@@ -1272,7 +1264,8 @@ that the device code is tested against.
 Figures from other analyses are quoted from where they were produced. The
 measurement on other cohorts is in `results/inv012_peak_trough.md` and section 7
 of document 5. The adult figure of 1915 is from `docs/preprint-dosing-constants.md`,
-and the overnight test is in `oref-investigations/results/bridge_diabeloop.md`.
+and the overnight test of the shape as a predictor is in
+`results/gradient_isf_fit.md`.
 
 Earlier drafts of this document are in git. The first (commit fd3662e) proposed
 the profile-anchored, flat form now kept as an arm. The
@@ -1286,7 +1279,10 @@ correction beside the reading at the current glucose. The sixth (commit
 f1672de) added the evidence for multiplying the curve and for one shape shared by
 everyone. The eighth (commit 24b0706) added the outcome test in simulation and the
 figures. This version adds the second simulated month, the trace of the lows and
-the shadow code.
+the shadow code. On 23 November 2026 the Trio cohort, which came from donated
+Nightscout sites outside the OpenAPS Data Commons, was removed from every
+measurement here, and the figures that included it were replaced with the rerun
+values.
 
 ## References
 

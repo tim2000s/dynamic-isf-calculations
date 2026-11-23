@@ -34,6 +34,7 @@ import psycopg2
 warnings.filterwarnings("ignore")
 
 from inv008 import config
+from inv008.plots import hist  # noqa: E402  after the module-level setup above, like the imports beside it
 
 ROOT = config.ROOT
 EMPIRICAL = ROOT / "empirical_isf_v5.json"
@@ -163,7 +164,7 @@ def main():
             "median": round(float(np.median(bu_arr)), 1),
             "p25": round(float(np.percentile(bu_arr, 25)), 1),
             "p75": round(float(np.percentile(bu_arr, 75)), 1),
-            "min": round(float(bu_arr.min()), 1), "max": round(float(bu_arr.max()), 1),
+            # no min or max: each is one person's value (REVIEW.md item 22)
         },
         "Q3_anchor_vs_change": {
             "corr_anchor_vs_abs_slope": None if corr_bd is None else round(corr_bd, 3),
@@ -201,9 +202,9 @@ def main():
     # candidate per-user anchors at 100
     prof_vals = np.array([p["profile_isf"] for p in per_user if p["profile_isf"]])
     nt_vals = np.array([p["near_target_isf"] for p in per_user if p["near_target_isf"] is not None])
-    ax[1].hist(prof_vals, bins=20, alpha=0.6, color="#2ca02c", label=f"profile ISF (n={len(prof_vals)}, med {np.median(prof_vals):.0f})")
+    hist(ax[1], prof_vals, bins=20, alpha=0.6, color="#2ca02c", label=f"profile ISF (n={len(prof_vals)}, med {np.median(prof_vals):.0f})")
     if len(nt_vals):
-        ax[1].hist(nt_vals, bins=20, alpha=0.6, color="#ff7f0e",
+        hist(ax[1], nt_vals, bins=20, alpha=0.6, color="#ff7f0e",
                    label=f"near-target drop/IOB (n={len(nt_vals)}, med {np.median(nt_vals):.0f})")
     ax[1].set_xlabel("ISF at 100 (mg/dL per U)"); ax[1].set_ylabel("people")
     ax[1].set_title("Candidate per-user anchors at 100\n(closed-loop drop/IOB is loop-suppressed and data-starved)")

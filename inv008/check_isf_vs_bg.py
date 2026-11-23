@@ -7,7 +7,7 @@ import multiprocessing as mp, os, sys, warnings
 from pathlib import Path
 import numpy as np, pandas as pd, psycopg2
 warnings.filterwarnings("ignore")
-ROOT = Path(os.environ.get("DYNISF_ROOT", Path.cwd())); sys.path.insert(0, str(ROOT))
+ROOT = Path(os.environ.get("DYNISF_ROOT", Path.cwd())); sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # repository code, not the data folder's stale copies
 from inv008.phase1_convergence import _compute_rows, COL_MAP
 NIGHT = set(range(0, 6)); TABLES = {"v5_trio": "oref_v5", "v6_aaps_classic": "oref_v6", "v7_oref0": "oref_v7"}
 

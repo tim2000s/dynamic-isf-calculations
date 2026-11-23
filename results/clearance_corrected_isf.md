@@ -1,35 +1,35 @@
 # Test #1 (bounding): high-BG resistance after removing insulin-independent clearance
 
-88 users, 62,057 insulin-active windows. Non-insulin flux estimated from windows where the loop expects ~no insulin action (|loop predicted drop|<5).
+75 users, 54,649 insulin-active windows. Non-insulin flux estimated from windows where the loop expects ~no insulin action (|loop predicted drop|<5).
 
 ## Data-derived non-insulin flux (mg/dL over 4h)
 
 | BG band | flux | n |
 |---|---|---|
-| 100-120 | 10.0 | 2,014 |
-| 120-145 | 23.0 | 845 |
-| 145-175 | 44.0 | 220 |
-| 175-205 | 67.0 | 106 |
-| 205-260 | 81.0 | 158 |
+| 100-120 | 10.0 | 1,948 |
+| 120-145 | 22.0 | 793 |
+| 145-175 | 44.0 | 187 |
+| 175-205 | 67.5 | 98 |
+| 205-260 | 80.0 | 152 |
 
 ## Realised ÷ profile ISF ratio: raw vs clearance-corrected
 
 | BG band | raw | corrected | clean+corrected |
 |---|---|---|---|
-| 100-120 | 0.59 | 0.3 | 0.36 |
-| 120-145 | 0.84 | 0.31 | 0.28 |
-| 145-175 | 0.86 | 0.21 | 0.24 |
-| 175-205 | 0.87 | 0.17 | 0.14 |
-| 205-260 | 0.89 | 0.25 | 0.24 |
+| 100-120 | 0.58 | 0.29 | 0.34 |
+| 120-145 | 0.87 | 0.33 | 0.3 |
+| 145-175 | 0.85 | 0.19 | 0.2 |
+| 175-205 | 0.89 | 0.15 | 0.1 |
+| 205-260 | 0.88 | 0.24 | 0.24 |
 
-**Implied k**: raw -0.1, corrected **0.44**, clean+corrected 0.51 (k>0 = resistance).
+**Implied k**: raw -0.04, corrected **0.62**, clean+corrected 0.68 (k>0 = resistance).
 
 ## Power-law bound (clearance required vs data-derived)
 
 | BG band | required clearance | data-derived | median drop / pred |
 |---|---|---|---|
-| 175-205 | 50.9 | 67.0 | 76.0 / 83.8 |
-| 205-260 | 74.5 | 81.0 | 109.0 / 115.0 |
+| 175-205 | 52.5 | 67.5 | 77.0 / 81.6 |
+| 205-260 | 75.3 | 80.0 | 109.5 / 114.0 |
 
 **Verdict: RESISTANCE appears after clearance removal (corrected ratio falls with BG).**
 

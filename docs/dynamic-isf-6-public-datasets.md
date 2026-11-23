@@ -583,7 +583,7 @@ position, so the interaction was divided by the starting glucose term. A second
 implementation disagreed on the sign, which is how it surfaced. Design matrix
 columns now carry names and a regression test covers it.
 
-Code sits in `inv009/` in the `dynamic-isf-calculations` repository, with 29 tests.
+Code sits in `inv009/` in the `dynamic-isf-calculations` repository, with 39 tests.
 
 ```
 psql -d oref -f inv009/ingest/sql/05_settings.sql

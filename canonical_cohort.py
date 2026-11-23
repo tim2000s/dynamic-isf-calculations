@@ -6,10 +6,8 @@ ONE definition that every downstream artefact (paper, advisor, Phase 4) uses.
 TDD = the most inclusive AND defensible per-user estimate:
   • v6 / v7  →  basal_profile + Σ treatments insulin / recording-span days
                 (direct from the user's pump-uploaded delivery events)
-  • v5       →  `mean_tdd` from `user_profiles_v5.json`, which was computed
-                live at extraction time by integrating real delivery events
-                from the user's Nightscout REST API.  Materially equivalent
-                to the v6/v7 method — same definition, different upstream.
+  The cohort is the OpenAPS Data Commons (v6 and v7) only; the Trio (v5) cohort, from donated
+  Nightscout sites, was removed from public analyses on 23 November 2026.
 
 Quality filters (identical across all artefacts):
   • ISF        ∈ [10, 300]   mg/dL
@@ -39,18 +37,6 @@ warnings.filterwarnings("ignore")
 
 ROOT = Path(os.environ.get("DYNISF_ROOT", Path.cwd()))
 
-# Curated DynISF formula mapping (validated against live NS reason strings,
-# inherited from formula_analysis_v2.py).
-FORMULA_PER_USER = {
-    "U***": "sigmoid", "U***": "sigmoid", "U***": "sigmoid", "U***": "sigmoid",
-    "U***": "log",     "U***": "log",     "U***": "sigmoid",
-    "U***": "log",     "U***": "log",     "U***": "sigmoid",
-    "U***": "log",     "U***": "log",     "U***": "log",
-    "U***": "sigmoid", "U***": "log",     "U***": "log",
-    "U***": "log",     "U***": "log",     "U***": "log",     "U***": "log",
-    "U***": "sigmoid", "U***": "sigmoid", "U***": "sigmoid",
-}
-
 QUALITY = {
     "isf": (10, 300),
     "cr":  (2, 50),
@@ -61,13 +47,13 @@ QUALITY = {
 
 
 def _load_profiles() -> pd.DataFrame:
-    v5 = pd.DataFrame(json.loads((ROOT / "user_profiles_v5.json").read_text()))
-    v5["cohort"] = "v5_trio"
+    # OpenAPS Data Commons only (AndroidAPS uploads and oref0). The Trio cohort came from donated
+    # Nightscout sites outside the Commons and is not used in public analyses (23 November 2026).
     v6 = pd.DataFrame(json.loads((ROOT / "user_profiles_v6_enriched.json").read_text()).values())
     v6["cohort"] = "v6_aaps_classic"
     v7 = pd.DataFrame(json.loads((ROOT / "user_profiles_v7_enriched.json").read_text()).values())
     v7["cohort"] = "v7_oref0"
-    df = pd.concat([v5, v6, v7], ignore_index=True)
+    df = pd.concat([v6, v7], ignore_index=True)
     df = df.drop_duplicates("user_id", keep="last").reset_index(drop=True)
     # Keep only the columns we use; some v5 records have stray fields that collide on merge.
     keep_cols = [c for c in (
@@ -105,9 +91,9 @@ def _load_treatments_insulin_per_day(uid_to_pdy: dict) -> dict:
 
 
 def _per_user_db_metrics(conn) -> pd.DataFrame:
-    """Per-user n_days, dynisf_frac, and Sigmoid/Log group seeds across v5/v6/v7."""
+    """Per-user n_days, dynisf_frac, and Sigmoid/Log group seeds across v6/v7."""
     parts = []
-    for table in ("oref_v5", "oref_v6", "oref_v7"):
+    for table in ("oref_v6", "oref_v7"):
         sql = f"""
             SELECT user_id,
                    (MAX(ts_relative_sec)-MIN(ts_relative_sec))/86400.0 AS n_days,
@@ -143,7 +129,7 @@ def load_canonical_cohort() -> pd.DataFrame:
         # v6 / v7: use basal + treatments/day if treatments available.
         if pd.notna(r["tx_per_day"]) and r["tx_per_day"] > 0 and r["basal"] > 0:
             return r["basal"] + r["tx_per_day"], "treatments_plus_basal"
-        # v5: fall back to live-extracted mean_tdd (full DB integration, equivalent).
+        # no treatments-derived dose: fall back to a live-extracted mean_tdd where one exists
         m = r.get("mean_tdd")
         if pd.notna(m) and float(m) > 0:
             return float(m), "live_extracted_mean_tdd"
@@ -166,16 +152,9 @@ def load_canonical_cohort() -> pd.DataFrame:
         "profile_target_low_mgdl": "target_low",
     })
 
-    df["formula"] = df["user_id"].map(FORMULA_PER_USER)
-    def group(r):
-        if not r["dynisf_user"]:
-            return "no_dynisf"
-        if r["formula"] == "sigmoid":
-            return "dynisf_sigmoid"
-        if r["formula"] == "log":
-            return "dynisf_log"
-        return "dynisf_unknown"
-    df["group"] = df.apply(group, axis=1)
+    # the per-person formula map covered Trio people only and went with the Trio cohort
+    df["formula"] = None
+    df["group"] = df["dynisf_user"].map({False: "no_dynisf", True: "dynisf_unknown"})
 
     # Quality filter
     keep = (

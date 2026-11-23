@@ -123,7 +123,7 @@ def main():
           f"| free power | A={score['free_power']['A']:.0f}, p={score['free_power']['exponent']} | "
           f"{score['free_power']['median_log_err']} |",
           f"| 1/TDD | K={score['inv_TDD']['K']:.0f} | {score['inv_TDD']['median_log_err']} |",
-          "\n![Overnight level vs TDD](charts/inv008/fig_overnight_level_vs_tdd.png)\n",
+          "\nThe chart draws one mark per person and is kept in the private data folder (REVIEW.md item 22).\n",
           "## Reading\n",
           (f"Measured overnight sensitivity falls with TDD at an exponent of "
            f"{s['fitted_exponent_free']} — the same negative direction as the earlier "

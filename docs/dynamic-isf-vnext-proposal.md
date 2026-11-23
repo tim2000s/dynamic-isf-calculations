@@ -6,7 +6,7 @@
 > withdrawal. It is not a dosing recommendation. The full technical review is in
 > `DYNAMIC-ISF-AUDIT-2026-09.md`.
 >
-> Figures here predate the correction of 23 November 2026 to the daily-dose readers and a unit conversion (REVIEW.md item 20); current values are in results/.
+> Figures here predate the correction of 23 November 2026 to the daily-dose readers and a unit conversion (REVIEW.md item 20), and the removal the same day of the Trio cohort from public analyses, since it came from donated Nightscout sites outside the OpenAPS Data Commons; current values are in results/.
 
 ---
 

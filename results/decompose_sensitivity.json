@@ -1,0 +1,55 @@
+{
+ "n_users_windows": [
+  88,
+  78129
+ ],
+ "Q1_glucose_shape": {
+  "isf_at_100_pooled": 1.04,
+  "reversion_c_per_mgdl": 0.751,
+  "interaction_d": 0.0111,
+  "fractional_change_per_mgdl": 0.0106,
+  "direction": "rises with glucose",
+  "naive_without_reversion_term": {
+   "isf_at_100": -7.48,
+   "fractional_change_per_mgdl": -0.0195
+  }
+ },
+ "Q2_per_user_isf_at_100": {
+  "n_users": 82,
+  "median": -0.8,
+  "p25": -3.3,
+  "p75": 2.8
+ },
+ "Q3_anchor_vs_change": {
+  "corr_anchor_vs_abs_slope": 0.317,
+  "median_fractional_slope_per_user": 0.0028,
+  "reading": "if the abs slope d grows with the anchor b (positive corr) and d/b is roughly constant, the glucose effect is multiplicative on the anchor"
+ },
+ "diagnostic": {
+  "corr_iob_vs_bg_above_target": 0.536,
+  "reversion_drop_at_bg160_zero_insulin": 45.1,
+  "high_minus_low_iob_drop_gap_mgdl": 5.0,
+  "band_centres": [
+   107.5,
+   122.5,
+   140.0,
+   162.5,
+   197.5
+  ],
+  "low_iob_drop": [
+   13.0,
+   24.0,
+   35.0,
+   51.999996100000004,
+   76.0
+  ],
+  "high_iob_drop": [
+   18.0,
+   26.0,
+   40.0,
+   58.0,
+   91.0
+  ]
+ },
+ "conclusion": "Closed-loop observational data cannot identify the insulin sensitivity here. The homeostasis the loop enforces creates two killers: (1) glucose reverts toward target regardless of insulin (~45 mg/dL drop from BG 160 with zero insulin), and that reversion is collinear with IOB (corr 0.54, the loop doses by glucose), so the insulin term collapses when reversion is controlled; (2) at target the loop holds BG there, so almost no excursion exists to measure (few near-target 4h windows, and those that exist read a loop-suppressed value). The best per-user ISF at 100 therefore comes from tuned profiles or the cross-sectional K/\u221aTDD cold-start, not from drop/IOB."
+}

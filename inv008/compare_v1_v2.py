@@ -25,6 +25,7 @@ import numpy as np
 import pandas as pd
 
 from inv008 import config
+from inv008.plots import binned
 from inv008.dynisf import isf_v1, isf_v2
 
 OUT = config.ROOT / "results"
@@ -34,6 +35,8 @@ CHART = config.ROOT / "charts" / "inv008"
 def main():
     rows, per_user = [], []
     for f in sorted(glob.glob(str(config.REPLAY_DIR / "*.parquet"))):
+        if json.loads(Path(f).with_suffix(".meta.json").read_text())["platform"] not in config.COMMONS:
+            continue
         d = pd.read_parquet(f, columns=["bg", "tdd", "isf_v1"]).dropna()
         d = d[(d.bg > 0) & (d.tdd > 0) & (d.isf_v1 > 0)]
         if len(d) < 500:
@@ -74,11 +77,11 @@ def main():
     ax[0].set_xlabel("glucose (mg/dL)"); ax[0].set_ylabel("ISF_v2 / ISF_v1")
     ax[0].set_title("v2 vs v1 by glucose\n(>1: v2 weaker / more protective)")
     ax[0].set_ylim(0, 8); ax[0].legend(fontsize=9); ax[0].grid(alpha=0.3)
-    ax[1].scatter(pu.median_tdd, pu.median_ratio, s=22, alpha=0.7, color="#1f77b4")
+    binned(ax[1], pu.median_tdd, pu.median_ratio, "#1f77b4", "per-person median ratio")
     ax[1].axhline(1, color="k", lw=0.8, ls=":")
     ax[1].set_xscale("log"); ax[1].set_xlabel("median TDD (U/day)")
-    ax[1].set_ylabel("median ISF_v2 / ISF_v1 per user")
-    ax[1].set_title("Per-user median ratio vs TDD"); ax[1].grid(alpha=0.3, which="both")
+    ax[1].set_ylabel("median ISF_v2 / ISF_v1")
+    ax[1].set_title("Ratio against TDD, binned across people"); ax[1].grid(alpha=0.3, which="both")
     fig.tight_layout(); fig.savefig(CHART / "fig_v1_v2.png", dpi=150); plt.close(fig)
 
     md = ["# v1 vs v2 comparison\n",

@@ -1,18 +1,18 @@
 {
- "n_users": 132,
+ "n_users": 110,
  "glucose_term": {
-  "powerlaw_beats_log_pct": 40.0,
-  "median_k": -0.6,
+  "powerlaw_beats_log_pct": 37.0,
+  "median_k": -0.63,
   "k_IQR": [
-   -0.74,
-   -0.35
+   -0.76,
+   -0.36
   ],
-  "median_r2_powerlaw": 0.048,
-  "median_r2_log": 0.048,
-  "frac_k_positive": 0.07
+  "median_r2_powerlaw": 0.06,
+  "median_r2_log": 0.061,
+  "frac_k_positive": 0.05
  },
  "tdd_exponent": {
-  "p_with_powerlaw_glucose": 0.325,
+  "p_with_powerlaw_glucose": 0.319,
   "closer_to": "0.5 (\u221aTDD)"
  }
 }

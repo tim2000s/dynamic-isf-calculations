@@ -39,7 +39,7 @@ import psycopg2
 
 warnings.filterwarnings("ignore")
 ROOT = Path(os.environ.get("DYNISF_ROOT", Path.cwd()))
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # repository code, not the data folder's stale copies
 OUT = ROOT / "results"
 DSN = "dbname=oref"
 N_WORKERS = min(12, mp.cpu_count())

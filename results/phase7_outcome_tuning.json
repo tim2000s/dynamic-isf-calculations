@@ -1,22 +1,22 @@
 {
- "n": 114,
- "K_pop_working": 338.2,
+ "n": 96,
+ "K_pop_working": 319.9,
  "median_nudge": 1.0,
  "candidates": [
   {
    "candidate": "sensitivity route (empirical)",
-   "err_vs_working_pct": 138.0,
-   "logR_vs_TBR": 0.39
+   "err_vs_working_pct": 124.0,
+   "logR_vs_TBR": 0.35
   },
   {
    "candidate": "cold start (\u221aTDD, no per-user)",
-   "err_vs_working_pct": 30.0,
-   "logR_vs_TBR": 0.23
+   "err_vs_working_pct": 32.0,
+   "logR_vs_TBR": 0.15
   },
   {
    "candidate": "outcome route (cold + nudge)",
-   "err_vs_working_pct": 35.0,
-   "logR_vs_TBR": -0.01
+   "err_vs_working_pct": 36.0,
+   "logR_vs_TBR": -0.07
   }
  ]
 }

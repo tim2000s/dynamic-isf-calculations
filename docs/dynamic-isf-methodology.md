@@ -8,7 +8,10 @@
 > are withdrawn. See `DYNAMIC-ISF-AUDIT-2026-09.md`.
 >
 > Correction, 23 November 2026: the cohort figures in section 5 were rerun after the daily-dose
-> readers were corrected and a unit conversion was fixed (REVIEW.md item 20).
+> readers were corrected and a unit conversion was fixed (REVIEW.md item 20). They were rerun
+> again the same day after the Trio cohort, which came from donated Nightscout sites outside the
+> OpenAPS Data Commons, was removed from public analyses. The device-ISF validation used only
+> that cohort and is no longer reported.
 
 ---
 
@@ -20,11 +23,10 @@ method (1) implements each candidate equation exactly, with a unit-test contract
 reconstructs, from each person's available insulin-delivery history, the closest available TDD
 signal to the one the equations consume; (3) replays every glucose reading through each equation to generate
 the ISF it would produce; (4) compares the resulting ISF distributions between equations;
-(5) searches a family of candidate equations against a delta-IOB outcome proxy using
-leave-one-user-out cross-validation; and (6) validates the equation
-implementations against ISF values that devices themselves logged. We applied it to 171
-people using open-source automated insulin delivery (AID) systems and roughly 9 million
-glucose readings. This paper documents each step, the script that performs it, and the
+and (5) searches a family of candidate equations against a delta-IOB outcome proxy using
+leave-one-user-out cross-validation. We applied it to 148 people using open-source automated
+insulin delivery (AID) systems from the OpenAPS Data Commons, and roughly 7.9 million glucose
+readings, of which 7.5 million had a reconstructed TDD. This paper documents each step, the script that performs it, and the
 reasoning that connects the outputs to the conclusions.
 
 ---
@@ -109,11 +111,11 @@ and glucose, for every reading rather than relying on a single closed form.
 
 ## 3. Data
 
-Three anonymised cohorts of open-source AID users, held in a local time-series database:
+Two anonymised cohorts of open-source AID users from the OpenAPS Data Commons, held in a local
+time-series database:
 
 | Platform | Users | Readings | TDD source |
 |---|---|---|---|
-| Trio | 23 | 3.03 M | device-logged TDD |
 | AAPS | 39 | 1.31 M | reconstructed from treatments |
 | OpenAPS | 109 | 6.58 M | reconstructed from treatments |
 
@@ -127,7 +129,7 @@ figures are released.
 
 ## 4. Method, step by step
 
-The pipeline is a Python package run in three stages plus two analyses. It is parallelised
+The pipeline is a Python package run in three stages plus one analysis. It is parallelised
 per person (one person = one task), resumable, with atomic per-person outputs and
 timestamped run manifests, and completes end to end in under ten minutes on a desktop
 workstation.
@@ -136,15 +138,15 @@ workstation.
 
 The v1 and v2 equations and the TDD blend are implemented as vectorised array operations,
 preserving every constant, the glucose cap, and the blend's branch logic. Correctness is
-fixed by 27 unit tests against hand-computed fixtures: the v2 glucose floor, the
+fixed by unit tests against hand-computed fixtures (41 tests in `inv008/tests/` in all): the v2 glucose floor, the
 glucose-dependent v1/v2 ratio, the glucose-cap compression, both branches of the TDD blend,
 and the missing-data gates. Every downstream conclusion rests on these being exactly the
 equations as defined, and the tests are the contract that guarantees it.
 
 ### 4.2 TDD reconstruction
 
-Where the device did not log TDD, we rebuild the five windows the blend consumes from raw
-delivery records:
+Neither cohort's records carry the device's own TDD, so we rebuild the five windows the blend
+consumes from raw delivery records:
 
 1. **Parse delivery events:** boluses (any record carrying insulin) and temp-basal
    segments (absolute rate or percent-of-profile, with supersession and cancellation),
@@ -176,29 +178,28 @@ the candidate giving the best join coverage wins, and residual mismatch is flagg
 exceeds tolerance.
 
 Then, for every glucose reading, the replay computes the ISF under both equations using
-that reading's TDD (device-logged where available, reconstructed otherwise). The output is
+that reading's reconstructed TDD. The output is
 a per-person table of (glucose, TDD, anchor, ISF) under each equation. Median join coverage
-was 99.4%, and 5 of 148 reconstructed users retain an uncertain anchor. As a cross-check, the
+was 98.4%, and 5 of 148 reconstructed users retain an uncertain anchor. As a cross-check, the
 analytic v2/v1 ratio computed from a reading's own glucose and TDD matches the ratio of the
 replayed ISFs at sampled readings, which confirms the join is sound.
 
 ### 4.4 Figures
 
-Each person gets a page: the ISF–glucose curves under each equation at their median TDD
-(with a TDD-interquartile band), a two-week sample of both dynamic-ISF traces over their
-real glucose, and the per-reading ratio distribution. Cohort figures: the per-person median
-v2/v1 ratio against TDD; per-person median ISF under each equation; and the log-log ISF–TDD
-relationship with the observed points and the fitted slope.
+The published figures are cohort-level. The v2/v1 ratio is shown against glucose, and against
+TDD as the median and interquartile range of people grouped into TDD bins. The log-log figure
+shows the delta-IOB proxy in the same binned form with its fitted slope and the two equations'
+assumed laws. Per-person pages are drawn into the private data folder and are not published.
 
 ### 4.5 Best-fit equation search
 
 To ask whether a better equation fits these data, candidates are scored against two targets:
 
 - **delta-IOB sensitivity proxy** — a regression on fasting windows
-  (`ΔBG = a + b·ΔIOB + c·BG_trend`; proxy = −b; n = 116 after quality gates). New insulin
+  (`ΔBG = a + b·ΔIOB + c·BG_trend`; proxy = −b; n = 98 after quality gates). New insulin
   delivery changes IOB during the window, and delivery responds to glucose. This target does
   not identify the physiological effect of insulin.
-- **tuned-profile ISF** — each person's own profile setting (n = 141): "what experienced
+- **tuned-profile ISF** — each person's own profile setting (n = 119): "what experienced
   users converge to".
 
 Candidates: the two equations above; the historical 1700-rule; the tuned profile value;
@@ -214,27 +215,13 @@ error, median absolute log-error (scale-free), and fraction of people predicted 
 ±30%. Without cross-validation the fitted equations would carry an unfair in-sample advantage;
 holding out each person in turn measures how well they generalise to someone new.
 
-### 4.6 Implementation validation against device-logged ISF
-
-Independently of the equation comparison, we check that the v1 implementation reproduces
-what devices actually computed. Trio logs its own per-cycle ISF, giving a device reference for
-its dynamic-ISF users. We correlate replayed v1 ISF against the device value, expecting,
-per person, a positive log-log correlation (the curve shape tracks) and a tight, roughly
-constant multiplicative offset — the device additionally applies an adjustment factor, an
-insulin divisor, and an autosensitivity ratio, none of which the replay models — rather
-than a ratio of exactly one.
-
-This step also surfaced a data-quality issue: four users switched the *units* of their
-logged ISF mid-history (mmol/L per unit vs mg/dL per unit). A per-reading correction
-(values below 20 scaled by 18.018) resolves all four. It affects only this validation read;
-the main pipeline never consumes that field.
-
 ---
 
 ## 5. How the outputs support the conclusions
 
-**v2 is the gentler equation for almost everyone.** Across the replayed cohort, v2 gives a
-higher ISF, and so a weaker correction, than v1 on 98% of readings, a median of 3.3×. The
+**v2 is the gentler equation for almost everyone.** Across the replayed cohort (147 people with a
+reconstructed TDD), v2 gives a
+higher ISF, and so a weaker correction, than v1 on 98% of readings, a median of 3.1×. The
 margin is widest at low glucose, where the v2 log nears its floor, and narrows to about 1.6×
 when glucose is high. Both differences between the equations push the same way at realistic
 doses: the steeper TDD law and the altered glucose term each lift v2's ISF above v1's, so at
@@ -242,23 +229,22 @@ target glucose the two would only meet near 194 U/day, well beyond anyone in the
 pattern is a direct reading of the replayed data, not a modelling artefact.
 
 **Both TDD power laws are steeper than the fitted proxy relationship.** The log-log fit of
-sensitivity against reconstructed TDD has a slope near −0.72, and the power law fitted to the
+sensitivity against reconstructed TDD has a slope near −0.71, and the power law fitted to the
 same proxy in the equation search has an exponent of −0.43. The bootstrap interval reported earlier, which
 excluded −1, was computed before the correction of 23 November 2026 and has not been rerun. v1 assumes −1 and v2 assumes −2. The proxy is calculated from the same closed-loop record,
 so this comparison does not establish a physiological TDD exponent.
 
-A square-root law is among the best fits to these two targets. Under cross-validation the
-K/√TDD form had a median log-error of 0.256 against tuned-profile ISF, second to a free-exponent
-power law (0.243), and 0.295 against the delta-IOB proxy, where the fitted forms ranged from 0.282
-to 0.315. It beat both equations, whose log-errors were 0.322 and 1.508 against tuned-profile ISF.
-Added inputs (carb ratio, target, basal fraction) do not robustly improve it. This is a predictive ranking against two observational targets. It does not settle
+A square-root law is among the better fits to these two targets. Under cross-validation the
+K/√TDD form had a median log-error of 0.281 against tuned-profile ISF, third behind a free-exponent
+power law (0.267) and the same power law with basal fraction added (0.277), and 0.294 against the
+delta-IOB proxy, where the fitted forms ranged from 0.260 to 0.334. It beat both equations, whose
+log-errors were 0.331 and 1.508 against tuned-profile ISF.
+Added inputs (carb ratio, target, basal fraction) do not robustly improve on the power law. This is a predictive ranking against two observational targets. It does not settle
 the physiological shape or level.
 
-**The implementation is faithful.** The unit tests fix the implementation to the defined
-equations, and the device-ISF validation shows the dynamic-ISF users tracking their
-devices' logged ISF with stable per-person offsets once the units issue is corrected, with
-no unexplained outliers. This licenses treating the replayed ISF as the equation's true
-output.
+**The implementation matches the defined equations.** The unit tests fix the implementation to
+the equations as written. None of the 119 people in the reference cohort ran a dynamic ISF, so
+the replay has not been checked against a device's own dynamic-ISF output in these cohorts.
 
 ---
 
@@ -266,24 +252,22 @@ output.
 
 | Step | Script | Key output |
 |---|---|---|
-| Equation implementation + tests | `inv008/dynisf.py`, `inv008/tests/` | 27 passing tests |
+| Equation implementation + tests | `inv008/dynisf.py`, `inv008/tests/` | 41 tests |
 | TDD reconstruction | `inv008/stage1_tdd.py` (+ `tdd_windows.py`, `sources.py`) | per-person TDD tables |
 | ISF replay | `inv008/stage2_replay.py` | per-person ISF tables |
 | Orchestration | `inv008/runner.py` | run logs + manifests |
-| Figures | `inv008/stage3_plots.py` | cohort + per-person figures |
+| Figures | `inv008/stage3_plots.py` | cohort figures (per-person pages kept private) |
 | Equation search | `fit_best_isf.py` | candidate-comparison tables |
 | Historical personalisation fit | `inv008/fit_personalisation.py` | proxy exponent / per-user-K description; dosing interpretation withdrawn |
-| Device validation | `inv008/validate_device_isf.py` | validation tables |
 | Delivery/basal inputs | `extract_treatments_tdd.py`, `extract_hourly_basal.py` | input data |
 | Reference cohort + delta-IOB proxy | `canonical_cohort.py`, `empirical_isf_v5.py` | targets for the search |
 
 ```
 python -m pytest inv008/tests/
 python -m inv008.runner --stage 1 --platforms v6 v7
-python -m inv008.runner --stage 2 --platforms v5 v6 v7
+python -m inv008.runner --stage 2 --platforms v6 v7
 python -m inv008.stage3_plots
 python fit_best_isf.py
-python -m inv008.validate_device_isf
 ```
 
 ---
@@ -299,6 +283,6 @@ python -m inv008.validate_device_isf
    carbohydrate, endogenous-glucose effects and closed-loop confounding. It has confidence
    intervals but no external physiological ground truth. Its level and TDD slope are provisional.
 4. **Single cohort.** Open-source AID users, mostly 2016–2023; no commercial-system or
-   demographic data. n = 116/141 for the historical proxy analyses.
+   demographic data. n = 98/119 for the historical proxy analyses.
 5. **Anchor uncertainty.** Five reconstructed users retain time-anchor uncertainty and are
    flagged.

@@ -219,7 +219,7 @@ def main():
     for row in by_tdd:
         md.append(f"| {row['tdd_band']} | {row['n_users']} | "
                   f"{row['median_measured_over_profile']} | {row['median_frac_clamp_binds']} |")
-    md += ["\n![Tier-2 shadow eval](charts/inv008/fig_shadow_eval_tier2.png)\n",
+    md += ["\nThe chart draws one mark per person and is kept in the private data folder (REVIEW.md item 22).\n",
            "**Reading.** Tier-2 is materially more aggressive than the person's current profile — "
            f"about {summary['implied_dose_vs_profile_at_level']}× the correction insulin at the "
            "level, before glucose scaling. The §8.2 level clamp is doing real work here: it binds "

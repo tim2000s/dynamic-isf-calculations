@@ -6,11 +6,11 @@ AndroidAPS maps a nominal 75-minute rapid-insulin peak to divisor 55, a 55-minut
 
 | divisor | V1 MAE | V1 bias | V2 MAE | V2 bias |
 |---:|---:|---:|---:|---:|
-| 55 | 22.8 | -8.0 | 40.1 | +22.1 |
-| 65 | 22.9 | -4.7 | 48.2 | +35.3 |
-| 75 | 23.3 | -1.3 | 60.1 | +52.5 |
+| 55 | 23.2 | -8.9 | 38.3 | +19.1 |
+| 65 | 23.2 | -5.7 | 46.0 | +31.8 |
+| 75 | 23.5 | -2.5 | 56.9 | +48.2 |
 
-Static ISF MAE was 20.5 mg/dL on the same windows.
+Static ISF MAE was 20.0 mg/dL on the same windows.
 
 ## Six-hour action-balance comparison
 

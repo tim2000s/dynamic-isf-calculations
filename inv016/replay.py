@@ -116,7 +116,7 @@ import pandas as pd
 
 from inv008.config import DB
 from inv013.candidate import (RESULTS, TARGET, candidate, curve_isf, curve_shape,
-                              stock_v1, trio_log, trio_sigmoid)
+                              stock_v1, trio_sigmoid)
 
 ARMS = ("Profile link", "TDD link", "Average-dose link",
         "Logarithmic as shipped", "Sigmoid", "First draft")
@@ -128,12 +128,12 @@ MEAL_RISE = 5.0
 MIN_READINGS = 20
 N_BOOT = 2000
 WORKERS = 7
-COHORTS = {"v5_trio": "Trio", "v6_aaps_classic": "AndroidAPS", "v7_oref0": "oref0"}
+COHORTS = {"v6_aaps_classic": "AndroidAPS", "v7_oref0": "oref0"}  # Commons only
 
 
-def arms(bg, tdd, pisf: float, mean_tdd: float, trio: bool) -> dict:
+def arms(bg, tdd, pisf: float, mean_tdd: float) -> dict:
     """Insulin asked for per mg/dL from target under each arm, over the profile's."""
-    log = trio_log(bg, tdd, pisf) if trio else stock_v1(bg, tdd, 55.0)
+    log = stock_v1(bg, tdd, 55.0)
     return dict(zip(ARMS, (
         1.0 / curve_shape(bg), pisf / curve_isf(bg, tdd), pisf / curve_isf(bg, mean_tdd),
         pisf / log, pisf / trio_sigmoid(bg, pisf), pisf / candidate(bg, pisf, tdd, mean_tdd))))
@@ -154,9 +154,10 @@ def person(job: tuple) -> pd.DataFrame | None:
     user, cohort, path, table, pisf, days = job
     d = (pd.read_parquet(path, columns=["ts_relative_sec", "bg", "tdd"])
          .drop_duplicates("ts_relative_sec").sort_values("ts_relative_sec"))
-    col = '"sug_COB"' if table == "oref_v5" else "sug_cob"
     with psycopg2.connect(**DB) as conn, conn.cursor() as cur:
-        cur.execute(f"SELECT ts_relative_sec, max({col}) FROM {table} WHERE user_id = %s GROUP BY 1", (user,))
+        if table not in ("oref_v6", "oref_v7"):  # Commons tables only; also keeps the f-string below safe
+            raise ValueError(f"replay: unexpected table {table!r}")
+        cur.execute(f"SELECT ts_relative_sec, max(sug_cob) FROM {table} WHERE user_id = %s GROUP BY 1", (user,))  # nosemgrep
         cob = pd.DataFrame(cur.fetchall(), columns=["ts_relative_sec", "cob"])
     d = d.merge(cob, on="ts_relative_sec", how="left")
     if days:
@@ -170,7 +171,7 @@ def person(job: tuple) -> pd.DataFrame | None:
     cells = pd.DataFrame({"g": np.digitize(bg, G_EDGES) - 1,
                           "m": np.where(np.isnan(hrs), -1, np.digitize(hrs, M_EDGES) - 1),
                           "n": 1, "dist": dist})
-    for name, r in arms(bg, tdd, pisf, mean_tdd, cohort == "v5_trio").items():
+    for name, r in arms(bg, tdd, pisf, mean_tdd).items():
         cells["r_" + name], cells["rd_" + name] = r, r * dist
     out = cells.groupby(["g", "m"], as_index=False).sum()
     return out.assign(user=user, cohort=cohort, product=pisf * mean_tdd,

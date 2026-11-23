@@ -71,7 +71,7 @@ nit (optional) or pre-existing (record it, do not let it block).
     milliseconds and an offset. Tested in `inv008/tests/test_v6_temps.py`. Every result built
     on the daily doses, the cohort file or the replay cache was rerun the same day, together
     with a unit fix: ISF values under 20 had been read as mmol/L where they are mg/dL
-    (`inv008/tests/test_units.py`). A new reader of these archives checks the share of unique records
+    (`inv008/tests/test_units.py` held this until the Trio cohort, the only one with mmol/L values, was removed; `inv008/tests/test_imports.py` now fails if a script compares a value with 20 and applies the mmol/L factor on the same line, the form the fault took in all seven scripts). A new reader of these archives checks the share of unique records
     and of unparsed times before summing.
 
 21. A bootstrap that resamples people numbers them in a fixed order. `inv008/overnight_variants.py`
@@ -86,6 +86,12 @@ nit (optional) or pre-existing (record it, do not let it block).
     and fails if a participant ID remains. A diff that adds a participant ID (U and three
     digits) outside a cohort's ID range, a per-person table, a per-person chart or a per-person
     page to the repository is refused. Boost data is never in this repository.
+
+23. Repository code is imported from the repository. Ten scripts put `$DYNISF_ROOT` first on
+    `sys.path`, and the data folder holds a June copy of `canonical_cohort.py` (and of `inv008/`),
+    so their runs imported stale code: on 23 November 2026 the cohort they built still held the
+    Trio people after the repository's own builder had removed them. They now insert the
+    repository; `inv008/tests/test_imports.py` fails if a script inserts the data folder again.
 
 ## Running
 

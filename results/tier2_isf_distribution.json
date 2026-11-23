@@ -1,0 +1,18 @@
+{
+ "n_patients": 98,
+ "total_readings": 5605658,
+ "anchor": "measured_ISF * sqrt(median TDD / TDD) * g(BG)  (unclamped)",
+ "per_person_median_isf": {
+  "p25": 10.7,
+  "median": 16.1,
+  "p75": 21.8
+ },
+ "population_pooled_isf_pct": {
+  "5": 6.2,
+  "25": 10.6,
+  "50": 16.5,
+  "75": 25.6,
+  "95": 43.5
+ },
+ "median_within_person_p10_p90_span": 3.28
+}

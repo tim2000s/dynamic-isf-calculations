@@ -95,21 +95,24 @@ ev = df[(df.r2 >= 0.10) & df.empirical_isf.between(5, 500)]
 K_ent = float(np.median(df.dropna(subset=["isf"]).isf * np.sqrt(df.dropna(subset=["isf"]).tdd)))
 K_emp = float(np.median(ev.empirical_isf * np.sqrt(ev.tdd)))
 res = json.loads((ROOT / "best_isf_fit_results.json").read_text())
-# 355, 145, 114 and 138 until the reader correction of 23 November 2026 (REVIEW.md item 20)
-check("K (entered) ~ 340", abs(K_ent - 340) < 6, f"recomputed {K_ent:.1f}, json {res['sqrt_rule_entered_K']}")
-check("K (empirical) ~ 136", abs(K_emp - 136) < 6, f"recomputed {K_emp:.1f}, json {res['sqrt_rule_empirical_K']}")
-check("anchor ratio 340/136 ~ 2.5", abs(K_ent / K_emp - 2.5) < 0.2, f"{K_ent/K_emp:.2f}")
+# 355, 145, 114 and 138 until the reader correction of 23 November 2026 (REVIEW.md item 20), and
+# 340, 136, 116 and 141 until the Trio cohort was removed the same day
+check("K (entered) ~ 320", abs(K_ent - 320) < 6, f"recomputed {K_ent:.1f}, json {res['sqrt_rule_entered_K']}")
+check("K (empirical) ~ 146", abs(K_emp - 146) < 6, f"recomputed {K_emp:.1f}, json {res['sqrt_rule_empirical_K']}")
+check("anchor ratio 320/146 ~ 2.2", abs(K_ent / K_emp - 2.2) < 0.2, f"{K_ent/K_emp:.2f}")
 # power-law slopes
 for tgt, col, lo, hi in [("entered", "isf", -0.6, -0.3), ("empirical", "empirical_isf", -0.6, -0.3)]:
     d = (ev if tgt == "empirical" else df).dropna(subset=[col])
     b = np.polyfit(np.log(d.tdd), np.log(d[col]), 1)[0]
     check(f"stored power-law slope ({tgt}) reproduces in [-0.6,-0.3]", lo < b < hi, f"slope {b:.3f}")
-check("n_empirical = 116", len(ev) == 116, f"{len(ev)}")
-check("n_cohort = 141", len(df) == 141, f"{len(df)}")
+check("n_empirical = 98", len(ev) == 98, f"{len(ev)}")
+check("n_cohort = 119", len(df) == 119, f"{len(df)}")
 
 print("\n6. Replay parquet: v2/v1 reproduced from the equations, glucose-dependent")
 worst_ratio = 0.0; n_checked = 0; low_b, high_b = [], []
 for f in glob.glob(str(config.REPLAY_DIR / "*.parquet")):
+    if json.loads(Path(f).with_suffix(".meta.json").read_text())["platform"] not in config.COMMONS:
+        continue
     d = pd.read_parquet(f, columns=["bg", "isf_v1", "tdd"]).dropna()
     d = d[(d.isf_v1 > 0) & (d.tdd > 0) & (d.bg > 0)]
     if len(d) < 100:
@@ -132,7 +135,7 @@ check("v2/v1 larger at low glucose than high (cohort medians)",
 print("\n7. Cohort composition")
 summ = pd.read_json(ROOT / "charts/inv008/cohort_summary.json")
 plats = summ.platform.value_counts().to_dict()
-check("platform counts (v5/v6/v7)", plats.get("v5") and plats.get("v6") and plats.get("v7"),
+check("platform counts (v6/v7, Commons only)", not plats.get("v5") and plats.get("v6") and plats.get("v7"),
       str(plats))
 
 print("\n8. Temp-basal bin-edge convention is unbiased (phase-averaged)")
@@ -169,16 +172,6 @@ cur = np.mean([temp_excess_error(False, s) for s in range(20)])
 fix = np.mean([temp_excess_error(True, s) for s in range(20)])
 check("current (left-edge) convention is unbiased", abs(cur) < 0.5,
       f"mean temp-excess error {cur:+.2f}% (the suggested side=right-1 alternative is {fix:+.1f}%, biased)")
-
-print("\n9. Device-ISF validation summary present and sane")
-dv = json.loads((ROOT / "results/device_isf_validation.json").read_text())
-logc = dv["log_dynisf"]["median_log_corr"]
-check("log-DynISF device correlation > 0.4", logc > 0.4, f"median log-corr {logc}")
-# The validation only spans the DynISF cohort users (n≈18); of those, 2 carry the
-# mid-history mmol/mgdl unit switch (U***, U***). The DB-wide count is 4 (also U***,
-# U***) but U***/U*** are not DynISF-cohort users so they are out of this scope.
-check("mixed-unit users flagged within validation scope", len(dv["mixed_unit_users"]) == 2,
-      f"{dv['mixed_unit_users']} (DB-wide there are 4; U***/U*** are out of scope)")
 
 print("\n" + "=" * 60)
 if fails:

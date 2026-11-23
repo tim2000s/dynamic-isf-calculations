@@ -34,6 +34,7 @@ import psycopg2
 
 warnings.filterwarnings("ignore")
 from inv008 import config, sources
+from inv008.plots import hist  # noqa: E402  after the module-level setup above, like the imports beside it
 from inv008.tdd_windows import build_delivery_grid
 from inv008.stage2_replay import choose_anchor
 
@@ -189,7 +190,7 @@ def main():
     ax[0].set_xlabel("starting glucose (mg/dL)"); ax[0].set_ylabel("median 4h drop (mg/dL)")
     ax[0].set_title(f"Now does insulin separate?\nhigh− low-insulin drop gap ≈ {ins_gap:.0f} mg/dL")
     ax[0].legend(fontsize=9); ax[0].grid(alpha=0.3)
-    ax[1].hist(bu_arr[(bu_arr > -20) & (bu_arr < 120)], bins=26, color="#1f77b4", alpha=0.85)
+    hist(ax[1], bu_arr[(bu_arr > -20) & (bu_arr < 120)], bins=26, color="#1f77b4", alpha=0.85)
     ax[1].axvline(np.median(bu_arr), color="k", ls="--", lw=1.5, label=f"median {np.median(bu_arr):.0f}")
     ax[1].set_xlabel("per-user ISF at 100 (mg/dL per U, total-insulin model)"); ax[1].set_ylabel("people")
     ax[1].set_title(f"Q2: per-user ISF at 100 ({len(per_user)} people)\nEGP rise {egp_h:.0f} mg/dL/h at zero insulin")

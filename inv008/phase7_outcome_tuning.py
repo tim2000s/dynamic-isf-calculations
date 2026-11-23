@@ -38,7 +38,7 @@ import pandas as pd
 
 warnings.filterwarnings("ignore")
 ROOT = Path(os.environ.get("DYNISF_ROOT", Path.cwd()))
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # repository code, not the data folder's stale copies
 OUT = ROOT / "results"
 N_WORKERS = min(12, mp.cpu_count())
 TABLES = {"v5_trio": "oref_v5", "v6_aaps_classic": "oref_v6", "v7_oref0": "oref_v7"}

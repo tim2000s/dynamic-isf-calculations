@@ -30,6 +30,7 @@ import numpy as np
 import pandas as pd
 
 from inv008 import config
+from inv008.plots import hist
 from inv008.dynisf import g_quartic
 
 OUT = config.ROOT / "results"
@@ -95,10 +96,9 @@ def main():
     summary = {
         "n_patients": n, "total_readings": int(sum(r["n"] for r in res)),
         "anchor": "measured_ISF * sqrt(median TDD / TDD) * g(BG)  (unclamped)",
-        "per_person_median_isf": {
-            "min": round(float(med.min()), 1), "p25": round(float(np.percentile(med, 25)), 1),
+        "per_person_median_isf": {"p25": round(float(np.percentile(med, 25)), 1),
             "median": round(float(np.median(med)), 1),
-            "p75": round(float(np.percentile(med, 75)), 1), "max": round(float(med.max()), 1)},
+            "p75": round(float(np.percentile(med, 75)), 1)},
         "population_pooled_isf_pct": {str(p): round(pooled_pct(p), 1)
                                       for p in (5, 25, 50, 75, 95)},
         "median_within_person_p10_p90_span": round(float(np.median(
@@ -136,7 +136,7 @@ def main():
 
     # ---- figure 2: population view ----
     fig, ax = plt.subplots(1, 2, figsize=(13, 5))
-    ax[0].hist(med, bins=np.logspace(np.log10(med.min()), np.log10(med.max()), 30),
+    hist(ax[0], med, bins=np.logspace(np.log10(med.min()), np.log10(med.max()), 30),
                color="#6a6ad6", alpha=0.85)
     ax[0].axvline(np.median(med), color="k", ls="--", lw=1.5,
                   label=f"median {np.median(med):.0f}")
@@ -157,10 +157,8 @@ def main():
           f"{n} people, {summary['total_readings']:,} readings. For each reading, "
           "ISF_Tier-2 = measured_ISF · √(median TDD / TDD) · g(BG) (raw, unclamped).\n",
           "## Population\n",
-          f"- Per-person median Tier-2 ISF spans {summary['per_person_median_isf']['min']}–"
-          f"{summary['per_person_median_isf']['max']} mg/dL per U "
-          f"(IQR {summary['per_person_median_isf']['p25']}–{summary['per_person_median_isf']['p75']}, "
-          f"median {summary['per_person_median_isf']['median']}).",
+          f"- Per-person median Tier-2 ISF: median {summary['per_person_median_isf']['median']} mg/dL per U "
+          f"(IQR {summary['per_person_median_isf']['p25']}–{summary['per_person_median_isf']['p75']}).",
           f"- Pooled over every reading: median {summary['population_pooled_isf_pct']['50']}, "
           f"p5–p95 {summary['population_pooled_isf_pct']['5']}–{summary['population_pooled_isf_pct']['95']}.",
           f"- Within a person the Tier-2 ISF spreads a median "

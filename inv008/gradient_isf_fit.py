@@ -41,6 +41,7 @@ from scipy import stats
 from sklearn.model_selection import KFold
 
 from inv008 import config, err_common as ec
+from inv008.plots import binned, hist
 
 OUT = config.ROOT / "results"
 CHART = config.ROOT / "charts" / "inv008"
@@ -161,11 +162,11 @@ def main():
     ax[0].axvline(k_star, color="#1f77b4", ls=":", lw=1)
     ax[0].set_xlabel("glucose steepness k  (0 = flat)"); ax[0].set_ylabel("within-user OOF MAE (mg/dL)")
     ax[0].set_title(f"Best-fit glucose-dependence\nk*={k_star} (adaptive)"); ax[0].legend(fontsize=8)
-    ax[1].hist(opt_k, bins=np.arange(-0.125, 4.2, 0.25), color="#9ecae1", edgecolor="#3182bd")
+    hist(ax[1], opt_k, bins=np.arange(-0.125, 4.2, 0.25), color="#9ecae1", edgecolor="#3182bd")
     ax[1].axvline(float(np.median(opt_k)), color="#d62728", lw=2, label=f"median {np.median(opt_k):.2f}")
     ax[1].set_xlabel("per-user optimal k"); ax[1].set_ylabel("users")
     ax[1].set_title("Steepness each person 'wants'"); ax[1].legend(fontsize=8)
-    ax[2].scatter(S.tdd, S.s, s=22, color="#2ca02c", alpha=0.7)
+    binned(ax[2], S.tdd, S.s, "#2ca02c", "fitted per-person scale")
     ax[2].set_xlabel("user median TDD (U/day)"); ax[2].set_ylabel(f"fitted per-user scale s (at k={k_star})")
     ax[2].set_title(f"Is the scale cold-start-predictable?\nρ(TDD)={rho_tdd.statistic:.2f}")
     ax[2].grid(alpha=0.3)

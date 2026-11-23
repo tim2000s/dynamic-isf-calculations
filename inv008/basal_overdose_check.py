@@ -31,6 +31,7 @@ import psycopg2
 
 warnings.filterwarnings("ignore")
 from inv008 import config
+from inv008.plots import hist  # noqa: E402  after the module-level setup above, like the imports beside it
 
 ROOT = config.ROOT
 OUT = ROOT / "results"; CHART = ROOT / "charts" / "inv008"
@@ -103,7 +104,7 @@ def main():
     (OUT / "basal_overdose_check.json").write_text(json.dumps(summary, indent=1))
 
     fig, ax = plt.subplots(1, 2, figsize=(13, 5))
-    ax[0].hist(permed, bins=24, color="#d62728", alpha=0.85)
+    hist(ax[0], permed, bins=24, color="#d62728", alpha=0.85)
     ax[0].axvline(0, color="k", lw=1.2, label="flat (basal matched)")
     ax[0].axvline(np.median(permed), color="b", ls="--", lw=1.5, label=f"median {np.median(permed):+.1f}")
     ax[0].set_xlabel("per-user median BG drift at neutral net IOB (mg/dL per h)")

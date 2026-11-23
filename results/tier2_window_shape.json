@@ -1,6 +1,6 @@
 {
- "n_patients": 116,
- "n_windows": 1252780,
+ "n_patients": 98,
+ "n_windows": 1114690,
  "bg_centres": [
   77.5,
   90.0,
@@ -12,34 +12,34 @@
   192.5
  ],
  "observed_isf_by_bg": [
-  10.3,
-  12.8,
-  14.1,
-  15.0,
-  15.1,
-  16.0,
-  15.0,
-  14.9
+  10.0,
+  12.4,
+  14.3,
+  15.4,
+  15.7,
+  16.5,
+  15.6,
+  15.8
  ],
  "observed_isf_n_by_bg": [
-  132495,
-  166045,
-  187754,
-  177197,
-  209092,
-  171654,
-  107449,
-  64536
+  98059,
+  133811,
+  163360,
+  162591,
+  196124,
+  163383,
+  103053,
+  62240
  ],
  "observed_isf_normalised": [
-  0.732,
-  0.908,
+  0.699,
+  0.864,
   1.0,
-  1.06,
-  1.068,
-  1.135,
-  1.058,
-  1.056
+  1.075,
+  1.097,
+  1.155,
+  1.089,
+  1.101
  ],
  "calculated_normalised": {
   "vnext_quartic": [
@@ -74,7 +74,7 @@
   ]
  },
  "fitted_powerlaw_exponent": {
-  "observed": -0.34,
+  "observed": -0.44,
   "vnext_quartic_same_range": 1.33
  },
  "reading": "observed insulin sensitivity falls with glucose; the fitted exponent of the observed curve vs the quartic's exponent over the same range says how well g(BG)'s shape matches the data."

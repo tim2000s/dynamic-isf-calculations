@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from inv008.plots import binned
+
 from . import config
 
 # Categorical slots 1-3 of the validated palette, in fixed order. Three because
@@ -114,7 +116,7 @@ def fig_entered_scatter(out):
     t = t.dropna(subset=["isf", "tdd_u"])
     t = t[(t.isf > 0) & (t.tdd_u > 0) & (t.n_days >= config.MIN_DAYS_TDD)]
     fig, ax = plt.subplots(figsize=(6.0, 4.2))
-    ax.scatter(t.tdd_u, t.isf, s=13, color=C1, alpha=0.38, linewidths=0, zorder=3)
+    binned(ax, t.tdd_u, t.isf, C1, "entered sensitivity", n_bins=12)
     x = np.linspace(t.tdd_u.min(), t.tdd_u.max(), 200)
     med_tdd = float(t.tdd_u.median())
     anchor = float(t.isf.median())
@@ -129,6 +131,7 @@ def fig_entered_scatter(out):
     ax.set_xlabel("total daily dose (U/day)")
     ax.set_ylabel("entered sensitivity factor (mg/dL per unit)")
     ax.set_title(f"What {len(t)} people had entered, against how much insulin they use")
+    ax.legend(fontsize=7, frameon=False, loc="lower left")
     ax.set_xlim(right=t.tdd_u.max() * 2.6)
     _despine(ax)
     fig.tight_layout(); fig.savefig(out, bbox_inches="tight"); plt.close(fig)

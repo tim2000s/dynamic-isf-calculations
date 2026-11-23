@@ -25,3 +25,15 @@ charts/inv008/fig_n1_cases.png
 charts/inv008/fig_post_cob_isf_*.png
 # single-person Boost analysis and third-party poster images, kept locally and never published (REVIEW.md items 15, 22)
 glucose-isf/
+# per-person charts: one mark per person, never published (REVIEW.md item 22)
+charts/inv008/fig_crossover.png
+charts/inv008/fig_isf_scatter.png
+charts/inv008/fig_empirical.png
+charts/inv008/fig_overnight_level_vs_tdd.png
+charts/inv008/fig_shadow_eval.png
+charts/inv008/fig_shadow_eval_tier2.png
+charts/inv008/fig_multipatient_k.png
+charts/inv018/fig_person_curves.png
+charts/inv018/fig_split_half.png
+results/phase9_powerlaw_backtest.*
+results/phase9b_powerlaw_backtest_4h.*

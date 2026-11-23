@@ -1,31 +1,31 @@
 {
- "n_users": 170,
- "n_ticks": 9461361,
- "median_ratio_v2_over_v1": 3.32,
- "frac_ticks_v2_weaker_than_v1": 0.979,
+ "n_users": 147,
+ "n_ticks": 7481069,
+ "median_ratio_v2_over_v1": 3.14,
+ "frac_ticks_v2_weaker_than_v1": 0.978,
  "ratio_by_BG_band": {
   "(40, 80]": {
-   "n": 775966,
-   "median_ratio": 59.74
+   "n": 573532,
+   "median_ratio": 56.25
   },
   "(80, 100]": {
-   "n": 1664035,
-   "median_ratio": 6.84
+   "n": 1268448,
+   "median_ratio": 6.54
   },
   "(100, 120]": {
-   "n": 2050609,
-   "median_ratio": 3.82
+   "n": 1606508,
+   "median_ratio": 3.71
   },
   "(120, 150]": {
-   "n": 2250045,
-   "median_ratio": 2.75
+   "n": 1782558,
+   "median_ratio": 2.66
   },
   "(150, 200]": {
-   "n": 1771259,
-   "median_ratio": 2.06
+   "n": 1440451,
+   "median_ratio": 2.0
   },
   "(200, 360]": {
-   "n": 901054,
+   "n": 766403,
    "median_ratio": 1.63
   }
  },

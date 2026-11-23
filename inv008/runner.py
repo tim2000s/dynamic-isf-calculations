@@ -4,7 +4,7 @@ Usage:
     python -m inv008.runner --stage 1 --platforms v6 v7
     python -m inv008.runner --stage 2 --platforms v5 v6 v7
     python -m inv008.runner --stage all
-    python -m inv008.runner --stage 2 --users U*** U*** --workers 4 --force
+    python -m inv008.runner --stage 2 --users <user> <user> --workers 4 --force
 
 Design (Mac mini M4 Pro, 10P+4E, 64 GB):
   * one user = one task; multiprocessing.Pool(workers, maxtasksperchild=4)
