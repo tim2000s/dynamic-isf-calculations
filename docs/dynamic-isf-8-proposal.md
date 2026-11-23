@@ -2,7 +2,7 @@
 title: "An alternative proposal for dynamic ISF in open-source AID systems"
 subtitle: "The Diabeloop glucose curve, tested on other cohorts and set against the logarithmic and sigmoid models"
 author: "Tim Street, Diabettech"
-date: "12 November 2026"
+date: "23 November 2026"
 ---
 
 ## Summary
